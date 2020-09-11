@@ -130,7 +130,8 @@ R
 **Locally**-->
 
 <p>Follow set-up instructions from <a href="lab-diffBinding-local">Downstream analysis tutorial</a>, differential binding part. We will need the same files and we can work in the same directory.</p>
-<p>Install <code>ChIPQC</code> library and any required dependencies</p>
+<p>Install <code>ChIPQC</code> library and any required dependencies.</p>
+<p>In <code>R</code>:</p>
 <pre><code class="bash">
 if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))
     install.packages(&quot;BiocManager&quot;)
@@ -140,6 +141,7 @@ BiocManager::install(&quot;ChIPQC&quot;, version = &quot;3.8&quot;)
 
 <h2 id="running-chipqc">Running ChIPQC</h2>
 <p>While running commands feel free to have a look at <a href="http://bioconductor.org/packages/devel/bioc/vignettes/ChIPQC/inst/doc/ChIPQC.pdf">ChIPQC package documentation</a> to learn more about different steps and/or build upon them. Here we will just show you the very basics.</p>
+<p>In <code>R</code>:</p>
 <pre><code class="bash">
 library(DiffBind)
 library(ChIPQC)
