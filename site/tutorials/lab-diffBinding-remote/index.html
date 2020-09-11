@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>ChIP-seq down-stream analysis - Epigenomics 2020</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "ChIP-seq down-stream analysis";
+    var mkdocs_page_input_path = "tutorials/lab-diffBinding-remote.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Epigenomics 2020</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../welcome/">Welcome</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../precourse/">Precourse Information</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../schedule/">Schedule</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">Tutorials</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Epigenomics 2020</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>ChIP-seq down-stream analysis</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="chip-seq-down-stream-analysis">ChIP-seq down-stream analysis</h1>
+<h3 id="learning-outcomes">Learning outcomes</h3>
+<ul>
+<li>obtain differentially bound sites with <code>DiffBind</code></li>
+<li>annotate differentially bound sites with nearest genes and genomic features with <code>ChIPpeakAnno</code></li>
+<li>perform functional enrichment analysis to identify predominant biological themes with <code>ChIPpeakAnno</code> and <code>reactome.db</code></li>
+</ul>
+<h2 id="content">Content</h2>
+<p><a href="#Introduction">Introduction</a></p>
+<p><a href="#DataMethods">Data &amp; Methods</a></p>
+<p><a href="#Setting-up">Setting-up</a></p>
+<p><a href="#DB">Differential binding</a></p>
+<ul>
+<li><a href="#DB_install">Installing DiffBind</a></li>
+<li><a href="#DB_run">Running DiffBind</a></li>
+</ul>
+<p><a href="#FA_local">Functional analysis</a></p>
+<ul>
+<li><a href="#FA_install">Installing ChIPpeakAnno</a></li>
+<li><a href="#FA_run">Running ChIPpeakAnno</a></li>
+</ul>
+<p><a href="#Next">Concluding remarks and next steps</a></p>
+<p><a href="#Next">Appendix: figures</a></p>
+<h2 id="introduction">Introduction <a name="Introduction"></a></h2>
+<p>Welcome back to the second part of the tutorial. In the first part we have learnt how to access the quality of ChIP-seq data and we how to derive a consensus peakset for downstream analyses.</p>
+<p>In this part we will learn how to place our peaks in a biological context, by identifying differentially bound sites between two sample groups and annotating these sites to find out predominant biological themes separating the groups.</p>
+<h2 id="data-methods">Data &amp; Methods <a name="DataMethods"></h2>
+<p>We will continue using the same data as in the first part of the tutorial. Please note that usually <strong>three biological replicates</strong> are the <strong>minimum requirement</strong> for statistical analysis such as in factor occupancy.</p>
+<p><em>The ENCODE data we are using have only two replicates and we are using them to demonstrate the tools and methodologies. No biological conclusions should be drawn from them, or as a matter of fact, from any other dataset with duplicates only. Just because the tool computes does not make it right!</em></p>
+<h2 id="setting-up">Setting-up  <a name="Setting-up"></h2>
+<p>The setting-up is the same as for the <em>data processing</em> tutorial.</p>
+<p>If you have not logged out from Uppmax: skip this part.</p>
+<p>If you have logged out: log back in, open interactive session, and run <code>chipseq_env.sh</code> script. Note to change reservation name to THU or FRI.</p>
+<pre><code class="bash">
+ssh -Y &lt;username&gt;@rackham.uppmax.uu.se
+interactive -A g2018030 -p core -n 4 --reservation=g2018030_FRI
+source ~/chipseq_env.sh
+
+</code></pre>
+
+<h2 id="differential-binding">Differential binding <a name="DB"></h2>
+<h3 id="intro">Intro</h3>
+<p>We will usage <code>Bioconductor</code> package <a href="http://bioconductor.org/packages/release/bioc/html/DiffBind.html">DiffBind</a> to <strong>identify sites that are differentially bound</strong> between two sample groups.</p>
+<p>The package includes <em>"functions to support the processing of peak sets, including overlapping and merging peak sets, counting sequencing reads overlapping intervals in peak sets, and identifying statistically significantly differentially bound sites based on evidence of binding affinity (measured by differences in read densities). To this end it uses statistical routines developed in an RNA-Seq context (primarily the Bioconductor packages edgeR and DESeq2 ). Additionally, the package builds on Rgraphics routines to provide a set of standardized plots to aid in binding analysis."</em></p>
+<p>This means that we will <strong>repeat deriving a consensus peakset</strong> in a more powerful way before identifying differentially bound sites. Actually, defying the consensus peaks is an important step that takes up entire chapter in the <code>DiffBind</code> manual. We recommend reading entire section:  <a href="http://bioconductor.org/packages/devel/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf">6.2 Deriving consensus peaksets</a>.</p>
+<p>So how does the differential binding affinity analysis work?</p>
+<p><em>"The core functionality of DiffBind is the differential binding affinity analysis, which enables binding sites to be identified that are statistically significantly differentially bound between sample groups. To accomplish this, first a contrast (or contrasts) is established, dividing the samples into groups to be compared. Next the core analysis routines are executed, by default using DESeq2. This will assign a p-value and FDR to each candidate binding site indicating confidence that they are differentially bound."</em></p>
+<h3 id="setting-up-diffbind">Setting-up <code>DiffBind</code>  <a name="DB_install"></h3>
+<p>Let's
+- load <a href="https://www.uppmax.uu.se/support/user-guides/r_packages-module-guide/">R packges module</a> that has a bunch of R packages, including <code>DiffBind</code>package, installed on Uppmax.
+-  go to the right directory given you are keeping files structure as for the first part of the tutorial.</p>
+<pre><code class="bash">module load R_packages/3.5.0
+cd ~/chipseq/analysis/R
+</code></pre>
+
+<p>In this directory we have placed a <em>sample sheet file</em> named <code>samples_REST.txt</code> that points to our BAM files as well as BED files with called peaks, following <code>DiffBind</code> specifications, and as created in <em>data processing</em> tutorial. To inspect sample sheet file:</p>
+<pre><code class="bash">head samples_REST.txt
+</code></pre>
+
+<p>Let's open R on Uppmax by simply typing R</p>
+<pre><code class="bash">R
+</code></pre>
+
+<p>From within R we need to load DiffBind library</p>
+<pre><code class="bash">library(DiffBind)
+</code></pre>
+
+<h3 id="running-diffbind">Running <code>DiffBind</code>  <a name="DB_run"></h3>
+<p>We will now follow <code>DiffBind</code> example to obtain differentially bound sites, given our samples. You may want to open <code>DiffBind</code> tutorial and read section <a href="http://bioconductor.org/packages/devel/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf">3 Example: Obtaining differentially bound sites</a> while typing the command to get more information about each step.</p>
+<pre><code class="bash">
+# reading in the sample information (metadata)
+samples = read.csv(&quot;samples_REST.txt&quot;, sep=&quot;\t&quot;)
+
+#   inspecting the metadata
+samples
+
+#   creating an object containing data
+res=dba(sampleSheet=samples, config=data.frame(RunParallel=FALSE))
+
+# inspecting the object: how many peaks are identified given the default settings?
+res
+
+# counting reads mapping to intervals (peaks)
+# at this step a normalisation is applied by the default set to: score=DBA_SCORE_TMM_MINUS_FULL
+res.cnt = dba.count(res, minOverlap=2, score=DBA_SCORE_TMM_MINUS_FULL, fragmentSize=130)
+
+# inspecting the object: notice the FRiP values!
+res.cnt
+
+# plotting the correlation of libraries based on normalised counts of reads in peaks
+pdf(&quot;correlation_libraries_normalised.pdf&quot;)
+plot(res.cnt)
+dev.off()
+
+# PCA scores plot: data overview
+pdf(&quot;PCA_normalised_libraries.pdf&quot;)
+dba.plotPCA(res.cnt,DBA_TISSUE,label=DBA_TISSUE)
+dev.off()
+
+# setting the contrast
+res.cnt2 = dba.contrast(res.cnt, categories=DBA_TISSUE, minMembers=2)
+
+# inspecting the object: how many contrasts were set in the previous step
+res.cnt2
+
+# performing analysis of differential binding
+res.cnt3 = dba.analyze(res.cnt2)
+
+# inspecting the object: which condition are most alike, which are most different, is this in line with part one of the tutorial?
+dba.show(res.cnt3, bContrasts = T)
+
+# correlation heatmap  using only significantly differentially bound sites
+# choose the contrast of interest e.g. HeLa vs. neuronal (#1)
+pdf(&quot;correlation_HeLa_vs_neuronal.pdf&quot;)
+plot(res.cnt3, contrast=1)
+dev.off()
+
+# boxplots to view how read distributions differ between classes of binding sites
+# are reads distributed evenly between those that increase binding affinity HeLa vs. in neuronal?
+pdf(&quot;Boxplot_HeLa_vs_neuronal.pdf&quot;)
+pvals &lt;- dba.plotBox(res.cnt3, contrast=1)
+dev.off()
+
+# extracting differentially binding sites in GRanges
+res.db1 = dba.report(res.cnt3, contrast=1)
+head(res.db1)
+
+# plotting overlaps of sites bound by REST in different cell types
+pdf(&quot;binding_site_overlap.pdf&quot;)
+dba.plotVenn(res.cnt3, 1:4, label1=&quot;HeLa&quot;,label2=&quot;neuron&quot;,label3=&quot;HepG2&quot;,label4=&quot;sknsh&quot;)
+dev.off()
+
+# finally, let's save our R session including the generated data. We will need everything in the next section
+save.image(&quot;diffBind.RData&quot;)
+</code></pre>
+
+<h2 id="functional-analysis">Functional analysis <a name="FA"></h2>
+<p>So now we have list of differentially bound sites for comparisons of interest but we do not know much about them besides the genomic location. It is time to them in a biological context. To do so, we will use another <code>Bioconductor</code> package <a href="http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html">ChIPpeakAnno</a>.</p>
+<p>ChIPpeakAnno <em>"is for facilitating the downstream analysis for ChIP-seq experiments. It includes functions to find the nearest gene, exon, miRNA or custom features such as the most conserved elements and other transcription factor binding sites supplied by users, retrieve the sequences around the peak, obtain enriched Gene Ontology (GO) terms or pathways. Starting 2.0.5, new functions have been added for finding the peaks with bi-directional promoters with summary statistics (peaksNearBDP), for summarizing the occurrence of motifs in peaks (summarizePatternInPeaks) and for adding other IDs to annotated peaks or enrichedGO (addGeneIDs). Starting 3.4, permutation test has been added to determine whether there is a significant overlap between two sets of peaks. In addition, binding patterns of multiple transcription factors (TFs) or distributions of multiple epigenetic markers around genomic features could be visualized and compared easily using a side-by-side heatmap and density plot.</em></p>
+<p>Here, we will annotate deferentially bound sites, summarise them in a genomic feature context and obtain enriched GO terms and pathways.</p>
+<h3 id="setting-up-chippeakanno">Setting-up <code>ChIPpeakAnno</code>  <a name="FA_install"></h3>
+<p>We will continue our R session. If you have logged-out or lost connection or simply want to start fresh: check pathways to R libraries and re-set if needed, navigate to R directory, load R packages, open R and load back the data saved in the differential binding session. We will build on them.</p>
+<pre><code class="bash">cd ~/chipseq/analysis/R
+
+module load R_packages/3.5.0
+
+R
+
+load(&quot;diffBind.RData&quot;)
+
+
+### Running `ChIPpeakAnno`  &lt;a name=&quot;FA_run&quot;&gt;
+
+## Like with DiffBind package there is a nice [ChIPpeakAnno tutorial (http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html#annotate-peaks) that you can view along this exercise to read more about the various steps.
+
+
+# Loading DiffBind library
+# we will need it to extract interesting peaks for down-stream analysis
+library(DiffBind)
+
+# Loading ChIPpeakAnno library
+library(ChIPpeakAnno)
+
+# Loading TSS Annotation For Human Sapiens (GRCh37) Obtained From BiomaRt
+data(TSS.human.GRCh37)
+
+# Choosing the peaks for the interesting comparison, e.g.
+data.peaks = dba.report(res.cnt3, contrast=1)
+head(data.peaks)
+
+# Annotate peaks with information on closest TSS using precompiled annotation data
+data.peaksAnno=annotatePeakInBatch(data.peaks, AnnotationData=TSS.human.GRCh37)
+
+# View annotated peaks: can you see the added information in comparsition to data.peaks?
+head(data.peaksAnno)
+
+# Saving results
+write.table(data.peaksAnno, file=&quot;peaks_HeLa_vs_neuronal.txt&quot;, sep=&quot;\t&quot;, row.names=F)
+</code></pre>
+
+<p>Feel free to build more on the exercises. Follow the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html#annotate-peaks">ChIPpeakAnno tutorial</a> for ideas.</p>
+<p><em>Locally, we can install few more R libraries and annotation data to inspect our peaks a more, e.g. to find enriched GO terms or REACTOME pathways. Check the <a href="lab-diffBinding-local">local version tutorial</a> for more functional analyses examples.</em></p>
+<h2 id="concluding-remarks-and-next-steps">Concluding remarks and next steps <a name="Next"></h2>
+<p>The workflow presented in the tutorials is quite common and it includes recommended steps for analysis of ChIP-seq data. Naturally, there may be different tools or ways to preform similar tasks. New tools are being developed all the time and no single tool can do it all.</p>
+<p>In the extra labs we have prepared you can find for instance an alternative way of quality control of ChIP-seq data with R package called <code>ChIPQC</code> as well as alternative differential binding workflow with a packaged called <code>csaw</code>. Note, these labs were not extensively tested so you may need to experiment and draw from the knowledge gained in the main labs.</p>
+<p>Also, there are more types of analyses one can do beyond the one presented here. A common further analysis, for instance, includes identification of short sequence motifs enriched in regions bound by the assayed factor (peaks). There are several tools available here and we recommend you test one or two with on the tutorial data: <a href="http://homer.salk.edu/homer/">Homer</a>, <a href="http://groups.csail.mit.edu/cgs/gem/">GEM</a>, <a href="http://floresta.eead.csic.es/rsat/peak-motifs_form.cgi">RSAT</a>m <a href="http://meme-suite.org/">MEME</a></p>
+<p>Above all, we recommend that you keep trying to analyze your own data. Practice makes perfect :)</p>
+<hr />
+<h2 id="appendix-figures">Appendix: figures <a name="Appendix"></h2>
+<p><img alt="correlation_librarires_normalised" src="../../figures/lab-diffBinding/correlation_libraries_normalised.pdf" /></p>
+<p>Fig: Correlation of libraries based on normalised counts of reads in peaks</p>
+<hr />
+<p><img alt="PCA" src="../../figures/lab-diffBinding/PCA_normalised_libraries.pdf" /></p>
+<p>Fig: PCA scores plot: data overview using normalised counts of reads in peaks</p>
+<hr />
+<p><img alt="Heatmap" src="../../figures/lab-diffBinding/correlation_HeLa_vs_neuronal.pdf" /></p>
+<p>Fig: Correlation heatmap  using only significantly differentially bound sites for HeLa and neuronal</p>
+<hr />
+<p><img alt="Boxplot" src="../../figures/lab-diffBinding/Boxplot_HeLa_vs_neuronal.pdf" /></p>
+<p>Fig: Boxplots of reads distributions between HeLa and neuronal</p>
+<hr />
+<p><img alt="Venn" src="../../figures/lab-diffBinding/binding_site_overlap.pdf" /></p>
+<p>Fig: Venn diagram of overlapping sites bound by REST in different cell types</p>
+<hr />
+<p><img alt="Features" src="../../figures/lab-diffBinding/peaks_featuresDistr_HeLa_vs_neuronal.pdf" /></p>
+<p>Fig: Boxplots of reads distributions between HeLa and neuronal</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

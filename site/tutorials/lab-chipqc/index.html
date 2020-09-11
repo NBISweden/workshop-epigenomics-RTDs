@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>ChIPQC - Epigenomics 2020</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "ChIPQC";
+    var mkdocs_page_input_path = "tutorials/lab-chipqc.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Epigenomics 2020</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../welcome/">Welcome</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../precourse/">Precourse Information</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../schedule/">Schedule</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">Tutorials</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Epigenomics 2020</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>ChIPQC</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="introduction">Introduction</h2>
+<p>Here, we will explore the alternative quality control workflow, using Bioconductor ChIPQC package. ChIPQC computes quality metrics for aligned data from ChIP-seq experiments. It also provides simple ways to generate a ChIP-seq experiment quality report which can be examined to asses the absolute and relative quality of individual ChIP-seq samples (and their associated controls, as well as overall quality of the experimental data.)</p>
+<h3 id="learning-outcomes">Learning outcomes</h3>
+<p>Using <code>ChIPQC</code> package
+- to generate a summary QC report for experimental sample groups
+- to be able to understand and assess QC metrics and plots</p>
+<h2 id="setting-up">Setting-up</h2>
+<p>In principle one can run <code>ChIPQC</code> both on Uppmax or locally. However, today we will test the package locally.</p>
+<!-- **Uppmax**
+
+To run on Uppmax, assuming the same files structure as for the [ChIP-seq data processing tutorial](processing) set pathway to R libraries installed on Uppmax, navigate to R directory and open R:
+
+<pre><code class="bash">
+export R_LIBS=&quot;/sw/courses/ngsintro/chipseq/software/zzz_R_lib&quot;
+
+cd ~/chipseq/analysis/R
+
+R
+
+</code></pre>
+
+
+**Locally**-->
+
+<p>Follow set-up instructions from <a href="lab-diffBinding-local">Downstream analysis tutorial</a>, differential binding part. We will need the same files and we can work in the same directory.</p>
+<p>Install <code>ChIPQC</code> library and any required dependencies</p>
+<pre><code class="bash">
+if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))
+    install.packages(&quot;BiocManager&quot;)
+BiocManager::install(&quot;ChIPQC&quot;, version = &quot;3.8&quot;)
+
+</code></pre>
+
+<h2 id="running-chipqc">Running ChIPQC</h2>
+<p>While running commands feel free to have a look at <a href="http://bioconductor.org/packages/devel/bioc/vignettes/ChIPQC/inst/doc/ChIPQC.pdf">ChIPQC package documentation</a> to learn more about different steps and/or build upon them. Here we will just show you the very basics.</p>
+<pre><code class="bash">
+library(DiffBind)
+library(ChIPQC)
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+
+
+#   reading in the sample information (metadata)
+samples = read.csv(&quot;samples_REST.txt&quot;, sep=&quot;\t&quot;)
+
+#   inspecting the metadata
+samples
+
+#   creating an object containing data
+res=dba(sampleSheet=samples, config=data.frame(RunParallel=FALSE))
+
+# inspecting the object
+res
+
+#   performing quality control
+resqc = ChIPQC(res,annotation=&quot;hg19&quot;, config=data.frame(RunParallel=TRUE))
+
+#   creating the quality control report in html format
+ChIPQCreport(resqc)
+
+</code></pre>
+
+<p>Examine the html report.</p>
+<p>What do you think?</p>
+<p>Are results in line with the previous quality control workflow?</p>
+<hr />
+<p>The report can be also downloaded from Box <a href="https://stockholmuniversity.box.com/s/c1lbrr1s1khw4ctiqfq0f9j2m1b6vp90">here</a></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

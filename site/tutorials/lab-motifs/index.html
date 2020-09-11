@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Motif finding - Epigenomics 2020</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Motif finding";
+    var mkdocs_page_input_path = "tutorials/lab-motifs.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Epigenomics 2020</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../welcome/">Welcome</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../precourse/">Precourse Information</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../schedule/">Schedule</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">Tutorials</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Epigenomics 2020</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Motif finding</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="motif-finding-exercise">Motif finding exercise</h1>
+<p>In this exercise we will try a few <em>de-novo</em> motif finding programs on data sets from human and mouse. We will also compare the motifs we find to a database of known motifs.</p>
+<h2 id="0-set-up">0. Set up</h2>
+<p>Log in to Uppmax, and start an interactive session.</p>
+<p>Load the modules we will use in the exercise:</p>
+<pre><code>module load bioinfo-tools
+module load BEDTools
+module load MEMESuite
+module load HOMER
+</code></pre>
+
+<p>Create a working directory where you will do the exercise, and go there. For example:</p>
+<pre><code>mkdir motif_lab
+cd motif_lab
+</code></pre>
+
+<p>Note that the programs used in this exercise produce html output. You view these directly on Uppmax, although this is a bit slow. Otherwise you can copy the files to you local computer, and open them there.</p>
+<h2 id="1-download-ctcf-data">1. Download CTCF data</h2>
+<p>First, we will look at a ChIP-seq experiment using an antibody against <em>CTCF</em>. <em>CTCF</em> (CCCTC-binding factor) is a zinc-finger protein that functions as a transcription factor. It also has insulator activity and is important for the 3D structure of chromatin, through formation of chromatin loops.</p>
+<p><img src="../figures/lab-motifs/F2.large.jpg" alt="CTCF loops" style="width: 400px;"/></p>
+<p><em>CTCF</em> is a well studied protein, and many ChIP-seq data sets are available for CTCF. Its DNA motif is <a href="http://jaspar.genereg.net/matrix/MA0139.1/?revcomp=1">well known</a> (as you can tell from its name).</p>
+<p><img src="../figures/lab-motifs/MA0139.1.rc.svg" alt="CTCF motif" style="width: 400px;"/></p>
+<p>We will use <a href="https://www.encodeproject.org/experiments/ENCSR572DUJ/">this data set</a>, from ENCODE. This page shows information about this particular experiment, along the experimental protocols and analysis pipelines used. Scroll down a bit and select the tab "File details". Now you will see a list of file available for download. We will use the bed files with "pseudoreplicated idr thresholded peaks". Download this file:</p>
+<pre><code>wget https://www.encodeproject.org/files/ENCFF693MYU/@@download/ENCFF693MYU.bed.gz
+gunzip ENCFF693MYU.bed.gz
+</code></pre>
+
+<h2 id="2-prepare-peak-data">2. Prepare peak data</h2>
+<p>The peaks are on the "narrowPeak bed format", described <a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format12">here</a></p>
+<p>Have a look at the file:</p>
+<pre><code>less ENCFF693MYU.bed
+</code></pre>
+
+<p>It's often a good idea to just use the peaks with the strongest signal for motif finding. This is becuase a) motif finding programs have a hard time handeling large inputs, and b) the peaks with the strongest signal are most likely to be true binding sites and to contain the motif of interest. Therefore, we will run motif finding on the top 500 peaks. To get the top 500 peaks, we first sort the peaks on "signalValue" in column 7 (using the <code>sort</code> command) and then take the first 500 peaks (using the <code>head</code> command):</p>
+<pre><code>sort -k 7,7nr  ENCFF693MYU.bed | head -n 500 &gt; ENCFF693MY_top500.bed
+</code></pre>
+
+<p>Have look at the resulting file:</p>
+<pre><code>less ENCFF693MY_top500.bed
+</code></pre>
+
+<h2 id="3-prepare-sequence-data">3. Prepare sequence data</h2>
+<p>Next, we need to get the genome sequence at these 500 peaks. Since repeat elements can confuse the motif finding programs, we will use a repeat-masked version of the genome, where all repeat sequences have been replaced with Ns. Create a soft link to the repeat masked genome in you working directory:</p>
+<pre><code>ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/refence_genomes/hg38.masked.fa* .
+</code></pre>
+
+<p>We will now use <code>bedTools</code> to extract the genome sequence for the 500 peaks:</p>
+<pre><code>bedtools getfasta -fo CTCF_top500_peak_seq.fa -fi hg38.masked.fa -bed ENCFF693MY_top500.bed
+</code></pre>
+
+<p>You can see the documentation for the program you just used <a href="https://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html">here</a>. Now, have a look at the fasta file produced:</p>
+<pre><code>less CTCF_top500_peak_seq.fa
+</code></pre>
+
+<h2 id="4-use-the-meme-suite-for-motif-finding">4. Use the MEME suite for motif finding</h2>
+<p>First we try DREME, which is a fast program that looks for regular expressions (documentation <a href="http://meme-suite.org/doc/dreme-tutorial.html">here</a>). This takes around 5 minutes to run:</p>
+<pre><code>dreme -p CTCF_top500_peak_seq.fa -oc dreme_out
+</code></pre>
+
+<p>DREME produces several output files. Take a look at the html file:</p>
+<pre><code>firefox dreme_out/dreme.html 
+</code></pre>
+
+<p>You see a list of motifs represented as regular expressions and sequence logos, along with e-values and some links.</p>
+<p>Next, we will try MEME-ChIP. This is a wrapper that runs several programs, including DREME, MEME, and Centrimo. It takes bit longer to run, around 10 minutes:</p>
+<pre><code>meme-chip -oc meme_chip_out CTCF_top500_peak_seq.fa
+</code></pre>
+
+<p>This produces several output files. The file <code>meme_chip_out/dreme_out/dreme.html</code> is basically the same file as we saw in the previous step. There is also an output file from MEME, a different motif finding program:</p>
+<pre><code>firefox meme_chip_out/meme_out/meme.html
+</code></pre>
+
+<p>Here you can see all motifs found by MEME, with e-values etc.</p>
+<p>MEME-ChIP also runs a program called centrimo, which looks at where the motifs are located, relative the peaks. It also produces a html file with the results:</p>
+<pre><code>firefox meme_chip_out/centrimo_out/centrimo.html
+</code></pre>
+
+<p>Finally, it summarizes the results of DREME, MEME and Centrimo:</p>
+<pre><code>firefox meme_chip_out/meme-chip.html 
+</code></pre>
+
+<p><strong>What can you learn from all this output? Do the programs find the expected motif? Do they find other motifs? Where are the motifs located in the peaks?</strong></p>
+<h2 id="5-what-are-the-motifs-we-have-found">5. What are the motifs we have found?</h2>
+<p>Often when we find a motif, we want to see if it is similar to any motif that is already known. One tool to do this is called Tomtom, and is part of the same suite of programs as MEME etc. MEME and DREME actually have convenient functions to directly look up motifs with Tomtom. To try this, open the MEME output again.</p>
+<pre><code>firefox meme_chip_out/meme_out/meme.html
+</code></pre>
+
+<p>Click on the rightward-pointing arrow next to the first motif (under <em>Submit/Download</em>). You can then select which tool you want to submit your motif to. Tomtom is already pre-selected, so just click on <em>Submit</em>. This takes you to the Tomtom website, where you click on <em>Start search</em>. After a short while you will see a page called <em>Results</em>. Clicking on <em>Tomtom HTML output</em> takes you to the result page. Here you can see the results of matching the motif we found (the "query motif") to Tomtom's data base.</p>
+<p><strong>What is the top scoring motif? Does it look similar to the motif we found? What about other motifs further down the list?</strong></p>
+<p>You can also access Tomtom directly from the <a href="http://meme-suite.org/tools/tomtom">web site</a>, or run it from the command line.</p>
+<h2 id="6-try-a-data-set-from-the-previous-execise">6. Try a data set from the previous execise</h2>
+<p>In the previous exercise you analyzed <em>REST</em> ChIP-seq data. The DNA specificity of this transcription factor is <a href="http://jaspar.genereg.net/search?q=rest">known</a>, so it's interesting to see if we are able to recover the same (or a similar) motif.</p>
+<p>In the previous exercise an earlier version of the human genome, hg19, was used. Also, only peaks on chromosomes 1 and 2 were considered. We have prepared a file with repeat-masked hg19 sequence from chromosomes 1 and 2. Create a soft link to this file in you work directory</p>
+<pre><code>ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/refence_genomes/hg19_chr_1_2.masked.fa* .
+</code></pre>
+
+<p>Then copy one of the peak files from the previous exercise to work directory </p>
+<pre><code>cp /sw/share/compstore/courses/ngsintro/chipseq/results/peaks_bed/hela_1_peaks.chr12.bed rest_peaks.chr12.bed
+</code></pre>
+
+<p>Now you are ready to repeat all steps on the new peak set: select the top 500 peaks, get repeat masked genome sequence for these peaks and run motif finding.</p>
+<pre><code>sort -k 7,7nr rest_peaks.chr12.bed | head -n 500 &gt; rest_top500.bed
+bedtools getfasta -fo rest_top500_peak_seq.fa -fi hg19_chr_1_2.masked.fa -bed rest_top500.bed
+dreme -p rest_top500_peak_seq.fa -oc dreme_out_rest
+meme-chip -oc meme_chip_out_rest rest_top500_peak_seq.fa
+</code></pre>
+
+<p><strong>What do the programs find? Do DREME and MEME find similar motifs? Do these look like the known REST site? Do the motifs you found resemble any known motifs in Tomtom's data base?</strong></p>
+<h2 id="7-try-homer">7. Try HOMER</h2>
+<p>Finally, we will try another popular motif finding software, HOMER. Here we will look at a <a href="https://www.encodeproject.org/experiments/ENCSR000CBJ/">CTCF chip-seq experiment from mouse</a>. First, download the bed file with the peaks and select the top 500 peaks:</p>
+<pre><code>wget https://www.encodeproject.org/files/ENCFF311HPG/@@download/ENCFF311HPG.bed.gz
+gunzip ENCFF311HPG.bed.gz
+sort -k 7,7nr ENCFF311HPG.bed | head -n 500 &gt; mouse_CTCF_top500.bed
+</code></pre>
+
+<p>Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at.</p>
+<p>Have a look at the resuling html file. Here you can see a list of <em>de-novo</em> motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on <em>Known Motif Enrichment Results</em> to see the results.</p>
+<pre><code>findMotifsGenome.pl mouse_CTCF_top500.bed mm10 homer_out_mouse_ctcf -size 200 -mask -preparsedDir tmp_homer/
+firefox homer_out_mouse_ctcf/homerResults.html
+</code></pre>
+
+<p><strong>What does HOMER find? is this output easy to interpret?</strong></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

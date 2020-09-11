@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Lab setup - Epigenomics 2020</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Lab setup";
+    var mkdocs_page_input_path = "tutorials/lab-setup.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Epigenomics 2020</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../welcome/">Welcome</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../precourse/">Precourse Information</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../schedule/">Schedule</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">Tutorials</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Epigenomics 2020</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Lab setup</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="setting-up">Setting-up  <a name="Setting-up"></h2>
+<p>Before we start tutorial, we need to set up our work environment. In particular, we need to:</p>
+<ol>
+<li><a href="#UppmaxNode">be able to login to Uppmax and use the node allocation</a>
+<br /></li>
+<li><a href="#FilesStructure">access files prepared for the tutorial</a> and keep folder structures organised
+<br /></li>
+<li><a href="#CommandsAndModules">learn how to read commands and use module system on Uppmax</a>
+<br /></li>
+</ol>
+<h3 id="using-computational-resources">Using computational resources <a name="UppmaxNode"></a></h3>
+<p>We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log to Rackham and run <code>salloc</code> command:</p>
+<pre><code class="bash">ssh -Y &lt;username&gt;@rackham.uppmax.uu.se
+salloc -A g2020XXX -t 04:00:00 -p core -n 8 --no-shell --reservation=g2020XXX_X
+</code></pre>
+
+<p><font color='red'>where X should be 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access for four hours, so you will repeat this in the afternoon.<font color='black'></p>
+<p>Please make sure you do it only <strong>ONCE</strong>, as by repeating this command you will use up resources reserved for others.</p>
+<p>Check which node you were assigned</p>
+<pre><code class="bash">$ squeue -u &lt;username&gt;
+</code></pre>
+
+<p>And connect to your node with</p>
+<pre><code class="bash">ssh -Y &lt;nodename&gt;
+</code></pre>
+
+<h3 id="directory-structure">Directory structure <a name="FilesStructure"></a></h3>
+<p>There are many files which are part of the data set as well as there are additional files with annotations that are required to run various steps in this tutorial. Therefore saving files in a structured manner is essential to keep track of the analysis steps (and always a good practice). We have preset data access and environment for you. To use these settings run:</p>
+<ul>
+<li>
+<p><code>chiseq_data.sh</code> that sets up directory structure and creates symbolic links to data as well as copies smaller files <strong>[RUN ONLY ONCE]</strong></p>
+</li>
+<li>
+<p><code>chipseq_env.sh</code> that sets several environmental variables you will use in the exercise: <strong>[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]</strong></p>
+</li>
+</ul>
+<p>Copy the scripts to your home directory and execute them:</p>
+<pre><code class="bash">cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_data.sh ./
+cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_env.sh ./
+
+source chipseq_data.sh
+source chipseq_env.sh
+</code></pre>
+
+<p>You should see a directory named <code>chipseq</code>:</p>
+<pre><code class="bash">ls ~
+cd ~/chipseq/analysis
+</code></pre>
+
+<h3 id="commands-and-modules">Commands and modules <a name="CommandsAndModules"></a></h3>
+<p>Many commands are quite long as there are many input files as well as several parameters to set up. Consequently a command may span over several lines of text. The <strong>backslash character 
+<!-- ("\\")**  -->
+</strong> <code>\</code>
+indicates to the interpreter that the command input will continue in the following line, not executing the command prematurely.</p>
+<p>To see all options for applications used throughout the class type <code>command -h</code> to view usage help.</p>
+<p>You will notice that you will load and unload modules practically before and after each command. This is done because there are often dependency conflicts between the modules used in this exercise. If not unloaded, some modules will cause error messages from the module system on Rackham. More on module system is here: <a href="https://www.uppmax.uu.se/resources/software/module-system/">https://www.uppmax.uu.se/resources/software/module-system/</a></p>
+<p><font color='red'> The commands in this tutorial contain pathways as we set them up in the above steps. If you change file locations, you will need to adjust pathways to match these changes when running commands. </font></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
