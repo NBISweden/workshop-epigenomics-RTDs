@@ -40,7 +40,9 @@ R
 Follow set-up instructions from [Downstream analysis tutorial](lab-diffBinding-local), differential binding part. We will need the same files and we can work in the same directory.
 
 
-Install `ChIPQC` library and any required dependencies
+Install `ChIPQC` library and any required dependencies.
+
+In `R`:
 
 ```bash
 
@@ -52,6 +54,8 @@ BiocManager::install("ChIPQC", version = "3.8")
 
 ## Running ChIPQC
 While running commands feel free to have a look at [ChIPQC package documentation](http://bioconductor.org/packages/devel/bioc/vignettes/ChIPQC/inst/doc/ChIPQC.pdf) to learn more about different steps and/or build upon them. Here we will just show you the very basics.
+
+In `R`:
 
 
 ```bash
@@ -92,4 +96,3 @@ What do you think? Are the results in line with the previous quality control wor
 The report can be also downloaded from Box [here](https://stockholmuniversity.box.com/s/c1lbrr1s1khw4ctiqfq0f9j2m1b6vp90)
  -->
 
- 
