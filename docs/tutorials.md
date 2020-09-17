@@ -1,4 +1,8 @@
-# Lab Tutorials
+To follow. View the old materials under [ChIP-seq data analysis workshop](https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07/). 
+
+
+
+<!-- # Lab Tutorials
 
 
 ## Setting up
@@ -29,7 +33,7 @@
 * [ChIPseeker package for ChIP profiling, peaks annotations, visualisation and functional annotations](tutorials/lab-ChIPseeker.md) (Olga) [local]
 
 * [Motifs finding](tutorials/lab-motifs.md) (Jakub) [Uppmax]
-    
+
 * [Calling broad peaks](tutorials/lab-broadpeaks.md) (Agata) [local]
 
 * [Alternative differential binding analyses using csaw](tutorials/) (Agata) [local]
@@ -45,7 +49,7 @@ Introduction to practicals IV:
 * scATAC-seq
 
 * [Scaling normalisation for ChIP-seq with exogenous chromatin spike](tutorials/lab-exospike.md) (Agata) [local]
-   
+
 * [Finding data in public resources](tutorials/lab-public-resources.md) (Jakub) [local]
 
 
@@ -75,4 +79,3 @@ Let's link a lecture [here](lectures/Meyer_Liu_bias_nihms680120.pdf)
 
 Let's link a tutorial [here](tutorials/day2/lab-chipseq-proc/chipseq-proc.md)
  -->
-

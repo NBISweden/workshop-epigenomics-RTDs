@@ -1,6 +1,8 @@
-# Precourse Material
+# Pre-course material
 
-There are few things to do ***before*** the course starts. Please read carefully and follow the instructions so we can have a good start to the course. Contact us in case anything in unclear.
+Information to follow
+
+<!-- There are few things to do ***before*** the course starts. Please read carefully and follow the instructions so we can have a good start to the course. Contact us in case anything in unclear.
 
 
 ## Computational Resources
@@ -61,8 +63,8 @@ After you complete setting-up
 * login to `rackham.uppmax.uu.se`
 
 * type `id` in the command line
-    
-* copy the output of the command and email back (to the course organisers at edu.epigenomics@nbis.se) 
+
+* copy the output of the command and email back (to the course organisers at edu.epigenomics@nbis.se)
 
 [A guide on how to log-in for the first time]((http://www.uppmax.uu.se/support/user-guides/guide–first-login-to-uppmax/)
 
@@ -87,7 +89,7 @@ For those of you wanting to start ahead and/or brush up on various skills before
 ### Computer skills
 
 * [Unix](http://www.ee.surrey.ac.uk/Teaching/Unix/): especially the first three chapters.
- 
+
 * DataCamp free [R tutorial](https://learn.datacamp.com/courses/free-introduction-to-r). A nice self learn tutorial to `R`, introducing many central concepts to `R`.
 
 * [A short introduction to R](https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf). A very short introduction to using `R`.
@@ -95,10 +97,10 @@ For those of you wanting to start ahead and/or brush up on various skills before
 ### ChIP-seq
 
 * [Video introduction to ChIP-seq data analysis](https://www.youtube.com/watch?v=zwuUveGgmS0) by Dr. Carl Hermann, University of Heidelberg.
-    
+
 * [ChIP-seq and beyond: new and improved methodologies to detect and characterize protein-DNA interactions](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3591838/).
-    
+
 * [Q&A: ChIP-seq technologies and the study of gene regulation](https://bmcbiol.biomedcentral.com/articles/10.1186/1741-7007-8-56).
 
 
-
+ -->
