@@ -1,11 +1,11 @@
 
-# <img border="0" src="icons/info.svg" width="40" height="40"> About
+# <img border="0" src="icons/info.png" width="40" height="40"> About
 
 Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This workshop builds on our previous [ChIP-seq data analysis workshop](https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07/) to introduce the best practice bioinformatics methods for processing, analyses and integration of epigenomics data. The teaching includes lectures, programming tutorials and interactive group sessions.
 
 
 <br/>
-## <img border="0" src="icons/team.svg" width="40" height="40"> Teaching team
+## <img border="0" src="icons/team.png" width="40" height="40"> Teaching team
 
 - [Agata Smialowska][agata] <<agata.smialowska@nbis.se>>
 - [Olga Dethlefsen][olga] <<olga.dethlefsen@nbis.se>>

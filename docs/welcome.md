@@ -3,11 +3,11 @@
 Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This course is run by the National Bioinformatics Infrastructure Sweden (NBIS). More under [About](about.md) tab.
 
 <br/>
-## <img border="0" src="icons/calendar-date.svg" width="40" height="40"> Date
+## <img border="0" src="icons/calendar-date.png" width="40" height="40"> Date
 23rd - 27th November 2020
 
 <br/>
-## <img border="0" src="icons/schedule-01.svg" width="40" height="40"> Important dates
+## <img border="0" src="icons/important-dates.png" width="40" height="40"> Important dates
 
 - Application opens: August, 1st, 2020
 - Application deadline: November, 1st, 2020
@@ -16,7 +16,7 @@ Online workshop open for PhD students, postdocs, researchers and other employees
 
 
 <br/>
-## <img border="0" src="icons/content.svg" width="40" height="40"> Workshop content
+## <img border="0" src="icons/content.png" width="40" height="40"> Workshop content
 This workshop is designed to introduce the best practice bioinformatics methods for processing, analyses and integration of epigenomics and functional genomics data.
 
 Topis covered include:
@@ -33,22 +33,22 @@ Topis covered include:
 
 
 <br/>
-## <img border="0" src="icons/application.svg" width="40" height="40"> Application
+## <img border="0" src="icons/application.png" width="40" height="40"> Application
 - Application is now open [here](https://forms.gle/zBorhLmT3ZNBn7bm8).
 - Application deadline: 1st November, 2020
 
 <br/>
-## <img border="0" src="icons/selection.svg" width="40" height="40"> Selection criteria
+## <img border="0" src="icons/selection.png" width="40" height="40"> Selection criteria
  - Due to limited capacity the workshop can accommodate maximum of 50 participants. If we receive more applications, participants will be selected based on several criteria. Selection criteria include correct entry requirements, motivation to attend the course as well as gender and geographical balance.
  - NBIS prioritises academic participants (students, staff, affiliated researchers) in Sweden. We can accept participants from industry and/or outside Sweden if we have seats available and the requirements criteria are met.
 
 <br/>
-## <img border="0" src="icons/fees.svg" width="40" height="40"> Fees
+## <img border="0" src="icons/fees.png" width="40" height="40"> Fees
 - This workshop is free of charge; however a no-show fee of 2000 SEK may apply.
 
 
 <br/>
-## Contact us:
+## Contact us
 - edu.epigenomics@nbis.se
 
 or
