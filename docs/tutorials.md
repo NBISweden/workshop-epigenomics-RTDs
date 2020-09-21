@@ -1,8 +1,10 @@
-To follow. View the old materials under [ChIP-seq data analysis workshop](https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07/). 
+To follow.
+
+*View the old materials under [ChIP-seq data analysis workshop](https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07/).* 
 
 
 
-# Lab Tutorials
+<!-- # Lab Tutorials
 
 
 ## Setting up
@@ -20,7 +22,7 @@ To follow. View the old materials under [ChIP-seq data analysis workshop](https:
 
 * [Visualisation](tutorials/lab-vis.md) (?)
 
-* [Alternative way to QC in R](tutorials/lab-chipqc.md) (Agata)
+* [Alternative way to QC in R](tutorials/lab-chipqc.md) (Agata) -->
 
 <!-- # Lab Tutorials
 

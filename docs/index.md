@@ -1,6 +1,8 @@
 # Epigenomics Data Analysis: from Bulk to Single Cell
 
-Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This course is run by the National Bioinformatics Infrastructure Sweden (NBIS). More under [About](about.md) tab.
+Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This course is organised by the National Bioinformatics Infrastructure Sweden (NBIS).
+
+This workshop builds on our previous [ChIP-seq data analysis workshop](https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07/) to introduce the best practice bioinformatics methods for processing, analyses and integration of epigenomics data. The online teaching includes lectures, programming tutorials and interactive group sessions.
 
 <br/>
 ## <img border="0" src="icons/calendar-date.png" width="40" height="40"> Date
@@ -39,27 +41,42 @@ Topis covered include:
 
 <br/>
 ## <img border="0" src="icons/selection.png" width="40" height="40"> Selection criteria
- - Due to limited capacity the workshop can accommodate maximum of 50 participants. If we receive more applications, participants will be selected based on several criteria. Selection criteria include correct entry requirements, motivation to attend the course as well as gender and geographical balance.
- - NBIS prioritises academic participants (students, staff, affiliated researchers) in Sweden. We can accept participants from industry and/or outside Sweden if we have seats available and the requirements criteria are met.
+ - Due to limited capacity the workshop can accommodate maximum of 30 participants. If we receive more applications, participants will be selected based on several criteria. Selection criteria include correct entry requirements, motivation to attend the course as well as gender and geographical balance.
+ - NBIS prioritises academic participants, especially PhD students, affiliated with Swedish universities. We warmly welcome international and/or non-academic participants when we have seats available and the requirements criteria are met.
 
 <br/>
 ## <img border="0" src="icons/fees.png" width="40" height="40"> Fees
 - This workshop is free of charge; however a no-show fee of 2000 SEK may apply.
 
 <br/>
-## University Credits
+## <img border="0" src="icons/diploma.png" width="40" height="40"> Certificate & University credits
 
-We are not able to warrant any university credits (högskolepoäng) for our course. Many universities however, accept the attendance in our courses and award 1.5 HPs (corresponding to a 40h study workload). You will need to clarify this credit transfer with your relevant department.
+We will issue a course certificate upon a successful course completion, assessed by active participation in all course sessions (lectures, computer practicals, group discussion etc.).
+
+Unfortunately we are **not** able to warrant any university credits (högskolepoäng). Many universities however, recognize the attendance in our courses and award 1.5 HPs, corresponding to a 40 h of studying. It is up to participants to clarify and arrange credit transfer with the relevant university department.
+
+
+<br/>
+## <img border="0" src="icons/team.png" width="40" height="40"> Teaching team
+
+- [Agata Smialowska][agata] <<agata.smialowska@nbis.se>>
+- [Olga Dethlefsen][olga] <<olga.dethlefsen@nbis.se>>
+- [Jakub Orzechowski Westholm][jakub] <<jakub.westholm@scilifelab.se>>
+- [Vincent van Hoef][vincent] <<vincent.vanhoef@nbis.se>>
+- [Phil Ewels][phil] <<phil.ewels@scilifelab.se>>
+- [Harshil Patel][harshil] <<Harshil.Patel@crick.ac.uk>>
+
+[agata]: https://nbis.se/about/staff/agata-smialowska/
+[olga]: https://nbis.se/about/staff/olga-dethlefsen/
+[jakub]: https://nbis.se/about/staff/jakub-orzechowski-westholm/
+[vincent]: https://nbis.se/about/staff/vincent-van-hoef
+[phil]: phil.ewels@scilifelab.se
+[harshil]: https://www.researchgate.net/profile/Harshil_Patel12
 
 <br/>
 ## Contact us
 - edu.epigenomics@nbis.se
 
-or
-
-- agata.smialowska@nbis.se
-- olga.dethlefsen@nbis.se
-- jakub.westholm@scilifelab.se
 
 
 
