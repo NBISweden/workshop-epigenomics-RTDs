@@ -33,6 +33,21 @@ Topis covered include:
 * Introduction to analysis of single cell functional genomics data (ATAC-seq);
 * **Nf-cores pipelines**: Methylseq, ChIP-seq, ATAC-seq
 
+<br/>
+## <img border="0" src="icons/entrance.png" width="40" height="40"> Entry requirements
+
+Required to be able to follow the tutorials:
+
+-  BYOL, bring your own laptop with R and RStudio installed
+- Basic knowledge in Linux
+- Basic R programming experience
+
+Makes learning experience easier:
+
+- Experience working on the SNIC center Uppmax or another HPC
+- Previous experience with NGS data analyses
+- Completing NBIS workshops “Introduction to Bioinformatics using NGS data” and “R Programming Foundations for Life Scientists” or equivalent
+
 
 <br/>
 ## <img border="0" src="icons/application.png" width="40" height="40"> Application
