@@ -29,7 +29,7 @@ Topis covered include:
 * RNA-seq integration for identification of targets of transcription factors;
 * Basic multi-omics exploration and integration;
 * Introduction to analysis of single cell functional genomics data (ATAC-seq);
-* **Nf-cores pipelines**: metylseq, chipseq, atacseq
+* **Nf-cores pipelines**: Methylseq, ChIP-seq, ATAC-seq
 
 
 <br/>
