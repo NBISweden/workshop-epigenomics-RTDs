@@ -7,13 +7,13 @@ Detailed schedule to follow.
 DNA methylation with Illumina EPIC arrays and Bisulfite-seq.
 
 ### Day 2
-ChIP-seq and ATAC-seq data processing and analysis principles
+ChIP-seq and ATAC-seq data processing and analysis principles.
 
 ### Day 3
-Functional analysis. GO terms and Reactome pathways.
+Functional analysis; GO terms and Reactome pathways; Motif search.
 
 ### Day 4
-Nf-core pipelines: methylseq, chipseq, atacseq
+Nf-core pipelines: Methylseq, Chipseq, Atacseq
 
 ### Day 5
 Integrative omics.
