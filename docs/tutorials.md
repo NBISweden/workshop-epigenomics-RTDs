@@ -2,7 +2,7 @@ To follow. View the old materials under [ChIP-seq data analysis workshop](https:
 
 
 
-<!-- # Lab Tutorials
+# Lab Tutorials
 
 
 ## Setting up
@@ -22,6 +22,7 @@ To follow. View the old materials under [ChIP-seq data analysis workshop](https:
 
 * [Alternative way to QC in R](tutorials/lab-chipqc.md) (Agata)
 
+<!-- # Lab Tutorials
 
 ## Day 3: Downstream analyses
 
