@@ -46,6 +46,10 @@ Topis covered include:
 ## <img border="0" src="icons/fees.png" width="40" height="40"> Fees
 - This workshop is free of charge; however a no-show fee of 2000 SEK may apply.
 
+<br/>
+## University Credits
+
+We are not able to warrant any university credits (högskolepoäng) for our course. Many universities however, accept the attendance in our courses and award 1.5 HPs (corresponding to a 40h study workload). You will need to clarify this credit transfer with your relevant department.
 
 <br/>
 ## Contact us
