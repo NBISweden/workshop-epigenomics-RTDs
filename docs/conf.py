@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Epigenomics Workshop Website Test'
+project = 'Epigenomics Workshop 2020'
 copyright = '2020, NBIS Epigenomics Workshop Team. All rights reserved.'
 author = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef'
 
 # The full version, including alpha/beta/rc tags
-release = '1'
+release = '2020.≈1'
 
 
 # -- General configuration ---------------------------------------------------
