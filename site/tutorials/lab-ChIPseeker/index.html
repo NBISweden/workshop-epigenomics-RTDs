@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>ChIP-seq down-stream analysis - Epigenomics 2020</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "ChIP-seq down-stream analysis";
+    var mkdocs_page_input_path = "tutorials/lab-ChIPseeker.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Epigenomics 2020</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../welcome/">Welcome</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../precourse/">Precourse Information</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../schedule/">Schedule</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../">Tutorials</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Epigenomics 2020</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>ChIP-seq down-stream analysis</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="chip-seq-downstream-analysis-chipseeker">ChIP-seq downstream analysis: ChIPseeker</h1>
+<h3 id="learning-outcomes">Learning outcomes</h3>
+<p>Using <code>ChIPseeker</code> package
+- to profile ChIP signal by genomics location and by ChIP binding to TSS regions
+- to annotate peaks, visualise and compare annotations
+- to run and compare functional enrichment</p>
+<h2 id="content">Content</h2>
+<p><a href="#Introduction">Introduction</a></p>
+<p><a href="#DataMethods">Data &amp; Methods</a></p>
+<p><a href="#Setting-up">Setting-up</a></p>
+<p><a href="#Profile">ChIP profiling</a></p>
+<p><a href="#Annotations">Peaks Annotations</a></p>
+<p><a href="#Functional">Functional analysis</a></p>
+<p><a href="#Next">Concluding remarks and next steps</a></p>
+<p><a href="#Next">Appendix: figures</a></p>
+<h2 id="introduction">Introduction <a name="Introduction"></a></h2>
+<p>In this tutorial we use another package, <code>ChIPseeker</code>, to have a look at the ChIP profiles, annotate peaks and visualise annotations as well as to run functional enrichment. In a way, <code>ChIPseeker</code> can be seen as an alternative and newer workflow to <code>ChIPpeakAnno</code>. It also offers additional functionality, e.g. especially when it comes to visualising ChIP profiles and comparing functional annotations.</p>
+<p><em>It supports annotating ChIP peaks and provides functions to visualize ChIP peaks coverage over chromosomes and profiles of peaks binding to TSS regions. Comparison of ChIP peak profiles and annotation are also supported. Moreover, it supports evaluating significant overlap among ChIP-seq datasets. Currently, ChIPseeker contains 17,000 bed file information from GEO database. These datasets can be downloaded and compare with user’s own data to explore significant overlap datasets for inferring co-regulation or transcription factor complex for further investigation.</em></p>
+<h2 id="data-methods">Data &amp; Methods <a name="DataMethods"></h2>
+<p>We will build upon the main labs, using the same dataset and results from <code>DiffBind</code> analyses that we have saved under <code>DiffBind.RData</code>. The tutorial is based on the <code>ChIPseeker</code> package tutorial <a href="https://bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.html">html</a> so feel to have this open alongside to read and experiment more.</p>
+<h2 id="setting-up">Setting-up  <a name="Setting-up"></h2>
+<p>If you have not done it already, install R and R-Studio. Refer back to <a href="../precourse">pre-course</a> preparations for instructions.</p>
+<p>You can continue working in the <code>diffBind</code> directory. We need access to <code>diffBind.RData</code> object &amp; some libraries</p>
+<pre><code class="bash">
+# Load libraries (install if needed)
+library(DiffBind)
+library(ChIPseeker)
+library(ReactomePA)
+library(clusterProfiler)
+library(biomaRt)
+
+library(org.Hs.eg.db)  
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb &lt;- TxDb.Hsapiens.UCSC.hg19.knownGene
+
+</code></pre>
+
+<h2 id="chip-profile">ChIP profile <a name="Profile"></a></h2>
+<h3 id="chip-peaks-coverage-plot">ChIP peaks coverage plot <a name="Profile_coverage"></a></h3>
+<p>After peak calling one may want to visualise distribution of peaks locations over the whole genome. Function <code>covplot</code> calculates coverage of peaks regions over chromosomes.</p>
+<p>Let's use data saved in <code>DiffBind.RData</code> objects. From this object we can easily extract peaks called for all our libraries as well as consensus peakset. In principle, we could also use <code>ChIPseeker</code> on raw .BED files.</p>
+<pre><code class="bash">
+# Let's start fresh removing all objects from R environment
+rm(list = ls())
+
+# loading diffBind.RData
+load(&quot;diffBind.RData&quot;)
+
+# Do you remember what was have we saved in the diffBind.RData
+ls()
+
+# res.cnt3 object was the final one containing consensus peaks and differential binding results
+
+# viewing all samples
+dba.show(res.cnt3)
+
+# this should show you our 8 libraries
+&gt; dba.show(res.cnt3)
+          ID Tissue Factor Replicate Caller Intervals FRiP
+1 REST_chip1   HeLa   REST         1 counts      6518 0.11
+2 REST_chip2   HeLa   REST         2 counts      6518 0.08
+3 REST_chip3 neural   REST         1 counts      6518 0.07
+4 REST_chip4 neural   REST         2 counts      6518 0.09
+5 REST_chip5  HepG2   REST         1 counts      6518 0.08
+6 REST_chip6  HepG2   REST         2 counts      6518 0.06
+7 REST_chip7  sknsh   REST         1 counts      6518 0.10
+8 REST_chip8  sknsh   REST         2 counts      6518 0.06
+
+</code></pre>
+
+<p>To plot peaks over genomic locations we need to extract from <code>res.cnt3</code> peaks of interest, e.g. consensus peaks or present in a single replicate etc. Here, we will focus on peaks present in HeLa replicates.</p>
+<pre><code class="bash">
+# extracting consensus peak set with 6518 peaks
+peaks.consensus &lt;- dba.peakset(res.cnt3, bRetrieve = T)
+
+# extracting HeLA peaks
+peaks.HeLa_rep1 &lt;- peaks.consensus[res.cnt3$called[,1]==1] # peaks called in rep 1
+peaks.HeLa_rep2 &lt;- peaks.consensus[res.cnt3$called[,2]==1] # peaks called in rep 2
+
+# adding an unified affinity scores column (re-formatting data)
+peaks.HeLa_rep1$Score &lt;- peaks.HeLa_rep1$REST_chip1
+peaks.HeLa_rep2$Score &lt;- peaks.HeLa_rep2$REST_chip2
+
+# plotting coverage for replicate 1, using affinity scores as a weight for peaks height
+covplot(peaks.HeLa_rep1, weightCol = &quot;Score&quot;)
+
+# zooming in to a selected region is also possible
+covplot(peaks.HeLa_rep1, weightCol = &quot;Score&quot;, xlim=c(0, 1e07))
+
+
+</code></pre>
+
+<p>We can also compare peaks across replicates. This should give us visual assessment of variability between replicates: peaks locations and strength should match in an idealistic scenario</p>
+<pre><code class="bash">
+# creating genomicRangesList object holding replicates 1 and 2
+grL.HeLa &lt;- GenomicRangesList(HeLa_rep1=peaks.HeLa_rep1, HeLa_rep2=peaks.HeLa_rep2)
+
+# plotting using affinity scores as a weight for peaks height
+covplot(grL.HeLa, weightCol = &quot;Score&quot;)
+
+# zooming in
+covplot(grL.HeLa, weightCol = &quot;Score&quot;, xlim=c(0, 1e07))
+
+</code></pre>
+
+<p>What do you think?
+- are these peaks reproducible?
+- which pair of replicates is most consistent, HeLA, neural, HepG2 or sknsh?
+- why is it good to always look at the data instead of simply trusting the output of the summary statistics, after all, we do rely on diffBind to call peaks being consistent</p>
+<h3 id="profile-of-chip-peaks-binding-to-tss-regions">Profile of ChIP peaks binding to TSS regions</h3>
+<p>For calculating the profile of ChIP peaks binding to TSS regions, we need to prepare the TSS regions, which are defined as the flanking sequence of the TSS sites. Then we can align the peaks that are mapping to these regions, and generate the tagMatrix used for plotting.</p>
+<p>Here, we will select peaks present per cell type, i.e. found in two replicates. We will also create tagMatrix list to enable groups comparisons across cell lines.</p>
+<pre><code class="bash">
+# extracting peaks for each cell line present across replicates
+peaks.HeLa &lt;- peaks.consensus[res.cnt3$called[,1]==1 &amp; res.cnt3$called[,2]==1]
+peaks.neural &lt;- peaks.consensus[res.cnt3$called[,3]==1 &amp; res.cnt3$called[,4]==1]
+peaks.HepG2 &lt;- peaks.consensus[res.cnt3$called[,5]==1 &amp; res.cnt3$called[,6]==1]
+peaks.sknsh &lt;- peaks.consensus[res.cnt3$called[,7]==1 &amp; res.cnt3$called[,8]==1]
+
+# getting TSS regions
+promoter &lt;- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
+
+# calculating tagMatrix
+tagMatrix.1 &lt;- getTagMatrix(peaks.HeLa, windows=promoter)
+tagMatrix.2 &lt;- getTagMatrix(peaks.neural, windows=promoter)
+tagMatrix.3 &lt;- getTagMatrix(peaks.HepG2, windows=promoter)
+tagMatrix.4 &lt;- getTagMatrix(peaks.sknsh, windows=promoter)
+
+# preparing tagMatrix list to enable cell lines comparisions
+tagMatrixList &lt;- list(HeLa=tagMatrix.1, neural=tagMatrix.2, HepG2=tagMatrix.3, sknsh=tagMatrix.4)
+
+# plotting tagMatrix heatmaps for each cell line
+tagHeatmap(tagMatrixList, xlim=c(-3000, 3000), color=NULL)
+
+# plotting average profile of ChIP peaks among different cell lines
+plotAvgProf(tagMatrixList, xlim=c(-3000, 3000))
+
+</code></pre>
+
+<h2 id="peaks-annotations">Peaks Annotations <a name="Annotations"></a></h2>
+<p><strong>Peak annotations is performed by <code>annotatePeak</code> function</strong>. Here, we can define TSS region, by default set to -3kb to 3kb. The output of annotatePeak is <code>csAnno</code> object than we can convert to GRanges with as.GRanges() function or to data frame with as data.frame() function.</p>
+<p>Similar to annotations with <code>ChIPpeakAnno</code> we will need <code>TxDB</code> object containing annotations, transcript-related features of a particular genome. We can use Bioconductor packages providing annotations for various model organisms. It may be however <strong>good to know that one can also prepare their own TxDb object</strong> by retrieving information from UCSC or BioMart using <code>GenomicFeature</code> package. Here, we will use <code>TxDb.Hsapiens.UCSC.hg19.knownGene</code> annotations provided by Bioconductor.</p>
+<p>Some <strong>annotations may overlap</strong> and by default ChIPseeker annotates peaks with the priority: promoter, 5' UTR, 3' UTR, exon, intron, downstreamn, intergenic, where downstream is defined as the downstream of gene end. This priority can be changed with <code>genomicAnnotationPriority</code> parameter.</p>
+<p>While annotating peaks we can include optional parameter <code>annoDb</code> containig further genome wide annotation data. If added, this will add SYMBOL, GENENAME, ENSEMBL/ENTREZID to the peaks annotations. Again, we will use Bioconductor <code>org.Hs.eg.db</code> for human genome wide annotation data.</p>
+<pre><code class="bash">
+# extracting all consensus peaks (repeating commands for clarity)
+peaks.consensus &lt;- dba.peakset(res.cnt3, bRetrieve = T)
+
+# extracting peaks for each cell line present across replicates (repeating commands for clarity)
+peaks.HeLa &lt;- peaks.consensus[res.cnt3$called[,1]==1 &amp; res.cnt3$called[,2]==1]
+peaks.neural &lt;- peaks.consensus[res.cnt3$called[,3]==1 &amp; res.cnt3$called[,4]==1]
+peaks.HepG2 &lt;- peaks.consensus[res.cnt3$called[,5]==1 &amp; res.cnt3$called[,6]==1]
+peaks.sknsh &lt;- peaks.consensus[res.cnt3$called[,7]==1 &amp; res.cnt3$called[,8]==1]
+
+# annotating peaks
+peaks.HeLa_ann &lt;- annotatePeak(peaks.HeLa, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb=&quot;org.Hs.eg.db&quot;)
+peaks.neural_ann &lt;- annotatePeak(peaks.neural, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb=&quot;org.Hs.eg.db&quot;)
+peaks.HepG2_ann &lt;- annotatePeak(peaks.HepG2, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb=&quot;org.Hs.eg.db&quot;)
+peaks.sknsh_ann &lt;- annotatePeak(peaks.sknsh, tssRegion=c(-3000, 3000), TxDb=txdb, annoDb=&quot;org.Hs.eg.db&quot;)
+
+# previewing annotations summary for HeLa peaks
+peaks.HeLa_ann
+
+&gt; peaks.HeLa_ann
+Annotated peaks generated by ChIPseeker
+1096/1096  peaks were annotated
+Genomic Annotation Summary:
+              Feature  Frequency
+9    Promoter (&lt;=1kb) 18.2481752
+10   Promoter (1-2kb)  5.0182482
+11   Promoter (2-3kb)  3.2846715
+4              5' UTR  0.1824818
+3              3' UTR  1.7335766
+1            1st Exon  0.1824818
+7          Other Exon  2.6459854
+2          1st Intron 10.3102190
+8        Other Intron 20.6204380
+6  Downstream (&lt;=300)  1.0036496
+5   Distal Intergenic 36.7700730
+
+# previewing peaks annotations for HeLa peaks
+head(as.data.frame(peaks.HeLa_ann))
+
+</code></pre>
+
+<p>We find our genomic annotations in <em>annotation</em> column. Plots, pie and barplot, are supported to visualise these annotations.</p>
+<pre><code class="bash">
+# creating barplot for HeLa peaks genomics annotations
+plotAnnoBar(peaks.HeLa_ann)
+
+# creating vennpie plot
+vennpie(peaks.HeLa_ann)
+
+# creating upsetplot showing overlapping annotations
+upsetplot(peaks.HeLa_ann)
+
+</code></pre>
+
+<p>We can also use <code>plotAnnoBar</code> to compare annotations between different datasets, here cell lines. For that, we just need to create a list containing peaks annotations of datasets to compare.</p>
+<pre><code class="bash">
+# creating list holding annotations for different cell lines
+list.annotations &lt;- list(HeLa=peaks.HeLa_ann, neural=peaks.neural_ann, HepG2=peaks.HepG2_ann, sknskh=peaks.sknsh_ann)
+
+# creating barplot for HeLa, neural, HepG2 and sknsh peaks genomic annotations
+plotAnnoBar(list.annotations)
+
+</code></pre>
+
+<p>Finally, we can also visualise distribution of TF-binding loci relative to TSS, for single annotation set or using annotations list for comparisons.</p>
+<pre><code class="bash">
+# plotting distance to TSS for HeLa peaks
+plotDistToTSS(peaks.HeLa_ann)
+
+# plotting distance to TSS for all cell lines in our annotation list
+plotDistToTSS(list.annotations)
+
+</code></pre>
+
+<p>What do you think?
+- would you expect such distribution of features?
+- do these distributions differ between cell-lines?</p>
+<h2 id="functional-analysis">Functional analysis <a name="Functional"></a></h2>
+<p>Having obtained annotations to nearest genes, we can perform <strong>functional enrichment analysis to identify predominant biological themes</strong> among these genes by incorporating biological knowledge provided by biological ontologies, incl. GO (Gene Ontology, Ashburner et al. 2000), KEGG (Kyoto Encyclopedia of Genes and Genomes, Kanehisa et al. 2004), DO (Disease Ontology, Schriml et al. 2011) or Reactome (Croft et al. 2013).</p>
+<p>Here, we can also use <code>seq2gene</code> function for linking genomic regions to genes in a <strong>many-to-many mapping</strong>. This function consider host gene (exon/intron), promoter region and flanking gene from intergenic region that may undergo control via cis-regulation.</p>
+<p>One can <strong>build on</strong> using ChIPseeker for functional enrichment and annotation as there are several packages by the same author to identify biological themes, i.e. <code>ReactomePA</code> for reactome pathways enrichment, <code>DOSE</code> for Disease Ontology, <code>clusterProfiler</code> for Gene Ontology and KEGG enrichment analysis. Especially <a href="http://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html">clustserProfiler</a>
+ comes handy when <strong>visualising and comparing</strong> biological themes, also when comparing functions derived from other omics technologies for integrative analyses.</p>
+<p>Here, we will experiment with few functions only. We will search for enriched reactome pathways using genes annotated to peaks by nearest location and allowing for many-to-many mapping. We will also learn how to compare functional annotations between peak sets using GO terms as an example.</p>
+<p>We will start by defying our genes background, i.e. genes on chromosome 1 and 2. For this we can use functions from BioMart</p>
+<pre><code class="bash">
+# defining chromosomes
+chrom=c(1,2)
+
+# defining source
+ensembl=useMart(&quot;ensembl&quot;)
+ensembl = useDataset(&quot;hsapiens_gene_ensembl&quot;,mart=ensembl)
+
+# running query: extracting ENTREZID for genes on chromosome 1 and 2
+genes.chr1chr2 &lt;- getBM(attributes= &quot;entrezgene&quot;,
+        filters=c(&quot;chromosome_name&quot;),
+        values=list(chrom), mart=ensembl)
+
+# reformatting output to character string (as required later on by clusterProfiler functions)
+genes.universe &lt;- as.character(as.numeric(as.matrix(genes.chr1chr2)))
+
+</code></pre>
+
+<p>Reactome pathway enrichment of genes defined as a) nearest feature to the peaks and b) allowing for many-to-many mapping</p>
+<pre><code class="bash">
+# a: selecting annotated peaks for functional enrichment in object
+data.peaks_ann &lt;- peaks.neural_ann
+
+# a: fining enriched Reactome pathways using chromosome 1 and 2 genes as a background
+pathway.reac1 &lt;- enrichPathway(as.data.frame(data.peaks_ann)$geneId, universe = genes.universe)
+
+# a: previewing enriched Reactome pathways
+head(pathway.reac1)
+
+
+# b: selecting peaks
+data.peaks &lt;- peaks.neural
+
+# b: running seq2gene function for many-to-many mapping based on sequence regions (note: no prior peaks annotations here, many-to-many mapping is done from the sequence)
+genes.m2m &lt;- seq2gene(data.peaks, tssRegion = c(-3000, 3000), flankDistance = 3000, TxDb=txdb)
+
+# b: finding enriched Reactome pathways given many to many mapping and chromosome 1 and 2 genes as a background
+pathway.reac2 &lt;- enrichPathway(genes.m2m, universe = genes.universe)
+
+# b: creating dotplot to visualise enrichment results
+dotplot(pathway.reac2)
+
+</code></pre>
+
+<p>Let's search for enriched GO terms, and let's see how we can do it for all the peak sets together so we can easily compare the results on a <code>dotplot</code>. Also, let's learn how to simplify the output of GO terms using <code>simplify</code> function, useful in cases where lots of GO terms turn-up to be significant and it becomes difficult to interpret results. <code>simply</code> function removes redundant GO terms obtained from <code>encrichGO</code> calling internally <code>GoSemSim</code> function to calculate similarities among GO terms and removes those highly similar terms by keeping one representative term.</p>
+<p>```bash</p>
+<h1 id="creating-a-gene-list-with-entrezid-ideas-extracted-from-our-annotation-list-containing-annotated-peaks-for-all-four-cell-lines">creating a gene list with ENTREZID ideas extracted from our annotation list, containing annotated peaks for all four cell lines</h1>
+<p>list.genes = lapply(list.annotations, function(i) as.data.frame(i)$geneId)
+names(list.genes) &lt;- sub("_", "\n", names(list.genes))</p>
+<h1 id="running-enrichedgo-function-to-find-enriched-mf-correlation_libraries_normalised-on-the-gene-list">running enrichedGO function to find enriched MF correlation_libraries_normalised on the gene list</h1>
+<p>compMF &lt;- compareCluster(geneCluster = list.genes,
+                       fun           = "enrichGO",
+                       pvalueCutoff  = 0.05,
+                       pAdjustMethod = "BH",
+                       OrgDb='org.Hs.eg.db',
+                       ont="MF")</p>
+<h1 id="comparing-results-on-a-dotplot">comparing results on a dotplot</h1>
+<p>dotplot(compMF)</p>
+<h1 id="simplifying-results-although-here-we-do-not-have-problems-with-too-many-go-terms">simplifying results although here we do not have problems with too many GO terms</h1>
+<p>compMF.flr &lt;- simplify(compMF, cutoff = 0.7, by = "p.adjust", select_fun = min, measure = "Wang", semData = NULL)</p>
+<h1 id="creating-a-dotplot-on-reduced-go-terms">creating a dotplot on reduced GO terms</h1>
+<p>dotplot(compMF.flr)</p>
+<p>````</p>
+<h2 id="concluding-remarks-and-next-steps">Concluding remarks and next steps <a name="Next"></h2>
+<p>There are different flavours to functional annotations, and what and how functional annotations should be done is context dependent, i.e. they should be adjusted given available data and biological question being asked. There are many methods out there, all relying on the available annotations and databases, being constantly improved and developed. As a rule of thumb to understand the results and be able to draw biological conclusions, it may be good to think about i) the statistical test behind the method, ii) what is compared against what (i.e. genes vs. background) and which databases are being used (i.e. Reactome, GO, DO, KEGG).</p>
+<p>For more examples on what can be done in terms on functional annotations, we recommend reading tutorials on <a href="http://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html#reduce-redundancy-of-enriched-go-terms">clusterProfiler</a> and <a href="https://bioconductor.org/packages/release/bioc/vignettes/DOSE/inst/doc/DOSE.html">DOSE</a>, where you can further learn about semantic similarity analysis, disease enrichment analysis, GSEA analysis and much more.</p>
+<hr />
+<h2 id="appendix-figures">Appendix: figures <a name="Appendix"></h2>
+<h4 id="chip-profiling">ChIP profiling</h4>
+<p><img src="../figures/lab-chipseeker/fig-covplot-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Coverage plot for HeLa replicate 1 peaks</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-covplot-cmp-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Coverage plot for HeLa replicate 1 and 2 peaks</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-covplot-cmp-2.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Coverage plot for HeLa replicate 1 and 2 peaks (selected region)</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-TSS-heatmap-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Heatmap of ChIP peaks among different cell lines</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-TSS-avg-profile-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Average profile of ChIP peaks among different cell lines</p>
+<hr />
+<h4 id="peaks-annotations_1">Peaks annotations</h4>
+<p><img src="../figures/lab-chipseeker/fig-anno-vennpie-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Genomic annotations by vennpie</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-anno-barplot-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Genomic annotations by barplot</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-anno-upsetplot-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Annotations overlap with UpSetPlot</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-anno-barplot-cmp-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Genomics locations: dataset comparisons with barplot</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-anno-dist-to-tss-cmp-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Distance to TSS: datasets comparisons</p>
+<hr />
+<h4 id="functional-annotations">Functional annotations</h4>
+<p><img src="../figures/lab-chipseeker/fig-func-reactome-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Dotplot for enriched reactome pathways for neuronal peaks (many-to-many mapping)</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-func-go-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Comparison of enriched GO MF terms (mapping to the nearest gene)</p>
+<hr />
+<p><img src="../figures/lab-chipseeker/fig-func-go-simp-1.pdf" alt="" style="width: 600px;"/><br></p>
+<p>Fig: Comparison of enriched GO MF terms (mapping to the nearest gene) after reducing redundant terms</p>
+<hr />
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
