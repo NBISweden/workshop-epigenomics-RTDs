@@ -1,0 +1,7 @@
+=========
+FOO TEST
+=========
+
+
+This is a test in `rst`.
+

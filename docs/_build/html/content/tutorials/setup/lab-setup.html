@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setting-up &mdash; Epigenomics Workshop Website Test 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ChIP-seq" href="../chipseq_tutorials.html" />
+    <link rel="prev" title="Tutorials" href="../../tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Epigenomics Workshop Website Test
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-computational-resources-a-name-uppmaxnode-a">Using computational resources <a name="UppmaxNode"></a></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure-a-name-filesstructure-a">Directory structure <a name="FilesStructure"></a></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commands-and-modules-a-name-commandsandmodules-a">Commands and modules <a name="CommandsAndModules"></a></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIP-seq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop Website Test</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Setting-up  <a name="Setting-up"></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/content/tutorials/setup/lab-setup.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setting-up-a-name-setting-up">
+<h1>Setting-up  <a name="Setting-up"><a class="headerlink" href="#setting-up-a-name-setting-up" title="Permalink to this headline">¶</a></h1>
+<p>Before we start tutorial, we need to set up our work environment. In particular, we need to:</p>
+<ol class="simple">
+<li><p><a class="reference external" href="#UppmaxNode">be able to login to Uppmax and use the node allocation</a></p></li>
+<li><p><a class="reference external" href="#FilesStructure">access files prepared for the tutorial</a> and keep folder structures organised</p></li>
+<li><p><a class="reference external" href="#CommandsAndModules">learn how to read commands and use module system on Uppmax</a></p></li>
+</ol>
+<br /><div class="section" id="using-computational-resources-a-name-uppmaxnode-a">
+<h2>Using computational resources <a name="UppmaxNode"></a><a class="headerlink" href="#using-computational-resources-a-name-uppmaxnode-a" title="Permalink to this headline">¶</a></h2>
+<p>We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log to Rackham and run <code class="docutils literal notranslate"><span class="pre">salloc</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -Y &lt;username&gt;@rackham.uppmax.uu.se
+salloc -A g2020XXX -t <span class="m">04</span>:00:00 -p core -n <span class="m">8</span> --no-shell --reservation<span class="o">=</span>g2020XXX_X
+</pre></div>
+</div>
+<p><font color='red'>where X should be 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access for four hours, so you will repeat this in the afternoon.<font color='black'></p>
+<p>Please make sure you do it only <strong>ONCE</strong>, as by repeating this command you will use up resources reserved for others.</p>
+<p>Check which node you were assigned</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ squeue -u &lt;username&gt;
+</pre></div>
+</div>
+<p>And connect to your node with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -Y &lt;nodename&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="directory-structure-a-name-filesstructure-a">
+<h2>Directory structure <a name="FilesStructure"></a><a class="headerlink" href="#directory-structure-a-name-filesstructure-a" title="Permalink to this headline">¶</a></h2>
+<p>There are many files which are part of the data set as well as there are additional files with annotations that are required to run various steps in this tutorial. Therefore saving files in a structured manner is essential to keep track of the analysis steps (and always a good practice). We have preset data access and environment for you. To use these settings run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chiseq_data.sh</span></code> that sets up directory structure and creates symbolic links to data as well as copies smaller files <strong>[RUN ONLY ONCE]</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chipseq_env.sh</span></code> that sets several environmental variables you will use in the exercise: <strong>[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]</strong></p></li>
+</ul>
+<p>Copy the scripts to your home directory and execute them:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_data.sh ./
+cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_env.sh ./
+
+<span class="nb">source</span> chipseq_data.sh
+<span class="nb">source</span> chipseq_env.sh
+</pre></div>
+</div>
+<p>You should see a directory named <code class="docutils literal notranslate"><span class="pre">chipseq</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls ~
+<span class="nb">cd</span> ~/chipseq/analysis
+</pre></div>
+</div>
+</div>
+<div class="section" id="commands-and-modules-a-name-commandsandmodules-a">
+<h2>Commands and modules <a name="CommandsAndModules"></a><a class="headerlink" href="#commands-and-modules-a-name-commandsandmodules-a" title="Permalink to this headline">¶</a></h2>
+<p>Many commands are quite long as there are many input files as well as several parameters to set up. Consequently a command may span over several lines of text. The **backslash character</p>
+<!-- ("\\")**  --><p>** <code class="docutils literal notranslate"><span class="pre">\</span></code>
+indicates to the interpreter that the command input will continue in the following line, not executing the command prematurely.</p>
+<p>To see all options for applications used throughout the class type <code class="docutils literal notranslate"><span class="pre">command</span> <span class="pre">-h</span></code> to view usage help.</p>
+<p>You will notice that you will load and unload modules practically before and after each command. This is done because there are often dependency conflicts between the modules used in this exercise. If not unloaded, some modules will cause error messages from the module system on Rackham. More on module system is here: <a class="reference external" href="https://www.uppmax.uu.se/resources/software/module-system/">https://www.uppmax.uu.se/resources/software/module-system/</a></p>
+<p><font color='red'> The commands in this tutorial contain pathways as we set them up in the above steps. If you change file locations, you will need to adjust pathways to match these changes when running commands. </font></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../chipseq_tutorials.html" class="btn btn-neutral float-right" title="ChIP-seq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../../tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Agata Smialowska
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

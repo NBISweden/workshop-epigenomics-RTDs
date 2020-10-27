@@ -1,0 +1,7 @@
+=========
+FOO3 TEST
+=========
+
+
+This is a test in `rst`.
+
