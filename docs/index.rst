@@ -60,6 +60,8 @@ Topis covered include:
 - **ChIP-seq** and **ATAC-seq**: peak calling, peak independent / dependent quality metrics, differential binding and differential accessibility analysis; DNA motif enrichment;
 - **Functional analysis**, including finding nearest genes and custom features, GO terms and Reactome pathways enrichment;
 - **Integrative visualisations** of epigenomics datasets;
+- Quantitative ChIP-seq;
+- Novel methods to investigate protein-chromatin interactions;
 - RNA-seq integration for identification of targets of transcription factors;
 - Basic multi-omics exploration and integration;
 - Introduction to analysis of single cell functional genomics data (ATAC-seq);
@@ -101,7 +103,7 @@ Makes learning experience easier:
 Application
 -----------
 
-- Application is now open [here](https://forms.gle/zBorhLmT3ZNBn7bm8).
+- Application is now open `here <https://forms.gle/zBorhLmT3ZNBn7bm8>`_.
 - Application deadline: 1st November, 2020
 
 
