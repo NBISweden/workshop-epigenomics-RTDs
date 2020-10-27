@@ -2,6 +2,13 @@
 
 This is a repository for the NBIS Epigenomics Workshop website.
 
+***!!! OBS!!! Please bear with me and do not make any commits for time being.*** We'll change the html builder to Sphinx, which supports (a much nicer) .rst format. md will still be supported.
+
+Thanks!
+
+Agata
+
+
 ## Modifications
 
 To modify the webpage:
