@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop Test Page!
+Welcome to Epigenomics Workshop 2020 Page!
 ==========================================================
 
 
