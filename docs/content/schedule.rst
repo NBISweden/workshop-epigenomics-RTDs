@@ -91,7 +91,7 @@ Thursday (26 November 2020)
 
 09.15 - 10.00 Recap of the previous day (group session) (**online session**) 
 
-10:00 - 10:40 - **Intro to Nextflow**(**online session**) (Phil)
+10:00 - 10:40 - **Intro to Nextflow** (**online session**) (Phil)
 
 10:40 - 11.30 - Exercises (*online support*)
 
