@@ -20,7 +20,7 @@ To modify the webpage:
 
 ### Guidelines for contributions
 
-Please keep the tutorials content in their own folder under `docs/content/tutorials`. Please add the appropriate link to appropriate contents file in `docs/content/tutorials/*.rst`.
+Please keep the tutorials content in their own folder under `docs/content/tutorials`. Please add the link to appropriate contents file in `docs/content/tutorials/*.rst`.
 
 
 ### Viewing changes locally
