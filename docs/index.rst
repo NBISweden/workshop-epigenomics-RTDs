@@ -155,29 +155,15 @@ Teaching team
 
 - `Vincent van Hoef <https://nbis.se/about/staff/vincent-van-hoef>`_ <vincent.vanhoef@nbis.se>
 
-- Phil Ewels <phil.ewels@scilifelab.se>
+- `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
 
 - `Harshil Patel <https://www.researchgate.net/profile/Harshil_Patel12>`_ <Harshil.Patel@crick.ac.uk>
 
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
 
+- `Jessica Nordlund <https://katalog.uu.se/profile/?id=N8-1393>`_ <Jessica.Nordlund@medsci.uu.se>
 
 
-.. - [Agata Smialowska][agata] <<agata.smialowska@nbis.se>>
-.. - [Olga Dethlefsen][olga] <<olga.dethlefsen@nbis.se>>
-.. - [Jakub Orzechowski Westholm][jakub] <<jakub.westholm@scilifelab.se>>
-.. - [Vincent van Hoef][vincent] <<vincent.vanhoef@nbis.se>>
-.. - [Phil Ewels][phil] <<phil.ewels@scilifelab.se>>
-.. - [Harshil Patel][harshil] <<Harshil.Patel@crick.ac.uk>>
-.. - [Simon Elsässer][simon] <<simon.elsasser@ki.se>>
-
-.. [agata]: https://nbis.se/about/staff/agata-smialowska/
-.. [olga]: https://nbis.se/about/staff/olga-dethlefsen/
-.. [jakub]: https://nbis.se/about/staff/jakub-orzechowski-westholm/
-.. [vincent]: https://nbis.se/about/staff/vincent-van-hoef
-.. [phil]: phil.ewels@scilifelab.se
-.. [harshil]: https://www.researchgate.net/profile/Harshil_Patel12
-.. [simon]: https://www.scilifelab.se/researchers/simon-elsasser/
 
 
 Contact us
