@@ -4,6 +4,10 @@ Schedule
 
 
 
+.. contents:: 
+    :local:
+
+
 
 Monday
 ------
