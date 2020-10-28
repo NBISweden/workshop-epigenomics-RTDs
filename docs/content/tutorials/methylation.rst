@@ -1,10 +1,10 @@
-=========
-
-=========
+===============
+DNA Methylation
+===============
 
 These are tutorials for quality control and processing of ChIP-seq data.
 
 .. toctree::
    :maxdepth: 1
 
-   Array workflow <dir/lab_instructions.rst>
+   Array workflow <dir/lab-instructions.rst>
