@@ -10,6 +10,7 @@ Detection of broad peaks from ChIP-seq data
 
 **Learning outcomes**
 
+- be able to assess the quality of ChIP-seq data for factors with broad occupancy pattern
 - be able to detect regions of enrichment for factors with broad occupancy pattern
 
 
@@ -57,7 +58,7 @@ GEO accession is ``GSE60104``
 ENA accession is ``PRJNA257491``
 
 
-.. list-table:: Table 1. Files used in the data set used in this exercise.
+.. list-table:: Table 1. Files in the data set used in this exercise.
    :widths: 40 25 25
    :header-rows: 1
 
