@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Detection of broad peaks from ChIP-seq data &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Downstream" href="../chip_downstream_tutorials.html" />
+    <link rel="prev" title="ChIP-seq data processing tutorial" href="../chipseqProc/lab-chipseq-processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation.html">DNA Methylation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../chipseq_tutorials.html">ChIP-seq</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../chipseqProc/lab-chipseq-processing.html">ChIPseq processing and narrow peak detection</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ChIPseq: broad peaks detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quality-control">Quality control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peak-calling-using-macs2">Peak calling using MACS2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#visual-inspection-of-the-peaks">Visual inspection of the peaks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#postprocessing-of-peak-candidates">Postprocessing of peak candidates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alternative-approach-window-based-enrichment-analysis-csaw">Alternative approach: window-based enrichment analysis (csaw)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../chipseq_tutorials.html">ChIP-seq</a> &raquo;</li>
+        
+      <li>Detection of broad peaks from ChIP-seq data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/content/tutorials/chipseqBroadPeaks/lab-broadpeaks.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detection-of-broad-peaks-from-chip-seq-data">
+<h1>Detection of broad peaks from ChIP-seq data<a class="headerlink" href="#detection-of-broad-peaks-from-chip-seq-data" title="Permalink to this headline">¶</a></h1>
+<p><strong>Learning outcomes</strong></p>
+<ul class="simple">
+<li><p>be able to detect regions of enrichment for factors with broad occupancy pattern</p></li>
+</ul>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#requirements" id="id6">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#data" id="id7">Data</a></p></li>
+<li><p><a class="reference internal" href="#quality-control" id="id8">Quality control</a></p>
+<ul>
+<li><p><a class="reference internal" href="#cross-correlation-and-related-metrics" id="id9">Cross-correlation and related metrics</a></p></li>
+<li><p><a class="reference internal" href="#cumulative-enrichment" id="id10">Cumulative enrichment</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#peak-calling-using-macs2" id="id11">Peak calling using MACS2</a></p></li>
+<li><p><a class="reference internal" href="#visual-inspection-of-the-peaks" id="id12">Visual inspection of the peaks</a></p></li>
+<li><p><a class="reference internal" href="#postprocessing-of-peak-candidates" id="id13">Postprocessing of peak candidates</a></p></li>
+<li><p><a class="reference internal" href="#alternative-approach-window-based-enrichment-analysis-csaw" id="id14">Alternative approach: window-based enrichment analysis (csaw)</a></p></li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id6">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MACS</span> <span class="pre">2.1.2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span></code> 3.5.0 (2018-04-23) or newer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">csaw</span></code> and its dependencies</p></li>
+</ul>
+<p>Bioconductor packages required for annotation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">org.Hs.eg.db</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TxDb.Hsapiens.UCSC.hg38.knownGene</span></code></p></li>
+</ul>
+<p>Please note that this lab consists of two parts:</p>
+<ol class="lowerroman simple">
+<li><p>calling broad peaks using <code class="docutils literal notranslate"><span class="pre">MACS</span></code> (on Uppmax) and</p></li>
+<li><p>finding enriched genomic windows using  <code class="docutils literal notranslate"><span class="pre">csaw</span></code> in <code class="docutils literal notranslate"><span class="pre">R</span></code>  (local).</p></li>
+</ol>
+<p>Please note that this workflow has been tested using <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">3.5.0</span></code> and <code class="docutils literal notranslate"><span class="pre">csaw</span> <span class="pre">1.14.1</span></code>.</p>
+</div>
+<div class="section" id="data">
+<h2><a class="toc-backref" href="#id7">Data</a><a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<p>We will use ChIP-seq of H3K79me2 from Orlando et al, 2014 (“Quantitative ChIP-Seq Normalization Reveals Global Modulation of the Epigenome”). H3K79me2 is enriched at <strong>active promoters</strong> and linked to transcriptional activation. This is a SE data set, which admitedly is not the best design for broad marks. To use this procedure with PE data, please follow modifications listed on <a class="reference external" href="https://github.com/taoliu/MACS">MACS2 repository homepage</a>.</p>
+<p>GEO accession is <cite>GSE60104</cite>
+ENA accession is ` PRJNA257491`</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Table 1. Files used in the data set used in this exercise.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Sample</p></th>
+<th class="head"><p>GEO Accession</p></th>
+<th class="head"><p>SRA Accession</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Jurkat_K79_100%_R1</p></td>
+<td><p>GSM1465008</p></td>
+<td><p>SRR1536561</p></td>
+</tr>
+<tr class="row-odd"><td><p>Jurkat_K79_100%_R2</p></td>
+<td><p>GSM1464998</p></td>
+<td><p>SRR1536551</p></td>
+</tr>
+<tr class="row-even"><td><p>Jurkat_K79_50%_R1</p></td>
+<td><p>GSM1465006</p></td>
+<td><p>SRR1536559</p></td>
+</tr>
+<tr class="row-odd"><td><p>Jurkat_K79_0%_R1</p></td>
+<td><p>GSM1465004</p></td>
+<td><p>SRR1536557</p></td>
+</tr>
+<tr class="row-even"><td><p>Jurkat_WCE_100%_R1</p></td>
+<td><p>GSM1511469</p></td>
+<td><p>SRR1584493</p></td>
+</tr>
+<tr class="row-odd"><td><p>Jurkat_WCE_100%_R2</p></td>
+<td><p>GSM1511474</p></td>
+<td><p>SRR1584498</p></td>
+</tr>
+<tr class="row-even"><td><p>Jurkat_WCE_50%_R1</p></td>
+<td><p>GSM1511467</p></td>
+<td><p>SRR1584491</p></td>
+</tr>
+<tr class="row-odd"><td><p>Jurkat_WCE_0%_R1</p></td>
+<td><p>GSM1511465</p></td>
+<td><p>SRR1584489</p></td>
+</tr>
+</tbody>
+</table>
+<p>We will call peaks from <em>one sample only</em>, and compare the results to other samples processed earlier.</p>
+<p>Data have been processed in the same way as for the TF ChIP-seq, i.e. the duplicated reads were removed, as were the reads mapped to the ENCODE blacklisted regions. In this case the reads were mapped to <code class="docutils literal notranslate"><span class="pre">hg38</span></code> assembly of human genome.</p>
+<p><span class="raw-html"><br /></span></p>
+</div>
+<div class="section" id="quality-control">
+<h2><a class="toc-backref" href="#id8">Quality control</a><a class="headerlink" href="#quality-control" title="Permalink to this headline">¶</a></h2>
+<p>As always, one should start the analysis from assesment of data quality. This is already performed, and the plots and metrics are included below.</p>
+<div class="section" id="cross-correlation-and-related-metrics">
+<h3><a class="toc-backref" href="#id9">Cross-correlation and related metrics</a><a class="headerlink" href="#cross-correlation-and-related-metrics" title="Permalink to this headline">¶</a></h3>
+<p>The files discussed in this section can be accessed at
+<code class="docutils literal notranslate"><span class="pre">/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/results_pre/fingerprint</span></code>
+and
+<code class="docutils literal notranslate"><span class="pre">/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/results_pre/xcor</span></code>
+.</p>
+<p>These metrics have been developed with application to TF ChIP-seq in mind, and you can see that the results for broad peaks are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. Already from these plots alone it is evident that the data has some quality issues. At this point you should be able to identify them.</p>
+<table class="colwidths-given docutils align-default" id="id3">
+<caption><span class="caption-text">Figure 1. Cross correlations in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014).</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>K79me2 ChIP (SRR1536557)</p></th>
+<th class="head"><p>input (SRR1584489)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/SRR1536557_xcor.png"><img alt="../../../_images/SRR1536557_xcor.png" src="../../../_images/SRR1536557_xcor.png" style="width: 300px;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/SRR1584489_xcor.png"><img alt="../../../_images/SRR1584489_xcor.png" src="../../../_images/SRR1584489_xcor.png" style="width: 300px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>As for the ChIP, the cross correlation profile of factors with broad occupancy patterns is not going to be as sharp as for TFs, and the values of NSC and RSC tend to be lower, which does not mean that the ChIP failed. In fact, the developers of the tool do not recommend using the same NSC / RSC values as quality cutoffs for broad marks. However, input samples should not display signs of enrichment, as is the case here.</p>
+</div>
+<div class="section" id="cumulative-enrichment">
+<h3><a class="toc-backref" href="#id10">Cumulative enrichment</a><a class="headerlink" href="#cumulative-enrichment" title="Permalink to this headline">¶</a></h3>
+<p>Another plot worth examining is cumulative enrichment (aka fingerprint from deepTools):</p>
+<table class="colwidths-given docutils align-default" id="id4">
+<caption><span class="caption-text">Figure 2. Cumulative enrichment (bamFingerprint) for ChIP and input samples in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014).</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>all samples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/cmplGSE60104fingerprint.png"><img alt="../../../_images/cmplGSE60104fingerprint.png" src="../../../_images/cmplGSE60104fingerprint.png" style="width: 600px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that even though the cross correlation metrics don’t look great, some enrichment can be observed for the ChIP samples (SRR1536561, SRR1536551, SRR1536559, SRR1536557), and not for the input samples. As this data is data from very shallow sequencing, the fraction of the genome covered by reads is smaller than expected (0.3 for the best sample). Thus we do not expect to detect all occupancy sites, only the ones which give the strongest signal (this is actually an advantage for this class, as it reduces the running time).</p>
+</div>
+</div>
+<div class="section" id="peak-calling-using-macs2">
+<h2><a class="toc-backref" href="#id11">Peak calling using MACS2</a><a class="headerlink" href="#peak-calling-using-macs2" title="Permalink to this headline">¶</a></h2>
+<p>You will call peaks using sample Jurkat_K79_50_R1 <code class="docutils literal notranslate"><span class="pre">SRR1536557</span></code> and its matching input <code class="docutils literal notranslate"><span class="pre">SRR1584489</span></code>.</p>
+<p>Effective genome size for <code class="docutils literal notranslate"><span class="pre">hg38</span></code> is <code class="docutils literal notranslate"><span class="pre">3.0e9</span></code>.</p>
+<p>The estimated fragment size is <code class="docutils literal notranslate"><span class="pre">180</span> <span class="pre">bp</span></code> (<code class="docutils literal notranslate"><span class="pre">phantompeakqualtools</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p results/macs
+<span class="nb">cd</span> results/macs
+
+ln -s /sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/bam/SRR1536557.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+ln -s /sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/bam/SRR1584489.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+
+module load macs/2
+
+macs2 callpeak -t SRR1536557.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584489.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 50_R1 --outdir 50_R1 -f BAM --gsize <span class="m">3</span>.0e9 -q <span class="m">0</span>.1 --nomodel --extsize <span class="m">180</span> --broad --broad-cutoff <span class="m">0</span>.1
+</pre></div>
+</div>
+<p>If you would like to compare the results of two different methods of finding broad peaks, repeat this with another data set:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -s /sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/bam/SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+ln -s /sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/bam/SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+
+macs2 callpeak -t SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 100_R1 --outdir 100_R1 -f BAM --gsize <span class="m">3</span>.0e9 -q <span class="m">0</span>.1 --nomodel --extsize <span class="m">180</span> --broad --broad-cutoff <span class="m">0</span>.1
+</pre></div>
+</div>
+<p>You can now inspect the results in the output folder <code class="docutils literal notranslate"><span class="pre">50_R1</span></code>. The structure is alike the output for calling narrow peaks. The file <code class="docutils literal notranslate"><span class="pre">*.broadPeak</span></code> is in <code class="docutils literal notranslate"><span class="pre">BED6+3</span></code> format which is similar to <code class="docutils literal notranslate"><span class="pre">narrowPeak</span></code> file used for point-source factors, except for missing the 10th column for annotating peak summits. Look at <a class="reference external" href="https://github.com/taoliu/MACS">MACS2 repository homepage</a> for details.</p>
+<p>How many peaks were identified?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>agata@r483 50_R1<span class="o">]</span>$ wc -l *Peak
+  <span class="m">46664</span> 50_R1_peaks.broadPeak
+</pre></div>
+</div>
+<p>This is a preliminary peak list, and in case of broad peaks, it almost always needs some processing or filtering.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can also copy the results from
+<code class="docutils literal notranslate"><span class="pre">/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/results_pre/macs</span></code></p>
+</div>
+</div>
+<div class="section" id="visual-inspection-of-the-peaks">
+<h2><a class="toc-backref" href="#id12">Visual inspection of the peaks</a><a class="headerlink" href="#visual-inspection-of-the-peaks" title="Permalink to this headline">¶</a></h2>
+<p>You will use <code class="docutils literal notranslate"><span class="pre">IGV</span></code> for this step, and it is recommended that you run it locally on your own computer. Please load <code class="docutils literal notranslate"><span class="pre">hg38</span></code> reference genome.</p>
+<p>Required files are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SRR1536557.bwt.hg38_dm6.sorted.hg38.BLfilt.bam</span></code> and matching <code class="docutils literal notranslate"><span class="pre">bai</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SRR1584489.bwt.hg38_dm6.sorted.hg38.BLfilt.bam</span></code> and matching <code class="docutils literal notranslate"><span class="pre">bai</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">50_r1_peaks.broadPeak</span></code></p></li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can access the bam and bai files from
+<code class="docutils literal notranslate"><span class="pre">/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/bam/</span></code></p>
+</div>
+<p>You can look at some locations of interest. Some peaks with low FDR (q value) or high fold enrichment may be worth checking out. Or check your favourite gene.</p>
+<p>Some ideas:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chr1:230,145,433-230,171,784
+chr1:235,283,256-235,296,431
+chr1:244,857,626-244,864,213
+chr1:45,664,079-45,690,431
+</pre></div>
+</div>
+<p>The first two locations visualise peaks longer than 2kb. The third and the fourth are a 4 kb-long peaks with fold erichment over background &gt;15.</p>
+<table class="colwidths-given docutils align-default" id="id5">
+<caption><span class="caption-text">Figure 3. Results of peak calling in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014); sample sample 100_r1.</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>two upper tracks are ChIP samples, the bottom track is input</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/broad3.png"><img alt="../../../_images/broad3.png" src="../../../_images/broad3.png" style="width: 600px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>All the above demonstrate one of the common caveats of calling broad peaks: regions obviously enriched in a mark of interest are represented as a series of adjoining peaks which in fact should be merged into one long enrichment domain. You may leave it as is, or merge the peaks into longer ones, depending on the downstream application.</p>
+</div>
+<div class="section" id="postprocessing-of-peak-candidates">
+<h2><a class="toc-backref" href="#id13">Postprocessing of peak candidates</a><a class="headerlink" href="#postprocessing-of-peak-candidates" title="Permalink to this headline">¶</a></h2>
+<p>Please note that this step is only an example, as <strong>any postprocessing of peak calling results is highly project specific</strong>.</p>
+<p>Normally, you would work with replicated data. As in the case of TFs earlier, it is recommended to continue working with peaks reproducible between replicates.</p>
+<p>The peak candidate lists can and should be further filtered, based on fold enrichment and pileup value, to remove peaks which could have a high fold enrichment but low signal, as these are likely non-informative. Any filtering, however has to be performed having in mind the biological characteristics of the signal.</p>
+<p>You can merge peaks which are close to one another using <a class="reference external" href="https://bedtools.readthedocs.io/en/latest/">bedtools</a>. You will control the distance of features to be merged using option <code class="docutils literal notranslate"><span class="pre">-d</span></code>. Here we arbitrarily choose 1 kb.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp 50_r1_peaks.broadPeak 50_r1.bed
+
+module load bioinfo-tools
+module load BEDTools/2.27.1
+
+bedtools merge -d <span class="m">1000</span> -i 50_r1.bed &gt; 50_r1.merged.bed
+
+<span class="c1">#how many peaks?</span>
+wc -l 50_r1.merged.bed
+<span class="c1">#11732 50_r1.merged.bed</span>
+</pre></div>
+</div>
+<p><span class="raw-html"><br /></span></p>
+</div>
+<div class="section" id="alternative-approach-window-based-enrichment-analysis-csaw">
+<h2><a class="toc-backref" href="#id14">Alternative approach: window-based enrichment analysis (csaw)</a><a class="headerlink" href="#alternative-approach-window-based-enrichment-analysis-csaw" title="Permalink to this headline">¶</a></h2>
+<p>This workflow is similar to the one using <code class="docutils literal notranslate"><span class="pre">csaw</span></code> designed for TF peaks. The differences pertain to analysis of signal from diffuse marks. Please check the “Csaw (Alternative differential binding analyses)” tutorial for more detailed comments on each step.</p>
+<p>You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to <code class="docutils literal notranslate"><span class="pre">chr1</span></code>.</p>
+<p>This exercise is best performed locally. It has not been tested on Uppmax.</p>
+<p>First, you need to copy the necessary files to your laptop:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /desired/location
+
+scp &lt;USERNAME&gt;@rackham.uppmax.uu.se:/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/broad_peaks_bam.tar.gz .
+
+<span class="c1">#type your password at the prompt</span>
+
+tar zcvf broad_peaks_bam.tar.gz
+</pre></div>
+</div>
+<p>The remaining part of the exercise is performed in <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p>
+<p>Sort out the working directory and file paths:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">setwd</span><span class="p">(</span><span class="s">&quot;/path/to/workdir&quot;</span><span class="p">)</span>
+
+<span class="n">dir.data</span> <span class="o">=</span> <span class="s">&quot;/path/to/desired/location/bam_chr1&quot;</span>
+
+<span class="n">k79_100_1</span><span class="o">=</span><span class="nf">file.path</span><span class="p">(</span><span class="n">dir.data</span><span class="p">,</span><span class="s">&quot;SRR1536561.bwt.hg38_dm6.sorted.chr1.hg38.bam&quot;</span><span class="p">)</span>
+<span class="n">k79_100_2</span><span class="o">=</span><span class="nf">file.path</span><span class="p">(</span><span class="n">dir.data</span><span class="p">,</span><span class="s">&quot;SRR1536561.bwt.hg38_dm6.sorted.chr1.hg38.bam&quot;</span><span class="p">)</span>
+<span class="n">k79_100_i1</span><span class="o">=</span><span class="nf">file.path</span><span class="p">(</span><span class="n">dir.data</span><span class="p">,</span><span class="s">&quot;SRR1584493.bwt.hg38_dm6.sorted.chr1.hg38.bam&quot;</span><span class="p">)</span>
+<span class="n">k79_100_i2</span><span class="o">=</span><span class="nf">file.path</span><span class="p">(</span><span class="n">dir.data</span><span class="p">,</span><span class="s">&quot;SRR1584498.bwt.hg38_dm6.sorted.chr1.hg38.bam&quot;</span><span class="p">)</span>
+
+<span class="n">bam.files</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="n">k79_100_1</span><span class="p">,</span><span class="n">k79_100_2</span><span class="p">,</span><span class="n">k79_100_i1</span><span class="p">,</span><span class="n">k79_100_i2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Read in the data:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">frag.len</span><span class="o">=</span><span class="m">180</span>
+
+<span class="nf">library</span><span class="p">(</span><span class="n">csaw</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">windowCounts</span><span class="p">(</span><span class="n">bam.files</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="n">frag.len</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="m">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You will identify the enrichment windows by performing a differential occupancy analysis between ChIP and input samples.</p>
+<p>Information on the contrast to test:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">grouping</span> <span class="o">&lt;-</span> <span class="nf">factor</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;chip&#39;</span><span class="p">,</span> <span class="s">&#39;chip&#39;</span><span class="p">,</span> <span class="s">&#39;input&#39;</span><span class="p">,</span> <span class="s">&#39;input&#39;</span><span class="p">))</span>
+<span class="n">design</span> <span class="o">&lt;-</span> <span class="nf">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="m">0</span> <span class="o">+</span> <span class="n">grouping</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">design</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">levels</span><span class="p">(</span><span class="n">grouping</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">edgeR</span><span class="p">)</span>
+<span class="n">contrast</span> <span class="o">&lt;-</span> <span class="nf">makeContrasts</span><span class="p">(</span><span class="n">chip</span> <span class="o">-</span> <span class="n">input</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">design</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, you need to filter out uninformative windows with low signal prior to further analysis. Selection of appropriate filtering strategy and cutoff is key to a successful detection of differential occupancy events, and is data dependent. Filtering is valid so long as it is independent of the test statistic under the null hypothesis.
+One possible approach involves choosing a filter threshold based on the fold change over
+the level of non-specific enrichment (background). The degree of background enrichment is estimated
+by counting reads into large bins across the genome.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">type=&quot;global&quot;</span></code>, the <code class="docutils literal notranslate"><span class="pre">filterWindows</span></code> function returns the increase in the abundance of
+each window over the global background.
+Windows are filtered by setting some minimum threshold on this increase. Here, a <strong>fold change of 3</strong> is necessary for a window to be considered as containing a binding site.</p>
+<p>In this example, you estimate the global background using ChIP samples only. You can do it using the entire dataset including inputs of course.</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">bam.files_chip</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="n">k79_100_1</span><span class="p">,</span><span class="n">k79_100_2</span><span class="p">)</span>
+
+<span class="n">bin.size</span> <span class="o">&lt;-</span> <span class="m">2000L</span>
+<span class="n">binned.ip</span> <span class="o">&lt;-</span> <span class="nf">windowCounts</span><span class="p">(</span><span class="n">bam.files_chip</span><span class="p">,</span> <span class="n">bin</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">bin.size</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="n">frag.len</span><span class="p">)</span>
+<span class="n">data.ip</span><span class="o">=</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span>
+<span class="n">filter.stat</span> <span class="o">&lt;-</span> <span class="nf">filterWindows</span><span class="p">(</span><span class="n">data.ip</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="n">binned.ip</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="s">&quot;global&quot;</span><span class="p">)</span>
+
+<span class="n">keep</span> <span class="o">&lt;-</span> <span class="n">filter.stat</span><span class="o">$</span><span class="n">filter</span> <span class="o">&gt;</span> <span class="nf">log2</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+<span class="n">data.filt</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="p">[</span><span class="n">keep</span><span class="p">,]</span>
+</pre></div>
+</div>
+<p>To examine how many windows passed the filtering:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">keep</span><span class="p">)</span>
+
+<span class="c1">##   Mode   FALSE    TRUE</span>
+<span class="c1">##  logical   56543   61752</span>
+</pre></div>
+</div>
+<p>To normalise the data for different library sizes you need to calculate normalisation factors based on large bins:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">binned</span> <span class="o">&lt;-</span> <span class="nf">windowCounts</span><span class="p">(</span><span class="n">bam.files</span><span class="p">,</span> <span class="n">bin</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="m">10000</span><span class="p">)</span>
+<span class="n">data.filt</span> <span class="o">&lt;-</span> <span class="nf">normOffsets</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">se.out</span><span class="o">=</span><span class="n">data.filt</span><span class="p">)</span>
+
+<span class="n">data.filt</span><span class="o">$</span><span class="n">norm.factors</span>
+<span class="c1">## [1] 0.9970575 0.9970575 0.9310318 1.0804262</span>
+</pre></div>
+</div>
+<p>Detection of DB windows (in our case, the occupancy sites):</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">data.filt.calc</span> <span class="o">&lt;-</span> <span class="nf">asDGEList</span><span class="p">(</span><span class="n">data.filt</span><span class="p">)</span>
+<span class="n">data.filt.calc</span> <span class="o">&lt;-</span> <span class="nf">estimateDisp</span><span class="p">(</span><span class="n">data.filt.calc</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+<span class="n">fit</span> <span class="o">&lt;-</span> <span class="nf">glmQLFit</span><span class="p">(</span><span class="n">data.filt.calc</span><span class="p">,</span> <span class="n">design</span><span class="p">,</span> <span class="n">robust</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">&lt;-</span> <span class="nf">glmQLFTest</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="n">contrast</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can inspect the raw results:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="nf">head</span><span class="p">(</span><span class="n">results</span><span class="o">$</span><span class="n">table</span><span class="p">)</span>
+       <span class="n">logFC</span>   <span class="n">logCPM</span>            <span class="bp">F</span>      <span class="n">PValue</span>
+<span class="m">1</span> <span class="m">5.12314899</span> <span class="m">3.507425</span> <span class="m">2.028955e+10</span> <span class="m">0.004065537</span>
+<span class="m">2</span> <span class="m">1.24105882</span> <span class="m">3.644954</span> <span class="m">3.018273e+00</span> <span class="m">0.210391635</span>
+<span class="m">3</span> <span class="m">1.24105882</span> <span class="m">3.644954</span> <span class="m">3.018273e+00</span> <span class="m">0.210391635</span>
+<span class="m">4</span> <span class="m">1.07213133</span> <span class="m">4.470860</span> <span class="m">2.003744e+00</span> <span class="m">0.279525197</span>
+<span class="m">5</span> <span class="m">0.44631285</span> <span class="m">4.740069</span> <span class="m">2.820544e-01</span> <span class="m">0.643192436</span>
+<span class="m">6</span> <span class="m">0.03694957</span> <span class="m">4.829412</span> <span class="m">1.729703e-02</span> <span class="m">0.939536489</span>
+</pre></div>
+</div>
+<p>The following steps will calculate the FDR for each peak, merge peaks withink 1 kb and calculate the FDR for these composite peaks.</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">merged</span> <span class="o">&lt;-</span> <span class="nf">mergeWindows</span><span class="p">(</span><span class="nf">rowRanges</span><span class="p">(</span><span class="n">data.filt</span><span class="p">),</span> <span class="n">tol</span><span class="o">=</span><span class="m">1000L</span><span class="p">)</span>
+<span class="n">table.combined</span> <span class="o">&lt;-</span> <span class="nf">combineTests</span><span class="p">(</span><span class="n">merged</span><span class="o">$</span><span class="n">id</span><span class="p">,</span> <span class="n">results</span><span class="o">$</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Short inspection of the results:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">table.combined</span><span class="p">)</span>
+
+<span class="c1">##   nWindows logFC.up logFC.down      PValue         FDR direction</span>
+<span class="c1">## 1       16        5          3 0.065048599 0.083668125        up</span>
+<span class="c1">## 2       23        0         20 0.004044035 0.008745581      down</span>
+<span class="c1">## 3        1        0          1 0.167741339 0.203667724      down</span>
+<span class="c1">## 4        2        2          0 0.210391635 0.233814958        up</span>
+<span class="c1">## 5        7        6          0 0.013399521 0.020487780        up</span>
+<span class="c1">## 6        1        1          0 0.057954382 0.075061398        up</span>
+</pre></div>
+</div>
+<p>How many regions are up (i.e. enriched in chip compared to input)?</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">is.sig.region</span> <span class="o">&lt;-</span> <span class="n">table.combined</span><span class="o">$</span><span class="n">FDR</span> <span class="o">&lt;=</span> <span class="m">0.1</span>
+<span class="nf">table</span><span class="p">(</span><span class="n">table.combined</span><span class="o">$</span><span class="n">direction</span><span class="p">[</span><span class="n">is.sig.region</span><span class="p">])</span>
+
+<span class="c1">## down mixed    up</span>
+<span class="c1">##   57    32  2103</span>
+</pre></div>
+</div>
+<p>Does this make sense? How does it compare to results obtained from a MACS run?</p>
+<p>You can now annotate the results as in the csaw TF exercise:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">org.Hs.eg.db</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">TxDb.Hsapiens.UCSC.hg38.knownGene</span><span class="p">)</span>
+
+<span class="n">anno</span> <span class="o">&lt;-</span> <span class="nf">detailRanges</span><span class="p">(</span><span class="n">merged</span><span class="o">$</span><span class="n">region</span><span class="p">,</span> <span class="n">txdb</span><span class="o">=</span><span class="n">TxDb.Hsapiens.UCSC.hg38.knownGene</span><span class="p">,</span>
+<span class="n">orgdb</span><span class="o">=</span><span class="n">org.Hs.eg.db</span><span class="p">,</span> <span class="n">promoter</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">3000</span><span class="p">,</span> <span class="m">1000</span><span class="p">),</span> <span class="n">dist</span><span class="o">=</span><span class="m">5000</span><span class="p">)</span>
+
+<span class="n">merged</span><span class="o">$</span><span class="n">region</span><span class="o">$</span><span class="n">overlap</span> <span class="o">&lt;-</span> <span class="n">anno</span><span class="o">$</span><span class="n">overlap</span>
+<span class="n">merged</span><span class="o">$</span><span class="n">region</span><span class="o">$</span><span class="n">left</span> <span class="o">&lt;-</span> <span class="n">anno</span><span class="o">$</span><span class="n">left</span>
+<span class="n">merged</span><span class="o">$</span><span class="n">region</span><span class="o">$</span><span class="n">right</span> <span class="o">&lt;-</span> <span class="n">anno</span><span class="o">$</span><span class="n">right</span>
+
+<span class="n">all.results</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="n">merged</span><span class="o">$</span><span class="n">region</span><span class="p">)[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">],</span> <span class="n">table.combined</span><span class="p">,</span> <span class="n">anno</span><span class="p">)</span>
+
+<span class="n">sig</span><span class="o">=</span><span class="n">all.results</span><span class="p">[</span><span class="n">all.results</span><span class="o">$</span><span class="n">FDR</span><span class="o">&lt;</span><span class="m">0.05</span><span class="p">,]</span>
+<span class="n">all.results</span> <span class="o">&lt;-</span> <span class="n">all.results</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">all.results</span><span class="o">$</span><span class="n">PValue</span><span class="p">),]</span>
+
+<span class="nf">head</span><span class="p">(</span><span class="n">all.results</span><span class="p">)</span>
+
+<span class="n">filename</span><span class="o">=</span><span class="s">&quot;k79me2_100_csaw.txt&quot;</span>
+<span class="nf">write.table</span><span class="p">(</span><span class="n">all.results</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&quot;\t&quot;</span><span class="p">,</span><span class="n">quote</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="n">row.names</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To compare with peaks detected by MACS it is convenient to save the results in <code class="docutils literal notranslate"><span class="pre">BED</span></code> format:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="n">sig.up</span><span class="o">=</span><span class="n">sig</span><span class="p">[</span><span class="n">sig</span><span class="o">$</span><span class="n">direction</span><span class="o">==</span><span class="s">&quot;up&quot;</span><span class="p">,]</span>
+
+<span class="n">starts</span><span class="o">=</span><span class="n">sig.up</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="m">-1</span>
+
+<span class="n">sig.up</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="o">=</span><span class="n">starts</span>
+
+<span class="n">sig_bed</span><span class="o">=</span><span class="n">sig.up</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span>
+
+<span class="n">filename</span><span class="o">=</span><span class="s">&quot;k79me2_100_peaks.bed&quot;</span>
+<span class="nf">write.table</span><span class="p">(</span><span class="n">sig_bed</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&quot;\t&quot;</span><span class="p">,</span><span class="n">col.names</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="n">quote</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="n">row.names</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can now load the <code class="docutils literal notranslate"><span class="pre">bed</span></code> file to <code class="docutils literal notranslate"><span class="pre">IGV</span></code> along with the appropriate <code class="docutils literal notranslate"><span class="pre">broad.Peak</span></code> file and zoom in to your favourite location on chromosome 1.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../chip_downstream_tutorials.html" class="btn btn-neutral float-right" title="Downstream" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../chipseqProc/lab-chipseq-processing.html" class="btn btn-neutral float-left" title="ChIP-seq data processing tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
