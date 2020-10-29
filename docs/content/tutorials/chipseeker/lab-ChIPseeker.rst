@@ -9,7 +9,7 @@ ChIP-seq down-stream analysis: ChIPseeker
 
 
 
-** Learning outcomes**
+**Learning outcomes**
 
 Using ``ChIPseeker`` package
 - to profile ChIP signal by genomics location and by ChIP binding to TSS regions
