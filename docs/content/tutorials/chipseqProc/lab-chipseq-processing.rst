@@ -929,8 +929,8 @@ Figure 11. Sample clustering (spearman) by reads mapped in bins genome-wide.
 
 Figure 12. Sample clustering (pearson) by reads mapped in merged peaks.
 
-----
+.. ----
 
-Written by: Agata Smialowska
+.. Written by: Agata Smialowska
 
-Contributions by: Olga Dethlefsen
+.. Contributions by: Olga Dethlefsen

@@ -90,7 +90,7 @@ We can now create a heatmap for scores associated with genomic regions, i.e. plo
 Have a look at the ``tss.hela_1.pdf``. What do you think?
 
 
-----
+.. ----
 
-Written by: Agata Smialowska
+.. Written by: Agata Smialowska
 

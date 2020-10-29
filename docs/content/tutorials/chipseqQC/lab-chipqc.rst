@@ -82,6 +82,6 @@ Are results in line with the previous quality control workflow?
 .. The report can be also downloaded from Box [here](https://stockholmuniversity.box.com/s/c1lbrr1s1khw4ctiqfq0f9j2m1b6vp90)
 
 
-----
+.. ----
 
-Written by: Agata Smialowska
+.. Written by: Agata Smialowska

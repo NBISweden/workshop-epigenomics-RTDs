@@ -506,6 +506,6 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosome 1.
 
 
-----
+.. ----
 
-Written by: Agata Smialowska
+.. Written by: Agata Smialowska
