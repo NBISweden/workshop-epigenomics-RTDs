@@ -26,7 +26,7 @@ Please keep the tutorials content in their own folder under `docs/content/tutori
 ### Viewing changes locally
 
 
-#### Install Sphix and readthedocs theme
+#### Install Sphinx and readthedocs theme
 
 ```
 conda install sphinx
