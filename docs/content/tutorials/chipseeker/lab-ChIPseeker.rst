@@ -436,7 +436,7 @@ Fig: Average profile of ChIP peaks among different cell lines
 
 **Peaks annotations**
 
-.. image::figures/fig-anno-vennpie-1.pdf
+.. image:: figures/fig-anno-vennpie-1.pdf
    			:width: 600px
 
 Fig: Genomic annotations by vennpie
