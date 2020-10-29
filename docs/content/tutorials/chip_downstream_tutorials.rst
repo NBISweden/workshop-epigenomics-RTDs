@@ -1,23 +1,11 @@
-=============
-Downstream
-=============
-
-
+====================
+Downstream Analyses
+====================
 
 These are tutorials for downstream processing of ChIP-seq and ATAC-seq data.
 
 
-Diff occupancy
-===============
+.. toctree::
+   :maxdepth: 1
 
-
-
-
-Motifs
-========
-
-
-Annotation with closest features
-=================================
-
-
+   Annotation using ChIPseeker <chipseeker/lab-ChIPseeker.rst>

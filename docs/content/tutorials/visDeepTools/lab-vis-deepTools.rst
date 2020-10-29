@@ -4,14 +4,18 @@
 
 
 ====================================
-Signal visualisation with deepTools
+Signal visualisation
 ====================================
 
 
 **Learning outcomes**
 
-- Using ``deepTools``
-- visualisation ChIP signal in relation to annotated TSS
+Using ``deepTools``
+- to visualise ChIP signal in relation to annotated TSS
+
+
+.. contents:: 
+    :local:
 
 
 Signal visualisation with deepTools
