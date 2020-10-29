@@ -339,7 +339,7 @@ Third, the processed **bam files are sorted and indexed**:
 
 
 
-**Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as `IGV <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_.
+**Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as ``IGV``.
 
 We are still working with subset of data (chromosomes 1 and 2) hence the **effective genome size** used here is 492449994 (4.9e8). For **hg19** the effective genome size would be set to 2.45e9 (see `publication <http://www.nature.com/nbt/journal/v27/n1/fig_tab/nbt.1518_T1.html>`_.
 
@@ -816,21 +816,6 @@ Exploration suggestions:
 - go to ``chr1:1,233,734-1,235,455`` and ``chr2:242,004,675-242,008,035``. You should be able to see signal as below
 
 
-.. ----
-
-.. ![](../figures/lab-processing/IGV_ex1.png)
-
-.. Example IGV view centered around `chr1:1,233,734-1,235,455`
-
-.. ----
-
-.. ![](../figures/lab-processing/IGV_ex2.png)
-
-.. Example IGV view centered around `chr2:242,004,675-242,008,035`
-
-
-.. ----
-
 
 .. image:: figures/IGV_ex1.png
    			:width: 400px
@@ -945,8 +930,6 @@ Figure 11. Sample clustering (spearman) by reads mapped in bins genome-wide.
 Figure 12. Sample clustering (pearson) by reads mapped in merged peaks.
 
 ----
-
-
 
 Written by: Agata Smialowska
 

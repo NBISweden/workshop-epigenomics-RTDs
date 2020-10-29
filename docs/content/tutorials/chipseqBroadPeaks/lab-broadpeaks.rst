@@ -47,6 +47,10 @@ Please note that this lab consists of two parts:
 Please note that this workflow has been tested using ``R 3.5.0`` and ``csaw 1.14.1``.
 
 
+
+Instructions how to install **R and Bioconductor packages** (including dependencies for csaw) can be found in instructions to previous labs. Please note that this workflow has been tested using ``R 3.5.0`` and ``csaw 1.14.1``.
+
+
 Data
 =====
 
@@ -501,3 +505,7 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 
 You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosome 1.
 
+
+----
+
+Written by: Agata Smialowska
