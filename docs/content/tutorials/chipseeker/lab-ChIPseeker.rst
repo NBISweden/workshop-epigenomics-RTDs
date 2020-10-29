@@ -393,7 +393,7 @@ For more examples on what can be done in terms on functional annotations, we rec
 Appendix
 ========
 
-Figures generated during this session are shown below.
+Links to figures generated during this session are shown below.
 
 
 **ChIP profiling**
@@ -436,7 +436,7 @@ Fig: Average profile of ChIP peaks among different cell lines
 
 **Peaks annotations**
 
-.. image:: figures/fig-anno-vennpie-1.pdf
+.. image::figures/fig-anno-vennpie-1.pdf
    			:width: 600px
 
 Fig: Genomic annotations by vennpie
