@@ -12,6 +12,7 @@ Welcome to Epigenomics Workshop 2020 Page!
 ==========================================================
 
 
+Epigenomics Data Analysis: from Bulk to Single Cell
 
 Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This course is organised by the National Bioinformatics Infrastructure Sweden (NBIS).
 
@@ -103,7 +104,7 @@ Makes learning experience easier:
 Application
 -----------
 
-- Application is now closed 
+- Application is now closed
 - Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
 
 
