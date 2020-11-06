@@ -181,6 +181,6 @@ Site Contents
    :maxdepth: 1
 
    content/precourse
-   content/Online-classroom
+   content/online-classroom
    content/schedule
    content/tutorials
