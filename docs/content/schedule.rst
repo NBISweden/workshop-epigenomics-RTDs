@@ -12,9 +12,6 @@ Schedule
 Monday (23 November 2020)
 --------------------------
 
-Monday (23 November 2020)
---------------------------
-
 *DNA methylation with Illumina 450K arrays and Bisulfite-seq*
 
 09.15 - 09.30 Introduction to the course (**online session**) (Olga, Agata)
