@@ -12,27 +12,30 @@ Schedule
 Monday (23 November 2020)
 --------------------------
 
-*DNA methylation with Illumina EPIC arrays and Bisulfite-seq*
+Monday (23 November 2020)
+--------------------------
+
+*DNA methylation with Illumina 450K arrays and Bisulfite-seq*
 
 09.15 - 09.30 Introduction to the course (**online session**) (Olga, Agata)
 
 09.30 - 09.45 **Introduction to methylation** (**online session**)  (Vincent)
 
-09.45 - 10.00 Break-out session (**online session**)  (Vincent)
+09.45 - 10.15 Computer exercises set-up (**online support**)
 
-10.00 - 11.30 **Methylation methods & technologies** (**online session**)  (Jessica Nordlund)
+10.15 - 10.30 **Methylation Exercises Overview I: Array workflow** (**online session**)  (Vincent)
 
-11.30 - 12.00 Computer exercises set-up (*online support*)
+10.30 - 12.00 Exercises (*online support*)
 
 12.00 - 13.00 lunch (*offline*)
 
-13.00 - 13.30 **Methylation Exercises Overview I: Array workflow** (**online session**)  (Vincent)
+13.00 - 13.30 Exercises (*online support*)
 
-13.30 - 15.30 Exercises (*online support*)
+13.30 - 15.00 **Methylation methods & technologies** (**online session**)  (Jessica Nordlund)
 
-15.30 - 16.00 **Methylation Exercises Overview II: Methylation Sequencing**  (**online session**) (Vincent)
+15.00 - 15.15 **Methylation Exercises Overview II: Methylation Sequencing**  (**online session**) (Vincent)
 
-16.00 - 17.00 Exercises (*online support*)
+15.15 - 17.00 Exercises (*online support*)
 
 17.00 - 17.30 Test yourself (*offline*)
 
