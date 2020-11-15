@@ -73,11 +73,13 @@ Wednesday (25 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.30 TBD
+13.00 - 14.30 Exercises (*online support*)
 
-13.00 - 15.30 Exercises (*online support*)
+14.30 - 15.00 **ChIP-seq alternatives - ChIC, CUT&RUN, CUT&TAG** (**online session**) (Simon)
 
-15.30 - 17.00 Exercises (*offline*)
+15.00 - 16.00 Exercises (*online support*)
+
+16.00 - 17.00 Exercises (*offline*)
 
 17.00 - 17.30 Test yourself (*offline*)
 

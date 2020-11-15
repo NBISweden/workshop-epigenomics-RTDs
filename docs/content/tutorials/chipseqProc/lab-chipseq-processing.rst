@@ -134,12 +134,45 @@ We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These
 Methods
 =========
 
-Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using `bowtie`, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
+Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using ``bowtie``, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
 
 **To shorten computational time** required to run steps in this tutorial we scaled down dataset by keeping reads mapping to **chromosomes 1 and 2 only**. For the post peak-calling QC and differential occupancy part of the tutorials, peaks were called using entire data set. Note that all methods used in this exercise perform significantly better when used on complete (i.e. non-subset) data sets. Their accuracy most often scales with the number of mapped reads in each library, but so does the run time. For reference we include the key plots generated analysing the complete data set 
 (`Appendix`_).
 
-Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the `~/chipseq/results` directory.
+Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the ``~/chipseq/results`` directory.
+
+
+Setting up directory structure and files
+------------------------------------------
+
+There are many files which are part of the data set as well as there are additional files with annotations that are required to run various steps in this tutorial. Therefore saving files in a structured manner is essential to keep track of the analysis steps (and always a good practice). We have preset data access and environment for you. To use these settings run:
+
+
+* ``chiseq_data.sh`` that sets up directory structure and creates symbolic links to data as well as copies smaller files **[RUN ONLY ONCE]**
+
+* ``chipseq_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
+
+Copy the scripts to your home directory and execute them:
+
+
+.. code-block:: bash
+
+  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_data.sh ./
+  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_env.sh ./
+
+  source chipseq_data.sh
+  source chipseq_env.sh
+
+
+You should see a directory named ``chipseq``:
+
+.. code-block:: bash
+
+  ls ~
+  cd ~/chipseq/analysis
+
+
+
 
 
 :raw-html:`<br />`

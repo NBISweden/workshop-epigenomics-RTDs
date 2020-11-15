@@ -36,7 +36,7 @@
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Downstream" href="../chip_downstream_tutorials.html" />
+    <link rel="next" title="Alternative QC using ChIPQC" href="../chipseqQC/lab-chipqc.html" />
     <link rel="prev" title="ChIP-seq data processing tutorial" href="../chipseqProc/lab-chipseq-processing.html" /> 
 </head>
 
@@ -87,9 +87,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../methylation.html">DNA Methylation</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../chipseq_tutorials.html">ChIP-seq</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../chipseqProc/lab-chipseq-processing.html">ChIPseq processing and narrow peak detection</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../chipseqProc/lab-chipseq-processing.html">ChIPseq: processing and narrow peak detection</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ChIPseq: broad peaks detection</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#data">Data</a></li>
@@ -100,9 +99,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#alternative-approach-window-based-enrichment-analysis-csaw">Alternative approach: window-based enrichment analysis (csaw)</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../chipseqQC/lab-chipqc.html">ChIPseq: alternative QC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visDeepTools/lab-vis-deepTools.html">Signal visualisation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -178,6 +180,7 @@
 <h1>Detection of broad peaks from ChIP-seq data<a class="headerlink" href="#detection-of-broad-peaks-from-chip-seq-data" title="Permalink to this headline">¶</a></h1>
 <p><strong>Learning outcomes</strong></p>
 <ul class="simple">
+<li><p>be able to assess the quality of ChIP-seq data for factors with broad occupancy pattern</p></li>
 <li><p>be able to detect regions of enrichment for factors with broad occupancy pattern</p></li>
 </ul>
 <div class="contents local topic" id="contents">
@@ -214,14 +217,15 @@
 <li><p>finding enriched genomic windows using  <code class="docutils literal notranslate"><span class="pre">csaw</span></code> in <code class="docutils literal notranslate"><span class="pre">R</span></code>  (local).</p></li>
 </ol>
 <p>Please note that this workflow has been tested using <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">3.5.0</span></code> and <code class="docutils literal notranslate"><span class="pre">csaw</span> <span class="pre">1.14.1</span></code>.</p>
+<p>Instructions how to install <strong>R and Bioconductor packages</strong> (including dependencies for csaw) can be found in instructions to previous labs. Please note that this workflow has been tested using <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">3.5.0</span></code> and <code class="docutils literal notranslate"><span class="pre">csaw</span> <span class="pre">1.14.1</span></code>.</p>
 </div>
 <div class="section" id="data">
 <h2><a class="toc-backref" href="#id7">Data</a><a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
 <p>We will use ChIP-seq of H3K79me2 from Orlando et al, 2014 (“Quantitative ChIP-Seq Normalization Reveals Global Modulation of the Epigenome”). H3K79me2 is enriched at <strong>active promoters</strong> and linked to transcriptional activation. This is a SE data set, which admitedly is not the best design for broad marks. To use this procedure with PE data, please follow modifications listed on <a class="reference external" href="https://github.com/taoliu/MACS">MACS2 repository homepage</a>.</p>
-<p>GEO accession is <cite>GSE60104</cite>
-ENA accession is ` PRJNA257491`</p>
+<p>GEO accession is <code class="docutils literal notranslate"><span class="pre">GSE60104</span></code></p>
+<p>ENA accession is <code class="docutils literal notranslate"><span class="pre">PRJNA257491</span></code></p>
 <table class="colwidths-given docutils align-default" id="id2">
-<caption><span class="caption-text">Table 1. Files used in the data set used in this exercise.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-text">Table 1. Files in the data set used in this exercise.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 44%" />
 <col style="width: 28%" />
@@ -592,7 +596,7 @@ Windows are filtered by setting some minimum threshold on this increase. Here, a
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../chip_downstream_tutorials.html" class="btn btn-neutral float-right" title="Downstream" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../chipseqQC/lab-chipqc.html" class="btn btn-neutral float-right" title="Alternative QC using ChIPQC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../chipseqProc/lab-chipseq-processing.html" class="btn btn-neutral float-left" title="ChIP-seq data processing tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

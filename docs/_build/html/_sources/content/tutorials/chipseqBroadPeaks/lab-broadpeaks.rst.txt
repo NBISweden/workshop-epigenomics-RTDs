@@ -10,6 +10,7 @@ Detection of broad peaks from ChIP-seq data
 
 **Learning outcomes**
 
+- be able to assess the quality of ChIP-seq data for factors with broad occupancy pattern
 - be able to detect regions of enrichment for factors with broad occupancy pattern
 
 
@@ -46,17 +47,22 @@ Please note that this lab consists of two parts:
 Please note that this workflow has been tested using ``R 3.5.0`` and ``csaw 1.14.1``.
 
 
+
+Instructions how to install **R and Bioconductor packages** (including dependencies for csaw) can be found in instructions to previous labs. Please note that this workflow has been tested using ``R 3.5.0`` and ``csaw 1.14.1``.
+
+
 Data
 =====
 
 We will use ChIP-seq of H3K79me2 from Orlando et al, 2014 ("Quantitative ChIP-Seq Normalization Reveals Global Modulation of the Epigenome"). H3K79me2 is enriched at **active promoters** and linked to transcriptional activation. This is a SE data set, which admitedly is not the best design for broad marks. To use this procedure with PE data, please follow modifications listed on `MACS2 repository homepage <https://github.com/taoliu/MACS>`_.
 
 
-GEO accession is `GSE60104`
-ENA accession is ` PRJNA257491`
+GEO accession is ``GSE60104``
+
+ENA accession is ``PRJNA257491``
 
 
-.. list-table:: Table 1. Files used in the data set used in this exercise.
+.. list-table:: Table 1. Files in the data set used in this exercise.
    :widths: 40 25 25
    :header-rows: 1
 
@@ -498,3 +504,8 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 
 
 You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosome 1.
+
+
+.. ----
+
+.. Written by: Agata Smialowska

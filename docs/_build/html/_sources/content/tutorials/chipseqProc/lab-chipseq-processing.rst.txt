@@ -134,12 +134,45 @@ We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These
 Methods
 =========
 
-Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using `bowtie`, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
+Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using ``bowtie``, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
 
 **To shorten computational time** required to run steps in this tutorial we scaled down dataset by keeping reads mapping to **chromosomes 1 and 2 only**. For the post peak-calling QC and differential occupancy part of the tutorials, peaks were called using entire data set. Note that all methods used in this exercise perform significantly better when used on complete (i.e. non-subset) data sets. Their accuracy most often scales with the number of mapped reads in each library, but so does the run time. For reference we include the key plots generated analysing the complete data set 
 (`Appendix`_).
 
-Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the `~/chipseq/results` directory.
+Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the ``~/chipseq/results`` directory.
+
+
+Setting up directory structure and files
+------------------------------------------
+
+There are many files which are part of the data set as well as there are additional files with annotations that are required to run various steps in this tutorial. Therefore saving files in a structured manner is essential to keep track of the analysis steps (and always a good practice). We have preset data access and environment for you. To use these settings run:
+
+
+* ``chiseq_data.sh`` that sets up directory structure and creates symbolic links to data as well as copies smaller files **[RUN ONLY ONCE]**
+
+* ``chipseq_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
+
+Copy the scripts to your home directory and execute them:
+
+
+.. code-block:: bash
+
+  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_data.sh ./
+  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_env.sh ./
+
+  source chipseq_data.sh
+  source chipseq_env.sh
+
+
+You should see a directory named ``chipseq``:
+
+.. code-block:: bash
+
+  ls ~
+  cd ~/chipseq/analysis
+
+
+
 
 
 :raw-html:`<br />`
@@ -339,7 +372,7 @@ Third, the processed **bam files are sorted and indexed**:
 
 
 
-**Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as `IGV <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_.
+**Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as ``IGV``.
 
 We are still working with subset of data (chromosomes 1 and 2) hence the **effective genome size** used here is 492449994 (4.9e8). For **hg19** the effective genome size would be set to 2.45e9 (see `publication <http://www.nature.com/nbt/journal/v27/n1/fig_tab/nbt.1518_T1.html>`_.
 
@@ -816,21 +849,6 @@ Exploration suggestions:
 - go to ``chr1:1,233,734-1,235,455`` and ``chr2:242,004,675-242,008,035``. You should be able to see signal as below
 
 
-.. ----
-
-.. ![](../figures/lab-processing/IGV_ex1.png)
-
-.. Example IGV view centered around `chr1:1,233,734-1,235,455`
-
-.. ----
-
-.. ![](../figures/lab-processing/IGV_ex2.png)
-
-.. Example IGV view centered around `chr2:242,004,675-242,008,035`
-
-
-.. ----
-
 
 .. image:: figures/IGV_ex1.png
    			:width: 400px
@@ -944,10 +962,8 @@ Figure 11. Sample clustering (spearman) by reads mapped in bins genome-wide.
 
 Figure 12. Sample clustering (pearson) by reads mapped in merged peaks.
 
-----
+.. ----
 
+.. Written by: Agata Smialowska
 
-
-Written by: Agata Smialowska
-
-Contributions by: Olga Dethlefsen
+.. Contributions by: Olga Dethlefsen
