@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Downstream &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  <title>Downstream Analyses &mdash; Epigenomics Workshop 2020 1 documentation</title>
   
 
   
@@ -36,7 +36,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="ChIP-seq data processing tutorial" href="chipseqProc/lab-chipseq-processing.html" /> 
+    <link rel="next" title="ChIP-seq down-stream analysis: ChIPseeker" href="chipseeker/lab-ChIPseeker.html" />
+    <link rel="prev" title="Signal visualisation" href="visDeepTools/lab-vis-deepTools.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,13 +87,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../schedule.html">Schedule</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="setup/lab-setup.html">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chipseq_tutorials.html">ChIP-seq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chipseq_tutorials.html">ChIPseq</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Downstream Processing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#diff-occupancy">Diff occupancy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#motifs">Motifs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#annotation-with-closest-features">Annotation with closest features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chipseeker/lab-ChIPseeker.html">Annotation using ChIPseeker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="csaw/lab-csaw.html">Detection of differential binding sites using csaw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffBind/lab-diffBinding-local.html">Detection of differential binding sites using DiffBind local</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffBind/lab-diffBinding-remote.html">Detection of differential binding sites using DiffBind remote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="motifs/lab-motifs.html">Identification of sequence motifs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="expdesign_data.html">Experimental Design and Data Considerations</a></li>
 </ul>
 </li>
 </ul>
@@ -143,7 +148,7 @@
         
           <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
         
-      <li>Downstream</li>
+      <li>Downstream Analyses</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,17 +167,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="downstream">
-<h1>Downstream<a class="headerlink" href="#downstream" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="downstream-analyses">
+<h1>Downstream Analyses<a class="headerlink" href="#downstream-analyses" title="Permalink to this headline">¶</a></h1>
 <p>These are tutorials for downstream processing of ChIP-seq and ATAC-seq data.</p>
-<div class="section" id="diff-occupancy">
-<h2>Diff occupancy<a class="headerlink" href="#diff-occupancy" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="motifs">
-<h2>Motifs<a class="headerlink" href="#motifs" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="annotation-with-closest-features">
-<h2>Annotation with closest features<a class="headerlink" href="#annotation-with-closest-features" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="chipseeker/lab-ChIPseeker.html">Annotation using ChIPseeker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="csaw/lab-csaw.html">Detection of differential binding sites using csaw</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffBind/lab-diffBinding-local.html">Detection of differential binding sites using DiffBind local</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffBind/lab-diffBinding-remote.html">Detection of differential binding sites using DiffBind remote</a></li>
+<li class="toctree-l1"><a class="reference internal" href="motifs/lab-motifs.html">Identification of sequence motifs</a></li>
+</ul>
 </div>
 </div>
 
@@ -184,8 +189,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="chipseeker/lab-ChIPseeker.html" class="btn btn-neutral float-right" title="ChIP-seq down-stream analysis: ChIPseeker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="chipseqProc/lab-chipseq-processing.html" class="btn btn-neutral float-left" title="ChIP-seq data processing tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="visDeepTools/lab-vis-deepTools.html" class="btn btn-neutral float-left" title="Signal visualisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
