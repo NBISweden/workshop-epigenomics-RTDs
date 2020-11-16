@@ -26,6 +26,29 @@ MathJax.Hub.Queue(function() {
 - Perform differential methylation; both on single CpG as on a regional level
 - Gain biological insight by gene ontology analysis
 
+**Table of Contents**
+- [DNA Methylation: Array Workflow](#dna-methylation-array-workflow)
+  - [Introduction](#introduction)
+  - [Load Packages](#load-packages)
+  - [Datasets](#datasets)
+  - [Load Datasets](#load-datasets)
+  - [A Note on Class Structure](#a-note-on-class-structure)
+  - [Quality control](#quality-control)
+  - [Normalization](#normalization)
+    - [preprocessRaw](#preprocessraw)
+    - [preprocessIllumina](#preprocessillumina)
+    - [preprocessSWAN](#preprocessswan)
+    - [preprocessFunnorm](#preprocessfunnorm)
+    - [preprocessQuantile](#preprocessquantile)
+  - [Data exploration](#data-exploration)
+  - [Filtering](#filtering)
+  - [Probe-Wise Differential Methylation](#probe-wise-differential-methylation)
+  - [Regional Differential Methylation (DMR)](#regional-differential-methylation-dmr)
+    - [Location-based Regions](#location-based-regions)
+    - [Functional Regions](#functional-regions)
+  - [Gene Ontology Testing](#gene-ontology-testing)
+  - [Cell Type Composition](#cell-type-composition)
+
 ## Introduction
 
 Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented. 

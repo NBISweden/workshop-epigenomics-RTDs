@@ -19,6 +19,24 @@ MathJax.Hub.Queue(function() {
 
 # DNA Methylation: Bisulfite Sequencing Workflow
 
+**Table of Contents**
+- [DNA Methylation: Bisulfite Sequencing Workflow](#dna-methylation-bisulfite-sequencing-workflow)
+  - [Introduction](#introduction)
+  - [Load Packages](#load-packages)
+  - [Datasets](#datasets)
+  - [Load Datasets](#load-datasets)
+  - [Descriptive Statistics](#descriptive-statistics)
+  - [Filter Step](#filter-step)
+  - [Merge Data](#merge-data)
+  - [Further Filtering](#further-filtering)
+  - [Data Structure/Outlier Detection](#data-structureoutlier-detection)
+  - [Differential Methylation](#differential-methylation)
+    - [Single CpG Sites](#single-cpg-sites)
+    - [CpG Annotation](#cpg-annotation)
+    - [Differentially Methylated Regions](#differentially-methylated-regions)
+  - [Visualization](#visualization)
+  - [Alternative workflows](#alternative-workflows)
+
 ## Introduction
 
 Since its first use in 1992, bisulfite (BS) sequencing of DNA has become the gold standard for analysis of DNA methylation due to the potential whole-genome coverage and single-base resolution. BS treatment of DNA leads to the conversion of unmodified cytosines to uracil whilst maintaining 5mC unchanged, which, after PCR and sequencing, can be mapped at single base resolution. More recently, BS treatment has been coupled with next generation sequencing (NGS) to yield reduced representation (RRBS) or whole genome (WGBS) data on the global genomic distribution of 5mC. The benefits of WGBS is that it typically reaches a coverage >90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and usually is not applied to large number of samples and requires relatively large quantities of DNA. The reduced representation bisulfite sequencing (RRBS) is another technique, which can also profile DNA methylation at single-base resolution. It combines digestion of genomic DNA with restriction enzymes and sequencing with bisulfite treatment in order to enrich for areas with a high CpG content. Therefore it relies first on digestion of genomic DNA with restriction enzymes, such as MspI which recognises 5’-CCGG-3’ sequences and cleaves the phosphodiester bonds upstream of CpG dinucleotide. It can sequence only CpG dense regions and doesn’t interrogate CpG-deficient regions such as functional enhancers, intronic regions, intergenic regions or in general lowly methylated regions of the genome. 
