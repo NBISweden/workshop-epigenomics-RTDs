@@ -17,12 +17,20 @@ MathJax.Hub.Queue(function() {
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
 
+# DNA Methylation: Array Workflow
+
+**Learning Outcomes**
+
+- High level overview of several array technologies and methylation metrics
+- Perform quality check, filtering and normalization of raw data
+- Perform differential methylation; both on single CpG as on a regional level
+- Gain biological insight by gene ontology analysis
 
 ## Introduction
 
 Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented. 
 
-Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detects methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. The 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I assay with the novel Infinium II probes. Both assay types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome, however, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I uses two bead types per CpG, one for each of the methylated and unmethylated states. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization. The 850k array (also called EPIC array) also uses a combination of the Infinium I and II assays but achieves additional coverage by increasing the size of each array; a 450k slide contains 12 arrays whilst the EPIC has only 8. The EPIC slide builds upon the 450k slide with >90% of the original CpGs plus an additional 350,000 CpGs in mainly enhancer regions.
+Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detects methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. The 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I assay with the novel Infinium II probes. Both assay types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome, however, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I uses two bead types per CpG, one for each of the methylated and unmethylated states. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization. The 850k array (also called EPIC array) also uses a combination of the Infinium I and II assays but achieves additional coverage by increasing the size of each array; as a result a 450k slide contains 12 arrays for 12 samples whilst the EPIC has only 8 space for 8 samples. The EPIC slide builds upon the 450k slide with >90% of the original CpGs plus an additional 350,000 CpGs in mainly enhancer regions.
 
 ![](Figures/Infinium.png) 
 *Fig. 1: (Up) Infinium I and II design.*
@@ -317,7 +325,7 @@ Examining the MDS plots for this dataset demonstrates that the largest source of
 
 ### Filtering
 
-Poor performing probes can obscure the biological signals in the data and are generally filtered out prior to differential methylation analysis. As the signal from these probes is unreliable, by removing them we perform fewer statistical tests and thus incur a reduced multiple testing penalty. We filter out probes that have failed in one or more samples based on detection p-value.
+Poor performing probes can obscure the biological signals in the data and are generally filtered out prior to differential methylation analysis. As the signal from these probes is unreliable, by removing them we perform fewer statistical tests and thus lower the multiple testing penalty. We filter out probes that have failed in one or more samples based on detection p-value.
 
 ```r
 # ensure probes are in the same order in the mSetSq and detP objects
@@ -332,7 +340,7 @@ mSetSqFlt <- mSetSq[keep,]
 mSetSqFlt
 ```
 
-Because the presence of SNPs inside the probe body or at the nucleotide extension can have important consequences on the downstream analysis, _minfi_ offers the possibility to remove such probes. There is a function in _minfi_ that provides a simple interface for the removal of probes where common SNPs may affect the CpG. You can either remove all probes affected by SNPs (default), or only those with minor allele frequencies greater than a specified value.
+Because the presence of short nucleotide polymorphisms (or SNPs) inside the probe body or at the nucleotide extension can have important consequences on the downstream analysis, _minfi_ offers the possibility to remove such probes. Can you see why SNP can be a problem in methylation data analysis (Hint: C to T conversions are the most common type of SNP in the human genome)? There is a function in _minfi_ that provides a simple interface for the removal of probes where common SNPs may affect the CpG. You can either remove all probes affected by SNPs (default), or only those with minor allele frequencies greater than a specified value.
 
 ```r
 mSetSqFlt <- dropLociWithSnps(mSetSqFlt)
@@ -353,8 +361,6 @@ plotMDS(getM(mSetSqFlt), top=1000, gene.selection="common",
 legend("right", legend=levels(factor(targets$Sample_Source)), text.col=pal,
        cex=0.7, bg="white")
 ```
-
-
 
 ### Probe-Wise Differential Methylation
 
