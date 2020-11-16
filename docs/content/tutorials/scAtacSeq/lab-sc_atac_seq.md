@@ -69,7 +69,7 @@ devtools::install_github("timoast/signac", ref = "develop")
 
 If you want to run this exercise on your laptop, you also need to make sure that the following libraries are installed `Seurat`, `ggplot2`, `patchwork` and `TFBSTools`.
 
-
+![George Seurat](Seurat-Gravelines-Annonciade.jpg)
 
 ## Analysis of single cell ATAC-seq data
 [Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension packade is called Signac. Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, aling with some meta data.
@@ -161,7 +161,7 @@ The next step is to do some quality control (QC) on the ATAC-seq data. There are
 
 - **Number of fragments in peaks**. This represents the complexity and sequencing depth for each cell. Too many reads might indicate artefacts, such as several cells sharing a barcode.
 
-- **Fraction of reads in peaks**. This represents how well that ATAC protocol has worked, and we typically reure at least 15% if all fragments to be in peaks.
+- **Fraction of reads in peaks**. This represents how well that ATAC protocol has worked, and we typically reqiure at least 15% if all fragments to be in peaks.
 
 - **Reads in blacklist regions.** The [ENCODE](https://www.encodeproject.org) project has defined lists of [blacklist regions](https://github.com/Boyle-Lab/Blacklist). These are problematic regions (typically repeats) that often have high signals in next-generation sequencing experiments regardless of cell line or experiment. Cells with a realtively high ratio of reads mapping to blacklist regions, compared to peaks, often represent technical artifacts and should be removed.
 
@@ -559,10 +559,3 @@ TilePlot(
 )
 ```
 
-## Session information
-
-```{r session_info}
-R.Version() 
-sessionInfo(package = NULL)
-```
->>>>>>> 3b3a62bb5be834c94e35890ce1d7fa4a195bd33a
