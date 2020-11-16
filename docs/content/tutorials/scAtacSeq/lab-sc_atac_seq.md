@@ -72,7 +72,7 @@ If you want to run this exercise on your laptop, you also need to make sure that
 ![George Seurat](Seurat-Gravelines-Annonciade.jpg)
 
 ## Analysis of single cell ATAC-seq data
-[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension packade is called Signac. Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, aling with some meta data.
+[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
@@ -230,7 +230,7 @@ pbmc <- RunSVD(pbmc)
 DepthCor(pbmc)
 ```
 
-## Clustering and further dimensionality reduction
+### Clustering and further dimensionality reduction
 
 Now we can cluster the cells to find groups that belong to the same cell types. It is possible to plot the results from the SVD, but these often are not informative. Instead, we use the UMAP algorithm, which shows a better separation between the cell types. If you are interested, the paper describing UMAP can be found [here](https://arxiv.org/abs/1802.03426)
 
