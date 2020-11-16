@@ -54,7 +54,7 @@ Beta and M-values are related to each other but Beta-values are generally prefer
 
 In this workflow, we will provide examples of the steps involved in analyzing 450K methylation array data using R and Bioconductor. The different steps include: loading the raw data, quality control, filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented. 
 
-### Load Packages
+## Load Packages
 
 This exercise has been set up on Uppmax, so connect to Uppmax as described in . On Uppmax, most packages are already installed, and can be loaded into R after the _R.4.0.0_ and  _R_packages_ modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
@@ -94,7 +94,7 @@ ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 
 NOTE: These packages are of course also available for the later array versions. The EPIC array annotation package is called _IlluminaHumanMethylationEPICanno.ilm10b2.hg19_ and also included in _minfi_
 
-### Datasets
+## Datasets
 
 To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset ([GSE49667](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667)). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals (M28, M29, M30). An additional birth sample (individual VICS-72098-18-B) is included from another study ([GSE51180[(https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180)]) to illustrate approaches for identifying and excluding poor quality samples.
 
@@ -106,7 +106,7 @@ dataDirectory <- "data"
 list.files(dataDirectory, recursive = TRUE)
 ```
 
-### Load Datasets
+## Load Datasets
 
 Illumina methylation data is usually obtained in the form of Intensity Data (IDAT) Files. This is a proprietary format that is output by the slide scanner and stores the intensities for each probe on the array. Typically, each IDAT file is approximately 8MB in size. The simplest way to import the raw methylation data into R is using the minfi function `read.metharray.sheet`, along with the path to the IDAT files and a sample sheet. The sample sheet is a CSV (comma-separated) file containing one line per sample, with a number of columns describing each sample. The format expected by the `read.metharray.sheet` function is based on the sample sheet file that usually accompanies Illumina methylation array data. It is also very similar to the targets file described by the limma package. Importing the sample sheet into R creates a dataframe with one row for each sample and several columns. The `read.metharray.sheet` function uses the specified path and other information from the sample sheet to create a column called Basename which specifies the location of each individual IDAT file in the experiment. Import the metadata and have a look at the different samples.
 
@@ -139,7 +139,7 @@ sampleNames(rgSet) <- targets$ID
 pData(rgSet)
 ```
 
-### A Note on Class Structure
+## A Note on Class Structure
 
 minfi generates a number of classes corresponding to various transformations of the raw data. It is important to understand how these classes relate to each other. Figure 2 provides a useful overview. In a first step, IDAT files are collected in a _RGChannelSet_ object, transformed in a _MethylSet_ through a preprocess function and via two functions _ratioConvert_ and _mapToGenome_ (order does not matter) converted into an analysis-ready _GenomicRatioSet_.
 
@@ -188,7 +188,7 @@ cn <- getCN(gset)
 
 Much more annotation data can be extracted from this object (see the _minfi_ [documentation](http://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html)). Now we have a analysis ready object, albeit unnormalized. As we will see in a later section, there are several normalization options that automatically take care of the preprocessing and conversion of a _RGChannelSet_ to a _GenomicRatioSet_. But before doing this, an important step is Quality Control
 
-### Quality control
+## Quality control
 
 _minfi_ provides a simple quality control plot that uses the log median intensity in both the methylated (M) and unmethylated (U) channels. When plotting these two medians against each other, good samples tend to cluster together, while failed samples tend to separate and have lower median intensities. In general, users should make the plot and make a judgement. The line separating ”bad” from ”good” samples represent a useful cutoff, which is not always very clear and may have to be adapted to a specific dataset. The functions _getQC_ and _plotQC)_ are designed to extract and plot the quality control information from the _MethylSet_. 
 
@@ -246,13 +246,13 @@ qcReport(rgSet, pdf= "qcReport.pdf")
 ```
 
 
-### Normalization
+## Normalization
 
 So far, we did not use any normalization to process the data. Due to the intrinsic chip design of 2 types of chemistry probes, data normalization or preprocessing is a **critical step** to consider before data analysis. Additionally, there is often systematic bias between arrays due to a variety of variable experimental conditions such as concentrations of reagents or temperature, especially when the experiments are carried out in several batches. Relevant biological signals may be masked by technical differences, also called batch effects and there are two fundamental ways to deal with them. One possibility is to consider batch effects in the statistical analysis, for instance by introducing a dummy variable for the batch in a linear model. However, batch effects may alter the data in complicated ways for which the statistical model in mind may not be adequate. It might therefore be preferable to remove these technical differences in a preprocessing step. Several distinct preprocessing and normalization procedures are therefore available in _minfi_ (see below). A choice of different options raise of course the question which one is best or most optimal for your particular dataset. This is a difficult question to answer beforehand and selecting the best option is in practice often an iterative procedure. Nevertheless, there are some general guidelines and the authors of _minfi_ have the following to say about this:
 
 >  "Many people have asked us which normalization they should apply to their dataset. Our rule of thumb is the following. If there exist global biological methylation differences between your samples, as for instance a dataset with cancer and normal samples, or a dataset with different tissues/cell types, use the preprocessFunnorm function as it is aimed for such datasets. On the other hand, if you do not expect global differences between your samples, for instance a blood dataset, or one-tissue dataset, use the preprocessQuantile function. In our experience, these two normalization procedures perform always better than the functions preprocessRaw, preprocessIllumina and preprocessSWAN discussed below. For convenience, these functions are still implemented in the minfi package."
 
-#### preprocessRaw
+### preprocessRaw
 
 As seen before, this function converts a _RGChannelSet_ to a _MethylSet_ by converting the Red and Green channels into a matrix of methylated signals and a matrix of unmethylated signals. No normalization is performed.
 
@@ -260,7 +260,7 @@ Input: _RGChannelSet_
 
 Output: _MethylSet_
 
-#### preprocessIllumina
+### preprocessIllumina
 
 Convert a _RGChannelSet_ to a _MethylSet_ by implementing the preprocessing choices as available in Genome Studio: background subtraction and control normalization. Both of them are optional and turning them off is equivalent to raw preprocessing (_preprocessRaw_):
 
@@ -268,7 +268,7 @@ Input: _RGChannelSet_
 
 Output: _MethylSet_
 
-#### preprocessSWAN
+### preprocessSWAN
 
 Perform Subset-quantile within array normalization (SWAN) [6], a within-array normalization correction for the technical differences between the Type I and Type II array designs. The algorithm matches the Beta-value distributions of the Type I and Type II probes by applying a within-array quantile normalization separately for different subsets of probes (divided by CpG content). The input of SWAN is a _MethylSet_, and the function returns a _MethylSet_ as well. If an _RGChannelSet_ is provided instead, the function will first call _preprocessRaw_ on the _RGChannelSet_, and then apply the SWAN normalization. 
 
@@ -276,7 +276,7 @@ Input: _RGChannelSet_ or _MethylSet_
 
 Output: _MethylSet_
 
-#### preprocessFunnorm
+### preprocessFunnorm
 
 The function _preprocessFunnorm_ uses the internal control probes present on the array to infer between-array technical variation. It is particularly useful for studies comparing conditions with known large-scale differences, such as cancer/normal studies, or between-tissue studies. It has been shown that for such studies, functional normalization outperforms other existing approaches. By default, is uses the first two principal components of the control probes to infer the unwanted variation.
 
@@ -284,7 +284,7 @@ Input: _RGChannelSet_
 
 Output: _GenomicRatioSet_
 
-#### preprocessQuantile
+### preprocessQuantile
 
 This function implements stratified [quantile normalization](https://en.wikipedia.org/wiki/Quantile_normalization) preprocessing. The normalization procedure is applied to the Meth and Unmeth intensities separately. The distribution of type I and type II signals is forced to be the same by first quantile normalizing the type II probes across samples and then interpolating a reference distribution to which we normalize the type I probes. Since probe types and probe regions are confounded and we know that DNA methylation varies across regions we stratify the probes by region before applying this interpolation. Note that this algorithm relies on the assumptions necessary for quantile normalization to be applicable and thus is not recommended for cases where global changes are expected such as in cancer-normal comparisons as these would be removed by the normalization. 
 
@@ -314,7 +314,7 @@ legend("top", legend = levels(factor(targets$Sample_Group)),
        text.col=brewer.pal(8,"Dark2"))
 ```
 
-### Data exploration
+## Data exploration
 
 After normalization of your data is a good time to look at the similarities and differences between the various samples. One way to do this is by creating a MDS or Multi-Dimenional Scaling plot. This is a method to graphically represent relationships between objects (here the different samples) in multidimensional space onto 2 or 3 dimensional space. Dimension one (or principal component one) captures the greatest source of variation in the data, dimension two captures the second greatest source of variation in the data and so on. Colouring the data points or labels by known factors of interest can often highlight exactly what the greatest sources of variation are in the data. In a good quality dataset, one would hope that biological differences would show up as one of the greatest sources of variation. It is also possible to use MDS plots to decipher sample mix-ups. The following code creates the MDS plot twice but the samples in the left plot are colored according to celltype, while the plot on the right is colored according to "individual". Before you proceed think a moment about what this figure tells you about the sources in variation in the data. Try changing the `dim=c(1,2)` parameter to for example `dim=c(1,3)` or other values to get an even deeper understanding of the variation in the data. 
 
@@ -337,7 +337,7 @@ legend("top", legend=levels(factor(targets$Sample_Source)), text.col=pal,
 
 Examining the MDS plots for this dataset demonstrates that the largest source of variation is the difference between individuals. The higher dimensions reveal that the differences between cell types are largely captured by the third and fourth principal components. This type of information is useful in that it can inform downstream analysis. If obvious sources of unwanted variation are revealed by the MDS plots, we can include them in our statistical model to account for them. In the case of this particular dataset, we will include individual to individual variation in our statistical model.
 
-### Filtering
+## Filtering
 
 Poor performing probes can obscure the biological signals in the data and are generally filtered out prior to differential methylation analysis. As the signal from these probes is unreliable, by removing them we perform fewer statistical tests and thus lower the multiple testing penalty. We filter out probes that have failed in one or more samples based on detection p-value.
 
@@ -376,7 +376,7 @@ legend("right", legend=levels(factor(targets$Sample_Source)), text.col=pal,
        cex=0.7, bg="white")
 ```
 
-### Probe-Wise Differential Methylation
+## Probe-Wise Differential Methylation
 
 After all this preprocessing and filtering, the time has come to address an actual biological question of interest! Namely, which CpG sites are differentially differentially methylated between the different cell types? To do this, we will design a linear model in _limma_
 
@@ -455,9 +455,9 @@ plotCpg(bVals, cpg="cg07499259", pheno=targets$Sample_Group, ylab = "Beta values
 
 Does this plot makes sense? Are the differences in methylation percentage as expected? 
 
-### Regional Differential Methylation (DMR)
+## Regional Differential Methylation (DMR)
 
-#### Location-based Regions
+### Location-based Regions
 
 Often, differential methylation of a single CpG is not so informative or can be hard to detect. Therefore, knowing whether several CpGs near to each other (or _regions_) are concordantly differentially methylated can be of greater interest.
 
@@ -502,7 +502,7 @@ DMR.plot(ranges = results.ranges,
          genome = "hg19")
 ```
 
-#### Functional Regions
+### Functional Regions
 
 An alternative approach to detect DMRs is to predefine the regions to be tested; so, as opposed to the previous approach where the regions are defined according to heuristic distance rules we can define regions based on a shared function. For this, we will used the package _mCSEA_ which contains three types of regions for 450K and EPIC arrays: promoter regions, gene body and CpG Islands. _mCSEA_ is based on Gene Set Enrichment analysis (GSEA), a popular methodology for functional analysis that was specifically designed to avoid some drawbacks in the field of gene expression. Briefly, CpG sites are ranked according to a metric (logFC, t-statistic, ...) and an enrichment score (ES) is calculated for each region. This is done by running through the entire ranked CpG list, increasing the score when a CpG in the region is encountered and decreasing the score when the gene encountered is not in the region. A high ES indicates these probes are found high up in the ranked list. In other words, a high (N)ES value means that for the CpG sites in this region there is - on average - a shift towards a higher methylation level. This approach has been [shown](https://academic.oup.com/bioinformatics/article/35/18/3257/5316232) to be more effective to detect smaller but consistent methylation differences.
 
@@ -539,7 +539,7 @@ The results of selected results can be visualized using _mCSEAPlot_, by specifyi
            makePDF = FALSE)
 ```
 
-### Gene Ontology Testing
+## Gene Ontology Testing
 
 After obtaining a - potentially long - list of significantly differentially methylated CpG sites, one might wonder whether there is a (or multiple) specific biological pathway(s) over-represented in this list. In some cases it is relatively straightforward to link the top differentially methylated CpGs to genes that make biological sense in terms of the cell types or samples being studied, but there may be many thousands of CpGs significantly differentially methylated. Gene-set analysis (GSA) is frequently used to discover meaningful biological patterns from lists of genes generated from high-throughput experiments, including genome-wide DNA methylation studies. The objective is typically to identify similarities between the genes, with respect to annotations available from sources such as the Gene Ontology (GO) or Kyoto Encyclopedia of Genes and Genomes (KEGG).
 
@@ -559,7 +559,7 @@ length(all)
 ```
 
 
-> ### Note on CpG coverage bias
+> ## Note on CpG coverage bias
 > 
 > A key assumption of GSA methods is that all genes have, _a priori_, the same probability of appearing in the list of significant genes. If this is not true, that is, if certain genes are more likely to appear in the list, regardless of the treatments or conditions being investigated, this has the potential to cause misleading results from GSA. This has been [shown](https://academic.oup.com/bioinformatics/article/29/15/1851/265573) to be a major source of bias in genome-wide methylation gene set analysis. Essentially it comes down to this: genes that have more CpGs associated with them will have a much higher probability of being identified as differentially methylated compared to genes with fewer CpGs. As a result gene sets containing many "highly covered" genes will be found to be significantly enriched much easier than other gene sets, regardless of the treatment or condition. For the 450k array, the numbers of CpGs mapping to genes can vary from as few as 1 to as many as 1200. The _gometh_ function takes into account the varying numbers of CpGs associated with each gene on the Illumina methylation arrays. If you want to try alternative methods, keep in mind to check how they handle this source of bias. 
 
@@ -575,7 +575,7 @@ topGSA(gst, number=10)
 While gene set testing is useful for providing some biological insight in terms of what pathways might be affected by abberant methylation, care should be taken not to over-interpret the results. Gene set testing should be used for the purpose of providing some biological insight that ideally would be tested and validated in further laboratory experiments. It is important to keep in mind that we are not observing gene level activity such as in RNA-Seq experiments, and that we have had to take an extra step to associate CpGs with genes.
 
 
-### Cell Type Composition
+## Cell Type Composition
 
 As methylation is cell type specific and methylation arrays provide CpG methylation values for a population of cells, biological findings from samples that are comprised of a mixture of cell types, such as blood, can be confounded with cell type composition. In order to estimate the confounding levels between phenotype and cell type composition, the function _estimateCellCounts_ (depending on the package _FlowSorted.Blood.450k_) can be used to estimate the cell type composition of blood samples. The function takes as input a _RGChannelSet_ and returns a cell counts vector for each samples. If there seems to be a large difference in cell type composition in the different levels of the phenotype, it might be needed to include the celltype proportions in the model to account for this confounding. Since we have been working with sorted populations of cells, this was not necessary for our data.
 

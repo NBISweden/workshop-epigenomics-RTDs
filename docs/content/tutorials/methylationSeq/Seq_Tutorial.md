@@ -31,7 +31,7 @@ In comparison to regular DNA sequencing, bisulfite sequencing brings with it som
 
 The most obvious one is that to quantify methylation of DNA, bisulfite converted reads have to be compared to an _in silico_ bisulfite-converted genome sequence, referred to as the reference genome, to allow accurate mapping. At each CpG site in the reference genome, an aligned read is called as unmethylated if the sequence is TG (indicating bisulfite conversion) and methylated if the sequence is CG (indicating protection by the methyl group). Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment. A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see [methylseq](https://nf-co.re/methylseq)). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example methylseq. 
 
-### Load Packages
+## Load Packages
 
 Workflows for the downstream analysis of BS data are in general less standardized than those for the analysis of array data and might require a somewhat more advanced knowledge of R to make the most of the data. The workflow we will present today is based on the _methylKit_ R package. This package has been developed as a comprehensive package for the analysis of genome-wide DNA methylation profiles providing functions for clustering, sample quality visualization, differential methylation analysis and feature annotation. 
 
@@ -46,7 +46,7 @@ library("genomation")
 
 NOTE: _methylKit_ has an active discussion group [here](https://groups.google.com/g/methylkit_discussion), if you have questions regarding the package and/or analysis.
 
-### Datasets
+## Datasets
 
 To showcase a basic analysis, a small dataset has been collected consisting of mouse mammary gland cells. The epithelium of the mammary gland exists in a highly dynamic state, undergoing dramatic changes during puberty, pregnancy, lactation and regression. Characterization of the lineage hierarchy of cells in the mammary epithelium is an important step toward understanding which cells are predisposed to oncogenesis. In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example). These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the methylseq nf-core pipeline. 
 
@@ -54,7 +54,7 @@ To showcase a basic analysis, a small dataset has been collected consisting of m
 *Table 1: Example of a Bismark coverage files. One of the input types fit for methylKit.*
 
 
-### Load Datasets
+## Load Datasets
 
 The samples we will be using as input files are Bismark coverage files, which need to be collected in a list R object prior to be loaded in _methylKit_ using the _methRead_ function. Important is that you supply sample location, sample IDs and the genome assembly. Moreover, you should supply which pipeline was used to produce the input files and a _treatment_ parameter indicating which sample is "control" or "0" and which is "test" or "1". Additionally, you can define a minimum read coverage for CpG sites to be included in the object. Depending on the type of input data, additional parameters are available.
 
@@ -80,7 +80,7 @@ myobj
 
 This will result in _methylRawList_ object containing the data and metadata. What do the columns "numCs" and "numTs" in each sample correspond to?
 
-### Descriptive Statistics
+## Descriptive Statistics
 
 With all data collected, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions _getMethylationStats_ and _getCoverageStats_ can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the _both.strands_ parameter has to be set to FALSE.  _myobj_ is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected? 
 
@@ -95,7 +95,7 @@ Typically, percent methylation histogram should have two peaks on both ends. In 
 
 Experiments that are highly suffering from PCR duplication bias will have a secondary peak towards the right hand side of the coverage histogram.
 
-### Filter Step
+## Filter Step
 
 It might be useful to filter samples based on coverage. In particular, if our samples are suffering from PCR bias it would be useful to discard bases with very high read coverage. Furthermore, we would also like to discard bases that have low read coverage, because a high enough read coverage will increase the power of the statistical tests. The code below filters a _methylRawList_ and discards bases that have coverage below 10 reads (in this case we already did this when reading in the files...) and also discards the bases that have more than 99.9th percentile of coverage in each sample.
 
@@ -113,7 +113,7 @@ Next, a basic normalization of the coverage values between samples is performed 
 myobj.filt.norm <- normalizeCoverage(myobj.filt, method = "median")
 ```
 
-### Merge Data
+## Merge Data
 
 In order to do further analysis, we will need to extract the bases that are covered in all samples. The following function will merge all samples to one object with base-pair locations that are covered in all samples. Setting _destrand=TRUE_ (the default is _FALSE_) will merge reads on both strands of a CpG dinucleotide. This provides better coverage, but only advised when looking at CpG methylation (for CpH methylation this will cause wrong results in subsequent analyses; can you figure out why?). In addition, setting _destrand=TRUE_ will only work when operating on base-pair resolution, otherwise setting this option _TRUE_ will have no effect. Our data contains no strand info, so the _destrand_ option is not applicable. The _unite_ function will return a _methylBase_ object which will be our main object for all comparative analysis. The _methylBase_ object contains methylation information for regions/bases that are covered in all samples.
 
@@ -123,7 +123,7 @@ meth
 ```
 
 
-### Further Filtering
+## Further Filtering
 
 We might need to filter the CpGs further before exploratory analysis and the downstream differential methylation. For exploratory analysis, it is of general interest to see how samples relate to each other and we might want to remove CpGs that are not variable before doing that. For differential methylation, removing non variable CpGs prior to the analysis will lower the number of tests that needs to be performed, thus improving multiple correction.
 
@@ -142,7 +142,7 @@ meth <- meth[sds > 5]
 ```
 
 
-### Data Structure/Outlier Detection
+## Data Structure/Outlier Detection
 
 We can check the correlation between samples using _getCorrelation_. This function will either plot scatter plot and correlation coefficients or just print a correlation matrix if _plot=FALSE_. What does this plot tell you about the structure in the data?
 
@@ -162,9 +162,9 @@ Another very useful visualization is obtained by plotting the samples in a princ
 PCASamples(meth)
 ```
 
-### Differential Methylation
+## Differential Methylation
 
-#### Single CpG Sites
+### Single CpG Sites
 
 If the basic statistics of the samples look OK and the data structure seems reasonable, we can proceed to the differential methylation step. Differential DNA methylation is usually calculated by comparing the proportion of methylated Cs in a test sample relative to a control. In simple comparisons between such pairs of samples (i.e. test and control), methods such as Fisher’s Exact Test can be applied when there are no replicates for test and control cases. If replicates are available, regression based methods are generally used to model methylation levels in relation to the sample groups and variation between replicates. In addition, an advantage of regression methods over Fisher's exact test is that it allows for the inclusion of sample specific covariates (continuous or categorical) and the ability to adjust for confounding variables. 
 
@@ -222,7 +222,7 @@ NOTE: If you need to interact with these objects, it is sometimes necessary to f
 
 If necessary, covariates (such as age, sex, smoking status, ...) can be included in the regression analysis. The function will then try to separate the influence of the covariates from the treatment effect via the logistic regression model. In this case, the test would be whether the full model (model with treatment and covariates) is better than the model with the covariates only. If there is no effect due to the treatment (sample groups), the full model will not explain the data better than the model with covariates only. In _calculateDiffMeth_, this is achieved by supplying the covariates argument in the format of a dataframe. 
 
-#### CpG Annotation
+### CpG Annotation
 
 To help with the biological interpretation of the data, we will annotate the differentially methylated regions/bases using the _genomation_ package. The most common annotation task is to see where CpGs of interest land in relation to genes and gene parts and regulatory regions: Do they mostly occupy promoter, intronic or exonic regions? Do they overlap with repeats? Do they overlap with other epigenomic markers or long-range regulatory regions? In this example, we read the gene annotation information from a BED file (Browser Extensible Data - genome coordinates and annotation) and annotate our differentially methylated regions with that information using _genomation_ functions. 
 
@@ -274,7 +274,7 @@ plotTargetAnnotation(diffCpGann, main = "Differential Methylation Annotation")
 
 In general, this workflow can be used to annotate a CpG list with any set of features contained in a BED file.
 
-#### Differentially Methylated Regions
+### Differentially Methylated Regions
 
 Since we are often more interested in the different methylation of multiple CpGs across samples instead of a single site, we can also summarize methylation information over a set of defined functional regions such as promoters or CpG islands. The function below summarizes the methylation information over a given set of CpG Islands and outputs a _methylRaw_ or _methylRawList_ object depending on the input. We are using the output of _genomation_ functions used above to provide the locations of the Islands. For these regional summary functions, we need to provide regions of interest as GRanges object.
 
@@ -312,7 +312,7 @@ myDiff_islands_25p_ann <- annotateWithGeneParts(as((myDiff_islands_25p), "GRange
 head(getAssociationWithTSS(myDiff_islands_25p_ann))
 ```
 
-### Visualization
+## Visualization
 
 The results of a differential analysis can be exported as a bedGraph; a format that allows display of continuous-valued data in track format. This display type is useful for probability scores, percentages and transcriptome data. By uploading this BED file to a genome browser such as the [UCSC Genome Browser](https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A134369628%2D136772024&hgsid=936224469_kTHLULnq2frGTQtwufy02ky7TjXA), you can create custom visualizations of the genome architecture surrounding CpGs or regions of interest. The _bedgraph_ function produces a UCSC compatible file; by specifying the _col.name_ the exact information to be plotted can be collected. For a _methylDiff_ object this can be one of "pvalue", "qvalue" or "meth.diff".
 
@@ -329,7 +329,7 @@ A tutorial of the Genome Browser is out of scope for this workshop; but a step-b
 
 Exactly how to produce these plots is out of the scope of these exercises, but I encourage you to try it later with for example the bedgraph of all differentially methylated CpGs.
 
-### Alternative workflows
+## Alternative workflows
 
 DSS beta-binomial models with empirical Bayes for moderating dispersion.
 BSseq Regional differential methylation analysis using smoothing and linear-regression-based tests.
