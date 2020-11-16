@@ -28,9 +28,14 @@ Load the modules we will use in the exercise:
 
 	module load bioinfo-tools
 	module load BEDTools
-	module load MEMESuite
 	module load HOMER
 
+We will also use programs from the MEME suite. This is available on Uppmax as a module, but currently there are some problems with that version. Instead, we install MEME ourselves, with conda. We set up a conda environment with MEME installed, and activate it.
+
+.. code-block:: bash
+
+	conda create -n motif_lab -c bioconda meme
+	conda activate motif_lab
 
 Create a working directory where you will do the exercise, and go there. For example:
 
@@ -102,7 +107,7 @@ Next, we need to get the genome sequence at these 500 peaks. Since repeat elemen
 
 .. code-block:: bash
 
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/refence_genomes/hg38.masked.fa* .
+	ln -s /sw/courses/epigenomics/motif_finding/hg38.masked.fa* .
 
 
 We will now use ``bedTools`` to extract the genome sequence for the 500 peaks:
@@ -155,19 +160,6 @@ This produces several output files. The file ``meme_chip_out/dreme_out/dreme.htm
 
 Here you can see all motifs found by MEME, with e-values etc.
 
-MEME-ChIP also runs a program called centrimo, which looks at where the motifs are located, relative the peaks. It also produces a html file with the results:
-
-.. code-block:: bash
-
-	firefox meme_chip_out/centrimo_out/centrimo.html
-
-
-Finally, it summarizes the results of DREME, MEME and Centrimo:
-
-.. code-block:: bash
-
-	firefox meme_chip_out/meme-chip.html 
-
 
 **What can you learn from all this output? Do the programs find the expected motif? Do they find other motifs? Where are the motifs located in the peaks?**
 
@@ -200,14 +192,14 @@ In the previous exercise an earlier version of the human genome, hg19, was used.
 
 .. code-block:: bash
 
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/refence_genomes/hg19_chr_1_2.masked.fa* .
+	ln -s /sw/courses/epigenomics/motif_finding/hg19_chr_1_2.masked.fa* .
 
 
 Then copy one of the peak files from the previous exercise to work directory 
 
 .. code-block:: bash
 
-	cp /sw/share/compstore/courses/ngsintro/chipseq/results/peaks_bed/hela_1_peaks.chr12.bed rest_peaks.chr12.bed
+	cp /sw/courses/epigenomics/motif_finding/hela_1_peaks.chr12.bed rest_peaks.chr12.bed
 
 
 Now you are ready to repeat all steps on the new peak set: select the top 500 peaks, get repeat masked genome sequence for these peaks and run motif finding.
