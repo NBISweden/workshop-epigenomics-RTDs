@@ -35,13 +35,12 @@ Date
 	:height: 40
    	:width: 40
 
-Important dates
----------------
+Application
+-----------
 
-- Application opens: August, 1st, 2020
-- Application deadline: November, 1st, 2020
-- Confirmation to accepted students: November, 7th, 2020
-- Course days: 23rd - 27th, November, 2020
+- Application is now closed 
+- Application is now closed
+- Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
 
 :raw-html:`<br />`
 
