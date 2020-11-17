@@ -22,29 +22,11 @@ DNA Methylation: Bisulfite Sequencing Workflow
 
 **Learning Outcomes**
 
+.. Contents
+.. ========
 
-* 
-  **Table of Contents**
-
-* `DNA Methylation: Bisulfite Sequencing Workflow <#dna-methylation-bisulfite-sequencing-workflow>`_
-
-  * `Introduction <#introduction>`_
-  * `Load Packages <#load-packages>`_
-  * `Datasets <#datasets>`_
-  * `Load Datasets <#load-datasets>`_
-  * `Descriptive Statistics <#descriptive-statistics>`_
-  * `Filter Step <#filter-step>`_
-  * `Merge Data <#merge-data>`_
-  * `Further Filtering <#further-filtering>`_
-  * `Data Structure/Outlier Detection <#data-structureoutlier-detection>`_
-  * `Differential Methylation <#differential-methylation>`_
-
-    * `Single CpG Sites <#single-cpg-sites>`_
-    * `CpG Annotation <#cpg-annotation>`_
-    * `Differentially Methylated Regions <#differentially-methylated-regions>`_
-
-  * `Visualization <#visualization>`_
-  * `Alternative workflows <#alternative-workflows>`_
+.. contents:: 
+    :local:
 
 Introduction
 ------------

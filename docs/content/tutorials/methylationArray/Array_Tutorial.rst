@@ -28,8 +28,8 @@ DNA Methylation: Array Workflow
 * Perform differential methylation; both on single CpG as on a regional level
 * Gain biological insight by gene ontology analysis
 
-.. Table of Contents
-.. =========
+.. Contents
+.. ========
 
 .. contents:: 
     :local:
@@ -286,18 +286,18 @@ preprocessRaw
 
 As seen before, this function converts a *RGChannelSet* to a *MethylSet* by converting the Red and Green channels into a matrix of methylated signals and a matrix of unmethylated signals. No normalization is performed.
 
-Input: *RGChannelSet* 
-
-Output: *MethylSet*
+.. attention::
+   | Input: *RGChannelSet* 
+   | Output: *MethylSet*
 
 preprocessIllumina
 ^^^^^^^^^^^^^^^^^^
 
 Convert a *RGChannelSet* to a *MethylSet* by implementing the preprocessing choices as available in Genome Studio: background subtraction and control normalization. Both of them are optional and turning them off is equivalent to raw preprocessing (\ *preprocessRaw*\ ):
 
-Input: *RGChannelSet* 
-
-Output: *MethylSet*
+.. attention::
+   | Input: *RGChannelSet* 
+   | Output: *MethylSet*
 
 preprocessSWAN
 ^^^^^^^^^^^^^^
@@ -322,11 +322,16 @@ preprocessQuantile
 
 This function implements stratified `quantile normalization <https://en.wikipedia.org/wiki/Quantile_normalization>`_ preprocessing. The normalization procedure is applied to the Meth and Unmeth intensities separately. The distribution of type I and type II signals is forced to be the same by first quantile normalizing the type II probes across samples and then interpolating a reference distribution to which we normalize the type I probes. Since probe types and probe regions are confounded and we know that DNA methylation varies across regions we stratify the probes by region before applying this interpolation. Note that this algorithm relies on the assumptions necessary for quantile normalization to be applicable and thus is not recommended for cases where global changes are expected such as in cancer-normal comparisons as these would be removed by the normalization. 
 
-Input: *RGChannelSet* 
+.. attention::
+   | Input: *RGChannelSet* 
+   | Output: *GenomicRatioSet*
 
-Output: *GenomicRatioSet*
+As we are comparing different blood cell types, which are globally relatively similar, we will apply the preprocessQuantile method to our data. 
 
-As we are comparing different blood cell types, which are globally relatively similar, we will apply the preprocessQuantile method to our data [This assumption might not be true; in an actual analysis it would be advised to try and compare different methods]. Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an iniital quality control. 
+.. warning::
+   This assumption might not be true; in an actual analysis it would be advised to try and compare different normalization methods. 
+
+Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an iniital quality control. 
 
 .. code-block:: r
 
