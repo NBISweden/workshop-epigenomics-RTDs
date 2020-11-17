@@ -22,11 +22,7 @@ DNA Methylation: Array Workflow
 
 **Learning Outcomes**
 
-
-* High level overview of several array technologies and methylation metrics
-* Perform quality check, filtering and normalization of raw data
-* Perform differential methylation; both on single CpG as on a regional level
-* Gain biological insight by gene ontology analysis
+In this tutorial, we will provide examples of the steps involved in analyzing 450K methylation array data using R and Bioconductor. The different steps include: importing the raw data, quality control checks, data filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented. 
 
 .. Contents
 .. ========
@@ -68,8 +64,6 @@ Beta and M-values are related to each other but Beta-values are generally prefer
    :alt: 
 
 *Fig. 2: Relationship between Beta and M-values.*
-
-In this workflow, we will provide examples of the steps involved in analyzing 450K methylation array data using R and Bioconductor. The different steps include: loading the raw data, quality control, filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented. 
 
 Load Packages
 -------------
@@ -223,7 +217,12 @@ Quality control
    qc <- getQC(MSet)
    plotQC(qc)
 
-Here, the cutoff line suggests 3 "bad" samples. Can you determine which samples these are? [Hint: the *pData* function might be of help here] In general, a decision of good versus bad quality should be based on multiple metrics, not just one. Therefore, we can additionally look at the detection p-values for every CpG in every sample, which is indicative of the quality of the signal. The method used by *minfi* to calculate detection p-values compares the total signal (M+U) for each probe to the background signal level, which is estimated from the negative control probes. Very small p-values are indicative of a reliable signal whilst large p-values, for example >0.01, generally indicate a poor quality signal.
+Here, the cutoff line suggests 3 "bad" samples. Can you determine which samples these are? 
+   
+.. hint:: 
+   the *pData* function might be of help here. 
+   
+In general, a decision of good versus bad quality should be based on multiple metrics, not just one. Therefore, we can additionally look at the detection p-values for every CpG in every sample, which is indicative of the quality of the signal. The method used by *minfi* to calculate detection p-values compares the total signal (M+U) for each probe to the background signal level, which is estimated from the negative control probes. Very small p-values are indicative of a reliable signal whilst large p-values, for example >0.01, generally indicate a poor quality signal.
 
 Plotting the mean detection p-value for each sample allows us to gauge the general quality of the samples in terms of the overall signal reliability. Samples that have many failed probes will have relatively large mean detection p-values.
 
@@ -263,7 +262,8 @@ Taking these different metrics into account, it seems clear that the *birth* sam
    # subset target as well
    targets <- targets[keep,]
 
-NOTE: The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reson a sample failed QC.
+.. note::
+   The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reson a sample failed QC.
 
 .. code-block:: r
 
@@ -274,12 +274,25 @@ NOTE: The 450k array contains several internal control probes that can be used t
 Normalization
 -------------
 
-So far, we did not use any normalization to process the data. Due to the intrinsic chip design of 2 types of chemistry probes, data normalization or preprocessing is a **critical step** to consider before data analysis. Additionally, there is often systematic bias between arrays due to a variety of variable experimental conditions such as concentrations of reagents or temperature, especially when the experiments are carried out in several batches. Relevant biological signals may be masked by technical differences, also called batch effects and there are two fundamental ways to deal with them. One possibility is to consider batch effects in the statistical analysis, for instance by introducing a dummy variable for the batch in a linear model. However, batch effects may alter the data in complicated ways for which the statistical model in mind may not be adequate. It might therefore be preferable to remove these technical differences in a preprocessing step. Several distinct preprocessing and normalization procedures are therefore available in *minfi* (see below). A choice of different options raise of course the question which one is best or most optimal for your particular dataset. This is a difficult question to answer beforehand and selecting the best option is in practice often an iterative procedure. Nevertheless, there are some general guidelines and the authors of *minfi* have the following to say about this:
+So far, we did not use any normalization to process the data. Due to the intrinsic chip design of 2 types of chemistry probes, data normalization or preprocessing is a **critical step** to consider before data analysis. Given the higher dynamic range of type I probes, one expects that  - when left uncorrected - there would be a relative overenrichment of type I over type II probes in a top ranked list of probes correlating with a phenotype.
+
+Additionally, there is often systematic bias between arrays due to a variety of variable experimental conditions such as concentrations of reagents or temperature, especially when the experiments are carried out in several batches. Relevant biological signals may be masked by technical differences, also called batch effects and there are two fundamental ways to deal with them. One possibility is to consider batch effects in the statistical analysis, for instance by introducing a dummy variable for the batch in a linear model. However, batch effects may alter the data in complicated ways for which the statistical model in mind may not be adequate. It might therefore be preferable to remove these technical differences in a preprocessing step. 
+ 
+Several distinct preprocessing and normalization procedures are therefore available in *minfi* (see below). A choice of different options raise of course the question which one is best or most optimal for your particular dataset. This is a difficult question to answer beforehand and selecting the best option is in practice often an iterative procedure while looking at the distribution of the Beta values (see example of different methods in Figure 4). Nevertheless, there are some general guidelines and the authors of *minfi* have the following to say about this:
 
 .. note::
 
     "Many people have asked us which normalization they should apply to their dataset. Our rule of thumb is the following. If there exist global biological methylation differences between your samples, as for instance a dataset with cancer and normal samples, or a dataset with different tissues/cell types, use the preprocessFunnorm function as it is aimed for such datasets. On the other hand, if you do not expect global differences between your samples, for instance a blood dataset, or one-tissue dataset, use the preprocessQuantile function. In our experience, these two normalization procedures perform always better than the functions preprocessRaw, preprocessIllumina and preprocessSWAN discussed below. For convenience, these functions are still implemented in the minfi package."
 
+So, try different methods and compare the normalized data. Do the Beta values of the different probes or different samples look more comparable after normalization?
+
+.. image:: Figures/norms.jpg
+   :target: Figures/norms.jpg
+   :alt: 
+   
+*Fig. 4: (A) No normalization. (B) Lumi-based classical quantile normalization. (C) Peak-based correction followed by quantile normalization. (D) Subset quantile normalization with a unique set of reference quantiles computed from Infinium I signals. (E) Subset quantile normalization with a reference quantiles set computed from Infinium I signals for each kind of probe category according to the ‘relation to CpG’ annotations provided by Illumina (CA, USA). (F) Subset quantile normalization with a reference quantiles set computed from Infinium I signals for each kind of probe category. NT: Density plot of the median β-value profile for nontumoral samples; T: Density plot of the median β-value profile for tumoral samples.*
+
+Below a short overview of the normalization methods included in *minfi*.
 
 preprocessRaw
 ^^^^^^^^^^^^^
@@ -331,7 +344,7 @@ As we are comparing different blood cell types, which are globally relatively si
 .. warning::
    This assumption might not be true; in an actual analysis it would be advised to try and compare different normalization methods. 
 
-Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an iniital quality control. 
+Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an initial quality control. 
 
 .. code-block:: r
 
@@ -394,7 +407,12 @@ Poor performing probes can obscure the biological signals in the data and are ge
    mSetSqFlt <- mSetSq[keep,]
    mSetSqFlt
 
-Because the presence of short nucleotide polymorphisms (or SNPs) inside the probe body or at the nucleotide extension can have important consequences on the downstream analysis, *minfi* offers the possibility to remove such probes. Can you see why SNP can be a problem in methylation data analysis (Hint: C to T conversions are the most common type of SNP in the human genome)? There is a function in *minfi* that provides a simple interface for the removal of probes where common SNPs may affect the CpG. You can either remove all probes affected by SNPs (default), or only those with minor allele frequencies greater than a specified value.
+Because the presence of short nucleotide polymorphisms (or SNPs) inside the probe body or at the nucleotide extension can have important consequences on the downstream analysis, *minfi* offers the possibility to remove such probes. 
+
+.. note::
+   Can you see why SNP can be a problem in methylation data analysis (Hint: C to T conversions are the most common type of SNP in the human genome)? 
+
+There is a function in *minfi* that provides a simple interface for the removal of probes where common SNPs may affect the CpG. You can either remove all probes affected by SNPs (default), or only those with minor allele frequencies greater than a specified value.
 
 .. code-block:: r
 
@@ -419,11 +437,12 @@ Once the data has been filtered and normalised, it is often useful to re-examine
 Probe-Wise Differential Methylation
 -----------------------------------
 
-After all this preprocessing and filtering, the time has come to address an actual biological question of interest! Namely, which CpG sites are differentially differentially methylated between the different cell types? To do this, we will design a linear model in *limma*
+After all this preprocessing and filtering, the time has come to address the actual biological question of interest! Namely, which CpG sites are differentially differentially methylated between the different cell types? To do this, we will design a linear model in *limma*.
 
 As was apparent from the MDS plots, there is an additional factor that we need to take into account when performing the statistical analysis needed to solve this question. In the targets file, there is a column called Sample_Source, which refers to the individuals that the samples were collected from. Hence, when we specify our design matrix, we need to include two factors: individual and cell type. This style of analysis is called a paired analysis; differences between cell types are calculated within each individual, and then these differences are averaged across individuals to determine whether there is an overall significant difference in the mean methylation level for each CpG site. 
 
-NOTE: This design is fit for this dataset, and this dataset only. For future analyses, you will have to adapt the analysis style and design to your particular dataset. The `limma User’s Guide <https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf>`_ extensively covers the different types of designs that are commonly used for microarray experiments and how to analyse them in R.
+.. warning::
+   This design is fit for this dataset, and this dataset only. For future analyses, you will have to adapt the analysis style and design to your particular dataset. The `limma User’s Guide <https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf>`_ extensively covers the different types of designs that are commonly used for microarray experiments and how to analyse them in R.
 
 .. code-block:: r
 
@@ -506,7 +525,10 @@ Often, differential methylation of a single CpG is not so informative or can be 
 
 There are several Bioconductor packages that have functions for identifying differentially methylated regions from 450k data. Some of the most popular are the *dmrFind* function in the *charm* package, which has been somewhat superseded for 450k arrays by the *bumphunter* function in *minfi*\ , and, the *dmrcate* in the *DMRcate* package. They are each based on different statistical methods, but we will be using *dmrcate* here, as it is based on *limma* and thus we can use the design and contrast matrix we defined earlier.
 
-We will again start from our matrix of M-values. For this kind of analysis, this matrix has to be annotated with the chromosomal position of the CpGs and their gene annotations. Because in a first step the *limma* differential methylation analysis for single CpGs will be run again, we need to specify the design matrix, contrast matrix and contrast of interest. More info on the different options can always be found in the manual; *i.e* by using *?cpg.annotate* in R.
+We will again start from our matrix of M-values. For this kind of analysis, this matrix has to be annotated with the chromosomal position of the CpGs and their gene annotations. Because in a first step the *limma* differential methylation analysis for single CpGs will be run again, we need to specify the design matrix, contrast matrix and contrast of interest. 
+
+.. note::
+   More info on the different options can always be found in the manual; *i.e* by using *?cpg.annotate* in R.
 
 .. code-block:: r
 
@@ -587,7 +609,7 @@ Gene Ontology Testing
 
 After obtaining a - potentially long - list of significantly differentially methylated CpG sites, one might wonder whether there is a (or multiple) specific biological pathway(s) over-represented in this list. In some cases it is relatively straightforward to link the top differentially methylated CpGs to genes that make biological sense in terms of the cell types or samples being studied, but there may be many thousands of CpGs significantly differentially methylated. Gene-set analysis (GSA) is frequently used to discover meaningful biological patterns from lists of genes generated from high-throughput experiments, including genome-wide DNA methylation studies. The objective is typically to identify similarities between the genes, with respect to annotations available from sources such as the Gene Ontology (GO) or Kyoto Encyclopedia of Genes and Genomes (KEGG).
 
-We can perform this type of analysis using the *gometh* function in the *missMethyl* package. This function takes as input a character vector of the names (e.g. cg20832020) of the significant CpG sites, and optionally, a character vector of all CpGs tested. This is recommended particularly if extensive filtering of the CpGs has been performed prior to analysis as it constitutes the "background" out of which any significant CpG could be chosen. For gene ontology testing (default), the user can specify collection="GO”. For testing KEGG pathways, specify collection="KEGG”. In this tutorial, we will continue with the results from the single-probe "naive vs rTreg" comparison and select all CpG sites that have an adjusted p-value of less than 0.05.
+We can perform this type of analysis using the *gometh* function in the *missMethyl* package. This function takes as input a character vector of the names (e.g. cg20832020) of the significant CpG sites, and optionally, a character vector of all CpGs tested. This is recommended particularly if extensive filtering of the CpGs has been performed prior to analysis as it constitutes the "background" out of which any significant CpG could be chosen. For gene ontology testing, the user can specify collection="GO” (which is the default option). For testing KEGG pathways, specify collection="KEGG”. In this tutorial, we will continue with the results from the single-probe "naive vs rTreg" comparison and select all CpG sites that have an adjusted p-value of less than 0.05.
 
 .. code-block:: r
 
@@ -604,9 +626,7 @@ We can perform this type of analysis using the *gometh* function in the *missMet
 
 ..
 
-   Note on CpG coverage bias
-   -------------------------
-
+.. warning::
    A key assumption of GSA methods is that all genes have, *a priori*\ , the same probability of appearing in the list of significant genes. If this is not true, that is, if certain genes are more likely to appear in the list, regardless of the treatments or conditions being investigated, this has the potential to cause misleading results from GSA. This has been `shown <https://academic.oup.com/bioinformatics/article/29/15/1851/265573>`_ to be a major source of bias in genome-wide methylation gene set analysis. Essentially it comes down to this: genes that have more CpGs associated with them will have a much higher probability of being identified as differentially methylated compared to genes with fewer CpGs. As a result gene sets containing many "highly covered" genes will be found to be significantly enriched much easier than other gene sets, regardless of the treatment or condition. For the 450k array, the numbers of CpGs mapping to genes can vary from as few as 1 to as many as 1200. The *gometh* function takes into account the varying numbers of CpGs associated with each gene on the Illumina methylation arrays. If you want to try alternative methods, keep in mind to check how they handle this source of bias. 
 
 
@@ -619,9 +639,11 @@ After having defined the significant and background sites, it is time to run the
    # Top 10 GO categories
    topGSA(gst, number=10)
 
+Can you find the top 5 KEGG pathways?
+
 While gene set testing is useful for providing some biological insight in terms of what pathways might be affected by abberant methylation, care should be taken not to over-interpret the results. Gene set testing should be used for the purpose of providing some biological insight that ideally would be tested and validated in further laboratory experiments. It is important to keep in mind that we are not observing gene level activity such as in RNA-Seq experiments, and that we have had to take an extra step to associate CpGs with genes.
 
 Cell Type Composition
 ---------------------
 
-As methylation is cell type specific and methylation arrays provide CpG methylation values for a population of cells, biological findings from samples that are comprised of a mixture of cell types, such as blood, can be confounded with cell type composition. In order to estimate the confounding levels between phenotype and cell type composition, the function *estimateCellCounts* (depending on the package *FlowSorted.Blood.450k*\ ) can be used to estimate the cell type composition of blood samples. The function takes as input a *RGChannelSet* and returns a cell counts vector for each samples. If there seems to be a large difference in cell type composition in the different levels of the phenotype, it might be needed to include the celltype proportions in the model to account for this confounding. Since we have been working with sorted populations of cells, this was not necessary for our data.
+As methylation is cell type specific and methylation arrays provide CpG methylation values for a population of cells, biological findings from samples that are comprised of a mixture of cell types, such as blood, can be confounded with cell type composition. In order to estimate the confounding levels between phenotype and cell type composition, the function *estimateCellCounts* (depending on the package *FlowSorted.Blood.450k*\ ) can be used to estimate the cell type composition of blood samples. The function takes as input a *RGChannelSet* and returns a cell counts vector for each samples. If there seems to be a large difference in cell type composition in the different levels of the phenotype, it might be needed to include the celltype proportions in the *limma* model to account for this confounding. Since we have been working with sorted populations of cells, this was not necessary for our data.
