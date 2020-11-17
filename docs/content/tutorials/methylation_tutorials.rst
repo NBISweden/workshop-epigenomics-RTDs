@@ -7,5 +7,5 @@ These are tutorials for quality control and downstream analysis of methylation d
 .. toctree::
    :maxdepth: 1
 
-   Array workflow <methylationArray/Array_Tutorial.md>
-   Sequencing workflow <methylationSeq/Seq_Tutorial.md>
+   Array workflow <methylationArray/Array_Tutorial.rst>
+   Sequencing workflow <methylationSeq/Seq_Tutorial.rst>

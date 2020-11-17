@@ -19,6 +19,10 @@ MathJax.Hub.Queue(function() {
 
 # DNA Methylation: Bisulfite Sequencing Workflow
 
+**Learning Outcomes**
+
+- 
+
 **Table of Contents**
 - [DNA Methylation: Bisulfite Sequencing Workflow](#dna-methylation-bisulfite-sequencing-workflow)
   - [Introduction](#introduction)

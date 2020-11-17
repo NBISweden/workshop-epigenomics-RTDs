@@ -1,12 +1,3 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
-
-
-:raw-html-m2r:`<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>`
-
-
 .. raw:: html
 
    <script type="text/x-mathjax-config">
