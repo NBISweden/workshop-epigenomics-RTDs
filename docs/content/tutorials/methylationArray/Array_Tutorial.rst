@@ -1,22 +1,3 @@
-.. raw:: html
-
-   <script type="text/x-mathjax-config">
-   MathJax.Hub.Config({
-       tex2jax: {
-           inlineMath: [['$','$'], ['\\(','\\)']],
-           skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-       }
-   });
-   MathJax.Hub.Queue(function() {
-       var all = MathJax.Hub.getAllJax(), i;
-       for(i = 0; i < all.length; i += 1) {
-           all[i].SourceElement().parentNode.className += ' has-jax';
-       }
-   });
-   </script>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
-
-
 DNA Methylation: Array Workflow
 ===============================
 
@@ -35,7 +16,7 @@ Introduction
 
 Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented. 
 
-But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. The 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization (See Figure 1). In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with >90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the *de facto* standard for methylation analyses; the data processing for both is however fairly similar.
+But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. Introduced in 2011, the 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. If bisulfite converted DNA matches the probe, the probe is extended with a nucleotide  attached to a red or green dye. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization (the methylated signal is measured in the green channel and the unmethylated signal in the red channel) [See Figure 1]. In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with >90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the *de facto* standard for methylation analyses; the data processing for both is however fairly similar.
 
 
 .. image:: Figures/Infinium.png
@@ -46,13 +27,15 @@ But first; a bit of history. Measurement of DNA methylation by Infinium technolo
 
 Regardless of array type, both the 450k and EPIC record two measurements for each CpG: a methylated intensity (M) and an unmethylated intensity (U). Using these values, the proportion of methylation at each site CpG locus can be determined. The level of methylation at a locus is commonly reported as the Beta-value, *i.e.* the ratio of the methylated probe intensity and the overall intensity:
 
-$$\beta = M/(M + U)$$
+.. math::
+   \beta = M/(M + U)
 
 Illumina recommends adding a constant offset α (by default, α = 100) to the denominator to regularize Beta value when both methylated and unmethylated probe intensities are low. The Beta-value statistic results in a number between 0 and 1, or 0 and 100%. Under ideal conditions, a value of zero indicates that all copies of the CpG site in the sample were completely unmethylated (no methylated molecules were measured) and a value of one indicates that every copy of the site was methylated.
 
 A second common metric to describe the methylation level is the M-value, *i.e* the log2 ratio of the intensities of methylated probe versus unmethylated probe:
 
-$$Mvalue = log2(M/U)$$
+.. math::
+   Mvalue = log2(M/U)
 
 A M-value close to 0 indicates a similar intensity between the methylated and unmethylated probes, which means the CpG site is about half-methylated, assuming that the intensity data has been properly normalized. Positive M-values mean that more molecules are methylated than unmethylated, while negative M-values mean the opposite. 
 
@@ -76,7 +59,7 @@ This exercise has been set up on Uppmax, so connect to Uppmax as described in . 
    module load R_packages/4.0.0
    module load RStudio
 
-Start the analysis by initiating *rstudio*...
+Start the analysis by initiating *RStudio*... This might take a few seconds and a :code:`libGL error` can be shown before loading the RStudio graphical interface.
 
 .. code-block:: bash
 
@@ -90,19 +73,19 @@ Next, run the R commands by copying them from this website into the Rstudio term
    library("limma")
    library("minfi")
    library("RColorBrewer")
-   library("missMethyl")
+   library("missMethyl") # Can take a short time...
    library("minfiData")
    library("Gviz")
    library("DMRcate")
    library("stringr")
 
-Included with *minfo* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context.
+Included with *minfo* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context and to link the Red and Green raw data to methylated and unmethylated status.
 
 .. code-block:: r
 
    ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
-   # Use the head command to get a quick overview of the data
-   # head(ann450k)
+   # Use the head command to get a quick overview of the data and see what types of annotations are available
+   head(ann450k)
 
 .. note::
 
@@ -114,11 +97,11 @@ Datasets
 
 To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset (\ `GSE49667 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667>`_). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals (M28, M29, M30). An additional birth sample (individual VICS-72098-18-B) is included from another study (`GSE51180 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180>`_) to illustrate approaches for identifying and excluding poor quality samples.
 
-These datasets have been downloaded to Uppmax prior to the workshop, so you just need to point R towards the directory they are saved. The ``list.files`` command will return the list of files in the specified directory.
+These datasets have been uploaded to Uppmax prior to the workshop, so you just need to point R towards the directory they are saved. The ``list.files`` command will return the list of files in the specified directory.
 
 .. code-block:: r
 
-   dataDirectory <- "data"
+   dataDirectory <- "/sw/courses/epigenomics/DNAmethylation/array_data/"
    # list the files
    list.files(dataDirectory, recursive = TRUE)
 
@@ -131,19 +114,19 @@ Illumina methylation data is usually obtained in the form of Intensity Data (IDA
 
    # read in the sample sheet for the experiment
    targets <- read.metharray.sheet(dataDirectory, pattern="SampleSheet.csv")
-   #targets
+   targets
 
-Now we know where the data is located and we have essential information on each samples identity, we can read in the raw intensity data into R using the ``read.metharray.exp`` function. This creates an *RGChannelSet* object that contains all the raw intensity data, from both the red and green colour channels, for each of the samples. This is the initial object of a minfi analysis that contains the raw intensities in the green and red channels. Note that this object contains the intensities of the internal control probes as well. Because we read the data from a data sheet experiment, the phenotype data is also stored in the *RGChannelSet* and can be accessed via the accessor command pData. Also the probed design can be summarized by querying this object. Before starting the actual analysis it is good practice to get a feel of the structure and content of the *RGChannelSet* object in this way.
+Now we know where the data is located and we have essential information on each samples identity, we can read in the raw intensity data into R using the ``read.metharray.exp`` function. This creates an *RGChannelSet* object that contains all the raw intensity data, from both the red and green colour channels, for each of the samples. This is the initial object of a minfi analysis that contains the raw intensities in the green and red channels. Note that this object contains the intensities of the internal control probes as well. Because we read the data from a data sheet experiment, the phenotype data is also stored in the *RGChannelSet* and can be accessed via the accessor command ``pData``. Also the probed design can be summarized by querying this object. Before starting the actual analysis it is good practice to get a feel of the structure and content of the *RGChannelSet* object in this way.
 
 .. code-block:: r
 
-   # read in the raw data from the IDAT files
+   # read in the raw data from the IDAT files; warnings can be ignored.
    rgSet <- read.metharray.exp(targets=targets)
 
    # Get an overview of the data
-   # rgSet
-   # pData(rgSet)
-   # getManifest(rgSet)
+   rgSet
+   pData(rgSet)
+   getManifest(rgSet)
 
 It might be useful to change the names of the samples into something a little more descriptive.
 
@@ -156,6 +139,10 @@ It might be useful to change the names of the samples into something a little mo
    # Check the names have been updated by looking at the rownames of the phenoData
    pData(rgSet)
 
+.. note::
+
+   If you prefer to run this tutorial locally, you can also download the dataset to your personal computer. To do this, navigate to the folder on your own conputer where you want to deposit the data and execute :code:`scp -r <username>@rackham.uppmax.uu.se:/sw/courses/epigenomics/DNAmethylation/array_data .`. Then you can point the :code:`dataDirectory` to this local directory. Of course, you will also have to install all packages locally!
+
 A Note on Class Structure
 -------------------------
 
@@ -167,7 +154,7 @@ minfi generates a number of classes corresponding to various transformations of 
    :alt: 
    *Fig. 2: Flowchart of the different *minfi* class objects.*
 
-As of now, our dataset is an *RGChannelSet* object containing the raw intensity data. To proceed, this needs to be transformed into a *MethylSet* object containing the methylated and unmethylated signals. The most basic way to construct a *MethylSet* is to use the function *preprocessRaw* which uses the array design to match up the different probes and color channels to construct the methylated and unmethylated signals. This function does not do any normalization (in a later step we will add normalization, but this step is useful for initial quality control). Do this now for your object and have a look at the changes in the metadata.
+As of now, our dataset is an *RGChannelSet* object containing the raw green and red intensity data. To proceed, this needs to be transformed into a *MethylSet* object containing the methylated and unmethylated signals. The most basic way to construct a *MethylSet* is to use the function *preprocessRaw* which uses the array design to match up the different probes and color channels to construct the methylated and unmethylated signals. This function does not do any normalization (in a later step we will add normalization, but this step is useful for initial quality control). Do this now for your object and have a look at the changes in the metadata. Notice that the red and green assays have been transformed in Meth and Unmeth signals.
 
 .. code-block:: r
 
@@ -199,11 +186,11 @@ The functions *getBeta*\ , *getM* and *getCN* work on the *GenomicRatioSet* retu
 .. code-block:: r
 
    beta <- getBeta(gset)
-   # head(beta)
+   head(beta)
    m <- getM(gset)
-   # head(m)
+   head(m)
    cn <- getCN(gset)
-   # head(cn)
+   head(cn)
 
 Much more annotation data can be extracted from this object (see the *minfi* `documentation <http://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html>`_\ ). Now we have a analysis ready object, albeit unnormalized. As we will see in a later section, there are several normalization options that automatically take care of the preprocessing and conversion of a *RGChannelSet* to a *GenomicRatioSet*. But before doing this, an important step is Quality Control
 
@@ -230,7 +217,7 @@ Plotting the mean detection p-value for each sample allows us to gauge the gener
 
    # calculate the detection p-values
    detP <- detectionP(rgSet)
-   # head(detP)
+   head(detP)
 
 These p-values can be summarized in a single plot to simplify the comparison between samples
 
@@ -257,19 +244,19 @@ Taking these different metrics into account, it seems clear that the *birth* sam
    keep <- !colnames(rgSet) == "birth.11"
    # subset rgSet
    rgSet <- rgSet[,keep]
-   # Check the sample has been removed
+   # Check the sample has been removed by looking at the number of colnames
    rgSet
    # subset target as well
    targets <- targets[keep,]
 
 .. note::
-   The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reson a sample failed QC.
+   The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.
 
 .. code-block:: r
 
    controlStripPlot(rgSet, controls="BISULFITE CONVERSION II")
    # The plots of the different control probes can be exported into a pdf file in one step using the function qcReport
-   qcReport(rgSet, pdf= "qcReport.pdf")
+   #qcReport(rgSet, pdf= "qcReport.pdf")
 
 Normalization
 -------------
@@ -365,6 +352,9 @@ Compare with the unnormalized data to visualize the effect of the normalization.
    legend("top", legend = levels(factor(targets$Sample_Group)), 
           text.col=brewer.pal(8,"Dark2"))
 
+.. hint::
+   Click on Zoom above the RStudio plot panel to watch a larger version of the plotted figure.
+
 Data exploration
 ----------------
 
@@ -400,7 +390,9 @@ Poor performing probes can obscure the biological signals in the data and are ge
    detP <- detectionP(rgSet)
    detP <- detP[match(featureNames(mSetSq),rownames(detP)),] 
 
-   # remove any probes that have failed in one or more samples; this next line checks for each row of detP whether the number of values < 0.01 is equal to the number of samples (TRUE) or not (FALSE)
+   # remove any probes that have failed in one or more samples; this next line
+   # checks for each row of detP whether the number of values < 0.01 is equal 
+   # to the number of samples (TRUE) or not (FALSE)
    keep <- rowSums(detP < 0.01) == ncol(mSetSq) 
    table(keep)
    # Subset the GenomicRatioSet
@@ -549,6 +541,7 @@ Once we have the relevant statistics for the individual CpGs, we can then use th
 
    DMRs <- dmrcate(myAnnotation, lambda=1000, C=2)
    DMRs
+   # Create GRanges object; create directory when prompted
    results.ranges <- extractRanges(DMRs)
    results.ranges
 
@@ -567,12 +560,20 @@ Just as for the single CpG analysis, it is a good idea to visually inspect the r
             phen.col = cols, 
             genome = "hg19")
 
+Interestingly, the hypomethylation of the second DMR, near TIGIT, in Treg was  one of the main conclusions of the paper base don this dataset:  
+
+.. note::
+   ...In support of the view that methylation limits access of FOXP3 to its DNA targets, we showed that increased expression of the immune suppressive receptor T-cell immunoglobulin and immunoreceptor tyrosine-based inhibitory motif domain (TIGIT), which delineated Treg from activated effector T cells, was associated with hypomethylation and FOXP3 binding at the TIGIT locus... 
+
 Functional Regions
 ^^^^^^^^^^^^^^^^^^
 
 An alternative approach to detect DMRs is to predefine the regions to be tested; so, as opposed to the previous approach where the regions are defined according to heuristic distance rules we can define regions based on a shared function. For this, we will used the package *mCSEA* which contains three types of regions for 450K and EPIC arrays: promoter regions, gene body and CpG Islands. *mCSEA* is based on Gene Set Enrichment analysis (GSEA), a popular methodology for functional analysis that was specifically designed to avoid some drawbacks in the field of gene expression. Briefly, CpG sites are ranked according to a metric (logFC, t-statistic, ...) and an enrichment score (ES) is calculated for each region. This is done by running through the entire ranked CpG list, increasing the score when a CpG in the region is encountered and decreasing the score when the gene encountered is not in the region. A high ES indicates these probes are found high up in the ranked list. In other words, a high (N)ES value means that for the CpG sites in this region there is - on average - a shift towards a higher methylation level. This approach has been `shown <https://academic.oup.com/bioinformatics/article/35/18/3257/5316232>`_ to be more effective to detect smaller but consistent methylation differences.
 
-Here, we will apply this method to the output of the "naive-rTreg" comparison, ranking the CpGs by logFC differences. We specify "promoters" as the type of regions to be considered, but other options such as CpG Islands or gene bodies are possible. NOTE "Promoters" are not really restricted to pure promoters, but also include UTR, 1st Exon and a region upstream of the TSS.
+Here, we will apply this method to the output of the "naive-rTreg" comparison, ranking the CpGs by logFC differences. We specify "promoters" as the type of regions to be considered, but other options such as CpG Islands or gene bodies are possible. 
+
+.. note::
+   "Promoters" are not really restricted to pure promoters, but also include UTR, 1st Exon and a region upstream of the TSS.
 
 .. code-block:: r
 
@@ -594,13 +595,13 @@ Here, we will apply this method to the output of the "naive-rTreg" comparison, r
    head(myResults$promoters)
 
 The main results are found in *myResults$promoters*. This data frame contains the (normalized) enrichment score, p-values, total number of associated CpGs and the leading edge CpGs. The leading edge CpGs are the real drivers of the ES; these can be considered the most important CpGs with the largest logFC.
-The results of selected results can be visualized using *mCSEAPlot*\ , by specifying the *regionType* and the *dmrName*. Here an example of the top hit; the promoter of PRDM8. Note that the gene name indicates the promoter of said gene, since we specified we only consider promoter regions in this analysis. The result of this visualization are the chromosomal location, Beta levels per CpG per sample, leading edge status (green if in leading edge set) and gene annotation.
+The results of selected results can be visualized using *mCSEAPlot*\ , by specifying the *regionType* and the *dmrName*. Here an example of the second hit of the DMRs based on location; the promoter of TIGIT. Note that the gene name indicates the promoter of said gene, since we specified we only consider promoter regions in this analysis. The result of this visualization are the chromosomal location, Beta levels per CpG per sample, leading edge status (green if in leading edge set) and gene annotation.
 
 .. code-block:: r
 
     mCSEAPlot(myResults, 
               regionType = "promoters", 
-              dmrName = "PRDM8",
+              dmrName = "TIGIT",
               transcriptAnnotation = "symbol", 
               makePDF = FALSE)
 
@@ -639,7 +640,7 @@ After having defined the significant and background sites, it is time to run the
    # Top 10 GO categories
    topGSA(gst, number=10)
 
-Can you find the top 5 KEGG pathways?
+Can you find the top 10 KEGG pathways? Do they make sense biologically?
 
 While gene set testing is useful for providing some biological insight in terms of what pathways might be affected by abberant methylation, care should be taken not to over-interpret the results. Gene set testing should be used for the purpose of providing some biological insight that ideally would be tested and validated in further laboratory experiments. It is important to keep in mind that we are not observing gene level activity such as in RNA-Seq experiments, and that we have had to take an extra step to associate CpGs with genes.
 
@@ -647,3 +648,12 @@ Cell Type Composition
 ---------------------
 
 As methylation is cell type specific and methylation arrays provide CpG methylation values for a population of cells, biological findings from samples that are comprised of a mixture of cell types, such as blood, can be confounded with cell type composition. In order to estimate the confounding levels between phenotype and cell type composition, the function *estimateCellCounts* (depending on the package *FlowSorted.Blood.450k*\ ) can be used to estimate the cell type composition of blood samples. The function takes as input a *RGChannelSet* and returns a cell counts vector for each samples. If there seems to be a large difference in cell type composition in the different levels of the phenotype, it might be needed to include the celltype proportions in the *limma* model to account for this confounding. Since we have been working with sorted populations of cells, this was not necessary for our data.
+
+Alternative Workflows
+---------------------
+
+`RnBeads <https://rnbeads.org>`_ 
+   R-based and user-friendly; includes modules for data import, quality control, filtering and normalization (“preprocessing”), export of processed data (“tracks and tables”), covariate inference (e.g., predicting epigenetic age and cell type heterogeneity from DNA methylation data), exploratory analysis (e.g., dimension reduction, global distribution of DNA methylation levels, hierarchical clustering), and differential DNA methylation analysis. Each analysis module generates an HTML report that combines method descriptions, results tables, and publication-grade plots. These reports provide the user with a comprehensive and readily sharable summary of the dataset.
+
+`COHCAP <https://www.bioconductor.org/packages/release/bioc/html/COHCAP.html>`_ 
+   R-based; provides a pipeline to analyze single-nucleotide resolution methylation data (Illumina 450k/EPIC methylation array, targeted BS-Seq, etc.). It provides differential methylation for CpG Sites, differential methylation for CpG Islands, integration with gene expression data, with visualizaton options. 
