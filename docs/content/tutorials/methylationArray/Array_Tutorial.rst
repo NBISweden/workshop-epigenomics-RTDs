@@ -23,7 +23,7 @@ But first; a bit of history. Measurement of DNA methylation by Infinium technolo
    :target: Figures/Infinium.png
    :alt: 
  
-*Fig. 1: (Up) Infinium I and II design.*
+*Fig. 1: Infinium I and II design.*
 
 Regardless of array type, both the 450k and EPIC record two measurements for each CpG: a methylated intensity (M) and an unmethylated intensity (U). Using these values, the proportion of methylation at each site CpG locus can be determined. The level of methylation at a locus is commonly reported as the Beta-value, *i.e.* the ratio of the methylated probe intensity and the overall intensity:
 
@@ -51,7 +51,7 @@ Beta and M-values are related to each other but Beta-values are generally prefer
 Load Packages
 -------------
 
-This exercise has been set up on Uppmax, so connect to Uppmax as described in . On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
+This exercise has been set up on Uppmax, so connect to Uppmax as described in :doc:`../setup/lab-setup`. On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
 .. code-block:: bash
 
@@ -79,7 +79,7 @@ Next, run the R commands by copying them from this website into the Rstudio term
    library("DMRcate")
    library("stringr")
 
-Included with *minfo* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context and to link the Red and Green raw data to methylated and unmethylated status.
+Included with *minfi* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context and to link the Red and Green raw data to methylated and unmethylated status.
 
 .. code-block:: r
 
