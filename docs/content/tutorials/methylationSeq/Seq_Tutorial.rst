@@ -16,11 +16,11 @@ Introduction
 
 Since its first use in 1992, bisulfite (BS) sequencing of DNA has become the gold standard for analysis of DNA methylation due to the potential whole-genome coverage and single-base resolution. 
 
-There are different protocols that you can use to assess DNA methylation using NGS. The easiest way is to add the bisulfite reaction to your sequencing workflow and do Whole-Genome Bisulfite Sequencing (WGBS). However, you will need sufficient read depths to reliably determine methylation status. When you are working on an organism with a large genome size, this can lead to high costs for sequencing. The benefits of WGBS is that it typically reaches a coverage >90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and is usually not applied to a large number of samples. 
+There are different protocols available to assess DNA methylation using NGS. The easiest way is to add the bisulfite reaction to the sequencing workflow and do Whole-Genome Bisulfite Sequencing (WGBS). However, this requires sufficient read depths to reliably determine methylation status. When working on an organism with a large genome size, this can lead to high costs for sequencing. The benefits of WGBS are that it typically reaches a coverage >90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and is usually not applied to a large number of samples. 
 
-As an alternative, you could focus the detection of DNA methylation to a specific subset of the genome, thereby reducing the data volume of your experiment and subsequently the cost. One popular approach to this is Reduced Representation Bisulfite Sequencing (RRBS). The fundamental idea of RRBS is to get a “reduced representation" of the genome, with a focus on CpG islands. This involves the addition of restriction enzymes to digest the DNA during the fragmentation step. Typically, the enzyme MspI is used which is methylation insensitive. It cuts at 5’-CCGG-3’ sites, and since the genome is largely depleted of CpGs except for promoters/CpG islands, the "reduced representation" is largely capturing only these promoter regions for further analysis.
+As an alternative, one could focus the detection of DNA methylation to a specific subset of the genome, thereby reducing the data volume of the experiment and subsequently the cost. One popular approach to this is Reduced Representation Bisulfite Sequencing (RRBS). The fundamental idea of RRBS is to get a “reduced representation" of the genome, with a focus on CpG islands. This involves the addition of restriction enzymes to digest the DNA during the fragmentation step. Typically, the enzyme MspI is used which is methylation insensitive. It cuts at 5’-CCGG-3’ sites, and since the genome is largely depleted of CpGs except for promoters/CpG islands, the "reduced representation" is largely capturing only these promoter regions for further analysis.
 
-In comparison to regular DNA sequencing, bisulfite sequencing brings with it some peculiarities. A CpG locus in the reference genome, an aligned read is called as unmethylated if the sequence is TG (indicating bisulfite conversion) and methylated if the sequence is CG (indicating protection by the methyl group). The most obvious one is that to quantify methylation of DNA, bisulfite converted reads have to be compared to an *in silico* bisulfite-converted genome sequence, referred to as the reference genome, to allow accurate mapping. Since bisulfite sequencing changes unmethylated cytosines (C) over uracils (U) to thymines (T), subsequent steps for analysis aim for counting the number of C to T conversions and quantifying the methylation proportion per base. This is simply done by identifying C-to-T conversions in the aligned reads and dividing the number of Cs by the sum of Ts and Cs for each cytosine in the genome. 
+Regardless of the approach, the rationale behind bisulfite sequencing is fairly simple. Bisulfite treatment changes unmethylated cytosine (C) via uracil (U) to thymine (T), while methylated cytosines are protected from this conversion. Quantification of methylation is thus simply done by identifying C-to-T conversions in the aligned bisulfite treated reads and dividing the number of Cs by the sum of Ts and Cs for each cytosine in the genome. 
 
 .. image:: Figures/biseq.png
    :target: Figures/biseq.png
@@ -73,6 +73,7 @@ Start by loading the required packages.
    library("methylKit")
    # Annotation package
    library("genomation")
+   library("GenomicRanges")
 
 .. note::
    *methylKit* has an active discussion group `here <https://groups.google.com/g/methylkit_discussion>`_\ , if you have further questions regarding the package and/or analysis.
@@ -198,6 +199,19 @@ The most commonly used and simple method of standard deviation filtering on meth
 
    # This leaves us with this number of CpG sites
    nrow(meth)
+
+We can further remove known C -> T mutations. These locations should be removed from the analysis as they do not represent true bisulfite-treatment-associated conversions. Mutation locations can be stored in a GRanges object, and we can use that to remove the CpGs overlapping with the mutations. In order to do the overlap operation, we will convert the methylKit object to a GRanges object and do the filtering with the ``%over%`` function. The returned object will still be a methylKit object.
+
+.. code-block:: r
+
+   # give the locations of 2 example SNPs
+   mut <- GRanges(seqnames=c("chr21","chr21"),
+            ranges=IRanges(start=c(9853296, 9853326),
+                           end=c( 9853296,9853326)))
+
+   # select CpGs that do not overlap with mutations
+   meth <- meth[!as(meth,"GRanges") %over% mut, ]
+
 
 Data Structure/Outlier Detection
 --------------------------------
