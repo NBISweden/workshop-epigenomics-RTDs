@@ -72,7 +72,7 @@ If you want to run this exercise on your laptop, you also need to make sure that
 ![George Seurat](Seurat-Gravelines-Annonciade.jpg)
 
 ## Analysis of single cell ATAC-seq data
-[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
+[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
@@ -471,10 +471,10 @@ plot1 | plot2 | plot3
 pbmc <- RenameIdents(
 	object = pbmc,
 	'0' = 'CD14 Mono',
-	'1' = 'CD4 Memory (DN T)',
-	'2' = 'CD4/8 Naive',
-	'3' = 'CD8 Effector',
-	'4' = 'CD14 Mono',
+	'1' = 'CD4/8 Naive',
+	'2' = 'CD4 Memory (DN T)',
+	'3' = 'CD14 Mono',
+	'4' = 'CD8 Effector',
 	'5' = 'pre-B/pro-B',
 	'6' = 'NK dim',
 	'7' = 'CD16 Mono',
@@ -539,7 +539,7 @@ It is often informative to plot the ATAC-seq signal for a particular genomic reg
 
 ```
 # set plotting order
-levels(pbmc) <- c('CD14 Mono', 'CD4 Memory (DN T)', 'CD4/8 Naive', 'CD8 Effector', 'pre-B/pro-B', 'NK CD56Dim', 'CD16 Mono', 'DC')
+levels(pbmc) <- c('CD14 Mono', 'CD4 Memory (DN T)', 'CD4/8 Naive', 'CD8 Effector', 'pre-B/pro-B', 'NK Dim', 'CD16 Mono', 'DC')
 
 
 CoveragePlot(
