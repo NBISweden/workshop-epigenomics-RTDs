@@ -14,11 +14,20 @@ During this tutorial, you will learn how to use the *methylKit* R package to per
 Introduction
 ------------
 
-Since its first use in 1992, bisulfite (BS) sequencing of DNA has become the gold standard for analysis of DNA methylation due to the potential whole-genome coverage and single-base resolution. BS treatment of DNA leads to the conversion of unmodified cytosines to uracil whilst maintaining 5mC unchanged, which, after PCR and sequencing, can be mapped at single base resolution. More recently, BS treatment has been coupled with next generation sequencing (NGS) to yield reduced representation (RRBS) or whole genome (WGBS) data on the global genomic distribution of 5mC. The benefits of WGBS is that it typically reaches a coverage >90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and usually is not applied to large number of samples and requires relatively large quantities of DNA. The reduced representation bisulfite sequencing (RRBS) is another technique, which can also profile DNA methylation at single-base resolution. It combines digestion of genomic DNA with restriction enzymes and sequencing with bisulfite treatment in order to enrich for areas with a high CpG content. Therefore it relies first on digestion of genomic DNA with restriction enzymes, such as MspI which recognises 5’-CCGG-3’ sequences and cleaves the phosphodiester bonds upstream of CpG dinucleotide. It can sequence only CpG dense regions and doesn’t interrogate CpG-deficient regions such as functional enhancers, intronic regions, intergenic regions or in general lowly methylated regions of the genome. 
+Since its first use in 1992, bisulfite (BS) sequencing of DNA has become the gold standard for analysis of DNA methylation due to the potential whole-genome coverage and single-base resolution. 
 
-In comparison to regular DNA sequencing, bisulfite sequencing brings with it some peculiarities. Since BS-seq changes unmethylated cytosines (C) over uracils (U) to thymines (T), subsequent steps for analysis aim for counting the number of C to T conversions and quantifying the methylation proportion per base. This is simply done by identifying C-to-T conversions in the aligned reads and dividing number of Cs by the sum of Ts and Cs for each cytosine in the genome. Being able to do the quantification reliably depends on rigorous quality control before alignment, the choice of alignment method and post-alignment quality control. 
+There are different protocols that you can use to assess DNA methylation using NGS. The easiest way is to add the bisulfite reaction to your sequencing workflow and do Whole-Genome Bisulfite Sequencing (WGBS). However, you will need sufficient read depths to reliably determine methylation status. When you are working on an organism with a large genome size, this can lead to high costs for sequencing. The benefits of WGBS is that it typically reaches a coverage >90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and is usually not applied to a large number of samples. 
 
-The most obvious one is that to quantify methylation of DNA, bisulfite converted reads have to be compared to an *in silico* bisulfite-converted genome sequence, referred to as the reference genome, to allow accurate mapping. At each CpG site in the reference genome, an aligned read is called as unmethylated if the sequence is TG (indicating bisulfite conversion) and methylated if the sequence is CG (indicating protection by the methyl group). Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment. A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see `methylseq <https://nf-co.re/methylseq>`_\ ). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example methylseq. 
+As an alternative, you could focus the detection of DNA methylation to a specific subset of the genome, thereby reducing the data volume of your experiment and subsequently the cost. One popular approach to this is Reduced Representation Bisulfite Sequencing (RRBS). The fundamental idea of RRBS is to get a “reduced representation" of the genome, with a focus on CpG islands. This involves the addition of restriction enzymes to digest the DNA during the fragmentation step. Typically, the enzyme MspI is used which is methylation insensitive. It cuts at 5’-CCGG-3’ sites, and since the genome is largely depleted of CpGs except for promoters/CpG islands, the "reduced representation" is largely capturing only these promoter regions for further analysis.
+
+In comparison to regular DNA sequencing, bisulfite sequencing brings with it some peculiarities. A CpG locus in the reference genome, an aligned read is called as unmethylated if the sequence is TG (indicating bisulfite conversion) and methylated if the sequence is CG (indicating protection by the methyl group). The most obvious one is that to quantify methylation of DNA, bisulfite converted reads have to be compared to an *in silico* bisulfite-converted genome sequence, referred to as the reference genome, to allow accurate mapping. Since bisulfite sequencing changes unmethylated cytosines (C) over uracils (U) to thymines (T), subsequent steps for analysis aim for counting the number of C to T conversions and quantifying the methylation proportion per base. This is simply done by identifying C-to-T conversions in the aligned reads and dividing the number of Cs by the sum of Ts and Cs for each cytosine in the genome. 
+
+.. image:: Figures/biseq.png
+   :target: Figures/biseq.png
+   :alt: 
+*Fig. 1: Bisulfite sequencing overview.*
+
+Being able to do this quantification reliably depends on rigorous quality control before alignment, the choice of alignment method and post-alignment quality control. Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment.  A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see `methylseq <https://nf-co.re/methylseq>`_\ ). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example nf-core methylseq. 
 
 Datasets
 --------
@@ -94,9 +103,15 @@ As mentioned above, the samples we will be using as input files are Bismark cove
               treatment=c(1,1,0,0),
               mincov = 10
               )
+   
+   # check number of samples
    myobj
 
-This will result in ``methylRawList`` object containing the data and metadata. What do the columns "numCs" and "numTs" in each sample correspond to?
+   # What type of data is stored here?
+   head(myobj[[1]])
+
+
+This will result in ``methylRawList`` object containing the data and metadata. What do the columns "numCs" and "numTs" in each sample correspond to? Can you see how many CpG sites are included in each sample?
 
 .. note::
 
@@ -105,22 +120,22 @@ This will result in ``methylRawList`` object containing the data and metadata. W
 Descriptive Statistics
 ----------------------
 
-With all data collected, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions ``getMethylationStats`` and ``getCoverageStats`` can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the ``both.strands`` parameter has to be set to FALSE.  ``myobj`` is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected? 
+With all data collected in a single object, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions ``getMethylationStats`` and ``getCoverageStats`` can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the ``both.strands`` parameter has to be set to FALSE.  ``myobj`` is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected? 
 
 .. code-block:: r
 
    # Get a histogram of the methylation percentage per sample
    # Here for sample 1
    getMethylationStats(myobj[[1]], plot=TRUE, both.strands=FALSE)
-   # Setting plot to FALSE will return a data frame containing the statistics
-   getMethylationStats(myobj[[1]], plot=FALSE, both.strands=FALSE) 
 
-Typically, percentage methylation histograms should have peaks on both ends of the distribution. In any given cell, any given cytosine is either methylated or not. Therefore, looking at many cells should yield a similar pattern where we see lots of locations with high methylation and lots of locations with low methylation and a lower number of locations with intermediate methylation.
+Typically, percentage methylation histograms should have peaks on both ends of the distribution. In any given cell, any given cytosine is either methylated or not. Therefore, looking at many cells should yield a similar pattern where we see lots of locations with high methylation and lots of locations with low methylation and a lower number of locations with intermediate methylation. Because bisulfite sequencing has a relatively high error rate, samples between 0% and 10% are usually classified as "unmethylated", and samples between 90% and 100% are classified as "fully methylated", although these thresholds are not fixed.
 
 .. code-block:: r
 
    # Get a histogram of the read coverage per sample
    getCoverageStats(myobj[[1]], plot=TRUE, both.strands=FALSE)
+   # Get percentile data by setting plot=FALSE
+   getCoverageStats(myobj[[1]], plot=FALSE, both.strands=FALSE)
 
 Experiments that are suffering from PCR duplication bias will have a secondary peak towards the right hand side of the coverage histogram.
 
@@ -136,6 +151,7 @@ It might be useful to filter samples based on coverage. In particular, if sample
                          lo.perc=NULL,
                          hi.count=NULL,
                          hi.perc=99.9)
+
 
 Normalization
 -------------
@@ -156,6 +172,8 @@ In order to do further analysis, we will need to extract the bases that are cove
    meth <- unite(myobj.filt.norm, destrand=FALSE)
    meth
 
+How many bases were kept for downstream analysis?
+
 Further Filtering
 -----------------
 
@@ -172,21 +190,25 @@ The most commonly used and simple method of standard deviation filtering on meth
    sds=matrixStats::rowSds(pm)
 
    # Visualize the distribution of the per-CpG standard deviation
-   hist(sds)
+   # to determine a suitable cutoff
+   hist(sds, breaks = 100)
 
-   # keep only CpG with standard deviations larger than 5%
-   meth <- meth[sds > 5]
+   # keep only CpG with standard deviations larger than 2%
+   meth <- meth[sds > 2]
+
+   # This leaves us with this number of CpG sites
+   nrow(meth)
 
 Data Structure/Outlier Detection
 --------------------------------
 
-We can check the correlation between samples using ``getCorrelation``. This function will either plot scatter plot and correlation coefficients or just print a correlation matrix if ``plot=FALSE``. What does this plot tell you about the structure in the data?
+We can check the correlation between samples using ``getCorrelation``. This function will either plot scatter plot and Pearson correlation coefficients or just print a correlation matrix if ``plot=FALSE``. What does this plot tell you about the structure in the data? Which samples resemble each other the most?
 
 .. code-block:: r
 
    getCorrelation(meth,plot=TRUE)
 
-The data structure can further be visualized in a dendrogram using hierarchical clustering of distance measures derived from each samples' percentage methylation. Check ``?clusterSamples`` to see which distance measures and clustering methods are available.
+The data structure can additionally be visualized in a dendrogram using hierarchical clustering of distance measures derived from each samples' percentage methylation. Clustering is used for grouping data points by their similarity. It is a general concept that can be achieved by many different algorithms. Check ``?clusterSamples`` to see which distance measures and clustering methods are available.
 
 .. code-block:: r
 
@@ -197,9 +219,6 @@ Another very useful visualization is obtained by plotting the samples in a princ
 .. code-block:: r
 
    PCASamples(meth)
-
-   sampleAnnotation=data.frame(batch_id=c("Luminal_1","Luminal_2","Basal_1","Basal_2"),age=c(19,34,23,40))
-   as=assocComp(mBase=meth,sampleAnnotation)
 
 Differential Methylation
 ------------------------
@@ -230,13 +249,21 @@ The following code tests for the differential methylation of our dataset; i.e co
                                adjust="BH")
    myDiff
 
-The output of ``calculateDiffMeth`` is a ``methylDiff`` object containing information about the difference in percentage methylation between treatment and control, and the p- and q-value of the model for all CpG sites. 
+The output of ``calculateDiffMeth`` is a ``methylDiff`` object containing information about the difference in percentage methylation between treatment and control, and the p- and q-value of the model for all CpG sites. No reordering, filtering or sorting has happened here yet.
+
+.. code-block:: r
+
+   # Simple volcano plot to get an overview of differential methylation
+   plot(myDiff$meth.diff, -log10(myDiff$qvalue))
+   abline(v=0)
 
 .. note::
 
-   Alternatively, the function ``calculateDiffMethDSS`` provides an interface to the beta-binomial model from the *DSS* package. This might sometimes be more statistically sound as it can account for both sampling and epigenetic variability
+   - Alternatively, the function ``calculateDiffMethDSS`` provides an interface to the beta-binomial model from the *DSS* package. This might sometimes be more statistically sound as it can account for both sampling and epigenetic variability
 
-Next, visualize the number of hyper- and hypomethylation events per chromosome, as a percent of the sites with the minimum coverage and differential. By default this is a 25% change in methylation and all samples with 10X coverage.
+   - If you want to compare multiple treatment groups, you can do as above using a treatment vector as c(2,2,1,1,0,0) to detect CpGs differing in any of the groups. For specific pairwise comparisons you have to use the ``reorganize`` function and rerun ``calculateDiffMeth`` 
+
+Next, visualize the number of hyper- and hypomethylation events per chromosome, as a percent of the sites with minimum coverage and minimal differential methylation. By default this is a 25% change in methylation and all samples with 10X coverage.
 
 .. code-block:: r
 
@@ -290,12 +317,16 @@ To help with the biological interpretation of the data, we will annotate the dif
    # First load the annotation data; i.e the coordinates of promoters, TSS, intron and exons
    refseq_anot <- readTranscriptFeatures("/sw/courses/epigenomics/DNAmethylation/biseq_data//mm10.refseq.genes.bed")
 
-   # Annotate hypermethylated CpGs ("target") with promoter/exon/intron information ("feature"). This function operates on GRanges objects, so we first coerce the methylKit object to GRanges. 
+   # Annotate hypermethylated CpGs ("target") with promoter/exon/intron 
+   # information ("feature"). This function operates on GRanges objects, so we # first coerce the methylKit object to GRanges. 
    myDiff25p.hyper.anot <- annotateWithGeneParts(target = as(myDiff25p.hyper,"GRanges"),
                                           feature = refseq_anot)
 
    # Summary of target set annotation
    myDiff25p.hyper.anot
+
+.. note::
+   The GenomicRanges package defines general purpose containers for storing and manipulating genomic intervals and variables defined along a genome.
 
 This function creates an *AnnotationByGeneParts* object, containing - for each target CpG - data such as the nearest transcription start site and the genomic structure it is located on. Several accessor functions from the *genomation* package allow for interaction with such an object.
 
@@ -311,7 +342,7 @@ This function creates an *AnnotationByGeneParts* object, containing - for each t
    # This can also be summarized for all differentially methylated CpGs
    plotTargetAnnotation(myDiff25p.hyper.anot, main = "Differential Methylation Annotation")
 
-Similarly, it is possible to annotate the differentially methylated CpGs with CpG Island membership using ``readFeatureFlank``. Using this function you read from a BED file with feature info (here the location of the CpG Islands) and with the flank parameter you can define a region around these features (here the "shores" are defined as 2000 bases around the Islands).
+Similarly, it is possible to annotate the differentially methylated CpGs with CpG Island membership using ``readFeatureFlank`` and ``annotateWithFeatureflank``. Using these functions you read from a BED file with feature info (here the location of the CpG Islands) and with the flank parameter you can define a region around these features (here the "shores" are defined as 2000 bases around the Islands).
 
 .. code-block:: r
 
@@ -335,6 +366,7 @@ Since we are often more interested in the different methylation of multiple CpGs
 .. code-block:: r
 
    # Summarize the original object counts over a certain region, here the CpG Islands
+   # You can ignore the warnings here...
    myobj_islands <- regionCounts(myobj, cpg_anot$CpGi)
    # Filter the summarized counts by coverage
    myobj_islands_filt <- filterByCoverage(myobj_islands,
@@ -366,6 +398,25 @@ And just like for the single CpGs, annotation using the *genomation* functions i
    # View the distance to the nearest Transcription Start Site; the target.row column indicates the row number in myDiff_islands_25p
    head(getAssociationWithTSS(myDiff_islands_25p_ann))
 
+Besides grouping by functional regions, you can also group CpGs in a sliding window along the genome for a more unbiased approach. As for the functional regions, we would start again from the original object but this time group the CpGs in a certain predefined window. After this, the usual ``filterByCoverage``, ``normalizeCoverage`` and ``unite`` functions are used before doing ``calculatedDiffMeth``. Give it a go if you happen to have some spare time at the end of this tutorial!
+
+.. code-block::
+
+   # Reconstruct original object, keeping a lower coverage this time
+   myobj_lowCov <- methRead(file.list,
+              sample.id=list("Luminal_1","Luminal_2","Basal_1","Basal_2"),
+              pipeline = "bismarkCoverage",
+              assembly="mm10",
+              treatment=c(1,1,0,0),
+              mincov = 3
+              )
+
+   # Group the counts
+   tiles <- tileMethylCounts(myobj_lowCov,win.size=1000,step.size=1000,cov.bases = 10)
+
+   # Inspect data
+   head(tiles[[1]])   
+
 Visualization
 -------------
 
@@ -375,7 +426,7 @@ The results of a differential analysis can be exported as a bedGraph; a format t
 
    bedgraph(myDiff25p, col.name = "meth.diff", file.name = "diff_cpg_25p.bed")
 
-A tutorial of the Genome Browser is out of scope for this workshop; but a step-by-step approach for visualizing your own data tracks can be found `here <https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#CustomTracks>`_. An example of such a custom visualization of the methylation difference between treatment and control can be seen in Figure 1. Notice how differentially methylated CpGs tend to group together in similarly regulated regions.
+A tutorial of the Genome Browser is out of scope for this workshop; but a step-by-step approach for visualizing your own data tracks can be found `here <https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#CustomTracks>`_. An example of such a custom visualization of the methylation difference between treatment and control can be seen in Figure 2. Notice how differentially methylated CpGs tend to group together in similarly regulated regions.
 
 .. note::
 
@@ -386,9 +437,16 @@ A tutorial of the Genome Browser is out of scope for this workshop; but a step-b
    :target: Figures/UCSC_bed_2.png
    :alt: 
 
-*Figure 1: UCSC Genome Browser example with three main annotation tracks. Upper track: percentage methylation difference between treatment and control samples for significantly differential methylated CpGs. Middle track: RefSeq gene structure. Lower track: CpG Island location.*
+*Figure 2: UCSC Genome Browser example with three main annotation tracks. Upper track: percentage methylation difference between treatment and control samples for significantly differential methylated CpGs. Middle track: RefSeq gene structure. Lower track: CpG Island location.*
 
 Exactly how to produce these plots is out of the scope of these exercises, but I encourage you to try it later with - for example - the bedgraph of all differentially methylated CpGs.
+
+Gene Set Enrichment
+-------------------
+
+Methylation is a DNA mark that can occur anywhere on the genome and is not as directly related to genes as expression data. Therefore, a methylation specific issue in performing gene set testing is how to assign differentially methylated features to genes. In addition, measured CpG sites are not distributed evenly across the genome, and it has been shown that genes that have more CpG sites measured across them are more likely to be detected as differentially methylated compared to genes that have fewer measured CpG sites. Moreover, approximately 10% of gene-annotated CpGs are assigned to more than one gene, violating assumptions of independently measured genes. Thus far, there are very few gene set testing methods designed specifically for DNA methylation data and their usefulness can be very limited. The *MissMethyl*  package was presented in the array tutorial as a potential tool, but is specific for array data.
+
+For bisulfite sequencing data, most often *ad hoc* approaches are used to select a subset of genes associated with differently methylated CpGs or regions. Next, this list of genes can be analyzed with traditional gene set enrichment tools such as *GOseq* (see more info `here <https://academic.oup.com/bioinformatics/article/29/15/1851/265573>`_, where the authors used this package to correct the "CpG sites per gene" bias). 
 
 Alternative workflows
 ---------------------
