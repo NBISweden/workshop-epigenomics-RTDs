@@ -1,26 +1,9 @@
-.. raw:: html
-
-   <script type="text/x-mathjax-config">
-   MathJax.Hub.Config({
-       tex2jax: {
-           inlineMath: [['$','$'], ['\\(','\\)']],
-           skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-       }
-   });
-   MathJax.Hub.Queue(function() {
-       var all = MathJax.Hub.getAllJax(), i;
-       for(i = 0; i < all.length; i += 1) {
-           all[i].SourceElement().parentNode.className += ' has-jax';
-       }
-   });
-   </script>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
-
-
 DNA Methylation: Bisulfite Sequencing Workflow
 ==============================================
 
 **Learning Outcomes**
+
+During this tutorial, you will learn how to use the *methylKit* R package to perform a basic bisulfite sequencing data analysis: loading data, basic quality control and filtering, data exploration and differential methylation at the CpG and regional level.
 
 .. Contents
 .. ========
@@ -37,10 +20,41 @@ In comparison to regular DNA sequencing, bisulfite sequencing brings with it som
 
 The most obvious one is that to quantify methylation of DNA, bisulfite converted reads have to be compared to an *in silico* bisulfite-converted genome sequence, referred to as the reference genome, to allow accurate mapping. At each CpG site in the reference genome, an aligned read is called as unmethylated if the sequence is TG (indicating bisulfite conversion) and methylated if the sequence is CG (indicating protection by the methyl group). Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment. A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see `methylseq <https://nf-co.re/methylseq>`_\ ). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example methylseq. 
 
+Datasets
+--------
+
+To showcase a basic analysis, a small set of samples has been collected consisting of mouse mammary gland cells. The epithelium of the mammary gland exists in a highly dynamic state, undergoing dramatic changes during puberty, pregnancy, lactation and regression. Characterization of the lineage hierarchy of cells in the mammary epithelium is an important step toward understanding which cells are predisposed to oncogenesis. 
+
+In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example). 
+
+.. note::
+   These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the methylseq nf-core pipeline. 
+
+
+.. image:: Figures/coverage.png
+   :target: Figures/coverage.png
+   :alt: 
+
+*Table 1: Example of a Bismark coverage files. One of the input types fit for methylKit.*
+
 Load Packages
 -------------
 
-Workflows for the downstream analysis of BS data are in general less standardized than those for the analysis of array data and might require a somewhat more advanced knowledge of R to make the most of the data. The workflow we will present today is based on the *methylKit* R package. This package has been developed as a comprehensive package for the analysis of genome-wide DNA methylation profiles providing functions for clustering, sample quality visualization, differential methylation analysis and feature annotation. 
+This exercise has been set up on Uppmax, so connect to Uppmax as described in :doc:`../setup/lab-setup`. On Uppmax, most packages are already installed, and can be loaded into R after the ``R/4.0.0`` and  ``R_packages/4.0.0`` modules have been loaded. If you are running on Uppmax, start by loading the following modules:
+
+.. code-block:: bash
+
+   module load R/4.0.0
+   module load R_packages/4.0.0
+   module load RStudio
+
+Start the analysis by initiating *RStudio*... This might take a few seconds and a :code:`libGL error` can be shown before loading the RStudio graphical interface.
+
+.. code-block:: bash
+
+   rstudio
+
+Workflows for the downstream analysis of Bisulfite sequencing data are in general less standardized than those for the analysis of array data and might require a somewhat more advanced knowledge of R to make the most of the data. The workflow we will present today is based on the `methylKit <https://bioconductor.org/packages/release/bioc/html/methylKit.html>`_ R package. This package has been developed as a comprehensive package for the analysis of genome-wide DNA methylation profiles providing functions for clustering, sample quality visualization and differential methylation analysis. `genomation <https://www.bioconductor.org/packages/release/bioc/vignettes/genomation/inst/doc/GenomationManual.html>`_ will be used to perform feature annotation. 
 
 Start by loading the required packages.
 
@@ -51,36 +65,28 @@ Start by loading the required packages.
    # Annotation package
    library("genomation")
 
-NOTE: *methylKit* has an active discussion group `here <https://groups.google.com/g/methylkit_discussion>`_\ , if you have questions regarding the package and/or analysis.
-
-Datasets
---------
-
-To showcase a basic analysis, a small dataset has been collected consisting of mouse mammary gland cells. The epithelium of the mammary gland exists in a highly dynamic state, undergoing dramatic changes during puberty, pregnancy, lactation and regression. Characterization of the lineage hierarchy of cells in the mammary epithelium is an important step toward understanding which cells are predisposed to oncogenesis. In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example). These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the methylseq nf-core pipeline. 
-
-
-.. image:: Figures/coverage.png
-   :target: Figures/coverage.png
-   :alt: 
-
-*Table 1: Example of a Bismark coverage files. One of the input types fit for methylKit.*
+.. note::
+   *methylKit* has an active discussion group `here <https://groups.google.com/g/methylkit_discussion>`_\ , if you have further questions regarding the package and/or analysis.
 
 Load Datasets
 -------------
 
-The samples we will be using as input files are Bismark coverage files, which need to be collected in a list R object prior to be loaded in *methylKit* using the *methRead* function. Important is that you supply sample location, sample IDs and the genome assembly. Moreover, you should supply which pipeline was used to produce the input files and a *treatment* parameter indicating which sample is "control" or "0" and which is "test" or "1". Additionally, you can define a minimum read coverage for CpG sites to be included in the object. Depending on the type of input data, additional parameters are available.
+As mentioned above, the samples we will be using as input files are Bismark coverage files, which need to be collected in a list R object prior to be loaded in *methylKit* using the ``methRead`` function. The data files have been uploaded to Uppmax before. Important is that you supply sample location, sample IDs and the genome assembly. Moreover, you should supply which pipeline was used to produce the input files and a ``treatment`` parameter indicating which sample is "control" or "0" and which is "test" or "1". Additionally, you can define a minimum read coverage for CpG sites to be included in the object with ``mincov``. Depending on the type of input data, additional parameters are available.
 
-NOTE: don't forget to check *?methRead* for more info about parameter options.
+.. note:: 
+   Don't forget to check ``?methRead`` for more info about parameter options.
 
 .. code-block:: r
 
    # Define the list containing the bismark coverage files.
-   file.list <- list("Data/P6_1.bismark.cov.gz", 
-                     "Data/P6_4.bismark.cov.gz", 
-                     "Data/P8_3.bismark.cov.gz", 
-                     "Data/P8_6.bismark.cov.gz")
+   file.list <- list(
+      "/sw/courses/epigenomics/DNAmethylation/biseq_data/P6_1.bismark.cov.gz", 
+      "/sw/courses/epigenomics/DNAmethylation/biseq_data/P6_4.bismark.cov.gz", 
+      "/sw/courses/epigenomics/DNAmethylation/biseq_data/P8_3.bismark.cov.gz", 
+      "/sw/courses/epigenomics/DNAmethylation/biseq_data/P8_6.bismark.cov.gz")
 
-   # read the listed files into a methylRawList object making sure the other parameters are filled in correctly.
+   # read the listed files into a methylRawList object making sure the other 
+   # parameters are filled in correctly.
    myobj <- methRead(file.list,
               sample.id=list("Luminal_1","Luminal_2","Basal_1","Basal_2"),
               pipeline = "bismarkCoverage",
@@ -90,28 +96,38 @@ NOTE: don't forget to check *?methRead* for more info about parameter options.
               )
    myobj
 
-This will result in *methylRawList* object containing the data and metadata. What do the columns "numCs" and "numTs" in each sample correspond to?
+This will result in ``methylRawList`` object containing the data and metadata. What do the columns "numCs" and "numTs" in each sample correspond to?
+
+.. note::
+
+   If you prefer to run this tutorial locally, you can also download these data filesto your personal computer. To do this, navigate to the folder on your own conputer where you want to deposit the data and execute :code:`scp -r <username>@rackham.uppmax.uu.se:/sw/courses/epigenomics/DNAmethylation/biseq_data .`. Of course, you will also have to install the analysis packages locally!
 
 Descriptive Statistics
 ----------------------
 
-With all data collected, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions *getMethylationStats* and *getCoverageStats* can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the *both.strands* parameter has to be set to FALSE.  *myobj* is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected? 
+With all data collected, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions ``getMethylationStats`` and ``getCoverageStats`` can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the ``both.strands`` parameter has to be set to FALSE.  ``myobj`` is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected? 
 
 .. code-block:: r
 
    # Get a histogram of the methylation percentage per sample
+   # Here for sample 1
    getMethylationStats(myobj[[1]], plot=TRUE, both.strands=FALSE)
+   # Setting plot to FALSE will return a data frame containing the statistics
+   getMethylationStats(myobj[[1]], plot=FALSE, both.strands=FALSE) 
+
+Typically, percentage methylation histograms should have peaks on both ends of the distribution. In any given cell, any given cytosine is either methylated or not. Therefore, looking at many cells should yield a similar pattern where we see lots of locations with high methylation and lots of locations with low methylation and a lower number of locations with intermediate methylation.
+
+.. code-block:: r
+
    # Get a histogram of the read coverage per sample
    getCoverageStats(myobj[[1]], plot=TRUE, both.strands=FALSE)
 
-Typically, percent methylation histogram should have two peaks on both ends. In any given cell, any given cytosine is either methylated or not. Therefore, looking at many cells should yield a similar pattern where we see lots of locations with high methylation and lots of locations with low methylation and a lower number of locations with intermediate methylation.
-
-Experiments that are highly suffering from PCR duplication bias will have a secondary peak towards the right hand side of the coverage histogram.
+Experiments that are suffering from PCR duplication bias will have a secondary peak towards the right hand side of the coverage histogram.
 
 Filter Step
 -----------
 
-It might be useful to filter samples based on coverage. In particular, if our samples are suffering from PCR bias it would be useful to discard bases with very high read coverage. Furthermore, we would also like to discard bases that have low read coverage, because a high enough read coverage will increase the power of the statistical tests. The code below filters a *methylRawList* and discards bases that have coverage below 10 reads (in this case we already did this when reading in the files...) and also discards the bases that have more than 99.9th percentile of coverage in each sample.
+It might be useful to filter samples based on coverage. In particular, if samples are suffering from PCR bias or overamplification it could be useful to discard bases with very high read coverage. Furthermore, we would also like to discard bases that have very low read coverage, because these tend to produce unreliable and unstable statistics in the downstream analysis. The code below filters a ``methylRawList`` and discards bases that have coverage below 10 reads (in this case we already did this when reading in the files...) and also discards the bases that have more than 99.9th percentile of coverage in each sample.
 
 .. code-block:: r
 
@@ -121,7 +137,10 @@ It might be useful to filter samples based on coverage. In particular, if our sa
                          hi.count=NULL,
                          hi.perc=99.9)
 
-Next, a basic normalization of the coverage values between samples is performed by using a scaling factor derived from differences between the median of the coverage distributions.
+Normalization
+-------------
+
+Next, a basic normalization of the coverage values between samples is performed by using a scaling factor derived from differences between the median of the coverage distributions. In the dowstream differential analysis, we will be comparing methylation fractions between samples, so one could think that sequence depth would not matter all that much. After all, 40/80 (mC/C) reads is the same fraction as 400/800 (mC/C) reads. However, certain statistical tests (i.e. Fisher's exact test) will result in different p-values depending on the total number of reads. Thus, if the coverage is quite similar across the samples, this step is not really essential, otherwise it might be a good idea to normalize the data. 
 
 .. code-block:: r
 
@@ -130,7 +149,7 @@ Next, a basic normalization of the coverage values between samples is performed 
 Merge Data
 ----------
 
-In order to do further analysis, we will need to extract the bases that are covered in all samples. The following function will merge all samples to one object with base-pair locations that are covered in all samples. Setting *destrand=TRUE* (the default is *FALSE*\ ) will merge reads on both strands of a CpG dinucleotide. This provides better coverage, but only advised when looking at CpG methylation (for CpH methylation this will cause wrong results in subsequent analyses; can you figure out why?). In addition, setting *destrand=TRUE* will only work when operating on base-pair resolution, otherwise setting this option *TRUE* will have no effect. Our data contains no strand info, so the *destrand* option is not applicable. The *unite* function will return a *methylBase* object which will be our main object for all comparative analysis. The *methylBase* object contains methylation information for regions/bases that are covered in all samples.
+In order to do further analysis, we will need to extract the bases that are covered by reads in all our samples. The following function will merge all samples to one object with base-pair locations that are covered in all samples. Setting ``destrand=TRUE`` (the default is ``FALSE``) will merge reads on both strands of a CpG dinucleotide. This provides better coverage, but only advised when looking at CpG methylation (for CpH methylation this will cause wrong results in subsequent analyses; can you figure out why?). In addition, setting ``destrand=TRUE`` will only work when operating on base-pair resolution, otherwise setting this option ``TRUE`` will have no effect. Our data contains no strand info, so the ``destrand`` option is not applicable. The ``unite`` function will return a ``methylBase`` object which will be our main object for all comparative analysis. The ``methylBase`` object contains methylation information for regions/bases that are covered in all samples.
 
 .. code-block:: r
 
@@ -140,7 +159,9 @@ In order to do further analysis, we will need to extract the bases that are cove
 Further Filtering
 -----------------
 
-We might need to filter the CpGs further before exploratory analysis and the downstream differential methylation. For exploratory analysis, it is of general interest to see how samples relate to each other and we might want to remove CpGs that are not variable before doing that. For differential methylation, removing non variable CpGs prior to the analysis will lower the number of tests that needs to be performed, thus improving multiple correction.
+High-throughput methylation data contains a lot of CpG sites that have no or little variation among study subjects and are not all that informative for downstream analyses. Nonspecific CpG filtering (i.e., not considering phenotype) is a common dimension reduction procedure performed prior to cluster analysis and differential methylation. For exploratory analysis, it is of general interest to see how samples relate to each other and we might want to remove CpGs that are not variable before doing that. For differential methylation, removing non variable CpGs prior to the analysis will lower the number of tests that needs to be performed, thus reducing multiple correction penalties.
+
+The most commonly used and simple method of standard deviation filtering on methylation ratio values (equivalent to Beta values) has been shown to be robust and consistent to different real datasets and would suffice for most occasions.
 
 .. code-block:: r
 
@@ -159,23 +180,26 @@ We might need to filter the CpGs further before exploratory analysis and the dow
 Data Structure/Outlier Detection
 --------------------------------
 
-We can check the correlation between samples using *getCorrelation*. This function will either plot scatter plot and correlation coefficients or just print a correlation matrix if *plot=FALSE*. What does this plot tell you about the structure in the data?
+We can check the correlation between samples using ``getCorrelation``. This function will either plot scatter plot and correlation coefficients or just print a correlation matrix if ``plot=FALSE``. What does this plot tell you about the structure in the data?
 
 .. code-block:: r
 
    getCorrelation(meth,plot=TRUE)
 
-The data structure can further be visualized in a dendrogram using hierarchical clustering of distance measures derived from each samples' percentage methylation. Check *?clusterSamples* to see which distance measures and clustering methods are available.
+The data structure can further be visualized in a dendrogram using hierarchical clustering of distance measures derived from each samples' percentage methylation. Check ``?clusterSamples`` to see which distance measures and clustering methods are available.
 
 .. code-block:: r
 
    clusterSamples(meth, dist="correlation", method="ward", plot=TRUE)
 
-Another very useful visualization is obtained by plotting the samples in a principal component space. Using this kind of PCA plot we project multidimensional data (i.e. we have as many dimensions in this data as there are CpG loci in *meth*\ ) into 2 or 3-dimensional space while at the same time maintaining as much variation in the data as possible. Samples that are more alike will be clustered together in PC space, so by looking at this plot we can see what is the largest source of variation in data and whether there are sample swaps and/or outlier samples. *PCASamples* is a function in *methylKit* that will perform PCA and plot the first two principal components. What does the PCA plot of our dataset tell you? What is the biggest source of variation on the data? Does it look samples are swapped? Do there seem to be outliers among the samples?
+Another very useful visualization is obtained by plotting the samples in a principal component space. Using this kind of PCA plot we project multidimensional data (i.e. we have as many dimensions in this data as there are CpG loci in ``meth``) into 2 or 3-dimensional space while at the same time maintaining as much variation in the data as possible. Samples that are more alike will be clustered together in PC space, so by looking at this plot we can see what is the largest source of variation in data and whether there are sample swaps and/or outlier samples. ``PCASamples`` is a function in *methylKit* that will perform PCA and plot the first two principal components. What does the PCA plot of our dataset tell you? What is the biggest source of variation on the data? Does it look samples are swapped? Do there seem to be outliers among the samples?
 
 .. code-block:: r
 
    PCASamples(meth)
+
+   sampleAnnotation=data.frame(batch_id=c("Luminal_1","Luminal_2","Basal_1","Basal_2"),age=c(19,34,23,40))
+   as=assocComp(mBase=meth,sampleAnnotation)
 
 Differential Methylation
 ------------------------
@@ -185,13 +209,16 @@ Single CpG Sites
 
 If the basic statistics of the samples look OK and the data structure seems reasonable, we can proceed to the differential methylation step. Differential DNA methylation is usually calculated by comparing the proportion of methylated Cs in a test sample relative to a control. In simple comparisons between such pairs of samples (i.e. test and control), methods such as Fisher’s Exact Test can be applied when there are no replicates for test and control cases. If replicates are available, regression based methods are generally used to model methylation levels in relation to the sample groups and variation between replicates. In addition, an advantage of regression methods over Fisher's exact test is that it allows for the inclusion of sample specific covariates (continuous or categorical) and the ability to adjust for confounding variables. 
 
-The *calculateDiffMeth* function is the main function to calculate differential methylation in the *methylKit* package. Depending on the sample size per each set it will either use Fisher’s exact or logistic regression to calculate P-values. In practice, the number of samples per group will determine which of the two methods will be used (logistic regression or Fisher's exact test). If there are multiple samples per group, *methylKit* will employ the logistic regression test. Otherwise, when there is one sample per group, Fisher's exact test will be used. P-values will automatically be corrected for multiple testing using the Benjamini-Hochberg FDR method. 
+The ``calculateDiffMeth`` function is the main function to calculate differential methylation in the *methylKit* package. Depending on the sample size per each set it will either use Fisher’s exact or logistic regression to calculate P-values. In practice, the number of samples per group will determine which of the two methods will be used (logistic regression or Fisher's exact test). If there are multiple samples per group, *methylKit* will employ the logistic regression test. Otherwise, when there is one sample per group, Fisher's exact test will be used. P-values will automatically be corrected for multiple testing using the Benjamini-Hochberg FDR method. 
 
-In its simplest form, where there are no covariates, the logistic regression will try to model the log odds ratio which is based on the methylation proportion of a CpG, $\pi_i$, using the treatment vector which denotes the sample group membership for the CpGs in the model. Below, the “Treatment” variable is used to predict the log-odds ratio of methylation proportions.
+.. note:: 
 
-$$log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i$$
+   In its simplest form, where there are no covariates, the logistic regression will try to model the log odds ratio which is based on the methylation proportion of a CpG, :math:`\pi_i`, using the treatment vector which denotes the sample group membership for the CpGs in the model. Below, the “Treatment” variable is used to predict the log-odds ratio of methylation proportions.
 
-The logistic regression model is fitted per CpG and we test if the treatment has any effect on the outcome variable or not. In other words, we are testing if $log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i$ is a “better” model than $log(\pi_i/(1-\pi_i)) = \beta_0$.
+   .. math::
+      log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i
+
+   The logistic regression model is fitted per CpG and we test if the treatment has any effect on the outcome variable or not. In other words, we are testing if :math:`log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i` is a “better” model than :math:`log(\pi_i/(1-\pi_i)) = \beta_0`.
 
 The following code tests for the differential methylation of our dataset; i.e comparing methylation levels between "treatment" (or Luminal samples) and "control" (Basal smaples). Since the example data has replicates, logistic regression will be used.
 
@@ -203,15 +230,20 @@ The following code tests for the differential methylation of our dataset; i.e co
                                adjust="BH")
    myDiff
 
-The output of *calculateDiffMeth* is a *methylDiff* object containing information about the difference in percentage methylation between treatment and control, and the p- and q-value of the model for all CpG sites. 
-Visualize the number of hyper- and hypomethylation events per chromosome, as a percent of the sites with the minimum coverage and differential. By default this is a 25% change in methylation and all samples with 10X coverage.
+The output of ``calculateDiffMeth`` is a ``methylDiff`` object containing information about the difference in percentage methylation between treatment and control, and the p- and q-value of the model for all CpG sites. 
+
+.. note::
+
+   Alternatively, the function ``calculateDiffMethDSS`` provides an interface to the beta-binomial model from the *DSS* package. This might sometimes be more statistically sound as it can account for both sampling and epigenetic variability
+
+Next, visualize the number of hyper- and hypomethylation events per chromosome, as a percent of the sites with the minimum coverage and differential. By default this is a 25% change in methylation and all samples with 10X coverage.
 
 .. code-block:: r
 
    # Overview of percentage hyper and hypo CpGs per chromosome.
    diffMethPerChr(myDiff)
 
-After q-value calculation, we can select the differentially methylated regions/bases based on q-value and percent methylation difference cutoffs of Treatment versus control. Following bits of code selects the bases that have q-value < 0.01 and percent methylation difference larger than 25%. If you specify *type="hyper"* or *type="hypo"* options, you will extract the hyper-methylated or hypo-methylated regions/bases.
+After q-value calculation, we can select the differentially methylated regions/bases based on q-value and percent methylation difference cutoffs of Treatment versus control. Following bits of code selects the bases that have q-value < 0.01 and percent methylation difference larger than 25%. If you specify ``type="hyper"`` or ``type="hypo"`` options, you will extract the hyper-methylated or hypo-methylated regions/bases.
 
 .. code-block:: r
 
@@ -235,28 +267,28 @@ After q-value calculation, we can select the differentially methylated regions/b
                            qvalue=0.01)
    myDiff25p <- myDiff25p[order(myDiff25p$qvalue),]
 
-NOTE: If you need to interact with these objects, it is sometimes necessary to first extract the data using the *getData* function.
+.. note::
+   If you need to interact with these objects, it is sometimes necessary to first extract the data using the ``getData`` function.
 
-If necessary, covariates (such as age, sex, smoking status, ...) can be included in the regression analysis. The function will then try to separate the influence of the covariates from the treatment effect via the logistic regression model. In this case, the test would be whether the full model (model with treatment and covariates) is better than the model with the covariates only. If there is no effect due to the treatment (sample groups), the full model will not explain the data better than the model with covariates only. In *calculateDiffMeth*\ , this is achieved by supplying the covariates argument in the format of a dataframe. 
+If necessary, covariates (such as age, sex, smoking status, ...) can be included in the regression analysis. The function will then try to separate the influence of the covariates from the treatment effect via the logistic regression model. In this case, the test would be whether the full model (model with treatment and covariates) is better than the model with the covariates only. If there is no effect due to the treatment (sample groups), the full model will not explain the data better than the model with covariates only. In ``calculateDiffMeth``, this is achieved by supplying the covariates argument in the format of a dataframe. 
 
 CpG Annotation
 ^^^^^^^^^^^^^^
 
-To help with the biological interpretation of the data, we will annotate the differentially methylated regions/bases using the *genomation* package. The most common annotation task is to see where CpGs of interest land in relation to genes and gene parts and regulatory regions: Do they mostly occupy promoter, intronic or exonic regions? Do they overlap with repeats? Do they overlap with other epigenomic markers or long-range regulatory regions? In this example, we read the gene annotation information from a BED file (Browser Extensible Data - genome coordinates and annotation) and annotate our differentially methylated regions with that information using *genomation* functions. 
+To help with the biological interpretation of the data, we will annotate the differentially methylated regions/bases using the *genomation* package. The most common annotation task is to see where CpGs of interest land in relation to genes and gene parts and regulatory regions: Do they mostly occupy promoter, intronic or exonic regions? Do they overlap with repeats? Do they overlap with other epigenomic markers or long-range regulatory regions? In this example, we read the gene annotation information from a BED file (Browser Extensible Data - file format containing genome coordinates and associated annotations) and annotate our differentially methylated regions with that information using *genomation* functions. 
 
-NOTE: The annotation tables used below (.bed files) can be downloaded from the `UCSC TableBrowser <https://genome.ucsc.edu/cgi-bin/hgTables>`_. 
+.. note::
 
+    The annotation tables used below (.bed files) can be downloaded from the `UCSC TableBrowser <https://genome.ucsc.edu/cgi-bin/hgTables>`_. 
 
-* 
-  For gene annotation, select "Genes and Gene prediction tracks" from the "group" drop-down menu. Following that, select "Refseq Genes" from the "track" drop-down menu. Select "BED- browser extensible data" for the "output format". Click "get output" and on the following page click "get BED" without changing any options. Save the output as a text file.
+   - For gene annotation, select "Genes and Gene prediction tracks" from the "group" drop-down menu. Following that, select "Refseq Genes" from the "track" drop-down menu. Select "BED- browser extensible data" for the "output format". Click "get output" and on the following page click "get BED" without changing any options. Save the output as a text file.
 
-* 
-  For CpG island annotation, select "Regulation" from the "group" drop-down menu. Following that, select "CpG islands" from the "track" drop-down menu. Select "BED- browser extensible data" for the "output format". Click "get output" and on the following page click "get BED" without changing any options. Save the output as a text file.
+   - For CpG island annotation, select "Regulation" from the "group" drop-down menu. Following that, select "CpG islands" from the "track" drop-down menu. Select "BED- browser extensible data" for the "output format". Click "get output" and on the following page click "get BED" without changing any options. Save the output as a text file.
 
 .. code-block:: r
 
    # First load the annotation data; i.e the coordinates of promoters, TSS, intron and exons
-   refseq_anot <- readTranscriptFeatures("Data/mm10.refseq.genes.bed")
+   refseq_anot <- readTranscriptFeatures("/sw/courses/epigenomics/DNAmethylation/biseq_data//mm10.refseq.genes.bed")
 
    # Annotate hypermethylated CpGs ("target") with promoter/exon/intron information ("feature"). This function operates on GRanges objects, so we first coerce the methylKit object to GRanges. 
    myDiff25p.hyper.anot <- annotateWithGeneParts(target = as(myDiff25p.hyper,"GRanges"),
@@ -279,12 +311,12 @@ This function creates an *AnnotationByGeneParts* object, containing - for each t
    # This can also be summarized for all differentially methylated CpGs
    plotTargetAnnotation(myDiff25p.hyper.anot, main = "Differential Methylation Annotation")
 
-Similarly, it is possible to annotate the differentially methylated CpGs with CpG Island membership using *readFeatureFlank*. Using this function you read from a BED file with feature info (here the location of the CpG Islands) and with the flank parameter you can define a region around these features (here the "shores" are defined as 2000 bases around the Islands).
+Similarly, it is possible to annotate the differentially methylated CpGs with CpG Island membership using ``readFeatureFlank``. Using this function you read from a BED file with feature info (here the location of the CpG Islands) and with the flank parameter you can define a region around these features (here the "shores" are defined as 2000 bases around the Islands).
 
 .. code-block:: r
 
    # Load the CpG info
-   cpg_anot <- readFeatureFlank("Data/mm10.cpg.bed", feature.flank.name = c("CpGi", "shores"), flank=2000)
+   cpg_anot <- readFeatureFlank("/sw/courses/epigenomics/DNAmethylation/biseq_data/mm10.cpg.bed", feature.flank.name = c("CpGi", "shores"), flank=2000)
    diffCpGann <- annotateWithFeatureFlank(as(myDiff25p,"GRanges"), feature = cpg_anot$CpGi, flank = cpg_anot$shores, feature.name = "CpGi", flank.name = "shores")
 
    # See whether the CpG in myDiff25p belong to a CpG Island or Shore
@@ -337,13 +369,17 @@ And just like for the single CpGs, annotation using the *genomation* functions i
 Visualization
 -------------
 
-The results of a differential analysis can be exported as a bedGraph; a format that allows display of continuous-valued data in track format. This display type is useful for probability scores, percentages and transcriptome data. By uploading this BED file to a genome browser such as the `UCSC Genome Browser <https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A134369628%2D136772024&hgsid=936224469_kTHLULnq2frGTQtwufy02ky7TjXA>`_\ , you can create custom visualizations of the genome architecture surrounding CpGs or regions of interest. The *bedgraph* function produces a UCSC compatible file; by specifying the *col.name* the exact information to be plotted can be collected. For a *methylDiff* object this can be one of "pvalue", "qvalue" or "meth.diff".
+The results of a differential analysis can be exported as a bedGraph; a format that allows display of continuous-valued data in track format. This display type is useful for probability scores, percentages and transcriptome data. By uploading this BED file to a genome browser such as the `UCSC Genome Browser <https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A134369628%2D136772024&hgsid=936224469_kTHLULnq2frGTQtwufy02ky7TjXA>`_\ , you can create custom visualizations of the genome architecture surrounding CpGs or regions of interest. The ``bedgraph`` function produces a UCSC compatible file; by specifying the ``col.name`` the exact information to be plotted can be collected. For a ``methylDiff`` object this can be one of "pvalue", "qvalue" or "meth.diff".
 
 .. code-block:: r
 
    bedgraph(myDiff25p, col.name = "meth.diff", file.name = "diff_cpg_25p.bed")
 
 A tutorial of the Genome Browser is out of scope for this workshop; but a step-by-step approach for visualizing your own data tracks can be found `here <https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#CustomTracks>`_. An example of such a custom visualization of the methylation difference between treatment and control can be seen in Figure 1. Notice how differentially methylated CpGs tend to group together in similarly regulated regions.
+
+.. note::
+
+  If you want to download from Uppmax, execute following code from a folder on your local computer: :code:`scp <username>@rackham.uppmax.uu.se:diff_cpg_25p.bed .`. Don't forget the trailing :code:`.`! This will download the diff_cpg_25p.bed file to that particular folder.
 
 
 .. image:: Figures/UCSC_bed_2.png
@@ -352,13 +388,18 @@ A tutorial of the Genome Browser is out of scope for this workshop; but a step-b
 
 *Figure 1: UCSC Genome Browser example with three main annotation tracks. Upper track: percentage methylation difference between treatment and control samples for significantly differential methylated CpGs. Middle track: RefSeq gene structure. Lower track: CpG Island location.*
 
-Exactly how to produce these plots is out of the scope of these exercises, but I encourage you to try it later with for example the bedgraph of all differentially methylated CpGs.
+Exactly how to produce these plots is out of the scope of these exercises, but I encourage you to try it later with - for example - the bedgraph of all differentially methylated CpGs.
 
 Alternative workflows
 ---------------------
 
-DSS beta-binomial models with empirical Bayes for moderating dispersion.
-BSseq Regional differential methylation analysis using smoothing and linear-regression-based tests.
-BiSeq Regional differential methylation analysis using beta-binomial models.
-MethylSeekR: Methylome segmentation using HMM and cutoffs.
-QuasR: Methylation aware alignment and methylation calling, as well as fastQC-like fastq raw data quality check features.
+DSS 
+   beta-binomial models with empirical Bayes for moderating dispersion.
+BSseq 
+   Regional differential methylation analysis using smoothing and linear-regression-based tests.
+BiSeq 
+   Regional differential methylation analysis using beta-binomial models.
+MethylSeekR 
+   Methylome segmentation using HMM and cutoffs.
+QuasR
+   Methylation aware alignment and methylation calling, as well as fastQC-like fastq raw data quality check features.

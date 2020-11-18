@@ -48,6 +48,12 @@ Beta and M-values are related to each other but Beta-values are generally prefer
 
 *Fig. 2: Relationship between Beta and M-values.*
 
+
+Datasets
+--------
+
+To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset (\ `GSE49667 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667>`_). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals: M28, M29, M30). Not all individuals contributed all 4 cell types, so there are 10 samples in total. An additional birth sample (individual VICS-72098-18-B) is included from another study (`GSE51180 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180>`_) to illustrate approaches for identifying and excluding poor quality samples.
+
 Load Packages
 -------------
 
@@ -91,22 +97,16 @@ Included with *minfi* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* pack
 
    These packages are of course also available for the later array versions. The EPIC array annotation package is called *IlluminaHumanMethylationEPICanno.ilm10b2.hg19* and also included in *minfi*.
 
+Load Datasets
+-------------
 
-Datasets
---------
-
-To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset (\ `GSE49667 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667>`_). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals (M28, M29, M30). An additional birth sample (individual VICS-72098-18-B) is included from another study (`GSE51180 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180>`_) to illustrate approaches for identifying and excluding poor quality samples.
-
-These datasets have been uploaded to Uppmax prior to the workshop, so you just need to point R towards the directory they are saved. The ``list.files`` command will return the list of files in the specified directory.
+The datasets have been uploaded to Uppmax prior to the workshop, so you just need to point R towards the directory they are saved. The ``list.files`` command will return the list of files in the specified directory.
 
 .. code-block:: r
 
    dataDirectory <- "/sw/courses/epigenomics/DNAmethylation/array_data/"
    # list the files
    list.files(dataDirectory, recursive = TRUE)
-
-Load Datasets
--------------
 
 Illumina methylation data is usually obtained in the form of Intensity Data (IDAT) Files. This is a proprietary format that is output by the slide scanner and stores the intensities for each probe on the array. Typically, each IDAT file is approximately 8MB in size. The simplest way to import the raw methylation data into R is using the minfi function ``read.metharray.sheet``\ , along with the path to the IDAT files and a sample sheet. The sample sheet is a CSV (comma-separated) file containing one line per sample, with a number of columns describing each sample. The format expected by the ``read.metharray.sheet`` function is based on the sample sheet file that usually accompanies Illumina methylation array data. It is also very similar to the targets file described by the limma package. Importing the sample sheet into R creates a dataframe with one row for each sample and several columns. The ``read.metharray.sheet`` function uses the specified path and other information from the sample sheet to create a column called Basename which specifies the location of each individual IDAT file in the experiment. Import the metadata and have a look at the different samples.
 
