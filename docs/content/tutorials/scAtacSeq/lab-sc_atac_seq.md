@@ -69,7 +69,8 @@ devtools::install_github("timoast/signac", ref = "develop")
 
 If you want to run this exercise on your laptop, you also need to make sure that the following libraries are installed `Seurat`, `ggplot2`, `patchwork` and `TFBSTools`.
 
-
+
+
 ## Analysis of single cell ATAC-seq data
 [Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension packade is called Signac. Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, aling with some meta data.
 
@@ -156,7 +157,7 @@ The next step is to do some quality control (QC) on the ATAC-seq data. There are
 
 - **Fragment sizes**, determined from paired-end sequencing data. For each cell we can quantify the fragment sizes by calculaing the ratio of nucleosome size fragments (147-294 nucleotides) to nucleosome-free fragments (<147 nucleotides). Open chromatin correseponds to short DNA fragmens, so we want to remove cells with to few short DNA fragments, coming from open open chromatin.
 
-- **Enrichment at transcription start sites (TSS).** Since chromatin is ofter open around TSS, we expect there to be an enrichment of framgents around these sites. This is quantified by collecting all fragments mapping around TSS to form an aggregate distribution, and comparing the highest level of fragments to the level of fragments 1000bp up and downstream of the TSS. **EXPLAIN THIS BETTER?**
+- **Enrichment at transcription start sites (TSS).** Since chromatin is ofter open around TSS, we expect there to be an enrichment of framgents around these sites. This is quantified by collecting all fragments mapping around TSS to form an aggregate distribution, and comparing the highest level of fragments to the level of fragments 1000bp up and downstream of the TSS.
 
 - **Number of fragments in peaks**. This represents the complexity and sequencing depth for each cell. Too many reads might indicate artefacts, such as several cells sharing a barcode.
 
