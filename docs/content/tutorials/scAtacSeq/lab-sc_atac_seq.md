@@ -195,6 +195,8 @@ VlnPlot(
 )
 ```
 
+![QC plots](qc.png)
+
 After calculating the qualtiy statistics, we apply (some rather artibtrary) cutoffs, to remove outlier cells. *How many cells do we have left after quality filtering in this example?*
 
 
@@ -249,6 +251,8 @@ p2 <- DimPlot(object = pbmc, label = TRUE) +
 
 p1 | p2
 ```
+
+![Dimension reduction](dimension_reduction.png)
 
 
 This might be a good time to save your data, so you don't have to re-run all your analysis if you have problems with Uppmax or the network. To load the data later, type `load(file="pbmc.Rda")`.
@@ -380,6 +384,9 @@ MotifPlot(
 )
 ```
 
+![Motif activity](motif_activity.png)
+
+
 
 ## Integrate with scRNA-seq data
 
@@ -415,6 +422,8 @@ FeaturePlot(
 	ncol = 3
 )
 ```
+
+![Gene activity](gene_activity.png)
 
 
 ### Label transfer
