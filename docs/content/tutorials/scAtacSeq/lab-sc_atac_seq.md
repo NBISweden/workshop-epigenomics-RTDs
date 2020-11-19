@@ -24,8 +24,6 @@
     + [Differentially accessible regions, again](#differentially-accessible-regions--again)
     + [Annotating regions](#annotating-regions)
     + [Visualization](#visualization)
-  * [Session information](#session-information)
-
 
 
 ## Setting up
