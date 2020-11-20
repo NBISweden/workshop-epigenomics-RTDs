@@ -8,7 +8,7 @@ Alternative QC using ChIPQC
 
 **Learning outcomes**
 
-Using `ChIPQC` package
+Using ``ChIPQC`` package
 - to generate a summary QC report for experimental sample groups
 - to be able to understand and assess QC metrics and plots
 
@@ -26,10 +26,14 @@ Here, we will explore the alternative quality control workflow, using Bioconduct
 Setting-up
 ==============
 
-In principle one can run ``ChIPQC`` both on Uppmax or locally. However, today we will test the package locally.
+In principle one can run ``ChIPQC`` both on Uppmax or locally. 
+The instructions below are 
+to use the package on Uppmax. For local usage, please make sure the paths to files are correct.
 
 
-Follow set-up instructions from [Downstream analysis tutorial](lab-diffBinding-local), differential binding part. We will need the same files and we can work in the same directory.
+
+Follow set-up instructions from :doc:`Downstream analysis tutorial <../diffBind/lab-diffBinding-remote>`, differential binding part. We will need the same files and we can work in the same directory.
+
 
 .. Install ``ChIPQC`` library and any required dependencies
 
@@ -37,18 +41,53 @@ Follow set-up instructions from [Downstream analysis tutorial](lab-diffBinding-l
 
 .. if (!requireNamespace("BiocManager", quietly = TRUE))
 ..     install.packages("BiocManager")
-.. BiocManager::install("ChIPQC", version = "3.8")
+.. BiocManager::install("ChIPQC")
 
 .. ```
+
+.. HINT::
+	
+	If you start from a different location, you should ``cd chipseq/analysis/R``
+
+
+You can now load the version of R for which we tested this class along with other dependencies:
+
+
+.. code-block:: bash
+	
+	cd analysis/R
+
+	module load bioinfo-tools
+	module load samtools/1.8
+
+	conda activate /sw/courses/epigenomics/software/conda/v8
+
+	R
+
+
+.. HINT::
+
+	We are running 
+	``R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"``
+
 
 
 Running ChIPQC
 ================
 
-While running commands feel free to have a look at `ChIPQC package documentation <http://bioconductor.org/packages/devel/bioc/vignettes/ChIPQC/inst/doc/ChIPQC.pdf>`_ to learn more about different steps and/or build upon them. Here we will just show you the very basics.
+While running commands (in ``R``) feel free to have a look at `ChIPQC package documentation <http://bioconductor.org/packages/devel/bioc/vignettes/ChIPQC/inst/doc/ChIPQC.pdf>`_ to learn more about different steps and/or build upon them. Here we will just show you the very basics.
+
 
 .. code-block:: R
 
+	#	add the path to the tutorial-specific R libraries
+	assign(".lib.loc", "/sw/courses/epigenomics/software/R", envir = environment(.libPaths))
+
+	#	you can see that the tutorial-specific R library path is added
+	.libPaths()
+	[1] "/sw/courses/epigenomics/software/R"
+
+	#
 	library(DiffBind)
 	library(ChIPQC)
 	library(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -71,6 +110,17 @@ While running commands feel free to have a look at `ChIPQC package documentation
 
 	#	creating the quality control report in html format
 	ChIPQCreport(resqc)
+
+
+.. WARNING::
+	
+	If you run this tutorial on Rackham, you may see an error
+
+		``ChIPQCreport(resqc)``
+
+		``Error in browseURL...`` : ``'browser' must be a non-empty character string``
+
+  	This is because the html report cannot be open in a browser directly from Rackham. You can download it to your computer and view it locally.
 
 
 
