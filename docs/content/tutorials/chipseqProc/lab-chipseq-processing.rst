@@ -157,19 +157,20 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_data.sh ./
-  cp /sw/share/compstore/courses/ngsintro/chipseq/scripts/setup/chipseq_env.sh ./
+  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_data.sh
+  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_env.sh
 
+
+  source chipseq_env.sh 
   source chipseq_data.sh
-  source chipseq_env.sh
 
 
 You should see a directory named ``chipseq``:
 
 .. code-block:: bash
 
-  ls ~
-  cd ~/chipseq/analysis
+  ls .
+  cd ./chipseq/analysis
 
 
 
@@ -205,15 +206,17 @@ We will calculate cross correlation for REST ChIP-seq in HeLa cells using a tool
 
 .. code-block:: bash
 
-	module load phantompeakqualtools/1.1
+  mkdir xcor
+  cd xcor
 
-	mkdir ~/chipseq/analysis/xcor
-	cd ~/chipseq/analysis/xcor
+  module load conda/latest
+  module load bioinfo-tools
+  module load samtools/0.1.19
+  conda activate /sw/courses/epigenomics/software/conda/xcor
 
-	run_spp.R -c=../../data/ENCFF000PED.chr12.bam -savp=hela1_xcor.pdf \
-	-out=xcor_metrics_hela.txt
+  run_spp.R -c=../../data/ENCFF000PED.chr12.bam -savp=hela2_xcor.pdf -out=xcor_metrics_hela.txt
 
-	module unload phantompeakqualtools/1.1
+  conda deactivate
 
 
 
@@ -328,18 +331,14 @@ Now we will do some data cleaning to try to improve the libraries quality. First
 
 .. code-block:: bash
 	
-	module load samtools/1.8
-	module load java/sun_jdk1.8.0_40
-	module load picard/2.10.3
+  cd ..
+  mkdir bam_preproc
+  cd bam_preproc
 
-	cd ~
-	mkdir ~/chipseq/analysis/bam_preproc
-	cd ~/chipseq/analysis/bam_preproc
+  module load samtools/1.8
+  module load picard/2.23.4
 
-	java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates \
-	I=../../data/ENCFF000PED.chr12.bam O=ENCFF000PED.chr12.rmdup.bam \
-	M=dedup_metrics.txt VALIDATION_STRINGENCY=LENIENT \
-	REMOVE_DUPLICATES=true ASSUME_SORTED=true
+  java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ../../data/ENCFF000PED.chr12.bam -O ENCFF000PED.chr12.rmdup.bam -M dedup_metrics.txt -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
 
 
 Check out ``dedup_metrics.txt`` for details of this step.
@@ -360,19 +359,21 @@ Third, the processed **bam files are sorted and indexed**:
 
 .. code-block:: bash
 
-	samtools sort -T sort_tempdir -o ENCFF000PED.chr12.rmdup.filt.sort.bam \
-	ENCFF000PED.chr12.rmdup.filt.bam
+  samtools sort -T sort_tempdir -o ENCFF000PED.chr12.rmdup.filt.sort.bam \
+  ENCFF000PED.chr12.rmdup.filt.bam
 
-	samtools index ENCFF000PED.chr12.rmdup.filt.sort.bam
+  samtools index ENCFF000PED.chr12.rmdup.filt.sort.bam
 
-	module unload samtools/1.1
-	module unload java/sun_jdk1.8.0_40
-	module unload picard/1.141
-	module unload NGSUtils/0.5.9
+  module unload samtools
+  module unload picard
+  module unload NGSUtils
 
 
 
 **Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as ``IGV``.
+
+Here we use normalisation per genomic content ``--normalizeUsing RPGC`` which scales the coverage to 1x, enabling us to compare tracks from different libraries (which have a different library size). `RPGC (per bin) = number of reads per bin / scaling factor for 1x average coverage. The scaling factor, in turn, is determined from the sequencing depth: (total number of mapped reads * fragment length) / effective genome size.`
+
 
 We are still working with subset of data (chromosomes 1 and 2) hence the **effective genome size** used here is 492449994 (4.9e8). For **hg19** the effective genome size would be set to 2.45e9 (see `publication <http://www.nature.com/nbt/journal/v27/n1/fig_tab/nbt.1518_T1.html>`_.
 
@@ -380,14 +381,14 @@ We are still working with subset of data (chromosomes 1 and 2) hence the **effec
 
 .. code-block:: bash
 
-	module load deepTools/2.5.1
+	module load deepTools/3.3.2
 
-	bamCoverage --bam ENCFF000PED.chr12.rmdup.filt.sort.bam \
- 	--outFileName ENCFF000PED.chr12.cov.norm1x.bedgraph \
- 	--normalizeTo1x 492449994 --extendReads 110 --binSize 50 \
- 	--outFileFormat bedgraph
+  bamCoverage --bam ENCFF000PED.chr12.rmdup.filt.sort.bam \
+    --outFileName ENCFF000PED.chr12.cov.norm1x.bedgraph \
+    --normalizeUsing RPGC --effectiveGenomeSize 492449994 --extendReads 110 \
+    --binSize 50 --outFileFormat bedgraph
 
-	module unload deepTools/2.5.1
+
 
 
 :raw-html:`<br />`
@@ -405,15 +406,10 @@ To compute cumulative enrichment for HeLa REST ChIP and the corresponding input 
 
 .. code-block:: bash
 
-	module load deepTools/2.5.1
-
-	plotFingerprint --bamfiles ENCFF000PED.chr12.rmdup.filt.sort.bam \
-	../../data/bam/hela/ENCFF000PEE.chr12.rmdup.sort.bam  \
-	../../data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam  \
-	 --extendReads 110  --binSize=1000 --plotFile HeLa.fingerprint.pdf \
-	--labels HeLa_rep1 HeLa_rep2 HeLa_input
-
-	module unload deepTools/2.5.1
+  plotFingerprint --bamfiles ENCFF000PED.chr12.rmdup.filt.sort.bam  \
+    ../../data/bam/hela/ENCFF000PEE.chr12.rmdup.sort.bam \
+    ../../data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+    --extendReads 110  --binSize=1000 --plotFile HeLa.fingerprint.pdf --labels HeLa_rep1 HeLa_rep2 HeLa_input -p 5 &> fingerprint.log
 
 
 
@@ -429,7 +425,7 @@ Have a look at the ``HeLa.fingerprint.pdf``, read ``deepTools`` `What the plots 
 
 
 
-.. list-table:: Figure 3. CCumulative enrichment for REST ChIP and corresponding inputs in different cell lines.
+.. list-table:: Figure 3. Cumulative enrichment for REST ChIP and corresponding inputs in different cell lines.
    :widths: 40 40
    :header-rows: 1
 
@@ -464,10 +460,10 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir hepg2
 	mkdir sknsh
 	mkdir neural
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hela/* ./hela
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hepg2/* ./hepg2
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/sknsh/* ./sknsh
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/neural/* ./neural
+	ln -s /proj/g2020022/chipseq_proc/data/bam/hela/* ./hela
+	ln -s /proj/g2020022/chipseq_proc/data/bam/hepg2/* ./hepg2
+	ln -s /proj/g2020022/chipseq_proc/data/bam/sknsh/* ./sknsh
+	ln -s /proj/g2020022/chipseq_proc/data/bam/neural/* ./neural
 
 
 
@@ -476,25 +472,24 @@ Now we are ready to compute the read coverages for genomic regions for the BAM f
 
 .. code-block:: bash
 
-	module load deepTools/2.5.1
+  # if not already loaded
+	module load deepTools/3.3.2 
 
-	multiBamSummary bins --bamfiles hela/ENCFF000PED.chr12.rmdup.sort.bam \
-	hela/ENCFF000PEE.chr12.rmdup.sort.bam hela/ENCFF000PET.chr12.rmdup.sort.bam \
-	hepg2/ENCFF000PMG.chr12.rmdup.sort.bam hepg2/ENCFF000PMJ.chr12.rmdup.sort.bam \
-	hepg2/ENCFF000POM.chr12.rmdup.sort.bam hepg2/ENCFF000PON.chr12.rmdup.sort.bam \
-	neural/ENCFF000OWM.chr12.rmdup.sort.bam neural/ENCFF000OWQ.chr12.rmdup.sort.bam \
-	neural/ENCFF000OXB.chr12.rmdup.sort.bam neural/ENCFF000OXE.chr12.rmdup.sort.bam \
-	sknsh/ENCFF000RAG.chr12.rmdup.sort.bam sknsh/ENCFF000RAH.chr12.rmdup.sort.bam \
-	sknsh/ENCFF000RBT.chr12.rmdup.sort.bam sknsh/ENCFF000RBU.chr12.rmdup.sort.bam \
-	 --outFileName multiBamArray_dT201_preproc_bam_chr12.npz --binSize=5000 \
-	--extendReads=110 --labels hela_1 hela_2 hela_i hepg2_1 hepg2_2 hepg2_i1 hepg2_i2 \
-	neural_1 neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2
+  multiBamSummary bins --bamfiles hela/ENCFF000PED.chr12.rmdup.sort.bam \
+    hela/ENCFF000PEE.chr12.rmdup.sort.bam hela/ENCFF000PET.chr12.rmdup.sort.bam \
+    hepg2/ENCFF000PMG.chr12.rmdup.sort.bam hepg2/ENCFF000PMJ.chr12.rmdup.sort.bam \
+    hepg2/ENCFF000POM.chr12.rmdup.sort.bam hepg2/ENCFF000PON.chr12.rmdup.sort.bam \
+    neural/ENCFF000OWM.chr12.rmdup.sort.bam neural/ENCFF000OWQ.chr12.rmdup.sort.bam \
+    neural/ENCFF000OXB.chr12.rmdup.sort.bam neural/ENCFF000OXE.chr12.rmdup.sort.bam \
+    sknsh/ENCFF000RAG.chr12.rmdup.sort.bam sknsh/ENCFF000RAH.chr12.rmdup.sort.bam \
+    sknsh/ENCFF000RBT.chr12.rmdup.sort.bam sknsh/ENCFF000RBU.chr12.rmdup.sort.bam \
+    --outFileName multiBamArray_dT201_preproc_bam_chr12.npz --binSize=5000 -p 4 \
+    --extendReads=110 --labels hela_1 hela_2 hela_i hepg2_1 hepg2_2 hepg2_i1 hepg2_i2 \
+    neural_1 neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2 -p 4 &> multiBamSummary.log
 
-	plotCorrelation --corData multiBamArray_dT201_preproc_bam_chr12.npz \
-	--plotFile REST_bam_correlation_bin.pdf --outFileCorMatrix corr_matrix_bin.txt \
-	--whatToPlot heatmap --corMethod spearman
-
-	module unload deepTools/2.5.1
+  plotCorrelation --corData multiBamArray_dT201_preproc_bam_chr12.npz \
+    --plotFile REST_bam_correlation_bin.pdf --outFileCorMatrix corr_matrix_bin.txt \
+    --whatToPlot heatmap --corMethod spearman
 
 
 
@@ -542,14 +537,14 @@ To avoid long paths in the command line let's create links to BAM files with ChI
 
 .. code-block:: bash
 
-	mkdir ~/chipseq/analysis/peak_calling
-	cd ~/chipseq/analysis/peak_calling
+  cd ..
+  mkdir peak_calling
+  cd peak_calling
 
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
-	./ENCFF000PED.preproc.bam
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
-	./ENCFF000PET.preproc.bam
-
+  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
+  ./ENCFF000PED.preproc.bam
+  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+  ./ENCFF000PET.preproc.bam
 
 
 Before we run ``MACS`` we need to **look at parameters** as there are several of them affecting peak calling as well as reporting the results. It is important to understand them to be able to modify the command to the needs of your data set.
@@ -573,13 +568,13 @@ Let's run ``MACS2`` now. ``MACS2`` prints messages as it progresses through diff
 
 .. code-block:: bash
 
-	module load MACS/2.1.0
+	module load MACS/2.2.6
 
-	macs2 callpeak -t ENCFF000PED.preproc.bam -c ENCFF000PET.preproc.bam \
-	-f BAM -g 4.9e8 -n hela_1_REST.chr12.macs2 -q 0.01
+  macs2 callpeak -t ENCFF000PED.preproc.bam -c ENCFF000PET.preproc.bam \
+  -f BAM -g 4.9e8 -n hela_1_REST.chr12.macs2 -q 0.01 &> macs.log
 
-	module unload MACS/2.1.0
-	module unload python/2.7.6
+	module unload MACS
+	module unload pythonß
 
 
 The output of a ``MACS2`` run consists of several files. To inspect files type
@@ -612,10 +607,6 @@ Peaks detected on chromosomes 1 and 2 are present in directory ``/results/peaks_
 	wc -l ../../results/peaks_bed/*.bed
 
 
-.. code-block:: bash
-
-	cp ../../results/peaks_bed/*.bed .
-
 
 What do you think?
 
@@ -646,7 +637,7 @@ Let's select two replicates of the same condition to investigate the peaks overl
 
 	module load BEDTools/2.25.0
 
-	bedtools intersect -a hela_1_peaks.chr12.bed -b hela_2_peaks.chr12.bed -f 0.50 -r \
+	bedtools intersect -a ../../results/peaks_bed/hela_1_peaks.chr12.bed -b ../../results/peaks_bed/hela_2_peaks.chr12.bed -f 0.50 -r \
 	> peaks_hela.chr12.bed
 
 	wc -l peaks_hela.chr12.bed
@@ -657,22 +648,18 @@ This way one can compare peaks from replicates of the same condition and beyond,
 
 .. code-block:: bash
 
-	bedtools intersect -a hepg2_1_peaks.chr12.bed -b hepg2_2_peaks.chr12.bed -f 0.50 -r \
+  module load BEDTools/2.29.2
+
+	bedtools intersect -a ../../results/peaks_bed/hepg2_1_peaks.chr12.bed -b ../../results/peaks_bed/hepg2_2_peaks.chr12.bed -f 0.50 -r \
 	> peaks_hepg2.chr12.bed
 
-	bedtools intersect -a peaks_hepg2.chr12.bed -b peaks_hela.chr12.bed -f 0.50 -r \
+	bedtools intersect -a ../../results/peaks_bed/peaks_hepg2.chr12.bed -b ../../results/peaks_bed/peaks_hela.chr12.bed -f 0.50 -r \
 	> peaks_hepg2_hela.chr12.bed
 
 	wc -l peaks_hepg2_hela.chr12.bed
 
 
-Feel free to experiment more. When you have done all intersections you were interested in unload the BEDTools module:
-
-
-.. code-block:: bash
-
-	module unload BEDTools/2.25.0
-
+Feel free to experiment more. When you have done all intersections you were interested in unload the BEDTools module.
 
 
 What can we tell about peak reproducibility?
@@ -702,23 +689,45 @@ These files are already prepared and are under ``peak_calling`` directory
 
 .. code-block:: bash
 	
+  BEDS="../../results/peaks_bed"
+
 	module load BEDOPS/2.4.3
 
-	bedops -m hela_1_peaks.chr12.bed hela_2_peaks.chr12.bed hepg2_1_peaks.chr12.bed hepg2_2_peaks.chr12.bed \
-	neural_1_peaks.chr12.bed neural_2_peaks.chr12.bed sknsh_1_peaks.chr12.bed sknsh_2_peaks.chr12.bed \
+	bedops -m $BEDS/hela_1_peaks.chr12.bed $BEDS/hela_2_peaks.chr12.bed $BEDS/hepg2_1_peaks.chr12.bed $BEDS/hepg2_2_peaks.chr12.bed \
+	$BEDS/neural_1_peaks.chr12.bed $BEDS/neural_2_peaks.chr12.bed $BEDS/sknsh_1_peaks.chr12.bed $BEDS/sknsh_2_peaks.chr12.bed \
 	>REST_peaks.chr12.bed
-
-	module unload BEDOPS/2.4.3
 
 	wc -l REST_peaks.chr12.bed
 
 
 
-In case things go wrong at this stage you can find the merged list of all peaks in the ``/results`` directory. Simply link the file to your current directory to go further:
+For example, to identify and merge all peaks reproducible within replicates:
 
 .. code-block:: bash
+  
+  bedtools intersect -a $BEDS/neural_1_peaks.chr12.bed -b $BEDS/neural_2_peaks.chr12.bed -f 0.50 -r \
+  > peaks_neural.chr12.bed
 
-	ln -s ../../results/peaks_bed/rest_peaks.chr12.bed ./rest_peaks.chr12.bed
+  bedtools intersect -a $BEDS/sknsh_1_peaks.chr12.bed -b $BEDS/sknsh_2_peaks.chr12.bed -f 0.50 -r \
+  > peaks_sknsh.chr12.bed
+
+  bedops -m peaks_neural.chr12.bed peaks_sknsh.chr12.bed peaks_hepg2_hela.chr12.bed \
+  peaks_hepg2.chr12.bed >REST_reproducible_peaks.chr12.bed
+
+  wc -l REST*
+
+
+.. HINT::
+
+  In case things go wrong at this stage you can find the merged list of all peaks in the ``/results`` directory. Simply link the file to your current directory to go further:
+
+  .. code-block:: bash
+
+  	ln -s ../../results/peaks_bed/rest_peaks.chr12.bed ./rest_peaks.chr12.bed
+
+
+
+
 
 
 :raw-html:`<br />`
@@ -733,23 +742,27 @@ Having a consensus peakset we can re-run samples clustering with ``deepTools`` u
 
 Let's make a new directory to keep things organised and run ``deepTools`` in ``BED`` mode providing merged peakset we created:
 
+in ``chipseq/analysis/``
+
 .. code-block:: bash
 
-	mkdir ~/chipseq/analysis/plots
-	cd ~/chipseq/analysis/plots
+	mkdir plots
+	cd plots
 
-	mkdir hela
-	mkdir hepg2
-	mkdir sknsh
-	mkdir neural
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hela/* ./hela
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/hepg2/* ./hepg2
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/sknsh/* ./sknsh
-	ln -s /sw/share/compstore/courses/ngsintro/chipseq/data/bam/neural/* ./neural
+  mkdir hela
+  mkdir hepg2
+  mkdir sknsh
+  mkdir neural
+  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/* ./hela
+  ln -s /proj/g2020022/chipseq_proc/data/bam/hepg2/* ./hepg2
+  ln -s /proj/g2020022/chipseq_proc/data/bam/sknsh/* ./sknsh
+  ln -s /proj/g2020022/chipseq_proc/data/bam/neural/* ./neural
 
-	module load deepTools/2.5.1
+  ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
-	multiBamSummary BED-file --BED ../peak_calling/REST_peaks.chr12.bed --bamfiles \
+	module load deepTools/3.3.2
+
+	multiBamSummary BED-file --BED REST_peaks.chr12.bed --bamfiles \
 	hela/ENCFF000PED.chr12.rmdup.sort.bam \
 	hela/ENCFF000PEE.chr12.rmdup.sort.bam hela/ENCFF000PET.chr12.rmdup.sort.bam \
 	hepg2/ENCFF000PMG.chr12.rmdup.sort.bam hepg2/ENCFF000PMJ.chr12.rmdup.sort.bam \
@@ -758,16 +771,16 @@ Let's make a new directory to keep things organised and run ``deepTools`` in ``B
 	neural/ENCFF000OXB.chr12.rmdup.sort.bam neural/ENCFF000OXE.chr12.rmdup.sort.bam \
 	sknsh/ENCFF000RAG.chr12.rmdup.sort.bam sknsh/ENCFF000RAH.chr12.rmdup.sort.bam \
 	sknsh/ENCFF000RBT.chr12.rmdup.sort.bam sknsh/ENCFF000RBU.chr12.rmdup.sort.bam \
-	--outFileName multiBamArray_bed_bam_chr12.npz \
-	--extendReads=110 \
+	--outFileName multiBamArray_bed_ALL_bam_chr12.npz \
+	--extendReads=110 -p 5 \
 	--labels hela_1 hela_2 hela_i hepg2_1 hepg2_2 hepg2_i1 hepg2_i2 neural_1 \
 	neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2
 
-	plotCorrelation --corData multiBamArray_bed_bam_chr12.npz \
+	plotCorrelation --corData multiBamArray_bed_ALL_bam_chr12.npz \
 	--plotFile correlation_peaks.pdf --outFileCorMatrix correlation_peaks_matrix.txt \
 	--whatToPlot heatmap --corMethod pearson --plotNumbers --removeOutliers
 
-	module unload deepTools/2.5.1
+	module unload deepTools
 
 
 What do you think?
