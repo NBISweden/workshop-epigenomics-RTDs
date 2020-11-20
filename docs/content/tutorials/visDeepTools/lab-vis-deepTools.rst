@@ -46,8 +46,8 @@ Assuming the same files structure as in the main data processing tutorial, creat
 .. code-block:: bash
 
 	cd ~/chipseq/analysis/
-	mkdir ~/chipseq/analysis/vis
-	cd ~/chipseq/analysis/vis
+	mkdir vis
+	cd vis
 
 	cp ../../hg19/chrom.sizes.hg19 chrom.sizes.hg19
 	cp ../bam_preproc/ENCFF000PED.chr12.cov.norm1x.bedgraph ./
@@ -58,27 +58,27 @@ To calculate scores per genome with ``deepTools`` `computeMatrix <http://deeptoo
 
 .. code-block:: bash
 
-	module load ucsc-utilities/v287
+	module load ucsc-utilities/v398
 
 	bedGraphToBigWig ENCFF000PED.chr12.cov.norm1x.bedgraph chrom.sizes.hg19 hela_1.bw
 
-	module unload ucsc-utilities/v287
+	module unload ucsc-utilities
 
 
-We can now compute the matrix of scores for visualisation using [computeMatrix](http://deeptools.readthedocs.org/en/latest/content/tools/computeMatrix.html). This tool calculates scores per genome regions and prepares an intermediate file that can be used with `plotHeatmap` and `plotProfiles`. Typically, the genome regions are genes, but any other regions defined in a BED file can be used. `computeMatrix` accepts multiple score files (bigWig format) and multiple regions files (BED format). This tool can also be used to filter and sort regions according to their score.
+We can now compute the matrix of scores for visualisation using `computeMatrix <http://deeptools.readthedocs.org/en/latest/content/tools/computeMatrix.html>`_. This tool calculates scores per genome regions and prepares an intermediate file that can be used with ``plotHeatmap`` and ``plotProfiles``. Typically, the genome regions are genes, but any other regions defined in a BED file can be used. ``computeMatrix`` accepts multiple score files (bigWig format) and multiple regions files (BED format). This tool can also be used to filter and sort regions according to their score.
 
 We will need a ``BED`` file with positions of TSS that we can copy to the working directory before running ``computeMatrix`` e.g.
 
 .. code-block:: bash
 
-	module load deepTools/2.5.1
+	module load deepTools/3.3.2
 
-	cp /sw/share/compstore/courses/ngsintro/chipseq/hg19/refGene_hg19_TSS_chr12_sorted_corr.bed ./
+	cp ../../hg19/refGene_hg19_TSS_chr12_sorted_corr.bed ./
 
-	computeMatrix reference-point -S hela_1.bw \
+	computeMatrix reference-point -S hela_rep1.bw \
 	-R refGene_hg19_TSS_chr12_sorted_corr.bed -b 5000 -a 5000 \
 	--outFileName matrix.tss.dat --outFileNameMatrix matrix.tss.txt \
-	--referencePoint=TSS --numberOfProcessors=max
+	--referencePoint=TSS -p 5
 
 
 We can now create a heatmap for scores associated with genomic regions, i.e. plot the binding profile around TSS
@@ -91,7 +91,38 @@ We can now create a heatmap for scores associated with genomic regions, i.e. plo
 
 
 
-Have a look at the ``tss.hela_1.pdf``. What do you think?
+Have a look at the ``tss.hela_rep1.pdf``. What do you think?
+
+This is a very basic plot. We can add on to it, for example we can cluster genes based on the signal profile around TSS. For more possibilities please check `plotHetmap <https://deeptools.readthedocs.io/en/develop/content/tools/plotHeatmap.html>`_.
+
+.. code-block:: bash
+
+	plotHeatmap --matrixFile matrix.tss.dat \
+	--outFileName tss.hela_rep1_k3_.pdf \
+	--sortRegions descend --sortUsing mean \
+	--kmeans 3
+
+:raw-html:`<br />`
+
+
+Appendix
+===========
+
+The plots generated in this tutorial.
+
+
+.. list-table:: Figure 1. Signal profiles and heatmaps centered on TSS for REST ChIP-seq in HeLa, replicate 1.
+   :widths: 25 25
+   :header-rows: 1
+
+   * - non-clustered
+     - clustered (kmeans, k=3)
+   * - .. image:: figures/tss.hela_1.png
+   			:width: 200px
+     - .. image:: figures/tss.hela_rep1_k3.png
+   			:width: 210px
+
+
 
 
 .. ----
