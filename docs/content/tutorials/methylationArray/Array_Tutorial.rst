@@ -339,7 +339,25 @@ Note that after normalisation, the data is housed in a GenomicRatioSet object; a
    # normalize the data; this results in a GenomicRatioSet object
    mSetSq <- preprocessQuantile(rgSet)
 
-Compare with the unnormalized data to visualize the effect of the normalization.
+Compare with the unnormalized data to visualize the effect of the normalization. First a comparison of the Beta distributions for the different probe designs. This will give an indication of the effectiveness of the within-array normalization.
+
+.. code-block:: r
+
+   par(mfrow=c(1,2))
+   # Plot distributions prior to normalization for sample 1
+   plotBetasByType(MSet[,1],main="Raw",)
+   # The normalized object is a GenomicRatioSet which does not contain
+   # the necessary probe info, we need to extract this from the MethylSet first.
+   typeI <- getProbeInfo(MSet, type = "I")[, c("Name","nCpG")]
+   typeII <- getProbeInfo(MSet, type = "II")[, c("Name","nCpG")]
+   probeTypes <- rbind(typeI, typeII)
+   probeTypes$Type <- rep(x = c("I", "II"), times = c(nrow(typeI), nrow(typeII)))
+   # Now plot the distributions of the normalized data for sample 1
+   plotBetasByType(getBeta(mSetSq)[,1], probeTypes = probeTypes, main="Normalized",)
+   # Close plotting window
+   dev.off()
+
+Does it look like the normalization brought the distributions closer to ech other? Now let's see how the between-array normallization worked...
 
 .. code-block:: r
 
@@ -352,6 +370,8 @@ Compare with the unnormalized data to visualize the effect of the normalization.
                main="Normalized", legend=FALSE)
    legend("top", legend = levels(factor(targets$Sample_Group)), 
           text.col=brewer.pal(8,"Dark2"))
+   # Close the double plotting window
+   dev.off()
 
 .. hint::
    Click on Zoom above the RStudio plot panel to watch a larger version of the plotted figure.
