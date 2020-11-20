@@ -114,15 +114,14 @@ While running commands (in ``R``) feel free to have a look at `ChIPQC package do
 
 .. WARNING::
 	
-	If you run this tutorial on Rackham, you may see the error
+	If you run this tutorial on Rackham, you may see an error
 
-	.. code_block:: R
+		``ChIPQCreport(resqc)``
 
-		ChIPQCreport(resqc)
-		Error in browseURL(paste0("file://", normalizePath(file.path(reportFolder,  : 
-  		'browser' must be a non-empty character string
+		``Error in browseURL...`` : ``'browser' must be a non-empty character string``
 
   	This is because the html report cannot be open in a browser directly from Rackham. You can download it to your computer and view it locally.
+
 
 
 Examine the html report.

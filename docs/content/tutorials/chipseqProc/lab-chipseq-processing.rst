@@ -338,7 +338,10 @@ Now we will do some data cleaning to try to improve the libraries quality. First
   module load samtools/1.8
   module load picard/2.23.4
 
-  java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ../../data/ENCFF000PED.chr12.bam -O ENCFF000PED.chr12.rmdup.bam -M dedup_metrics.txt -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
+  java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates \
+   -I ../../data/ENCFF000PED.chr12.bam -O ENCFF000PED.chr12.rmdup.bam \
+   -M dedup_metrics.txt -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true \
+   -ASSUME_SORTED true
 
 
 Check out ``dedup_metrics.txt`` for details of this step.
@@ -568,13 +571,13 @@ Let's run ``MACS2`` now. ``MACS2`` prints messages as it progresses through diff
 
 .. code-block:: bash
 
-	module load MACS/2.2.6
+  module load MACS/2.2.6
 
   macs2 callpeak -t ENCFF000PED.preproc.bam -c ENCFF000PET.preproc.bam \
   -f BAM -g 4.9e8 -n hela_1_REST.chr12.macs2 -q 0.01 &> macs.log
-
-	module unload MACS
-	module unload pythonß
+  
+  module unload MACS
+  module unload python
 
 
 The output of a ``MACS2`` run consists of several files. To inspect files type
@@ -691,13 +694,13 @@ These files are already prepared and are under ``peak_calling`` directory
 	
   BEDS="../../results/peaks_bed"
 
-	module load BEDOPS/2.4.3
+  module load BEDOPS/2.4.3
 
-	bedops -m $BEDS/hela_1_peaks.chr12.bed $BEDS/hela_2_peaks.chr12.bed $BEDS/hepg2_1_peaks.chr12.bed $BEDS/hepg2_2_peaks.chr12.bed \
-	$BEDS/neural_1_peaks.chr12.bed $BEDS/neural_2_peaks.chr12.bed $BEDS/sknsh_1_peaks.chr12.bed $BEDS/sknsh_2_peaks.chr12.bed \
-	>REST_peaks.chr12.bed
+  bedops -m $BEDS/hela_1_peaks.chr12.bed $BEDS/hela_2_peaks.chr12.bed $BEDS/hepg2_1_peaks.chr12.bed $BEDS/hepg2_2_peaks.chr12.bed \
+  $BEDS/neural_1_peaks.chr12.bed $BEDS/neural_2_peaks.chr12.bed $BEDS/sknsh_1_peaks.chr12.bed $BEDS/sknsh_2_peaks.chr12.bed \
+  >REST_peaks.chr12.bed
 
-	wc -l REST_peaks.chr12.bed
+  wc -l REST_peaks.chr12.bed
 
 
 
@@ -746,8 +749,8 @@ in ``chipseq/analysis/``
 
 .. code-block:: bash
 
-	mkdir plots
-	cd plots
+  mkdir plots
+  cd plots
 
   mkdir hela
   mkdir hepg2
@@ -760,9 +763,9 @@ in ``chipseq/analysis/``
 
   ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
-	module load deepTools/3.3.2
+  module load deepTools/3.3.2
 
-	multiBamSummary BED-file --BED REST_peaks.chr12.bed --bamfiles \
+  multiBamSummary BED-file --BED REST_peaks.chr12.bed --bamfiles \
 	hela/ENCFF000PED.chr12.rmdup.sort.bam \
 	hela/ENCFF000PEE.chr12.rmdup.sort.bam hela/ENCFF000PET.chr12.rmdup.sort.bam \
 	hepg2/ENCFF000PMG.chr12.rmdup.sort.bam hepg2/ENCFF000PMJ.chr12.rmdup.sort.bam \
@@ -776,11 +779,11 @@ in ``chipseq/analysis/``
 	--labels hela_1 hela_2 hela_i hepg2_1 hepg2_2 hepg2_i1 hepg2_i2 neural_1 \
 	neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2
 
-	plotCorrelation --corData multiBamArray_bed_ALL_bam_chr12.npz \
+  plotCorrelation --corData multiBamArray_bed_ALL_bam_chr12.npz \
 	--plotFile correlation_peaks.pdf --outFileCorMatrix correlation_peaks_matrix.txt \
 	--whatToPlot heatmap --corMethod pearson --plotNumbers --removeOutliers
 
-	module unload deepTools
+  module unload deepTools
 
 
 What do you think?
@@ -838,9 +841,9 @@ Explore data:
 
 - go to interesting locations, i.e. REST binding peaks detected in both HeLa samples, available in ``peaks_hela.chr12.bed``
 
-- you can change the signal display mode in the tracks in the left hand side panel. Right click in the BAM file track, select from the menu "display" 
+- you can change the signal display mode in the tracks in the left hand side panel. Right click in the BAM file track, select from the menu ``display`` 
 
-- squishy; "color by" - read strand and "group by" - read strand
+- choose squishy; ``color by`` read strand and ``group by`` read strand
 
 
 To view the ``peaks_hela.chr12.bed``
