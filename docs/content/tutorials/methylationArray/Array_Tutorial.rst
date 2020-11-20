@@ -354,10 +354,10 @@ Compare with the unnormalized data to visualize the effect of the normalization.
    probeTypes$Type <- rep(x = c("I", "II"), times = c(nrow(typeI), nrow(typeII)))
    # Now plot the distributions of the normalized data for sample 1
    plotBetasByType(getBeta(mSetSq)[,1], probeTypes = probeTypes, main="Normalized",)
-   # Close plotting window
+   # Close double plotting window
    dev.off()
 
-Does it look like the normalization brought the distributions closer to ech other? Now let's see how the between-array normallization worked...
+Does it look like the normalization brought the distributions closer to each other? Now let's see how the between-array normalization worked...
 
 .. code-block:: r
 
