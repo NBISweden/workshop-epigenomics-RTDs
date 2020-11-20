@@ -345,7 +345,7 @@ Compare with the unnormalized data to visualize the effect of the normalization.
 
    par(mfrow=c(1,2))
    # Plot distributions prior to normalization for sample 1
-   plotBetasByType(MSet[,1],main="Raw",)
+   plotBetasByType(MSet[,1],main="Raw")
    # The normalized object is a GenomicRatioSet which does not contain
    # the necessary probe info, we need to extract this from the MethylSet first.
    typeI <- getProbeInfo(MSet, type = "I")[, c("Name","nCpG")]
