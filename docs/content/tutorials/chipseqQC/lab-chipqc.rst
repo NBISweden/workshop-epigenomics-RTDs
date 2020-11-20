@@ -55,12 +55,12 @@ You can now load the version of R for which we tested this class along with othe
 
 .. code-block:: bash
 	
-	module load R/4.0.0
-	module load conda/latest
+	cd analysis/R
 
-	CONDA_ENVS_PATH="/sw/courses/epigenomics/software/conda"
+	module load bioinfo-tools
+	module load samtools/1.8
 
-	conda activate V8
+	conda activate /sw/courses/epigenomics/software/conda/v8
 
 	R
 
@@ -69,9 +69,6 @@ You can now load the version of R for which we tested this class along with othe
 
 	We are running 
 	``R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"``
-
-
-	.. ``R version 4.0.0 (2020-04-24) -- "Arbor Day"``
 
 
 
@@ -83,10 +80,10 @@ While running commands (in ``R``) feel free to have a look at `ChIPQC package do
 
 .. code-block:: R
 
-	#	add the path to the class-specific R libraries
+	#	add the path to the tutorial-specific R libraries
 	assign(".lib.loc", "/sw/courses/epigenomics/software/R", envir = environment(.libPaths))
 
-	#	you can see that the class-specific R library path is added
+	#	you can see that the tutorial-specific R library path is added
 	.libPaths()
 	[1] "/sw/courses/epigenomics/software/R"
 
@@ -108,14 +105,24 @@ While running commands (in ``R``) feel free to have a look at `ChIPQC package do
 	# inspecting the object
 	res
 
-	#### ERROR HERE	###
-
 	#	performing quality control
 	resqc = ChIPQC(res,annotation="hg19", config=data.frame(RunParallel=TRUE))
 
 	#	creating the quality control report in html format
 	ChIPQCreport(resqc)
 
+
+.. WARNING::
+	
+	If you run this tutorial on Rackham, you may see the error
+
+	.. code_block:: R
+
+		ChIPQCreport(resqc)
+		Error in browseURL(paste0("file://", normalizePath(file.path(reportFolder,  : 
+  		'browser' must be a non-empty character string
+
+  	This is because the html report cannot be open in a browser directly from Rackham. You can download it to your computer and view it locally.
 
 
 Examine the html report.
