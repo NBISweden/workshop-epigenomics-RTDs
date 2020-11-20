@@ -69,10 +69,10 @@ devtools::install_github("timoast/signac", ref = "develop")
 
 If you want to run this exercise on your laptop, you also need to make sure that the following libraries are installed `Seurat`, `ggplot2`, `patchwork` and `TFBSTools`.
 
-
+![George Seurat](Seurat-Gravelines-Annonciade.jpg)
 
 ## Analysis of single cell ATAC-seq data
-[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package been extended to support chromatin data, e.g. ATAC. This extension packade is called Signac. Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, aling with some meta data.
+[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
@@ -161,7 +161,7 @@ The next step is to do some quality control (QC) on the ATAC-seq data. There are
 
 - **Number of fragments in peaks**. This represents the complexity and sequencing depth for each cell. Too many reads might indicate artefacts, such as several cells sharing a barcode.
 
-- **Fraction of reads in peaks**. This represents how well that ATAC protocol has worked, and we typically reure at least 15% if all fragments to be in peaks.
+- **Fraction of reads in peaks**. This represents how well that ATAC protocol has worked, and we typically reqiure at least 15% if all fragments to be in peaks.
 
 - **Reads in blacklist regions.** The [ENCODE](https://www.encodeproject.org) project has defined lists of [blacklist regions](https://github.com/Boyle-Lab/Blacklist). These are problematic regions (typically repeats) that often have high signals in next-generation sequencing experiments regardless of cell line or experiment. Cells with a realtively high ratio of reads mapping to blacklist regions, compared to peaks, often represent technical artifacts and should be removed.
 
@@ -194,6 +194,8 @@ VlnPlot(
 	ncol = 3
 )
 ```
+
+![QC plots](qc.png)
 
 After calculating the qualtiy statistics, we apply (some rather artibtrary) cutoffs, to remove outlier cells. *How many cells do we have left after quality filtering in this example?*
 
@@ -230,7 +232,7 @@ pbmc <- RunSVD(pbmc)
 DepthCor(pbmc)
 ```
 
-## Clustering and further dimensionality reduction
+### Clustering and further dimensionality reduction
 
 Now we can cluster the cells to find groups that belong to the same cell types. It is possible to plot the results from the SVD, but these often are not informative. Instead, we use the UMAP algorithm, which shows a better separation between the cell types. If you are interested, the paper describing UMAP can be found [here](https://arxiv.org/abs/1802.03426)
 
@@ -249,6 +251,8 @@ p2 <- DimPlot(object = pbmc, label = TRUE) +
 
 p1 | p2
 ```
+
+![Dimension reduction](dimension_reduction.png)
 
 
 This might be a good time to save your data, so you don't have to re-run all your analysis if you have problems with Uppmax or the network. To load the data later, type `load(file="pbmc.Rda")`.
@@ -380,6 +384,9 @@ MotifPlot(
 )
 ```
 
+![Motif activity](motif_activity.png)
+
+
 
 ## Integrate with scRNA-seq data
 
@@ -415,6 +422,8 @@ FeaturePlot(
 	ncol = 3
 )
 ```
+
+![Gene activity](gene_activity.png)
 
 
 ### Label transfer
@@ -471,10 +480,10 @@ plot1 | plot2 | plot3
 pbmc <- RenameIdents(
 	object = pbmc,
 	'0' = 'CD14 Mono',
-	'1' = 'CD4 Memory (DN T)',
-	'2' = 'CD4/8 Naive',
-	'3' = 'CD8 Effector',
-	'4' = 'CD14 Mono',
+	'1' = 'CD4/8 Naive',
+	'2' = 'CD4 Memory (DN T)',
+	'3' = 'CD14 Mono',
+	'4' = 'CD8 Effector',
 	'5' = 'pre-B/pro-B',
 	'6' = 'NK dim',
 	'7' = 'CD16 Mono',
@@ -539,7 +548,7 @@ It is often informative to plot the ATAC-seq signal for a particular genomic reg
 
 ```
 # set plotting order
-levels(pbmc) <- c('CD14 Mono', 'CD4 Memory (DN T)', 'CD4/8 Naive', 'CD8 Effector', 'pre-B/pro-B', 'NK CD56Dim', 'CD16 Mono', 'DC')
+levels(pbmc) <- c('CD14 Mono', 'CD4 Memory (DN T)', 'CD4/8 Naive', 'CD8 Effector', 'pre-B/pro-B', 'NK Dim', 'CD16 Mono', 'DC')
 
 
 CoveragePlot(
@@ -559,9 +568,3 @@ TilePlot(
 )
 ```
 
-## Session information
-
-```{r session_info}
-R.Version() 
-sessionInfo(package = NULL)
-```

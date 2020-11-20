@@ -152,7 +152,7 @@ minfi generates a number of classes corresponding to various transformations of 
 .. image:: Figures/Classes.png
    :target: Figures/Classes.png
    :alt: 
-
+   
 *Fig. 2: Flowchart of the different *minfi* class objects.*
 
 As of now, our dataset is an *RGChannelSet* object containing the raw green and red intensity data. To proceed, this needs to be transformed into a *MethylSet* object containing the methylated and unmethylated signals. The most basic way to construct a *MethylSet* is to use the function *preprocessRaw* which uses the array design to match up the different probes and color channels to construct the methylated and unmethylated signals. This function does not do any normalization (in a later step we will add normalization, but this step is useful for initial quality control). Do this now for your object and have a look at the changes in the metadata. Notice that the red and green assays have been transformed in Meth and Unmeth signals.
@@ -338,6 +338,7 @@ Note that after normalisation, the data is housed in a GenomicRatioSet object; a
 
    # normalize the data; this results in a GenomicRatioSet object
    mSetSq <- preprocessQuantile(rgSet)
+
 
 Compare with the unnormalized data to visualize the effect of the normalization. First a comparison of the Beta distributions for the different probe designs. This will give an indication of the effectiveness of the within-array normalization.
 
