@@ -45,7 +45,7 @@ Tuesday (24 November 2020)
 *ChIP-seq and ATAC-seq data processing and analysis principles*
 
 
-09.15 - 10.00 Think ahead exercise & `Recap of the previous day<https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (**online session**) (Vincent)
+09.15 - 10.00 Think ahead exercise & `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (**online session**) (Vincent)
 
 10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session** including group discussions)
 
