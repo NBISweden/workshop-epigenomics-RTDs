@@ -4,7 +4,7 @@ Schedule
 
 
 
-.. contents:: 
+.. contents::
     :local:
 
 
@@ -14,7 +14,7 @@ Monday (23 November 2020)
 
 *DNA methylation with Illumina 450K arrays and Bisulfite-seq*
 
-09.15 - 09.30 Introduction to the course (**online session**) (Olga, Agata)
+09.15 - 09.30 `Welcome (**online session**)<https://github.com/NBISweden/workshop-epigenomics-RTDs/welcome>`_ (Olga, Agata)
 
 09.30 - 09.45 **Introduction to methylation** (**online session**)  (Vincent)
 
@@ -91,7 +91,7 @@ Thursday (26 November 2020)
 *Nf-core pipelines: Methylseq, Chipseq, Atacseq*
 
 
-09.15 - 10.00 Recap of the previous day (group session) (**online session**) 
+09.15 - 10.00 Recap of the previous day (group session) (**online session**)
 
 10:00 - 10:40 - **Intro to Nextflow** (**online session**) (Phil)
 
@@ -116,7 +116,7 @@ Friday (27 November 2020)
 *Integrative and single cell omics*
 
 
-9.15 - 09.30 Recap of the previous day (group session) (**online session**) 
+9.15 - 09.30 Recap of the previous day (group session) (**online session**)
 
 09.30 - 10.20 **scATAC-seq / scChIP-seq** (Jakub) (**online session**)
 
@@ -126,11 +126,10 @@ Friday (27 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.20 **Intro to exercises** (**online session**) 
+13.00 - 13.20 **Intro to exercises** (**online session**)
 
 13.20 - 15.00 Exercises (*online support*)
 
 15.00 - 15.30 Test yourself (*offline*)
 
 15.30 - 16.30 Course wrap-up (*online session*)
-
