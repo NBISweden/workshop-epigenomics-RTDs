@@ -100,8 +100,6 @@ We will call peaks from *one sample only*, and compare the results to other samp
 
 Data have been processed in the same way as for the TF ChIP-seq, i.e. the duplicated reads were removed, as were the reads mapped to the ENCODE blacklisted regions. In this case the reads were mapped to ``hg38`` assembly of human genome.
 
-A side note: You may have noticed that some of the bam files contain alignments to ``dm6`` - an assembly of `Drosophila melanogaster` genome. This is because we are using the same data set as for the quantitative ChIP-seq tutorial (on Wednesday). For now we ignore the alignments to ``dm6`` and focus on ``hg38``.
-
 :raw-html:`<br />`
 
 
@@ -255,7 +253,7 @@ Some ideas:
 
 Below you see IGV visualisations of the following
 
-. code-block:: bash
+.. code-block:: bash
 
 	chr1:230,145,433-230,171,784
 	chr1:235,283,256-235,296,431
@@ -314,11 +312,34 @@ You can merge peaks which are close to one another using `bedtools <https://bedt
 Alternative approach: window-based enrichment analysis (csaw)
 ===============================================================
 
-This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks. Please check the "Csaw (Alternative differential binding analyses)" tutorial for more detailed comments on each step.
+This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
 
 You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to ``chr1``.
 
-This exercise is best performed locally. It has not been tested on Uppmax.
+.. NOTE::
+  
+  This exercise was tested on Rackham using pre-installed R libraries. Local installation of recommended R packages may require additional software dependecies.
+
+
+Requirements Local
+----------------------
+
+* ``csaw``
+* ``edgeR``
+
+R packages required for annotation:
+
+* ``org.Hs.eg.db``
+* ``TxDb.Hsapiens.UCSC.hg38.knownGene``
+
+Recommended:
+
+* R-Studio to work in
+
+
+
+**Getting the data**
+
 
 First, you need to copy the necessary files to your laptop:
 
@@ -326,14 +347,58 @@ First, you need to copy the necessary files to your laptop:
 
 	cd /desired/location
 
-	scp <USERNAME>@rackham.uppmax.uu.se:/sw/share/compstore/courses/ngsintro/chipseq/broad_peaks/broad_peaks_bam.tar.gz .
+	scp <USERNAME>@rackham.uppmax.uu.se:/sw/courses/epigenomics/broad_peaks/broad_peaks_bam.tar.gz .
 
 	#type your password at the prompt
 
-	tar zcvf broad_peaks_bam.tar.gz
+	tar zdvf broad_peaks_bam.tar.gz
 
+
+
+
+Requirements Remote (Uppmax)
+--------------------------------
+
+The software is configured.
+
+To prepare the files, assuming you are in ``~/broad_peaks/results``:
+
+.. code-block:: bash
+  
+   mkdir csaw
+   cd csaw
+
+   mkdir bam_chr1
+   ln -s  /sw/courses/epigenomics/broad_peaks/bam_chr1/* bam_chr1
+
+..   cp /sw/courses/epigenomics/broad_peaks/bam_chr1 .
+
+A side note: You may have noticed that some of the bam files contain alignments to ``dm6`` - an assembly of `Drosophila melanogaster` genome. This is because we are using the same data set as for the quantitative ChIP-seq tutorial (on Wednesday). For now we ignore the alignments to ``dm6`` and focus on ``hg38``.
+
+
+Remote:
+
+.. code-block:: bash
+
+    conda activate /sw/courses/epigenomics/software/conda/v8
+    R
+
+Or locally work in RStudio.
 
 The remaining part of the exercise is performed in ``R``.
+
+
+Remote:
+
+.. code-block:: R
+
+  # provide the tutorial specific path to R libraries
+  assign(".lib.loc", "/sw/courses/epigenomics/software/R", envir = environment(.libPaths))
+
+  # verify that the tutorial-specific R library path is added
+  .libPaths()
+  [1] "/sw/courses/epigenomics/software/R"
+
 
 Sort out the working directory and file paths:
 
@@ -343,8 +408,11 @@ Sort out the working directory and file paths:
 
 	dir.data = "/path/to/desired/location/bam_chr1"
 
+	#for example when in broad_peaks/csaw
+	dir.data = "./bam_chr1"	
+
 	k79_100_1=file.path(dir.data,"SRR1536561.bwt.hg38_dm6.sorted.chr1.hg38.bam")
-	k79_100_2=file.path(dir.data,"SRR1536561.bwt.hg38_dm6.sorted.chr1.hg38.bam")
+	k79_100_2=file.path(dir.data,"SRR1536551.bwt.hg38_dm6.sorted.chr1.hg38.bam")
 	k79_100_i1=file.path(dir.data,"SRR1584493.bwt.hg38_dm6.sorted.chr1.hg38.bam")
 	k79_100_i2=file.path(dir.data,"SRR1584498.bwt.hg38_dm6.sorted.chr1.hg38.bam")
 
@@ -381,7 +449,7 @@ One possible approach involves choosing a filter threshold based on the fold cha
 the level of non-specific enrichment (background). The degree of background enrichment is estimated
 by counting reads into large bins across the genome.
 
-With ``type="global"``, the ``filterWindows`` function returns the increase in the abundance of
+The function ``filterWindowsGlobal`` returns the increase in the abundance of
 each window over the global background. 
 Windows are filtered by setting some minimum threshold on this increase. Here, a **fold change of 3** is necessary for a window to be considered as containing a binding site. 
 
@@ -394,7 +462,7 @@ In this example, you estimate the global background using ChIP samples only. You
 	bin.size <- 2000L
 	binned.ip <- windowCounts(bam.files_chip, bin=TRUE, width=bin.size, ext=frag.len)
 	data.ip=data[,1:2]
-	filter.stat <- filterWindows(data.ip, background=binned.ip, type="global")
+	filter.stat <- filterWindowsGlobal(data.ip, background=binned.ip)
 
 	keep <- filter.stat$filter > log2(3)
 	data.filt <- data[keep,]
@@ -405,20 +473,18 @@ To examine how many windows passed the filtering:
 .. code-block:: R
 
 	summary(keep)
-
-	##   Mode   FALSE    TRUE 
-	##  logical   56543   61752 
-
+  	 Mode   FALSE    TRUE 
+	logical   39272   48875 
 
 To normalise the data for different library sizes you need to calculate normalisation factors based on large bins:
 
 .. code-block:: R
 
 	binned <- windowCounts(bam.files, bin=TRUE, width=10000)
-	data.filt <- normOffsets(binned, se.out=data.filt)
+	data.filt <- normFactors(binned, se.out=data.filt)
 
 	data.filt$norm.factors
-	## [1] 0.9970575 0.9970575 0.9310318 1.0804262
+	## [1] 1.0106655 0.8825254 1.0076520 1.1126402
 
 
 
@@ -439,16 +505,16 @@ You can inspect the raw results:
 .. code-block:: R
 
 	> head(results$table)
-	       logFC   logCPM            F      PValue
-	1 5.12314899 3.507425 2.028955e+10 0.004065537
-	2 1.24105882 3.644954 3.018273e+00 0.210391635
-	3 1.24105882 3.644954 3.018273e+00 0.210391635
-	4 1.07213133 4.470860 2.003744e+00 0.279525197
-	5 0.44631285 4.740069 2.820544e-01 0.643192436
-	6 0.03694957 4.829412 1.729703e-02 0.939536489
+	      logFC   logCPM         F    PValue
+	1 1.5993767 3.768796 1.9155001 0.1663567
+	2 1.5993767 3.768796 1.9155001 0.1663567
+	3 1.3875763 4.476065 1.9777830 0.1596273
+	4 0.9306821 4.812106 1.0695744 0.3010442
+	5 0.6936473 5.077305 0.6639666 0.4151651
+	6 0.9355537 5.218651 1.2539775 0.2627969
 
 
-The following steps will calculate the FDR for each peak, merge peaks withink 1 kb and calculate the FDR for these composite peaks.
+The following steps will calculate the FDR for each peak, merge peaks within 1 kb and calculate the FDR for resulting composite peaks.
 
 .. code-block:: R
 
@@ -462,13 +528,23 @@ Short inspection of the results:
 
 	head(table.combined)
 
-	##   nWindows logFC.up logFC.down      PValue         FDR direction
-	## 1       16        5          3 0.065048599 0.083668125        up
-	## 2       23        0         20 0.004044035 0.008745581      down
-	## 3        1        0          1 0.167741339 0.203667724      down
-	## 4        2        2          0 0.210391635 0.233814958        up
-	## 5        7        6          0 0.013399521 0.020487780        up
-	## 6        1        1          0 0.057954382 0.075061398        up
+	DataFrame with 6 rows and 8 columns
+	  num.tests num.up.logFC num.down.logFC    PValue       FDR   direction
+	  <integer>    <integer>      <integer> <numeric> <numeric> <character>
+	1        14            0              0  0.486592  0.527626       mixed
+	2        19            0              0  0.366146  0.404923        down
+	3         3            0              0  0.205758  0.241335        down
+	4         1            0              0  0.238252  0.274038        down
+	5         3            0              0  0.488160  0.528994          up
+	6         4            0              0  0.983807  0.985523       mixed
+	   rep.test  rep.logFC
+	  <integer>  <numeric>
+	1        10  0.9281614
+	2        33 -1.9986066
+	3        36 -1.3523859
+	4        37 -1.0531498
+	5        38  1.6221839
+	6        42  0.0184684
 
 
 How many regions are up (i.e. enriched in chip compared to input)?
@@ -478,9 +554,8 @@ How many regions are up (i.e. enriched in chip compared to input)?
 	is.sig.region <- table.combined$FDR <= 0.1
 	table(table.combined$direction[is.sig.region])
 
-	## down mixed    up 
-	##   57    32  2103 
-
+ 	down mixed    up 
+ 	  13     5  1283 
 
 
 Does this make sense? How does it compare to results obtained from a MACS run?
@@ -525,7 +600,8 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 	filename="k79me2_100_peaks.bed"
 	write.table(sig_bed,filename,sep="\t",col.names=FALSE,quote=FALSE,row.names=FALSE)
 
-
+.. nrow(sig_bed)
+.. 1060
 
 You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosome 1.
 
