@@ -28,7 +28,7 @@ Monday (23 November 2020)
 
 13.00 - 13.30 Exercises (*online support*)
 
-13.30 - 15.00 **Methylation methods & technologies** (**online session**)  (Jessica Nordlund)
+13.30 - 15.00 **Methylation methods & technologies** (**online session**)  (Jessica)
 
 15.00 - 15.15 **Methylation Exercises Overview II: Methylation Sequencing**  (**online session**) (Vincent)
 
@@ -45,9 +45,9 @@ Tuesday (24 November 2020)
 *ChIP-seq and ATAC-seq data processing and analysis principles*
 
 
-09.15 - 10.00 Think ahead exercise & `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (**online session**) (Vincent)
+09.15 - 10.00 Think ahead exercise & `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (**online group session**)
 
-10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session** including group discussions)
+10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session**)
 
 11.30 - 13.00 lunch (*offline*)
 
@@ -67,7 +67,7 @@ Wednesday (25 November 2020)
 *New methods and quantitative ChIP-seq*
 
 
-09.15 - 10.30 Recap of the previous day (group session) (**online session**)
+09.15 - 10.30 `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_  (group session) (**online group session**)
 
 10.30 - 11.30 **Quantitative ChIP-seq methods** (**online session**) (Simon)
 
@@ -91,15 +91,15 @@ Thursday (26 November 2020)
 *Nf-core pipelines: Methylseq, Chipseq, Atacseq*
 
 
-09.15 - 10.00 Think ahead exercise & Recap of the previous day (group session) (**online session**)
+09.15 - 10.00 Think ahead exercise & `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (group session) (**online group session**)
 
-10:00 - 10:40 - **Intro to Nextflow** (**online session**) (Phil)
+10:00 - 10:40 - **Introduction to Nextflow** (**online session**) (Phil)
 
 10:40 - 11.30 - Exercises (*online support*)
 
 11.30 - 13.00 lunch (*offline*)
 
-13:00 - 13:45 - **Intro to the ChIP-seq and ATAC-seq pipelines** (**online session**) (Harshil)
+13:00 - 13:45 - **Introduction to the ChIP-seq and ATAC-seq pipelines** (**online session**) (Harshil)
 
 13.45 - 15.30 Exercises (*online support*)
 
@@ -116,9 +116,9 @@ Friday (27 November 2020)
 *Integrative and single cell omics*
 
 
-9.15 - 09.30 Recap of the previous day (group session) (**online session**)
+09.15 - 09.30 `Recap of the previous day <https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (group session) (**online session**)
 
-09.30 - 10.20 **scATAC-seq / scChIP-seq** (Jakub) (**online session**)
+09.30 - 10.20 **scATAC-seq / scChIP-seq** (Jakub) (**online group session**)
 
 10.20 - 10.30 Break
 
@@ -126,7 +126,7 @@ Friday (27 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.20 **Intro to exercises** (**online session**)
+13.00 - 13.20 **Introduction to exercises** (**online session**)
 
 13.20 - 14.30 Exercises (*online support*)
 
