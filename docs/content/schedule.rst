@@ -51,7 +51,7 @@ Tuesday (24 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.30 **Calling broad peaks, `differential analysis <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/diff.pdf>_`, motifs** (**online session**)  (Agata, Olga, Jakub)
+13.00 - 13.30 **Calling broad peaks, `differential analysis <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/diff.pdf>`_, motifs** (**online session**)  (Agata, Olga, Jakub)
 
 13.30 - 15.30 Exercises (*online support*)
 
