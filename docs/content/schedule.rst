@@ -14,7 +14,7 @@ Monday (23 November 2020)
 
 *DNA methylation with Illumina 450K arrays and Bisulfite-seq*
 
-09.15 - 09.30 `Welcome (**online session**)<https://github.com/NBISweden/workshop-epigenomics-RTDs/welcome>´_ (Olga, Agata)
+09.15 - 09.30 `Welcome <https://nbisweden.github.io/workshop-epigenomics/session-welcome/welcome>`_ (**online session**) (Olga, Agata)
 
 09.30 - 09.45 **Introduction to methylation** (**online session**)  (Vincent)
 
