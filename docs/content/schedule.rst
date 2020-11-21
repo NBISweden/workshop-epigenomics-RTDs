@@ -45,7 +45,7 @@ Tuesday (24 November 2020)
 *ChIP-seq and ATAC-seq data processing and analysis principles*
 
 
-09.15 - 10.00 Recap of the previous day and activation exercise (**online session**) (Vincent)
+09.15 - 10.00 Think ahead exercise & `Recap of the previous day<https://jamboard.google.com/d/1PSY_jTxLy26TsIFbmxnOLe-tP8LOSsK-AzES-ihx4qo/edit?usp=sharing>`_ (**online session**) (Vincent)
 
 10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session** including group discussions)
 
@@ -91,7 +91,7 @@ Thursday (26 November 2020)
 *Nf-core pipelines: Methylseq, Chipseq, Atacseq*
 
 
-09.15 - 10.00 Recap of the previous day (group session) (**online session**)
+09.15 - 10.00 Think ahead exercise & Recap of the previous day (group session) (**online session**)
 
 10:00 - 10:40 - **Intro to Nextflow** (**online session**) (Phil)
 
@@ -128,8 +128,8 @@ Friday (27 November 2020)
 
 13.00 - 13.20 **Intro to exercises** (**online session**)
 
-13.20 - 15.00 Exercises (*online support*)
+13.20 - 14.30 Exercises (*online support*)
 
-15.00 - 15.30 Test yourself (*offline*)
+14.30 - 15.00 Test yourself (*offline*)
 
-15.30 - 16.30 Course wrap-up (*online session*)
+15.00 - 16.00 Course wrap-up (*online session*)
