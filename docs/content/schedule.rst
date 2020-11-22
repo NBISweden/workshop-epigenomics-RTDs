@@ -34,7 +34,7 @@ Monday (23 November 2020)
 
 15.15 - 17.00 Exercises (*online support*)
 
-17.00 - 17.30 Test yourself (*offline*)
+17.00 - 17.30 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLScQj8_7azSJArlFLGktr2HGI59D2_f2T-Jz2FRGnryPND4vgA/viewform?usp=sf_link>`_ (*offline*)
 
 
 
