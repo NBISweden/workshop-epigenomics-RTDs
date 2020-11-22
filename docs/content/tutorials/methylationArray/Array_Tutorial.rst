@@ -571,6 +571,7 @@ Just as for the single CpG analysis, it is a good idea to visually inspect the r
 .. code-block:: r
 
    # set up the grouping variables and colours
+   pal <- brewer.pal(8,"Dark2")
    groups <- pal[1:length(unique(targets$Sample_Group))]
    names(groups) <- levels(factor(targets$Sample_Group))
    cols <- groups[as.character(factor(targets$Sample_Group))]
