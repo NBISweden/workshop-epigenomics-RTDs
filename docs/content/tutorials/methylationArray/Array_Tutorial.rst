@@ -237,6 +237,14 @@ The overall density distribution of Beta values for each sample is another usefu
    phenoData <- pData(MSet)
    densityPlot(MSet, sampGroups = phenoData$Sample_Group)
 
+The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.
+
+.. code-block:: r
+
+   controlStripPlot(rgSet, controls="BISULFITE CONVERSION II")
+   # The plots of the different control probes can be exported into a pdf file in one step using the function qcReport
+   #qcReport(rgSet, pdf= "qcReport.pdf")
+
 Taking these different metrics into account, it seems clear that the *birth* sample is of lower quality than the other samples. Therefore, we can decide to exclude it from the initial *rgSet* prior to further analysis.
 
 .. code-block:: r
@@ -249,15 +257,6 @@ Taking these different metrics into account, it seems clear that the *birth* sam
    rgSet
    # subset target as well
    targets <- targets[keep,]
-
-.. note::
-   The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.
-
-.. code-block:: r
-
-   controlStripPlot(rgSet, controls="BISULFITE CONVERSION II")
-   # The plots of the different control probes can be exported into a pdf file in one step using the function qcReport
-   #qcReport(rgSet, pdf= "qcReport.pdf")
 
 Normalization
 -------------
