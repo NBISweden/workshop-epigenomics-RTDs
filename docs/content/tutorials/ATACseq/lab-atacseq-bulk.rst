@@ -207,8 +207,35 @@ How many peaks were detected?
 	wc -l SRR891268_genrich.narrowPeak
 	130617 SRR891268_genrich.narrowPeak
 
-Unfortunately, Genrich does not work very well with our small training dataset (every covered region is called a peak). This is because most of the data is on chr22 whereas the background model was built on the whole genome.
+Unfortunately, Genrich does not work very well with our small training dataset (every covered region is called a peak). This is because most of the data is on chr22 whereas the background model was built on the whole genome (Genrich consideres length of all reference seqences included in bam header).
 
+Let's try again with properly prepared bam file, i.e such that the header contains only the chromosome of interest (chr22).
+
+.. code-block:: bash
+
+	# we need indexed bam
+	cd ../bam
+	samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
+	cd ../genrich
+
+	# change bam header to contain only chr22
+	nano header
+	chr22	50818468
+	(ctrl-x to close the file, y to save it)
+
+	#subset bam and change header
+	samtools view ../bam/SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam  chr22 | samtools view -bo SRR891268_hg38.sort.chr22_rh.bam -t header -
+
+	# sort by name
+	samtools sort -n -o SRR891268_hg38.nsort.chr22_rh.bam -T sort.tmp SRR891268_hg38.sort.chr22_rh.bam
+
+	# call peaks
+	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t SRR891268_hg38.nsort.chr22_rh.bam  -o SRR891268_chr22_genrich.narrowPeak
+
+	#how many peaks
+	wc -l SRR891268_chr22_genrich.narrowPeak
+	1017 SRR891268_chr22_genrich.narrowPeak
 
 MACS
 -----
@@ -237,4 +264,34 @@ How many peaks were detected?
 	
 	wc -l SRR891268_macs_bedpe_peaks.narrowPeak
 	2975 SRR891268_macs_bedpe_peaks.narrowPeak
+
+
+Comparing results of MACS and Genrich
+----------------------------------------
+
+How many peaks actually overlap?
+
+.. code-block:: bash
+	
+	cd ..
+	module load BEDTools/2.25.0
+
+	bedtools intersect -a macs/SRR891268_macs_bedpe_peaks.narrowPeak  -b genrich/SRR891268_chr22_genrich.narrowPeak  -f 0.50 -r >peaks_common.bed
+
+	wc -l peaks_common.bed 
+	#361 peaks_common.bed
+
+Inspetion of the peak tracks in IGV reveals small differences in peaks called by MACS and Genrich. The very shallow signal in this example does not produce peaks of good quality. Usually MACS tends to detect many shorter peaks whereas Genrich tends to merge these shorter peaks into longer intervals. 
+
+Below is zoom on ``chr22:49,917,416-49,919,778`` one of the locations where both MACS and Genrich found a peak.
+
+
+.. list-table:: Figure 5. Visalisation of read alignments and peaks detected by Genrich and MACS.
+   :widths: 60
+   :header-rows: 0
+
+   * - .. image:: figures/igv1.png
+   			:width: 600px
+
+
 
