@@ -294,4 +294,14 @@ Below is zoom on ``chr22:49,917,416-49,919,778`` one of the locations where both
    			:width: 600px
 
 
+:raw-html:`<br />`
+
+:raw-html:`<br />`
+
+:raw-html:`<br />`
+
+
+------
+
+(Tutorial modified from https://training.galaxyproject.org/topics/epigenetics/tutorials/atac-seq/tutorial.html)
 
