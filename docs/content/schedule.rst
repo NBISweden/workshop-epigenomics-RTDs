@@ -47,11 +47,14 @@ Tuesday (24 November 2020)
 
 09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-02-am>`_ (**online group session**)
 
-10.00 - 11.30 **Introduction to :download:`ChIPseq <../../slides/slides-chipseqproc-as-2020.pdf>` & ATAC-seq** (Agata) (**online session**)
+10.00 - 11.30 Introduction to `ChIPseq <../_static/slides-chipseqproc-as-2020.pdf>`_ & `ATACseq <../_static/slides-atacseqproc-as-2020.pdf>`_ (Agata) (**online session**)
+
+
+`these slides to dive deeper into Agile Basics <../_static/agile-101.pdf>`_. 
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.30 **Calling broad peaks**, `differential analysis <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/diff.pdf>`_ , **motifs** (**online session**)  (Agata, Olga, Jakub)
+13.00 - 13.30 `Calling broad peaks <../_static/slides-broadpeaks-as-2020.pdf>`_, `differential analysis <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/diff.pdf>`_ , **motifs** (**online session**)  (Agata, Olga, Jakub)
 
 13.30 - 15.30 Exercises (*online support*)
 
