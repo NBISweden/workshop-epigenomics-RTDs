@@ -45,7 +45,7 @@ Tuesday (24 November 2020)
 *ChIP-seq and ATAC-seq data processing and analysis principles*
 
 
-09.15 - 10.00 Recap of the previous day (**online group session**)
+09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-02-am>`_ (**online group session**)
 
 10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session**)
 
