@@ -255,7 +255,7 @@ We need to convert BAM file to BEDPE to correctly apply read shifts to center fr
 
 
 
-Please note that we selected ``--extsize 100``  to match the behaviour of Genrich. Normally ``--extsize 200`` would be selected. ``--shift``needs to be half of the size of ``--extsize`` to be centered on the 5’, so normally -100. ``--shift -100 --extsize 200`` will amplify the cutting sites' enrichment from ATAC-seq data. So in the end, the peak is where Tn5 transposase likes to attack.
+Please note that we selected ``--extsize 100``  to match the behaviour of Genrich. Normally ``--extsize 200`` would be selected. ``--shift`` needs to be minus half of the size of ``--extsize`` to be centered on the 5’, so normally -100. ``--shift -100 --extsize 200`` will amplify the cutting sites' enrichment from ATAC-seq data. So in the end, the peak is where Tn5 transposase likes to attack.
 
 
 How many peaks were detected?
