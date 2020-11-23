@@ -47,7 +47,7 @@ Tuesday (24 November 2020)
 
 09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-02-am>`_ (**online group session**)
 
-10.00 - 11.30 **Introduction to ChIP-seq & ATAC-seq** (Agata) (**online session**)
+10.00 - 11.30 **Introduction to :download:`ChIPseq <../../slides/slides-chipseqproc-as-2020.pdf>` & ATAC-seq** (Agata) (**online session**)
 
 11.30 - 13.00 lunch (*offline*)
 
