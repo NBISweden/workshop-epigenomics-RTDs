@@ -237,6 +237,14 @@ The overall density distribution of Beta values for each sample is another usefu
    phenoData <- pData(MSet)
    densityPlot(MSet, sampGroups = phenoData$Sample_Group)
 
+The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.
+
+.. code-block:: r
+
+   controlStripPlot(rgSet, controls="BISULFITE CONVERSION II")
+   # The plots of the different control probes can be exported into a pdf file in one step using the function qcReport
+   #qcReport(rgSet, pdf= "qcReport.pdf")
+
 Taking these different metrics into account, it seems clear that the *birth* sample is of lower quality than the other samples. Therefore, we can decide to exclude it from the initial *rgSet* prior to further analysis.
 
 .. code-block:: r
@@ -249,15 +257,6 @@ Taking these different metrics into account, it seems clear that the *birth* sam
    rgSet
    # subset target as well
    targets <- targets[keep,]
-
-.. note::
-   The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial *RGChannelSet* and can be plotted by using the function *controlStripPlot* and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.
-
-.. code-block:: r
-
-   controlStripPlot(rgSet, controls="BISULFITE CONVERSION II")
-   # The plots of the different control probes can be exported into a pdf file in one step using the function qcReport
-   #qcReport(rgSet, pdf= "qcReport.pdf")
 
 Normalization
 -------------
@@ -339,7 +338,26 @@ Note that after normalisation, the data is housed in a GenomicRatioSet object; a
    # normalize the data; this results in a GenomicRatioSet object
    mSetSq <- preprocessQuantile(rgSet)
 
-Compare with the unnormalized data to visualize the effect of the normalization.
+
+Compare with the unnormalized data to visualize the effect of the normalization. First a comparison of the Beta distributions for the different probe designs. This will give an indication of the effectiveness of the within-array normalization.
+
+.. code-block:: r
+
+   par(mfrow=c(1,2))
+   # Plot distributions prior to normalization for sample 1
+   plotBetasByType(MSet[,1],main="Raw")
+   # The normalized object is a GenomicRatioSet which does not contain
+   # the necessary probe info, we need to extract this from the MethylSet first.
+   typeI <- getProbeInfo(MSet, type = "I")[, c("Name","nCpG")]
+   typeII <- getProbeInfo(MSet, type = "II")[, c("Name","nCpG")]
+   probeTypes <- rbind(typeI, typeII)
+   probeTypes$Type <- rep(x = c("I", "II"), times = c(nrow(typeI), nrow(typeII)))
+   # Now plot the distributions of the normalized data for sample 1
+   plotBetasByType(getBeta(mSetSq)[,1], probeTypes = probeTypes, main="Normalized",)
+   # Close double plotting window
+   dev.off()
+
+Does it look like the normalization brought the distributions closer to each other? Now let's see how the between-array normalization worked...
 
 .. code-block:: r
 
@@ -352,6 +370,8 @@ Compare with the unnormalized data to visualize the effect of the normalization.
                main="Normalized", legend=FALSE)
    legend("top", legend = levels(factor(targets$Sample_Group)), 
           text.col=brewer.pal(8,"Dark2"))
+   # Close the double plotting window
+   dev.off()
 
 .. hint::
    Click on Zoom above the RStudio plot panel to watch a larger version of the plotted figure.
@@ -551,6 +571,7 @@ Just as for the single CpG analysis, it is a good idea to visually inspect the r
 .. code-block:: r
 
    # set up the grouping variables and colours
+   pal <- brewer.pal(8,"Dark2")
    groups <- pal[1:length(unique(targets$Sample_Group))]
    names(groups) <- levels(factor(targets$Sample_Group))
    cols <- groups[as.character(factor(targets$Sample_Group))]
