@@ -57,7 +57,7 @@ Tuesday (24 November 2020)
 
 15.30 - 17.00 Exercises (*offline*)
 
-17.00 - 17.30 Test yourself (*offline*)
+17.00 - 17.30 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLSdSapRXqrj7W4J9TfwskKUoJd4Qf_RqwfYZZjnytBDwIWTJNQ/viewform?usp=sf_link>`_ (*offline*)
 
 
 
