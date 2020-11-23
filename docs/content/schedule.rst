@@ -28,7 +28,7 @@ Monday (23 November 2020)
 
 13.00 - 13.30 Exercises (*online support*)
 
-13.30 - 15.00 **Methylation methods & technologies** (**online session**)  (Jessica)
+13.30 - 15.00 `Methylation methods & technologies <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/methylation-jn.pdf>`_ (**online session**)  (Jessica)
 
 15.00 - 15.15 **Methylation Exercises Overview II: Methylation Sequencing**  (**online session**) (Vincent)
 
