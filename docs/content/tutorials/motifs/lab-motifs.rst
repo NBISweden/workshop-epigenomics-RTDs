@@ -34,6 +34,7 @@ We will also use programs from the MEME suite. This is available on Uppmax as a 
 
 .. code-block:: bash
 
+	module load conda
 	conda create -n motif_lab -c bioconda meme
 	conda activate motif_lab
 
