@@ -3,39 +3,24 @@
     :format: html
 
 
-===========================================
-Analysis of public ChIP-seq datasets
-===========================================
+=================================================
+In-situ methods: CUT&RUN and ChIP data for CTCF
+=================================================
 
-
-
-**Learning outcomes**
-
-List some outcomes here
-
+.. Contents
+.. ========
 
 .. contents:: 
     :local:
 
 
-Introduction
-=============
+Background
+----------
 
-
-In this tutorial...
 
 
 Datasets
-===============
+--------
 
-...
-
-Setting-up
-===========
-
-If you have not done it already, install ``R`` and ``R-Studio``. Refer back to ####[pre-course](../precourse)### preparations for instructions.
-
-You can continue working in the ``diffBind`` directory. We need access to ``diffBind.RData`` object & some libraries
-
-In an ``R``session:
+Datasets used
 
