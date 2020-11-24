@@ -47,17 +47,14 @@ ln -s /sw/courses/epigenomics/sc_atac_seq/* .
 
 If you run this on some other system, you can copy the files with `scp`.
 
-Now, start `R` or `rstudio`, and run these commands to install some additional libraries are installed.
+Now, start `R` or `rstudio`, and run these commands to install some additional libraries are installed. We need to install the latest version of Signac, which takes a while.
 
 
 ```
 # Install bioconductor packages
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg19', "EnsDb.Hsapiens.v75", "GenomeInfoDbData", "JASPAR2020"))
-
-# Install packages from CRAN
-install.packages("hdf5r")
+BiocManager::install("JASPAR2020")
 
 # Install latest version of Signac from GitHub
 if (!requireNamespace("devtools", quietly = TRUE))
