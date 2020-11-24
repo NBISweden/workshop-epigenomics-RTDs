@@ -157,8 +157,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_data.sh
-  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_env.sh
+  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_data.sh .
+  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_env.sh .
 
 
   source chipseq_env.sh 
