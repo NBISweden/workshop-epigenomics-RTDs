@@ -26,7 +26,7 @@ Bioconductor packages can be installed in the usual way:
   BiocManager::install("rtracklayer")
 
 
-You can run everything from Uppmax as well as on your local laptop. If you choose to run examples on Uppmax, the relevant module load calls are:
+You can run things from Uppmax as well as on your local laptop. If you choose to run examples on Uppmax, the relevant module load calls are:
 
 .. code-block:: bash
 
@@ -36,6 +36,8 @@ You can run everything from Uppmax as well as on your local laptop. If you choos
 
 :code:`R_packages` contains all the mentioned R packages and their dependencies: :code:`GenomicRanges`, :code:`rtracklayer`, :code:`seqplots`. Be sure to have the corresponding modules loaded (and :code:`bioinfo-tools` before anything) before running them.
 
-.. hint:: 
-    Some of the results here can be computationally demanding. In those cases Uppmax will be recommended. In
-    any case, the resulting files of performing these operations will also be available in the course directory, to avoid technical issues delaying the whole tutorial.
+However, I recommend to download the bigWig and peak files and look at them locally. Most of the computationally demanding work has been pre-processed and it's probably easier to look at the files on
+IGV locally rather than remote. ``seqplots`` is also easier to run locally.
+
+.. note:: 
+    Computationally demanding steps have been precalculated and resulting plots are shown. Some of them can optionally be run again (such as ``deepTools`` computations. In those cases it will be noted within the corresponding section. 
