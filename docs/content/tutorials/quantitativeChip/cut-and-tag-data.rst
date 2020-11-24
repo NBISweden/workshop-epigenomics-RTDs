@@ -7,17 +7,8 @@
 Analysis of CUT&Tag H3K27me3 dataset
 ===========================================
 
-
-**Learning outcomes**
-
-Understanding the technical differences between Cut & Run, Cut & Tag, ChIP-seq and MINUTE-ChIP.
+.. Contents
+.. ========
 
 .. contents:: 
     :local:
-
-
-Introduction
-=============
-
-
-In this tutorial...
