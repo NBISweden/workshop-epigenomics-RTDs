@@ -67,7 +67,7 @@ Wednesday (25 November 2020)
 *New methods and quantitative ChIP-seq*
 
 
-09.15 - 10.30 Recap of the previous day (**online group session**)
+09.15 - 10.30 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-03-am>`_  (**online group session**)
 
 10.30 - 11.30 **Quantitative ChIP-seq methods** (**online session**) (Simon)
 
