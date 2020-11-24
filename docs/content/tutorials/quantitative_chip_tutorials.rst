@@ -9,6 +9,6 @@ These tutorials show how to examine different advanced ChIP approaches.
    :maxdepth: 1
 
    Setting up <quantitativeChip/setup-quant-chip.rst>
-   In-situ methods: CUT&RUN and ChIP data for CTCF <quantitativeChip/public-data.rst>
-   Quantifying ChIP: Spike-in and MINUTE-ChIP <quantitativeChip/minute-data.rst>
+   CUT&RUN and ChIP data for CTCF <quantitativeChip/cut-and-run-data.rst>
+   CUT&Tag H3K27me3 data <quantitativeChip/cut-and-tag-data.rst>
 

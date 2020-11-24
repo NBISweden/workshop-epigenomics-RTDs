@@ -4,7 +4,7 @@
 
 
 ===========================================
-Analysis of a MINUTE-ChIP dataset
+Analysis of CUT&Tag H3K27me3 dataset
 ===========================================
 
 
