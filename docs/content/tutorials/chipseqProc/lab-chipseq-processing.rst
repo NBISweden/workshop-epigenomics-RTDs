@@ -211,6 +211,7 @@ We will calculate cross correlation for REST ChIP-seq in HeLa cells using a tool
 
   module load conda/latest
   module load bioinfo-tools
+  module load samtools/1.8 #samtools loaded in this order
   module load samtools/0.1.19
   conda activate /sw/courses/epigenomics/software/conda/xcor
 
