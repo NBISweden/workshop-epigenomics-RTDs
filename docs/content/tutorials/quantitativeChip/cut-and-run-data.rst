@@ -101,13 +101,14 @@ When running things on Uppmax, copy the files to your home directory:
 .. code-block:: bash
 
     cd
-    mkdir -p quant_chip/bw
-    cd quant_chip/bw
+    mkdir -p cnr_chip/bw
+    cd cnr_chip/bw
     
-    cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/*.bw .
+    cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw .
     
     # Or you can create symlinks for the bigWig files instead:
-    for i in /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/*.bw; do ln -s ${i}; done
+    for i in /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw; do ln -s ${i}; done
+
 
 
 Manual inspection of bigwig profiles with IGV
@@ -115,14 +116,27 @@ Manual inspection of bigwig profiles with IGV
 
 Besides quality control tools and exploratory analyses, it is usually a good idea to have a look at the data without any further processing to have an idea about how it looks like. It can help spot technical issues or processing problems.
 
-If you have not done it yet, download a copy of the bigWig and peaks to your local laptop:
+.. attention::
+    When running these commands, the same relative path structure is expected to be kept. So if you
+    made a directory for this tutorial, be sure you are in that directory when starting.
+
+If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.
 
 .. code-block:: bash
 
-    scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/*.bw <path/to/your/local/folder>
+    # Wherever you have this directory, it's from now on your main working directory
+	mkdir cnr_chip
+	cd cnr_chip
 
+	mkdir bw
+	mkdir peaks
 
-Open IGV and import the bigWig files. You should see something like this:
+    scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw ./bw/
+
+    scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/peaks/*.narrowPeak ./peaks/
+    
+
+Open IGV and import the bigWig files (file > load from file...). You should see something like this:
 
 
 .. image:: Figures/01_IGV.png
@@ -163,7 +177,7 @@ This is a time consuming step that would need to be done on Uppmax. Move to the 
 
 .. code-block:: bash
     
-    cd ~/quant_chip
+    cd ~/cnr_chip
 
 Load deepTools (and bioinfo-tools module beforehand):
 
@@ -191,7 +205,7 @@ Load deepTools (and bioinfo-tools module beforehand):
         ./bw/NBIS_Skene2017_K562_CTCF_ChIP_medMN.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_15s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_3m.GRCh38.bw \
-        ./bw/NBIS_Skene2017_K562_CTCF_CnR_452.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw \
         -bs 5000 -p 10 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
@@ -214,6 +228,46 @@ Load deepTools (and bioinfo-tools module beforehand):
 .. note::
     The parameter ``--outRawCounts`` is not necessary and usually not generated, as the same values are saved in ``bins_table.npz`` in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using ``head`` or ``more``.
 
+
+If something does not work properly or you are not sure if a command is going to work, is a good
+idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
+and will finish very fast. For example, if you add ``--region chr1:300000:900000`` to the previous command:
+
+.. code-block:: bash
+        
+    multiBigwigSummary bins -b \
+        ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs.GRCh38.bw \
+        ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1.GRCh38.bw \
+        ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs.GRCh38.bw \
+        ./bw/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bw \
+        ./bw/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_ChIP_hiMN.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_ChIP_loMN.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_ChIP_medMN.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_15s.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_3m.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw \
+        ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw \
+        -bs 5000 -p 10 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
+        --labels \
+        Pugacheva2020_ChIP_MonoC \
+        Pugacheva2020_ChIP_MonoN \
+        Pugacheva2020_ChIP_RabbitC \
+        Pugacheva2020_ChIP_Control \
+        Pugacheva2020_ChIP_Mix \
+        Skene2017_ChIP_hiMN \
+        Skene2017_ChIP_loMN \
+        Skene2017_ChIP_medMN \
+        Skene2017_CnR_15s \
+        Skene2017_CnR_3m \
+        Skene2017_CnR_452 \
+        Skene2017_CnR_5s \
+        Skene2017_CnR_9m \
+        --region chr1:300000:900000
+
+It will run immediately if everything is working, and will produce a tiny dataset with 120 bins.
+
 The ``.npz`` matrix is then used by ``deepTools`` to produce other plots. For our correlation plot:
 
 .. code-block:: bash
@@ -232,13 +286,28 @@ This will generate a correlation plot based on genome-wide 5kb bins.
 
 **Q: Check out how the datasets cluster - does it make sense? Is the overall clustering following the biological target/control or underlying batch effect?**
 
+.. note:: 
+    If something here does not work, you can get the bins files from: ``cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins* .``.
+
+
+
 Cumulative enrichment
 ---------------------
 
 Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
 can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_
 
-You can plot this with ``deepTools as well``. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before.
+You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
+
+.. code-block:: bash
+
+	# Or your preferred folder
+	cd ~/cnr_chip
+    mkdir bam
+    cd bam
+
+    # In this case symlink is strongly preferred, as these files are bigger
+    for i in /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/*; do ln -s ${i}; done
 
 .. attention:: 
     This is a time consuming step that is recommended to do on Uppmax. You can also leave this for later and look at the results.
@@ -247,6 +316,8 @@ You can plot them.
 
 .. code-block:: bash
     
+    cd ~/cnr_chip
+
     plotFingerprint -b \
       ./bam/NBIS_Skene2017_K562_CTCF_ChIP_hiMN.GRCh38.bam \
       ./bam/NBIS_Skene2017_K562_CTCF_ChIP_loMN.GRCh38.bam \
@@ -256,7 +327,7 @@ You can plot them.
       ./bam/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bam \
       ./bam/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bam \
       ./bam/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bam \
-      -o ./hg38/bins/fingerprint_Skene2017.pdf \
+      -o ./fingerprint_Skene2017.pdf \
       --labels \
       Skene2017_ChIP_hiMN \
       Skene2017_ChIP_loMN \
@@ -267,6 +338,10 @@ You can plot them.
       Skene2017_CnR_5s \
       Skene2017_CnR_9m \
       -p 10
+
+
+.. note::
+    Again, here the ``--region`` trick also works to plot a subset of the data.
 
 
 The resulting plot should look like:
@@ -347,15 +422,18 @@ Peaks overlap using ``intervene``
  `explain <https://intervene.readthedocs.io/en/latest/install.html>`_
 
 .. attention::
-    There is no ``intervene`` module on Uppmax. If you want to run it there, you can probably install it using your usual ``conda`` environment or `pyenv`. See how to set ``pyenv`` `here <https://www.uppmax.uu.se/support/user-guides/python-modules-guide/>`_. 
+    There is no ``intervene`` module on Uppmax. If you want to run it there, you can probably install it using your usual ``conda`` environment or `pyenv`. See how to set ``pyenv`` `here <https://www.uppmax.uu.se/support/user-guides/python-modules-guide/>`_.
 
 You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
 
 .. code-block::
     
+    # Back to your local laptop copy of the peaks and bw
+    cd cnr_chip
+
     intervene venn --in ./peaks/Pugacheva2020_ChIP_CTCF_Mono*.narrowPeak
 
-This will output:
+This will output a ``Intervene_results`` folder with a pdf file:
 
 .. image:: Figures/06_venn_1.png
 	:target: Figures/06_venn_1.png
@@ -369,15 +447,15 @@ A way of looking broadly at a set of BED files an the overlap between them is to
 
 .. code-block:: bash
 
-    intervene pairwise --in ./peaks/*.narrowPeak 
+    intervene pairwise --in ./peaks/*.narrowPeak -o pairwise_results
 
-will generate a plot like this.
+will generate a plot like this in ``./pairwise_results/``.
 
 .. image:: Figures/07_venn_pairwise.png
 	:target: Figures/07_venn_pairwise.png
 	:alt:
 
-Very different numbers of peaks. 
+Very different numbers of peaks! 
 
 **Q: How do you think the number of peaks relate to the fingerprint? (the ones with the most accentuated fingerprint are the ones showing larger amounts of peaks, however the difference is not such for some of the CnR samples. Why can that be?**
 
@@ -425,6 +503,13 @@ So another way to look at this is to plot the signal of every dataset in a given
 These heatmaps can be generated using ``seqplots``. ``seqplots`` is an ``R`` package that can be installed
 from ``Bioconductor``. It can be run as a shiny app on a browser or from ``Rstudio``. You can check
 how to use it `in this link <https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html>`_.
+
+The subset file this was created on can be copied from the `tmp` folder:
+
+.. code-block:: bash
+    
+    scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/Skene2017_CTCF_CnR_45s_small.bed .
+
 
 **Q: how does the data compare? Note the difference in scale amongst the samples. What other features are different? Which dataset would be better to identify the CTCF binding motif?**
 
