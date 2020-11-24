@@ -57,7 +57,6 @@ Next, we load the first Insv data set. We use the function `import.bed`, which r
 
 ```{r granges_intro1}
 set.seed(1234)
-setwd("/Users/orzechoj/Documents/teaching/chipSeq/course2020/genomic_overlap/")
 
 insv.2.6 <- import.bed("insv_2_6h.bed")
 insv.2.6 <- filterChromosomes(insv.2.6, organism = "dm3")
