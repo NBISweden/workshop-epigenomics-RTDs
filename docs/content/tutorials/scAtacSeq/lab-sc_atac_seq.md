@@ -62,7 +62,7 @@ if (!requireNamespace("devtools", quietly = TRUE))
 devtools::install_github("timoast/signac", ref = "develop")
 ```
 
-If you want to run this exercise on your laptop, you also need to make sure that the following libraries are installed `Seurat`, `ggplot2`, `patchwork` and `TFBSTools`.
+If you want to run this exercise on your laptop, you also need to make sure that all libraries loaded below are installed, as well as all dependencies.
 
 ![George Seurat](Seurat-Gravelines-Annonciade.jpg)
 
