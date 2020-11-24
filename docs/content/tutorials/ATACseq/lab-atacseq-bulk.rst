@@ -226,11 +226,6 @@ Let's try again with properly prepared bam file, i.e such that the header contai
 	# we need indexed bam
 	samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
 
-	# change bam header to contain only chr22
-	nano header
-	chr22	50818468
-	(ctrl-x to close the file, y to save it)
-
 	#subset bam and change header
 	samtools view -h SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam chr22 | \
    		grep -P "@HD|@PG|chr22" | samtools view -Shbo SRR891268_hg38.chr22_rh.bam
