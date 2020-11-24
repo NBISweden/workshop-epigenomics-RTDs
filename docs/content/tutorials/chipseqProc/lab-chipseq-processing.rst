@@ -220,6 +220,7 @@ We will calculate cross correlation for REST ChIP-seq in HeLa cells using a tool
   conda deactivate
 
 
+Please do not forget to deactivate the conda environment at this point, as it may influence other software used downstream.
 
 This step takes a few minutes and ``phantompeakqualtools`` prints messages as it progresses through different stages of the analysis. When completed, have a look at the output file ``xcor_metrics_hela.txt``. The metrics file is tabulated and the fields are as below with the one in bold to be paid special attention to:
 
