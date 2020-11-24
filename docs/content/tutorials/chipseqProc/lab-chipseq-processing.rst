@@ -352,6 +352,7 @@ Second, **reads mapped to ENCODE blacklisted regions** in accession `ENCFF000KJP
 
 .. code-block:: bash
 	
+	module unload python
 	module load NGSUtils/0.5.9
 
 	bamutils filter ENCFF000PED.chr12.rmdup.bam \
