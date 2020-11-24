@@ -28,7 +28,7 @@ Monday (23 November 2020)
 
 13.00 - 13.30 Exercises (*online support*)
 
-13.30 - 15.00 `Methylation methods & technologies <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/methylation-jn.pdf>`_ (**online session**)  (Jessica)
+13.30 - 15.00 `Methylation methods & technologies <../_static/slides-methylation-jn-2020.pdf>`_ (**online session**)  (Jessica)
 
 15.00 - 15.15 **Methylation Exercises Overview II: Methylation Sequencing**  (**online session**) (Vincent)
 
@@ -51,7 +51,7 @@ Tuesday (24 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13.00 - 13.30 `Calling broad peaks <../_static/slides-broadpeaks-as-2020.pdf>`_, `differential analysis <https://github.com/NBISweden/workshop-epigenomics/blob/master/talks/diff.pdf>`_ , `Motif analysis <../_static/slides-motiffinding20202.pdf>`_ (**online session**)  (Agata, Olga, Jakub)
+13.00 - 13.30 `Calling broad peaks <../_static/slides-broadpeaks-as-2020.pdf>`_, `differential analysis <../_static/slides-de-od-2020.pdf>`_ , `Motif analysis <../_static/slides-motiffinding20202.pdf>`_ (**online session**)  (Agata, Olga, Jakub)
 
 13.30 - 15.30 Exercises (*online support*)
 
