@@ -54,13 +54,13 @@ When running things on Uppmax, copy the files to your home directory:
 .. code-block:: bash
 
     cd
-    mkdir -p quant_chip/bw
-    cd quant_chip/bw
+    mkdir -p cnt_chip/bw
+    cd cnt_chip/bw
     
-    cp /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/*.bw .
+    cp /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/bw/*.bw .
     
     # Or you can create symlinks for the bigWig files instead:
-    for i in /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/*.bw; do ln -s ${i}; done
+    for i in /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/bw/*.bw; do ln -s ${i}; done
 
 
 Manual inspection of bigWig files using IGV
@@ -89,6 +89,11 @@ Let’s look more systematically at known H3K27me3 peaks. We are using a publish
 These heatmaps can be generated using ``seqplots``. ``seqplots`` is an ``R`` package that can be installed
 from ``Bioconductor``. It can be run as a shiny app on a browser or from ``Rstudio``. You can check
 how to use it `in this link <https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html>`_.
+
+.. note:: 
+    Be sure to mark `custom` as genome when uploading bigWig and BED files to `seqplots`. There may be
+    some incompatibility between hg38 versions in this case.
+
 
 **Q: While showing the highest signal to noise (note the scale of the heatmap 0-1000!). Could there be a problem with CUT&Tag?**
 
