@@ -185,7 +185,16 @@ Genrich can apply the read shifts when ATAC-seq mode ``-j`` is selected.
 	mkdir ../genrich
 	cd ../genrich
 
-	samtools sort -n -o SRR891268_hg38.nsort.bam -T sort.tmp ../../results/bam/SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+	# we link the input bam file
+	ln -s /sw/courses/epigenomics/ATACseq_bulk/results/bam/SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
+	# in case not already loaded
+	module load bioinfo-tools
+	module load samtools/1.8
+
+	# sort the bam file by read name
+	samtools sort -n -o SRR891268_hg38.nsort.bam -T sort.tmp SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
 
 	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t SRR891268_hg38.nsort.bam  -o SRR891268_genrich.narrowPeak
 
@@ -193,12 +202,12 @@ Genrich can apply the read shifts when ATAC-seq mode ``-j`` is selected.
 The output file produced by Genrich is in `ENCODE narrowPeak format <https://genome.ucsc.edu/FAQ/FAQformat.html#format12>`_, listing the genomic coordinates of each peak called and various statistics.
 
 .. code-block:: bash
-
+	
 	chr start end name score strand signalValue pValue qValue peak
 
 	signalValue - Measurement of overall (usually, average) enrichment for the region.
 	pValue - Measurement of statistical significance (-log10). Use -1 if no pValue is assigned.
-    qValue - Measurement of statistical significance using false discovery rate (-log10). Use -1 if no qValue is assigned.
+	qValue - Measurement of statistical significance using false discovery rate (-log10). Use -1 if no qValue is assigned.
 
 How many peaks were detected?
 
@@ -213,11 +222,9 @@ Let's try again with properly prepared bam file, i.e such that the header contai
 
 .. code-block:: bash
 
+	
 	# we need indexed bam
-	cd ../bam
 	samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
-
-	cd ../genrich
 
 	# change bam header to contain only chr22
 	nano header
@@ -225,11 +232,13 @@ Let's try again with properly prepared bam file, i.e such that the header contai
 	(ctrl-x to close the file, y to save it)
 
 	#subset bam and change header
-	samtools view ../bam/SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam  chr22 | samtools view -bo SRR891268_hg38.sort.chr22_rh.bam -t header -
+	samtools view -h SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam chr22 | \
+   		grep -P "@HD|@PG|chr22" | samtools view -Shbo SRR891268_hg38.chr22_rh.bam
 
-	# sort by name
-	samtools sort -n -o SRR891268_hg38.nsort.chr22_rh.bam -T sort.tmp SRR891268_hg38.sort.chr22_rh.bam
 
+	# sort by read name
+	samtools sort -n -o SRR891268_hg38.nsort.chr22_rh.bam -T sort.tmp SRR891268_hg38.chr22_rh.bam
+	
 	# call peaks
 	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t SRR891268_hg38.nsort.chr22_rh.bam  -o SRR891268_chr22_genrich.narrowPeak
 
