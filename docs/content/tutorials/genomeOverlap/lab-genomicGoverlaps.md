@@ -6,7 +6,14 @@
 
 - To compute statistical significance of overlaps between two sets of genomic ranges using randomization tests, and to understand some of the pitfalls when interpreting stuch tests.
 
-
+### Table of contents
+  * [Setting up](#setting-up)
+  * [Introduction to genomic ranges](#introduction-to-genomic-ranges)
+    + [Operations on a single GRagnes object](#operations-on-a-single-gragnes-object)
+    + [Comparing GRanges](#comparing-granges)
+  * [Statistical significance of overlaps](#statistical-significance-of-overlaps)
+  * [Example with insulator elements](#example-with-insulator-elements)
+    + [Different sampling method](#different-sampling-method)
 
 ## Setting up
 
@@ -384,12 +391,4 @@ round(overlapZ,2)
 useCols <- colorRampPalette(c("white", "red"))(100)
 pheatmap(overlapP, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main="P-values")
 pheatmap(overlapZ, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main="z-scores")
-```
-
-
-## Session information
-
-```{r session_info}
-R.Version() 
-sessionInfo(package = NULL)
 ```
