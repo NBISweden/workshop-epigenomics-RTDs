@@ -16,11 +16,11 @@ Monday (23 November 2020)
 
 09.15 - 09.30 `Welcome <https://nbisweden.github.io/workshop-epigenomics/session-welcome/welcome>`_ (**online session**) (Olga, Agata)
 
-09.30 - 09.45 **`Introduction <../_static/slides-intro-meths-as-2020.pdf>`_ to methylation** (**online session**)  (Vincent)
+09.30 - 09.45 `Introduction <../_static/slides-intro-meths-as-2020.pdf>`_ to methylation (**online session**)  (Vincent)
 
 09.45 - 10.15 Computer exercises set-up (**online support**)
 
-10.15 - 10.30 **Methylation Exercises Overview I: `Array workflow <../_static/slides-array-meth-as-2020.pdf>`_** (**online session**)  (Vincent)
+10.15 - 10.30 Methylation Exercises Overview I: `Array workflow <../_static/slides-array-meth-as-2020.pdf>`_ (**online session**)  (Vincent)
 
 10.30 - 12.00 Exercises (*online support*)
 
@@ -30,7 +30,7 @@ Monday (23 November 2020)
 
 13.30 - 15.00 `Methylation methods & technologies <../_static/slides-methylation-jn-2020.pdf>`_ (**online session**)  (Jessica)
 
-15.00 - 15.15 **Methylation Exercises Overview II: `Methylation Sequencing <../_static/slides-bs-meth-as-2020.pdf>`_**  (**online session**) (Vincent)
+15.00 - 15.15 Methylation Exercises Overview II: `Methylation Sequencing <../_static/slides-bs-meth-as-2020.pdf>`_  (**online session**) (Vincent)
 
 15.15 - 17.00 Exercises (*online support*)
 
