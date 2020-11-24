@@ -364,7 +364,7 @@ Clearly, the CUT&Run data scores better by QC compared to the CTCF ChIP presente
       ./bam/NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs.GRCh38.bam \
       ./bam/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bam \
       ./bam/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bam \
-      -o ./hg38/bins/fingerprint_Pugacheva2020.pdf \
+      -o ./fingerprint_Pugacheva2020.pdf \
       --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC     Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
       -p 10
 
