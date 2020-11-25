@@ -81,7 +81,7 @@ Wednesday (25 November 2020)
 
 16.00 - 17.00 Exercises (*offline*)
 
-17.00 - 17.30 Test yourself (*offline*)
+17.00 - 17.30 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLScrSAyzu4hUvi_ODEM_0snwgrBp0EsdbYle_gbhwD_C99sGlw/viewform?usp=sf_link>`_ (*offline*)
 
 
 
