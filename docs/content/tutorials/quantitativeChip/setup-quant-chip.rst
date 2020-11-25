@@ -40,4 +40,4 @@ However, I recommend to download the bigWig and peak files and look at them loca
 IGV locally rather than remote. ``seqplots`` is also easier to run locally.
 
 .. note:: 
-    Computationally demanding steps have been precalculated and resulting plots are shown. Some of them can optionally be run again (such as ``deepTools`` computations. In those cases it will be noted within the corresponding section. 
+    Computationally demanding steps have been precalculated and resulting plots are shown. Some of them can optionally be run again (such as ``deepTools`` computations). In those cases it will be noted within the corresponding section. 

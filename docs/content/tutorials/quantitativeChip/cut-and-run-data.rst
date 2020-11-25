@@ -125,11 +125,11 @@ If you have not done it yet, download a copy of the bigWig and peaks to your loc
 .. code-block:: bash
 
     # Wherever you have this directory, it's from now on your main working directory
-	mkdir cnr_chip
-	cd cnr_chip
+    mkdir cnr_chip
+    cd cnr_chip
 
-	mkdir bw
-	mkdir peaks
+    mkdir bw
+    mkdir peaks
 
     scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw ./bw/
 
@@ -179,7 +179,7 @@ This is a time consuming step that would need to be done on Uppmax. Move to the 
     
     cd ~/cnr_chip
 
-Load deepTools (and bioinfo-tools module beforehand):
+Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
 
 .. code-block:: bash
     
@@ -229,9 +229,11 @@ Load deepTools (and bioinfo-tools module beforehand):
     The parameter ``--outRawCounts`` is not necessary and usually not generated, as the same values are saved in ``bins_table.npz`` in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using ``head`` or ``more``.
 
 
-If something does not work properly or you are not sure if a command is going to work, is a good
+If something does not work properly or you are not sure if a command is going to work, it is a good
 idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
-and will finish very fast. For example, if you add ``--region chr1:300000:900000`` to the previous command:
+and will run faster (failing fast is a good philosophy that will save you loads of time on the computer). 
+
+For instance, if you add ``--region chr1:300000:900000`` to the previous command:
 
 .. code-block:: bash
         
@@ -295,14 +297,14 @@ Cumulative enrichment
 ---------------------
 
 Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
-can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_
+can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_.
 
 You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
 
 .. code-block:: bash
 
-	# Or your preferred folder
-	cd ~/cnr_chip
+    # Or your preferred folder
+    cd ~/cnr_chip
     mkdir bam
     cd bam
 
@@ -395,7 +397,7 @@ Again, it is usually a good idea to inspect visually the files, so you can have 
 Number of peaks per sample
 --------------------------
 
-A simple `wc` count per peak file allows you to quickly check how many peaks you got:
+A simple ``wc`` count per peak file allows you to quickly check how many peaks you got:
 
 .. code-block:: bash
 
@@ -415,11 +417,10 @@ A simple `wc` count per peak file allows you to quickly check how many peaks you
     1611 Skene2017_CTCF_ChIP_hiMN.narrowPeak
 
 
-Peaks overlap using ``intervene``
-------------------------------------
+Peaks overlap using intervene
+------------------------------
 
-``intervene`` is an easy to use tool to look for overlaps between BED files. It relies on ``bedtools``, but saves some work when looking at different sets of files. You can install it using ``pip`` as they 
- `explain <https://intervene.readthedocs.io/en/latest/install.html>`_
+``intervene`` is an easy to use tool to look for overlaps between BED files. It relies on ``bedtools``, but saves some work when looking at different sets of files. You can install it using ``pip`` as they `explain <https://intervene.readthedocs.io/en/latest/install.html>`_.
 
 .. attention::
     There is no ``intervene`` module on Uppmax. If you want to run it there, you can probably install it using your usual ``conda`` environment or `pyenv`. See how to set ``pyenv`` `here <https://www.uppmax.uu.se/support/user-guides/python-modules-guide/>`_.
