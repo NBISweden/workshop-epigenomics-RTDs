@@ -11,13 +11,13 @@ Course is run with Zoom and Zulip
 
 **Zoom**
 
-* Zoom link [https://stockholmuniversity.zoom.us/j/62068542218](https://stockholmuniversity.zoom.us/j/62068542218)
-* password sent via email
+* Zoom link: https://stockholmuniversity.zoom.us/j/62068542218
+* Password sent via email
 
 **Zulip**
 
-* Zulip [https://workshop-epigenomics.zulipchat.com](https://workshop-epigenomics.zulipchat.com)
-* invitation sent via email
+* Zulip: https://workshop-epigenomics.zulipchat.com
+* Invitation sent via email
 
 We have created
 
