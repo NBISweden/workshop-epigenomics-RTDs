@@ -130,6 +130,6 @@ Friday (27 November 2020)
 
 13.15 - 14.30 Exercises (*online support*)
 
-14.30 - 15.00 Test yourself (*offline*)
+14.30 - 15.00 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLSceZFCuv6WrHd6-X1wSLBZLhvSMMsdzcPn5cm2CG1HzQzqNeQ/viewform?usp=sf_link>`_ (*offline*)
 
 15.00 - 16.00 Course wrap-up (*online session*)
