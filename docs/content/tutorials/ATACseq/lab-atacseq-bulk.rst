@@ -257,8 +257,11 @@ We need to convert BAM file to BEDPE to correctly apply read shifts to center fr
 	macs2 callpeak -t SRR891268_22_pe.bed -n SRR891268_macs_chr22_bedpe -f BEDPE -g 50818468 --nomodel --extsize 100 --shift -50 --call-summits
 
 
+We chose genome size ``-g 50818468`` - because it is the length of chromosome 22, which is the only one included in the input file.
 
 Please note that we selected ``--extsize 100``  to match the behaviour of Genrich. Normally ``--extsize 200`` would be selected. ``--shift`` needs to be minus half of the size of ``--extsize`` to be centered on the 5’, so normally -100. ``--shift -100 --extsize 200`` will amplify the cutting sites' enrichment from ATAC-seq data. So in the end, the peak is where Tn5 transposase likes to attack.
+
+
 
 
 How many peaks were detected?
