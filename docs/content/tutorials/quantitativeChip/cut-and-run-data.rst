@@ -179,7 +179,7 @@ This is a time consuming step that would need to be done on Uppmax. Move to the 
     
     cd ~/cnr_chip
 
-Load deepTools (and bioinfo-tools module beforehand):
+Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
 
 .. code-block:: bash
     
@@ -229,9 +229,11 @@ Load deepTools (and bioinfo-tools module beforehand):
     The parameter ``--outRawCounts`` is not necessary and usually not generated, as the same values are saved in ``bins_table.npz`` in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using ``head`` or ``more``.
 
 
-If something does not work properly or you are not sure if a command is going to work, is a good
+If something does not work properly or you are not sure if a command is going to work, it is a good
 idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
-and will finish very fast. For example, if you add ``--region chr1:300000:900000`` to the previous command:
+and will run faster (failing fast is a good philosophy that will save you loads of time on the computer). 
+
+For instance, if you add ``--region chr1:300000:900000`` to the previous command:
 
 .. code-block:: bash
         
@@ -295,7 +297,7 @@ Cumulative enrichment
 ---------------------
 
 Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
-can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_
+can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_.
 
 You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
 
