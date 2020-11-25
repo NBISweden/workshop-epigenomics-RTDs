@@ -542,10 +542,6 @@ It is often informative to plot the ATAC-seq signal for a particular genomic reg
 
 
 ```
-# set plotting order
-levels(pbmc) <- c('CD14 Mono', 'CD4 Memory (DN T)', 'CD4/8 Naive', 'CD8 Effector', 'pre-B/pro-B', 'NK Dim', 'CD16 Mono', 'DC')
-
-
 CoveragePlot(
 	object = pbmc,
 	region = rownames(da_peaks)[1],
