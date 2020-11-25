@@ -59,7 +59,8 @@ You can now load the version of R for which we tested this class along with othe
 
 	module load bioinfo-tools
 	module load samtools/1.8
-
+	module load conda/latest
+	
 	conda activate /sw/courses/epigenomics/software/conda/v8
 
 	R
