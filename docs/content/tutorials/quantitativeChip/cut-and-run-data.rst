@@ -401,20 +401,20 @@ A simple ``wc`` count per peak file allows you to quickly check how many peaks y
 
 .. code-block:: bash
 
-    94019 Pugacheva2020_ChIP_Mix_of_CTCF_PolyC_Abs.narrowPeak
-    65837 Pugacheva2020_ChIP_CTCF_MonoC_Abs.narrowPeak
-    50420 Pugacheva2020_ChIP_CTCF_RabbitC_Abs.narrowPeak
-    40077 Pugacheva2020_ChIP_CTCF_MonoN_Abs_Rep1.narrowPeak
-    828 Pugacheva2020_ChIP_IGG_Abs_Control.narrowPeak
+    94019 NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs_peaks.narrowPeak
+    65837 NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs_peaks.narrowPeak
+    50420 NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs_peaks.narrowPeak
+    40077 NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1_peaks.narrowPeak
+    828   NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control_peaks.narrowPeak
     
-    67164 Skene2017_CTCF_CnR_9m.narrowPeak
-    52647 Skene2017_CTCF_CnR_3m.narrowPeak
-    34678 Skene2017_CTCF_CnR_452.narrowPeak
-    3782 Skene2017_CTCF_ChIP_loMN.narrowPeak
-    3348 Skene2017_CTCF_ChIP_medMN.narrowPeak
-    2897 Skene2017_CTCF_CnR_15s.narrowPeak
-    2413 Skene2017_CTCF_CnR_5s.narrowPeak
-    1611 Skene2017_CTCF_ChIP_hiMN.narrowPeak
+    67164 NBIS_Skene2017_K562_CTCF_CnR_9m_peaks.narrowPeak
+    52647 NBIS_Skene2017_K562_CTCF_CnR_3m_peaks.narrowPeak
+    34678 NBIS_Skene2017_K562_CTCF_CnR_452_peaks.narrowPeak
+    3782  NBIS_Skene2017_K562_CTCF_ChIP_loMN_peaks.narrowPeak
+    3348  NBIS_Skene2017_K562_CTCF_ChIP_medMN_peaks.narrowPeak
+    2897  NBIS_Skene2017_K562_CTCF_CnR_15s_peaks.narrowPeak
+    2413  NBIS_Skene2017_K562_CTCF_CnR_5s_peaks.narrowPeak
+    1611  NBIS_Skene2017_K562_CTCF_ChIP_hiMN_peaks.narrowPeak
 
 
 Peaks overlap using intervene
@@ -432,7 +432,7 @@ You can generate venn diagrams (pairwise or more). For example, we may want to l
     # Back to your local laptop copy of the peaks and bw
     cd cnr_chip
 
-    intervene venn --in ./peaks/Pugacheva2020_ChIP_CTCF_Mono*.narrowPeak
+    intervene venn --in ./peaks/NBIS_Pugacheva2020_K562_ChIP_CTCF_Mono*.narrowPeak
 
 This will output a ``Intervene_results`` folder with a pdf file:
 
