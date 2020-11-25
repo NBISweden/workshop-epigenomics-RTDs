@@ -122,9 +122,9 @@ Friday (27 November 2020)
 
 10.45 - 11.00 Break
 
-11.00 - 11.40 **Data integration** (Jakub) (**online session**)
+11.00 - 11.45 **Data integration** (Jakub) (**online session**)
 
-11.40 - 13.00 lunch (*offline*)
+11.45 - 13.00 lunch (*offline*)
 
 13.00 - 13.15 **Introduction to exercises** (**online session**)
 
