@@ -16,12 +16,35 @@ This tutorial is included from `previous workshop <https://github.com/NBISweden/
 Requirements
 ============
 
+Uppmax
+--------
+
 - R 3.5.0 (2018-04-23) or newer
 
 - Bioconductor packages:
 	
 	- ChIPSeqSpike
 	- BSgenome.Hsapiens.UCSC.hg38
+
+
+Local
+-------
+
+- Bioconductor packages:
+	
+	- ChIPSeqSpike
+	- BSgenome.Hsapiens.UCSC.hg38
+
+
+The lab was tested on R 4.0.0. (R run from the console, not in R Studio). The packages were installed from Bioconductor version: Release (3.12).
+
+.. code-block: R
+
+	if (!requireNamespace("BiocManager", quietly = TRUE))
+	install.packages("BiocManager")
+
+	BiocManager::install("ChIPSeqSpike")
+	BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
 
 
 Data
@@ -86,8 +109,18 @@ All files necessary to execute the code in ``R`` can be copied from Rackham from
 
 ``/sw/courses/epigenomics/quantitative_chip_simon/exospike.tar.gz``
 
-
 After copying the files please decompress the archive and note the path to folder ``/chip_exo_spike`` on your local system.
+
+
+For local setup you can copy and extract files:
+
+.. code-block:
+	
+	scp <user>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/exospike.tar.gz .
+	
+	tar -xzf exospike.tar.gz 
+
+
 
 Fingerprint plots
 =================
