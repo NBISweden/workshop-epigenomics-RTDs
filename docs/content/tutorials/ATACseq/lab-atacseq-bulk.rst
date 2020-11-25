@@ -227,8 +227,7 @@ Let's try again with properly prepared bam file, i.e such that the header contai
 	samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
 
 	#subset bam and change header
-	samtools view -h SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam chr22 | \
-   		grep -P "@HD|@PG|chr22" | samtools view -Shbo SRR891268_hg38.chr22_rh.bam
+	samtools view -h SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam chr22 | grep -P "@HD|@PG|chr22" | samtools view -Shbo SRR891268_hg38.chr22_rh.bam
 
 
 	# sort by read name
@@ -252,10 +251,10 @@ We need to convert BAM file to BEDPE to correctly apply read shifts to center fr
 	cd ../macs
 
 	module load BEDTools/2.25.0
-	bedtools bamtobed -bedpe -i ../../results/genrich/SRR891268_hg38.nsort.bam >SRR891268.pe.bed
+	bedtools bamtobed -bedpe -i ../genrich/SRR891268_hg38.nsort.chr22_rh.bam >SRR891268_22_pe.bed
 
 	module load MACS/2.2.6
-	macs2 callpeak -t SRR891268.bed -n SRR891268_macs_bedpe -f BEDPE -g 2.7e9 --nomodel --extsize 100 --shift -50 --call-summits --keep-dup all
+	macs2 callpeak -t SRR891268_22_pe.bed -n SRR891268_macs_chr22_bedpe -f BEDPE -g 50818468 --nomodel --extsize 100 --shift -50 --call-summits
 
 
 
@@ -266,8 +265,8 @@ How many peaks were detected?
 
 .. code-block:: bash
 	
-	wc -l SRR891268_macs_bedpe_peaks.narrowPeak
-	2975 SRR891268_macs_bedpe_peaks.narrowPeak
+	wc -l SRR891268_macs_chr22_bedpe_peaks.narrowPeak
+	126 SRR891268_macs_chr22_bedpe_peaks.narrowPeak
 
 
 Comparing results of MACS and Genrich
@@ -278,23 +277,22 @@ How many peaks actually overlap?
 .. code-block:: bash
 	
 	cd ..
-	module load BEDTools/2.25.0
 
-	bedtools intersect -a macs/SRR891268_macs_bedpe_peaks.narrowPeak  -b genrich/SRR891268_chr22_genrich.narrowPeak  -f 0.50 -r >peaks_common.bed
+	bedtools intersect -a macs/SRR891268_macs_chr22_bedpe_peaks.narrowPeak  -b genrich/SRR891268_chr22_genrich.narrowPeak  -f 0.50 -r >peaks_common.bed
 
 	wc -l peaks_common.bed 
-	#361 peaks_common.bed
+	125 peaks_common.bed
 
-Inspetion of the peak tracks in IGV reveals small differences in peaks called by MACS and Genrich. The very shallow signal in this example does not produce peaks of good quality. Usually MACS tends to detect many shorter peaks whereas Genrich tends to merge these shorter peaks into longer intervals. 
+Inspetion of the peak tracks in IGV reveals small differences in peaks called by MACS and Genrich. The very shallow signal in this example does not produce peaks of good quality by neither method. Usually MACS tends to detect many shorter peaks whereas Genrich tends to merge these shorter peaks into longer intervals. 
 
-Below is zoom on ``chr22:49,917,416-49,919,778`` one of the locations where both MACS and Genrich found a peak.
+Below is zoom on ``chr22:46,033,366-46,038,084`` one of the locations where both MACS and Genrich found a peak.
 
 
 .. list-table:: Figure 5. Visalisation of read alignments and peaks detected by Genrich and MACS.
    :widths: 60
    :header-rows: 0
 
-   * - .. image:: figures/igv1.png
+   * - .. image:: figures/igv2.png
    			:width: 600px
 
 
