@@ -91,7 +91,7 @@ Thursday (26 November 2020)
 *Nf-core pipelines: Methylseq, Chipseq, Atacseq*
 
 
-09.15 - 10.00 Recap of the previous day (**online group session**)
+09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-04-am>`_ (**online group session**)
 
 10:00 - 10:40 **Introduction to Nextflow** (**online session**) (Phil)
 
@@ -105,7 +105,7 @@ Thursday (26 November 2020)
 
 15.30 - 17.00 Exercises (*offline*)
 
-17.00 - 17.30 Test yourself (*offline*)
+17.00 - 17.30 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLSd0cQe3iLkMha8Am7jxVDzIb4iCI-R16D92MMMXV3NQ8q-sJw/viewform?usp=sf_link>`_ (*offline*)
 
 
 
@@ -116,19 +116,19 @@ Friday (27 November 2020)
 *Integrative and single cell omics*
 
 
-09.15 - 09.30 Recap of the previous day (**online group session**)
+09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-05-am>`_ (**online group session**)
 
-09.30 - 10.20 **scATAC-seq / scChIP-seq** (Jakub) (**online group session**)
+10.00 - 10.45 **scATAC-seq / scChIP-seq** (Jakub) (**online group session**)
 
-10.20 - 10.30 Break
+10.45 - 11.00 Break
 
-10.30 - 11.30 **Data integration** (Jakub) (**online session**)
+11.00 - 11.40 **Data integration** (Jakub) (**online session**)
 
-11.30 - 13.00 lunch (*offline*)
+11.40 - 13.00 lunch (*offline*)
 
-13.00 - 13.20 **Introduction to exercises** (**online session**)
+13.00 - 13.15 **Introduction to exercises** (**online session**)
 
-13.20 - 14.30 Exercises (*online support*)
+13.15 - 14.30 Exercises (*online support*)
 
 14.30 - 15.00 Test yourself (*offline*)
 
