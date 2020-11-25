@@ -124,6 +124,11 @@ While running commands (in ``R``) feel free to have a look at `ChIPQC package do
   	This is because the html report cannot be open in a browser directly from Rackham. You can download it to your computer and view it locally.
 
 
+You need to copy the report to your local computer (copy the entire ``ChIPQCreport`` folder):
+
+.. code-block:: bash
+	
+	scp -r <USER>@rackham.uppmax.uu.se:path/to/ChIPQCreport .
 
 Examine the html report.
 
