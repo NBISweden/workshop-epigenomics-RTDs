@@ -38,7 +38,7 @@ Local
 
 The lab was tested on R 4.0.0. (R run from the console, not in R Studio). The packages were installed from Bioconductor version: Release (3.12).
 
-.. code-block: R
+.. code-block:: R
 
 	if (!requireNamespace("BiocManager", quietly = TRUE))
 	install.packages("BiocManager")
@@ -114,7 +114,7 @@ After copying the files please decompress the archive and note the path to folde
 
 For local setup you can copy and extract files:
 
-.. code-block:
+.. code-block:: bash
 	
 	scp <user>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/exospike.tar.gz .
 	
