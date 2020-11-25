@@ -263,7 +263,7 @@ We can also analyze motif occurence in the peaks, to see how this varies between
 
 #### Identifying enriched motifs
 
-First we will look at motifs that are enriched as set of peaks, e.g. in peaks that show differential accessibility between two cell types. *Do you notice anything particular about these motifs?*
+First we will look at motifs that are enriched in set of peaks, e.g. in peaks that show differential accessibility between two cell types. *Do you notice anything particular about these motifs?*
 
 
 
