@@ -361,7 +361,7 @@ FeaturePlot(
 	pt.size = 0.1
 )
 
-# Look for motifs that what differential activity between clusters 0 and 1. 
+# Look for motifs that have differential activity between clusters 0 and 1. 
 differential.activity <- FindMarkers(
 	object = pbmc,
 	ident.1 = '0',
