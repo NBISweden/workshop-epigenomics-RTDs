@@ -47,7 +47,7 @@ ln -s /sw/courses/epigenomics/sc_atac_seq/* .
 
 If you run this on some other system, you can copy the files with `scp`.
 
-Now, start `R` or `rstudio`, and run these commands to install some additional libraries are installed. We need to install the latest version of Signac, which takes a while.
+Now, start `R` or `rstudio`, and run these commands to install some additional libraries. We need to install the latest version of Signac, which takes a while.
 
 
 ```
