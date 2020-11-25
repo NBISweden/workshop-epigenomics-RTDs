@@ -99,7 +99,7 @@ Thursday (26 November 2020)
 
 11.30 - 13.00 lunch (*offline*)
 
-13:00 - 13:45 **Introduction to the ChIP-seq and ATAC-seq pipelines** (**online session**) (Harshil)
+13:00 - 13:45 `Introduction to the ChIP-seq and ATAC-seq pipelines <../_static/HarshilPatel_NBIS_Epigenomics_Workshop.pdf>`_ (**online session**) (Harshil)
 
 13.45 - 15.30 Exercises (*online support*)
 
