@@ -218,12 +218,11 @@ beaf32 <- import.gff3("beaf32.gff3")
 cp190 <- import.gff3("cp190.gff3")
 ctcf.1 <- import.gff3("ctcf.gff3")
 
-allDataSets <- list(
-	insv.2.6=insv.2.6,
-	insv.6.12=insv.6.12,
-	beaf32=beaf32,
-	cp190=cp190,
-	ctcf.1=ctcf.1)
+allDataSets <- list(insv.2.6=insv.2.6,
+                    insv.6.12=insv.6.12,
+		    beaf32=beaf32,
+		    cp190=cp190,
+		    ctcf.1=ctcf.1)
 
 # These data sets are from different studies, and on different formats. 
 # We have to make sure that they are all on the same format, so that all chromosome names match.
@@ -302,7 +301,13 @@ nTimes <- 50
 for(i in 1:length(allDataSets)){
 	for(j in 1:length(allDataSets)){
 		if(i<j){
-			permRes <- overlapPermTest(A=allDataSets[[i]], B=allDataSets[[j]], ntimes=nTimes, alternative="greater", genome=getGenome(dm3), mc.set.seed=FALSE, verbose=FALSE)
+			permRes <- overlapPermTest(A=allDataSets[[i]], 
+                                                   B=allDataSets[[j]], 
+						   ntimes=nTimes, 
+						   alternative="greater", 
+						   genome=getGenome(dm3), 
+						   mc.set.seed=FALSE, 
+						   verbose=FALSE)
 			overlapP[i,j] <- permRes$numOverlaps$pval
 			overlapZ[i,j] <- permRes$numOverlaps$zscore
 		}
@@ -363,10 +368,13 @@ nTimes <- 500
 for(i in 1:length(allDataSets)){
 	for(j in 1:length(allDataSets)){
 		if(i<j){
-			permRes <- permTest(A=allDataSets[[i]], B=allDataSets[[j]], ntimes=nTimes,
-													randomize.function=resampleRegions, universe=us,
-													alternative="greater", evaluate.function=numOverlaps, 
-													count.once=TRUE, mc.set.seed=FALSE, mc.cores=4)
+			permRes <- permTest(A=allDataSets[[i]], 
+			                    B=allDataSets[[j]], 
+					    ntimes=nTimes,
+					    randomize.function=resampleRegions, 
+					    universe=us,
+					    alternative="greater", evaluate.function=numOverlaps,
+					    count.once=TRUE, mc.set.seed=FALSE, mc.cores=4)
 			overlapP[i,j] <- permRes$numOverlaps$pval
 			overlapZ[i,j] <- permRes$numOverlaps$zscore
 		}
