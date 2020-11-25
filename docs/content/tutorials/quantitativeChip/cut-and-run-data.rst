@@ -125,11 +125,11 @@ If you have not done it yet, download a copy of the bigWig and peaks to your loc
 .. code-block:: bash
 
     # Wherever you have this directory, it's from now on your main working directory
-	mkdir cnr_chip
-	cd cnr_chip
+    mkdir cnr_chip
+    cd cnr_chip
 
-	mkdir bw
-	mkdir peaks
+    mkdir bw
+    mkdir peaks
 
     scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw ./bw/
 
@@ -301,8 +301,8 @@ You can plot this with ``deepTools`` as well. This requires the BAM files and ta
 
 .. code-block:: bash
 
-	# Or your preferred folder
-	cd ~/cnr_chip
+    # Or your preferred folder
+    cd ~/cnr_chip
     mkdir bam
     cd bam
 
@@ -395,7 +395,7 @@ Again, it is usually a good idea to inspect visually the files, so you can have 
 Number of peaks per sample
 --------------------------
 
-A simple `wc` count per peak file allows you to quickly check how many peaks you got:
+A simple ``wc`` count per peak file allows you to quickly check how many peaks you got:
 
 .. code-block:: bash
 
@@ -415,11 +415,10 @@ A simple `wc` count per peak file allows you to quickly check how many peaks you
     1611 Skene2017_CTCF_ChIP_hiMN.narrowPeak
 
 
-Peaks overlap using ``intervene``
-------------------------------------
+Peaks overlap using intervene
+------------------------------
 
-``intervene`` is an easy to use tool to look for overlaps between BED files. It relies on ``bedtools``, but saves some work when looking at different sets of files. You can install it using ``pip`` as they 
- `explain <https://intervene.readthedocs.io/en/latest/install.html>`_
+``intervene`` is an easy to use tool to look for overlaps between BED files. It relies on ``bedtools``, but saves some work when looking at different sets of files. You can install it using ``pip`` as they `explain <https://intervene.readthedocs.io/en/latest/install.html>`_.
 
 .. attention::
     There is no ``intervene`` module on Uppmax. If you want to run it there, you can probably install it using your usual ``conda`` environment or `pyenv`. See how to set ``pyenv`` `here <https://www.uppmax.uu.se/support/user-guides/python-modules-guide/>`_.

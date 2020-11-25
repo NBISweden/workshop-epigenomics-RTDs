@@ -112,7 +112,7 @@ Disclaimer
 Please be aware that this is an experimental code, and as such does not represent any golden standard for analyses of this type. This is my exploration of the topic of using exogenous chromatic spike for ChIP-seq. I will aim to keep updating it with further steps of the analysis, once I get there.
 
 
-Using `ChIPSeqSpike` for ChIPseq signal scaling
+Using ``ChIPSeqSpike`` for ChIPseq signal scaling
 ==================================================
 
 This workflow is based on this `repository <https://github.com/descostesn/BiocNYC-ChIPSeqSpike>`_.
