@@ -133,3 +133,5 @@ Friday (27 November 2020)
 14.30 - 15.00 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLSceZFCuv6WrHd6-X1wSLBZLhvSMMsdzcPn5cm2CG1HzQzqNeQ/viewform?usp=sf_link>`_ (*offline*)
 
 15.00 - 16.00 Course wrap-up (*online session*)
+
+anytime `feedback survey <https://docs.google.com/forms/d/e/1FAIpQLSfDdoOu8l5AX1Qzra8RALu-12C1jPCNJJyFaTKYjiU_ffPgIA/viewform?usp=sf_link>`_
