@@ -118,17 +118,17 @@ Friday (27 November 2020)
 
 09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-05-am>`_ (**online group session**)
 
-10.00 - 10.45 **scATAC-seq / scChIP-seq** (Jakub) (**online group session**)
+10.00 - 10.45 `Single cell methods <../_static/slides-single-cell-methods-jow-2020.pdf>`_ (Jakub) (**online session**)
 
 10.45 - 11.00 Break
 
-11.00 - 11.45 **Data integration** (Jakub) (**online session**)
+11.00 - 11.45 `Data integration <../_static/slides-data-intergation-jow-2020.pdf>`_ (Jakub) (**online session**)
 
 11.45 - 13.00 lunch (*offline*)
 
-13.00 - 13.15 **Introduction to exercises** (**online session**)
+13.00 - 13.05 **Introduction to exercises** (**online session**)
 
-13.15 - 14.30 Exercises (*online support*)
+13.05 - 14.30 Exercises (*online support*)
 
 14.30 - 15.00 `Test yourself <https://docs.google.com/forms/d/e/1FAIpQLSceZFCuv6WrHd6-X1wSLBZLhvSMMsdzcPn5cm2CG1HzQzqNeQ/viewform?usp=sf_link>`_ (*offline*)
 
