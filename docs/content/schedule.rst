@@ -93,7 +93,7 @@ Thursday (26 November 2020)
 
 09.15 - 10.00 `Recap of the previous day <https://nbisweden.github.io/workshop-epigenomics/sessions-testyourself/day-04-am>`_ (**online group session**)
 
-10:00 - 10:40 **Introduction to Nextflow** (**online session**) (Phil)
+10:00 - 10:40 `Introduction to Nextflow <../_static/PhilEwels_NBIS_Epigenomics_Nextflow_nf-core.pdf>`_ (**online session**) (Phil)
 
 10:40 - 11.30 Exercises (*online support*)
 
