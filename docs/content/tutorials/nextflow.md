@@ -1,4 +1,4 @@
-# Nextflow
+# Introduction to Nextflow and nf-core
 
 ## Learning outcomes
 
@@ -266,4 +266,55 @@ You should now see that `nf-core list chipseq` shows that your local cache is no
 
 **Important!** If you don't specify `-r` when using the `nextflow run` command, Nextflow will
 use whatever version of the pipeline you have in your local cache. This is another good reason
-to always specify if when running a pipeline.
+to always specify it when running a pipeline.
+
+## Running a test workflow
+
+It's always a good idea to start working with a tiny test workflow when using a new Nextflow pipeline.
+This confirms that everything is set up and working properly, before you start moving around massive data files.
+
+All nf-core pipelines come with a configuration profile called `test` which will run a minimal test dataset
+through the pipeline without needing any other pipeline parameters.
+
+### Trying out atacseq
+
+To try out the nf-core/atacseq pipeline and see if everything is working, let's try the test dataset.
+
+Remember the key points:
+
+* Start with a fresh new empty directory
+* Specify the pipeline version number with `-r`
+* Run in the background with `-bg`
+* Use the `uppmax` configuration profile to run on UPPMAX
+  * If using this, also specify an UPPMAX project with `--project` (two hyphens!)
+
+```
+mkdir atacseq-test
+cd atacseq-test
+nextflow run nf-core/atacseq -r 1.2.1 -profile test,uppmax --project XXX -bg
+```
+
+Now, I'll be honest, there's a pretty good chance that something will go wrong at this point.
+But that's ok, that's why we run a small test dataset!
+This is where you ask for help on Slack instead of suffering in silence.
+
+If all goes well, you should start seeing some log output from Nextflow appearing on your console.
+If you run `jobinfo -u USERNAME` you will hopefully see lots of jobs entering the queue.
+
+### Read the docs
+
+The documentation for nf-core pipelines is a big part of the community ethos.
+Whilst the test dataset is running (it's small, but the UPPMAX job queue can be slow), check out
+the nf-core website. Every pipeline has its own page with extensive documentation.
+For example, the atacseq docs are at <https://nf-co.re/atacseq>
+
+nf-core pipelines also have some documentation on the command line. You can run this
+as you would a real pipeline run, but with the `--help` option.
+
+In a new fresh directory(!), try this out:
+
+```bash
+mkdir atacseq-help
+cd atacseq-help
+nextflow run nf-core/atacseq -r 1.2.1 --help
+```
