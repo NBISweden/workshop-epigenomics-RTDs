@@ -452,6 +452,7 @@ Remember the pipeline paprameter flags that you will need (two hyphens!)
 * `--project xxx`
 * `--genome GRCh37`
 * `--input ./my_samplesheet.csv`
+* `--single_end`
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data!
 Once it's finished, take a look in the `results` folder and see what it generated.
