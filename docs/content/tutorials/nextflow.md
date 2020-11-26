@@ -301,9 +301,48 @@ This is where you ask for help on Slack instead of suffering in silence.
 If all goes well, you should start seeing some log output from Nextflow appearing on your console.
 If you run `jobinfo -u USERNAME` you will hopefully see lots of jobs entering the queue.
 
+### Generated files
+
+The pipeline will create a bunch of files in your working directory as it goes:
+
+```console
+$ ls -a1
+./
+../
+.nextflow/
+.nextflow.log
+.nextflow.pid
+results/
+work/
+```
+
+The hidden `.nextflow` files and folders contain information for the cache and detailed logs.
+
+Each task of the pipeline runs in its own isolated directory, these can be found under `work`.
+The name of each `work` directory corresponds to the task hash which is listed in the Nextflow log.
+
+As the pipeline runs, it saves the final files it generates to `results` (customise this location with `--outdir`).
+Once you are happy that the pipeline has finished properly, you can delete the temporary files in `work`:
+
+```bash
+rm -rf work/
+```
+
+### Re-running a pipeline with `-resume`
+
+Nextflow is very clever about using cached copies of pipeline steps if you re-run a pipeline.
+
+Once the test workflow has finished, try running the same command again with the `-resume` flag.
+Hopefully almost all steps will use the previous cached copies of results and the pipeline
+will finish extremely quickly.
+
+This option is very useful if a pipeline fails unexpectedly, as it allows you to start again
+and pick up where you left off.
+
 ### Read the docs
 
 The documentation for nf-core pipelines is a big part of the community ethos.
+
 Whilst the test dataset is running (it's small, but the UPPMAX job queue can be slow), check out
 the nf-core website. Every pipeline has its own page with extensive documentation.
 For example, the atacseq docs are at <https://nf-co.re/atacseq>
@@ -318,3 +357,14 @@ mkdir atacseq-help
 cd atacseq-help
 nextflow run nf-core/atacseq -r 1.2.1 --help
 ```
+
+## Running a real workflow
+
+Now we get to the real deal! Once you've gotten this far, you start to leave behind the
+generalisations that apply to all nf-core pipelines. Now you have to rely on your wits
+and the nf-core documentation.
+
+Remember that you're not on your own! If you're still struggling after checking the
+documentation, jump on to the nf-core Slack and ask for help.
+
+Every pipeline has it's own Slack channel (eg. `#atacseq`, `#chipseq` etc) where people will be happy to help.
