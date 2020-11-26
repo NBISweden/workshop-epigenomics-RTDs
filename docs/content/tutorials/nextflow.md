@@ -364,6 +364,100 @@ Now we get to the real deal! Once you've gotten this far, you start to leave beh
 generalisations that apply to all nf-core pipelines. Now you have to rely on your wits
 and the nf-core documentation.
 
+### Example data
+
+We have prepared some example data for you that comes from the exercises you've worked on
+earlier in the week. The files have been subsampled to make them small and quick to run,
+and are supplied as gzipped (compressed) FastQ files here: `/sw/courses/epigenomics/nextflow/fastq_sub12_gz/`
+
+Copy this directory to your own working space: (it's 4.2GB so may take a minute or two)
+
+```bash
+mkdir epigenomics_nextflow_data
+cd epigenomics_nextflow_data
+cp -R /sw/courses/epigenomics/nextflow/fastq_sub12_gz/ .
+```
+
+### Preparing the sample sheet
+
+The nf-core/chipseq pipeline uses a comma-separated sample sheet file to list all of the input
+files and which replicate / condition they belong to.
+
+Take a moment to [read the documentation](https://nf-co.re/chipseq/1.2.1/usage#input) and
+make sure that you understand the fields and structure of the file.
+
+We have made a sample sheet for you which describes the different conditions, which can be found
+in the folder you copied: `fastq_sub12_gz/exp_design_HeLa_neuron.txt`
+
+_HOWEVER_ - it's not yet complete. The file paths are incorrect and need to be fixed.
+The file paths are **relative to where you launch Nextflow**, so will depend a little
+on where you copied the data and where you made your new empty directory to run Nextflow.
+
+Remember that you can softlink files in Linux (kind of like making a shortcut link).
+This is often a good way of keeping a nicely organised work directory without having to
+move the data itself. For example:
+
+```
+cd my_analysis
+mkdir input_files
+cd input_files
+ln -s /path/to/my/epigenomics_nextflow_data/*/*.fastq.gz .
+```
+
+You can check whether this has worked by using `ls -l`, which should show the full link.
+For example:
+
+```console
+$ ls -l
+
+total 0
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OWM.chr12.rmdup.fastq.gz -> ../../fastq_sub12/neural/ENCFF000OWM.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OWQ.chr12.rmdup.fastq.gz -> ../../fastq_sub12/neural/ENCFF000OWQ.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OXB.chr12.rmdup.fastq.gz -> ../../fastq_sub12/neural/ENCFF000OXB.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OXE.chr12.rmdup.fastq.gz -> ../../fastq_sub12/neural/ENCFF000OXE.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PED.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hela/ENCFF000PED.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PEE.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hela/ENCFF000PEE.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PET.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hela/ENCFF000PET.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PMG.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hepg2/ENCFF000PMG.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PMJ.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hepg2/ENCFF000PMJ.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000POM.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hepg2/ENCFF000POM.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PON.chr12.rmdup.fastq.gz -> ../../fastq_sub12/hepg2/ENCFF000PON.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RAG.chr12.rmdup.fastq.gz -> ../../fastq_sub12/sknsh/ENCFF000RAG.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RAH.chr12.rmdup.fastq.gz -> ../../fastq_sub12/sknsh/ENCFF000RAH.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RBT.chr12.rmdup.fastq.gz -> ../../fastq_sub12/sknsh/ENCFF000RBT.chr12.rmdup.fastq.gz
+lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RBU.chr12.rmdup.fastq.gz -> ../../fastq_sub12/sknsh/ENCFF000RBU.chr12.rmdup.fastq.gz
+```
+
+#### Things to look out for
+
+The following things are easy mistakes when working with chipseq sample sheets - be careful!
+
+* File paths are relative to where you launch Nextflow, not relative to the sample sheet
+* Do not have any blank newlines at the end of the file
+* Use Linux line endings (`\n`), not windows (`\r\n`)
+* If using single end data, keep the empty column for the second FastQ file
+
+### Running the pipeline
+
+Once you've got your sample sheet ready, you can launch the analysis!
+
+Remember the core Nextflow flags that you will need (one hyphen!)
+
+* `-r 1.2.1`
+* `-bg`
+* `-profile uppmax`
+
+Remember the pipeline paprameter flags that you will need (two hyphens!)
+
+* `--project xxx`
+* `--genome GRCh37`
+* `--input ./my_samplesheet.csv`
+
+If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data!
+Once it's finished, take a look in the `results` folder and see what it generated.
+
+## Getting help
+
 Remember that you're not on your own! If you're still struggling after checking the
 documentation, jump on to the nf-core Slack and ask for help.
 
