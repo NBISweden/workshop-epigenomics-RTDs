@@ -179,8 +179,7 @@ dm3 <- filterChromosomes(getGenome(dm3), organism="dm3")
 
 rr <- createRandomRegions(nregions=100, length.mean=500, length.sd=0, genome=dm3)
 
-permRes <- overlapPermTest(A=rr, B=insv.2.6, ntimes=100, alternative="greater", 
-													 genome=getGenome(dm3), mc.set.seed=FALSE, verbose=TRUE)
+permRes <- overlapPermTest(A=rr, B=insv.2.6, ntimes=100, alternative="greater", genome=getGenome(dm3), mc.set.seed=FALSE, verbose=TRUE)
 summary(permRes)
 plot(permRes)
 ```
@@ -189,8 +188,7 @@ plot(permRes)
 Using the same strategy, we can check if there is a significant overlap between the two Insv data sets, from different time points. *How do you interpret the results?*
 
 ```
-permRes <- overlapPermTest(A=insv.2.6, B=insv.6.12, ntimes=100, alternative="greater",
-													 genome=getGenome(dm3), mc.set.seed=FALSE, verbose=TRUE)
+permRes <- overlapPermTest(A=insv.2.6, B=insv.6.12, ntimes=100, alternative="greater", genome=getGenome(dm3), mc.set.seed=FALSE, verbose=TRUE)
 summary(permRes)
 plot(permRes)
 ```
