@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>In-situ methods: CUT&amp;RUN and ChIP data for CTCF &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Analysis of CUT&amp;Tag H3K27me3 dataset" href="cut-and-tag-data.html" />
+    <link rel="prev" title="Setup" href="setup-quant-chip.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="setup-quant-chip.html">Setting up</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CUT&amp;RUN and ChIP data for CTCF</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#manual-inspection-of-bigwig-profiles-with-igv">Manual inspection of bigwig profiles with IGV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quality-control">Quality Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peak-calling">Peak calling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comparison-between-methods">Comparison between methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#heatmaps">Heatmaps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cut-and-tag-data.html">CUT&amp;Tag H3K27me3 data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lab-exospike.html">Spike-in</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a> &raquo;</li>
+        
+      <li>In-situ methods: CUT&amp;RUN and ChIP data for CTCF</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/quantitativeChip/cut-and-run-data.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="in-situ-methods-cut-run-and-chip-data-for-ctcf">
+<h1>In-situ methods: CUT&amp;RUN and ChIP data for CTCF<a class="headerlink" href="#in-situ-methods-cut-run-and-chip-data-for-ctcf" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id3">Background</a></p></li>
+<li><p><a class="reference internal" href="#datasets" id="id4">Datasets</a></p></li>
+<li><p><a class="reference internal" href="#data-preprocessing" id="id5">Data preprocessing</a></p></li>
+<li><p><a class="reference internal" href="#manual-inspection-of-bigwig-profiles-with-igv" id="id6">Manual inspection of bigwig profiles with IGV</a></p></li>
+<li><p><a class="reference internal" href="#quality-control" id="id7">Quality Control</a></p>
+<ul>
+<li><p><a class="reference internal" href="#correlation-plots" id="id8">Correlation plots</a></p></li>
+<li><p><a class="reference internal" href="#cumulative-enrichment" id="id9">Cumulative enrichment</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#peak-calling" id="id10">Peak calling</a></p>
+<ul>
+<li><p><a class="reference internal" href="#number-of-peaks-per-sample" id="id11">Number of peaks per sample</a></p></li>
+<li><p><a class="reference internal" href="#peaks-overlap-using-intervene" id="id12">Peaks overlap using intervene</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#comparison-between-methods" id="id13">Comparison between methods</a></p></li>
+<li><p><a class="reference internal" href="#heatmaps" id="id14">Heatmaps</a></p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2><a class="toc-backref" href="#id3">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>CTCF (CCCTC-binding factor) is a very general architectural protein that mediates interchromosomal or intrachromosomal interactions. By recruiting additional structural proteins like condensin, they create chromatin loops and contact points. CTCF is a sequence-specific binding factor with a well-known sequence motif. There are 55,000-65,000 theoretical binding sites in the human genome (predicted by the consensus sequence). Of these, 5000 appear to be occupied by CTCF in every tissue/cell type, whereas up to 60% are used cell-type specifically. DNA methylation modulates CTCF binding (lowering CTCF affinity). Given the plethora of knowledge and datasets available one would think that there is a universal agreement on where CTCF binds in which cell type. However, different ChIP-Seq data and alternative profiling methods actually give different qualitative and certainly quantitative answers.</p>
+<p>So we will look at a comparison of CUT&amp;RUN and different ChIP datasets to understand why and how different datasets report different binding sites.</p>
+<a class="reference external image-reference" href="Figures/00_CTCF.png"><img alt="" src="../../../_images/00_CTCF.png" /></a>
+<p><em>Fig. 1: Features of CTCF-binding sites in the genome</em></p>
+</div>
+<div class="section" id="datasets">
+<h2><a class="toc-backref" href="#id4">Datasets</a><a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<p>The datasets used correspond to two publications:</p>
+<p>Skene PJ, Henikoff S. An efficient targeted nuclease strategy for high-resolution mapping of DNA binding sites. Elife 2017.
+<a class="reference external" href="https://elifesciences.org/articles/21856">https://elifesciences.org/articles/21856</a></p>
+<p>Pugacheva, Elena M., et al. CTCF mediates chromatin looping via N-terminal domain-dependent cohesin retention. Proceedings of the National Academy of Sciences 117.4 (2020).
+<a class="reference external" href="https://www.pnas.org/content/117/4/2020">https://www.pnas.org/content/117/4/2020</a></p>
+<p>They can be found on GEO (GSE84474 and GSE137216). See below a table with the samples included in this example:</p>
+<p>In Skene and Henikoff, they compare CUT&amp;Run to their own ChIP (special optimized native ChIP for CTCF they say).</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Table 1. Files in Skene et al. 2017 used in this exercise.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GEO Accession</p></th>
+<th class="head"><p>Sample</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GSM2247150</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_ChIP_loMN</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM2247152</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_ChIP_medMN</p></td>
+</tr>
+<tr class="row-even"><td><p>GSM2247154</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_ChIP_hiMN</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM2433137</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_CnR_15s</p></td>
+</tr>
+<tr class="row-even"><td><p>GSM2433139</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_CnR_3m</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM2433140</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_CnR_45s</p></td>
+</tr>
+<tr class="row-even"><td><p>GSM2433141</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_CnR_5s</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM2433142</p></td>
+<td><p>NBIS_Skene2017_K562_CTCF_CnR_9m</p></td>
+</tr>
+</tbody>
+</table>
+<p>In Pugacheva et. all, they perform a crosslinking ChIP for CTCF. They’ve been using different antibodies just to be sure that they are ChIPing the right thing.</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Table 2. Files in Pugacheva et al. 2020 used in this exercise.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GEO Accession</p></th>
+<th class="head"><p>Sample</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GSM4073237</p></td>
+<td><p>NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM4073240</p></td>
+<td><p>NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1</p></td>
+</tr>
+<tr class="row-even"><td><p>GSM4073238</p></td>
+<td><p>NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM4073242</p></td>
+<td><p>NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs</p></td>
+</tr>
+<tr class="row-even"><td><p>GSM4073239</p></td>
+<td><p>NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control</p></td>
+</tr>
+</tbody>
+</table>
+<p>You can find many more CTCF datasets In the <a class="reference external" href="http://cistrome.org/db">Cistrome database</a>!</p>
+</div>
+<div class="section" id="data-preprocessing">
+<h2><a class="toc-backref" href="#id5">Data preprocessing</a><a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>Primary analysis of the initial FASTQ files was performed beforehand. Reads were mapped with <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> with default parameters. Resulting BAM files were deduplicated using Picard and blacklisted regions were removed. Peak files were generated using <code class="docutils literal notranslate"><span class="pre">MACS2</span></code> using very standard parameters: <code class="docutils literal notranslate"><span class="pre">--qval</span> <span class="pre">cutoff</span> <span class="pre">0.01</span></code>. In this case no replicates were used to call the peaks. BigWig files were generated with <code class="docutils literal notranslate"><span class="pre">deepTools</span></code> to 1x coverage. Resulting files are available under <code class="docutils literal notranslate"><span class="pre">/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR</span></code></p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>You can download bigWig and peak annotations. Most of what we are going to do can be done locally on aregular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.</p>
+</div>
+<p>When running things on Uppmax, copy the files to your home directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
+mkdir -p cnr_chip/bw
+<span class="nb">cd</span> cnr_chip/bw
+
+cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw .
+
+<span class="c1"># Or you can create symlinks for the bigWig files instead:</span>
+<span class="k">for</span> i <span class="k">in</span> /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw<span class="p">;</span> <span class="k">do</span> ln -s <span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-inspection-of-bigwig-profiles-with-igv">
+<h2><a class="toc-backref" href="#id6">Manual inspection of bigwig profiles with IGV</a><a class="headerlink" href="#manual-inspection-of-bigwig-profiles-with-igv" title="Permalink to this headline">¶</a></h2>
+<p>Besides quality control tools and exploratory analyses, it is usually a good idea to have a look at the data without any further processing to have an idea about how it looks like. It can help spot technical issues or processing problems.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When running these commands, the same relative path structure is expected to be kept. So if you
+made a directory for this tutorial, be sure you are in that directory when starting.</p>
+</div>
+<p>If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wherever you have this directory, it&#39;s from now on your main working directory</span>
+mkdir cnr_chip
+<span class="nb">cd</span> cnr_chip
+
+mkdir bw
+mkdir peaks
+
+scp &lt;youruser&gt;@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bw/*.bw ./bw/
+
+scp &lt;youruser&gt;@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/peaks/*.narrowPeak ./peaks/
+</pre></div>
+</div>
+<p>Open IGV and import the bigWig files (file &gt; load from file…). You should see something like this:</p>
+<a class="reference external image-reference" href="Figures/01_IGV.png"><img alt="" src="../../../_images/01_IGV.png" /></a>
+<p><strong>Q: Note down some observations concerning following questions:</strong></p>
+<ul class="simple">
+<li><p>How are the samples similar and how are they different?</p></li>
+<li><p>Can you make a prediction about the peak calling result?</p></li>
+</ul>
+<p>Go to this site <code class="docutils literal notranslate"><span class="pre">chr1:27,389,733-27,973,162</span></code>
+(corresponding to <a class="reference external" href="https://elifesciences.org/articles/21856/figures#fig8">Figure 8</a> ).</p>
+<p><strong>Q: Are peaks shared, or unique to a specific technique?</strong></p>
+</div>
+<div class="section" id="quality-control">
+<h2><a class="toc-backref" href="#id7">Quality Control</a><a class="headerlink" href="#quality-control" title="Permalink to this headline">¶</a></h2>
+<p>Quality Control metrics are very important to understand whether the experiment worked or not and spot possible caveats that may come up before further analysis. As mentioned in other tutorials, some metrics that can be useful are:</p>
+<ul class="simple">
+<li><p>Library complexity estimates and duplication rates.</p></li>
+<li><p>Sample clustering (PCA, correlation).</p></li>
+<li><p>Insert size distribution.</p></li>
+<li><p>Cumulative enrichment.</p></li>
+</ul>
+<div class="section" id="correlation-plots">
+<h3><a class="toc-backref" href="#id8">Correlation plots</a><a class="headerlink" href="#correlation-plots" title="Permalink to this headline">¶</a></h3>
+<p>One way to look at similarity between ChIP dataset is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions.</p>
+<p>This can be done using <code class="docutils literal notranslate"><span class="pre">deepTools</span></code>.</p>
+<p>This is a time consuming step that would need to be done on Uppmax. Move to the directory where you copied bigWig files on Uppmax. If you followed the same names, it would be:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/cnr_chip
+</pre></div>
+</div>
+<p>Load <code class="docutils literal notranslate"><span class="pre">deepTools</span></code> (and <code class="docutils literal notranslate"><span class="pre">bioinfo-tools</span></code>) module beforehand:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load bioinfo-tools
+module load deepTools
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">deepTools</span></code> needs that you first compute a bin matrix. From this, many other things can be done, such as correlation plots and PCA:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Labels basically follow alphabetical order (which is the way blob *.bw will expand).</span>
+<span class="c1"># But if you want to be totally sure, it’s better to spell out the order, as there may be</span>
+<span class="c1"># some surprises: https://unix.stackexchange.com/questions/368318/does-the-bash-star-wildcard-always-produce-an-ascending-sorted-list</span>
+
+multiBigwigSummary bins -b <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_hiMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_loMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_medMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_15s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_3m.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw <span class="se">\</span>
+    -bs <span class="m">5000</span> -p <span class="m">10</span> -o ./bins_table.npz --outRawCounts ./bins_table.tab <span class="se">\</span>
+    --labels <span class="se">\</span>
+    Pugacheva2020_ChIP_MonoC <span class="se">\</span>
+    Pugacheva2020_ChIP_MonoN <span class="se">\</span>
+    Pugacheva2020_ChIP_RabbitC <span class="se">\</span>
+    Pugacheva2020_ChIP_Control <span class="se">\</span>
+    Pugacheva2020_ChIP_Mix <span class="se">\</span>
+    Skene2017_ChIP_hiMN <span class="se">\</span>
+    Skene2017_ChIP_loMN <span class="se">\</span>
+    Skene2017_ChIP_medMN <span class="se">\</span>
+    Skene2017_CnR_15s <span class="se">\</span>
+    Skene2017_CnR_3m <span class="se">\</span>
+    Skene2017_CnR_452 <span class="se">\</span>
+    Skene2017_CnR_5s <span class="se">\</span>
+    Skene2017_CnR_9m
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameter <code class="docutils literal notranslate"><span class="pre">--outRawCounts</span></code> is not necessary and usually not generated, as the same values are saved in <code class="docutils literal notranslate"><span class="pre">bins_table.npz</span></code> in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using <code class="docutils literal notranslate"><span class="pre">head</span></code> or <code class="docutils literal notranslate"><span class="pre">more</span></code>.</p>
+</div>
+<p>If something does not work properly or you are not sure if a command is going to work, it is a good
+idea to use the <code class="docutils literal notranslate"><span class="pre">--region</span></code> parameter, which will do the analysis only on a given genomic region,
+and will run faster (failing fast is a good philosophy that will save you loads of time on the computer).</p>
+<p>For instance, if you add <code class="docutils literal notranslate"><span class="pre">--region</span> <span class="pre">chr1:300000:900000</span></code> to the previous command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>multiBigwigSummary bins -b <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_hiMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_loMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_ChIP_medMN.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_15s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_3m.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw <span class="se">\</span>
+    ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw <span class="se">\</span>
+    -bs <span class="m">5000</span> -p <span class="m">10</span> -o ./bins_table.npz --outRawCounts ./bins_table.tab <span class="se">\</span>
+    --labels <span class="se">\</span>
+    Pugacheva2020_ChIP_MonoC <span class="se">\</span>
+    Pugacheva2020_ChIP_MonoN <span class="se">\</span>
+    Pugacheva2020_ChIP_RabbitC <span class="se">\</span>
+    Pugacheva2020_ChIP_Control <span class="se">\</span>
+    Pugacheva2020_ChIP_Mix <span class="se">\</span>
+    Skene2017_ChIP_hiMN <span class="se">\</span>
+    Skene2017_ChIP_loMN <span class="se">\</span>
+    Skene2017_ChIP_medMN <span class="se">\</span>
+    Skene2017_CnR_15s <span class="se">\</span>
+    Skene2017_CnR_3m <span class="se">\</span>
+    Skene2017_CnR_452 <span class="se">\</span>
+    Skene2017_CnR_5s <span class="se">\</span>
+    Skene2017_CnR_9m <span class="se">\</span>
+    --region chr1:300000:900000
+</pre></div>
+</div>
+<p>It will run immediately if everything is working, and will produce a tiny dataset with 120 bins.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.npz</span></code> matrix is then used by <code class="docutils literal notranslate"><span class="pre">deepTools</span></code> to produce other plots. For our correlation plot:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>plotCorrelation --corData ./bins_table.npz <span class="se">\</span>
+    --plotFile ./correlation_spearman_all.png <span class="se">\</span>
+    --whatToPlot heatmap <span class="se">\</span>
+    --corMethod spearman
+</pre></div>
+</div>
+<p>This will generate a correlation plot based on genome-wide 5kb bins.</p>
+<a class="reference external image-reference" href="Figures/02_corrplot.png"><img alt="" src="../../../_images/02_corrplot.png" /></a>
+<p><strong>Q: Check out how the datasets cluster - does it make sense? Is the overall clustering following the biological target/control or underlying batch effect?</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If something here does not work, you can get the bins files from: <code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins*</span> <span class="pre">.</span></code>.</p>
+</div>
+</div>
+<div class="section" id="cumulative-enrichment">
+<h3><a class="toc-backref" href="#id9">Cumulative enrichment</a><a class="headerlink" href="#cumulative-enrichment" title="Permalink to this headline">¶</a></h3>
+<p>Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
+can understand more about what they exactly mean in <cite>deepTools</cite> <a class="reference external" href="https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6">documentation</a>.</p>
+<p>You can plot this with <code class="docutils literal notranslate"><span class="pre">deepTools</span></code> as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: <code class="docutils literal notranslate"><span class="pre">/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/</span></code> the same way as before:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Or your preferred folder</span>
+<span class="nb">cd</span> ~/cnr_chip
+mkdir bam
+<span class="nb">cd</span> bam
+
+<span class="c1"># In this case symlink is strongly preferred, as these files are bigger</span>
+<span class="k">for</span> i <span class="k">in</span> /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/*<span class="p">;</span> <span class="k">do</span> ln -s <span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>This is a time consuming step that is recommended to do on Uppmax. You can also leave this for later and look at the results.</p>
+</div>
+<p>You can plot them.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/cnr_chip
+
+plotFingerprint -b <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_ChIP_hiMN.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_ChIP_loMN.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_ChIP_medMN.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_CnR_15s.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_CnR_3m.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bam <span class="se">\</span>
+  -o ./fingerprint_Skene2017.pdf <span class="se">\</span>
+  --labels <span class="se">\</span>
+  Skene2017_ChIP_hiMN <span class="se">\</span>
+  Skene2017_ChIP_loMN <span class="se">\</span>
+  Skene2017_ChIP_medMN <span class="se">\</span>
+  Skene2017_CnR_15s <span class="se">\</span>
+  Skene2017_CnR_3m <span class="se">\</span>
+  Skene2017_CnR_452 <span class="se">\</span>
+  Skene2017_CnR_5s <span class="se">\</span>
+  Skene2017_CnR_9m <span class="se">\</span>
+  -p <span class="m">10</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Again, here the <code class="docutils literal notranslate"><span class="pre">--region</span></code> trick also works to plot a subset of the data.</p>
+</div>
+<p>The resulting plot should look like:</p>
+<a class="reference external image-reference" href="Figures/03_fingerprint1.png"><img alt="" src="../../../_images/03_fingerprint1.png" /></a>
+<p><strong>Q: What do you think it means in terms of quality of experiments?</strong>
+<strong>Do you see different groups of samples? Go to IGV and browse through the tracks.</strong>
+<strong>How do each of these groups look? Fingerprint supports the difference CUT&amp;RUN authors argue - That it has less background.</strong></p>
+<p>Clearly, the CUT&amp;Run data scores better by QC compared to the CTCF ChIP presented in this paper. But how about comparing to the Pugacheva CTCF ChIP datasets?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>plotFingerprint -b <span class="se">\</span>
+  ./bam/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bam <span class="se">\</span>
+  ./bam/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bam <span class="se">\</span>
+  -o ./fingerprint_Pugacheva2020.pdf <span class="se">\</span>
+  --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC     Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix <span class="se">\</span>
+  -p <span class="m">10</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="Figures/04_fingerprint2.png"><img alt="" src="../../../_images/04_fingerprint2.png" /></a>
+<p><strong>Q: How does Pugacheva CTCF ChIP measure up with the CUT&amp;Run? Given that the Skene CTCF ChIP was done under native conditions (no crosslinker) and Pugacheva CTCF ChIP (formaldehyde crosslinked), what do you think could be the problem with the native ChIP?</strong></p>
+</div>
+</div>
+<div class="section" id="peak-calling">
+<h2><a class="toc-backref" href="#id10">Peak calling</a><a class="headerlink" href="#peak-calling" title="Permalink to this headline">¶</a></h2>
+<p>Peaks were called with MACS2 using standard parameters.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>This is a step that could be better fine tuned to each experimental setting.</p>
+</div>
+<p>Again, it is usually a good idea to inspect visually the files, so you can have a feeling on whether the peaks were correctly called and how the samples look like.</p>
+<a class="reference external image-reference" href="Figures/05_IGV_peaks.png"><img alt="" src="../../../_images/05_IGV_peaks.png" /></a>
+<p><strong>Q: Given the QC you did above, does the peak calling confirm the quality differences amongst the samples? Does a higher signal/noise allows to identify more peaks? Call peaks more confidently?</strong></p>
+<div class="section" id="number-of-peaks-per-sample">
+<h3><a class="toc-backref" href="#id11">Number of peaks per sample</a><a class="headerlink" href="#number-of-peaks-per-sample" title="Permalink to this headline">¶</a></h3>
+<p>A simple <code class="docutils literal notranslate"><span class="pre">wc</span></code> count per peak file allows you to quickly check how many peaks you got:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">94019</span> NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs_peaks.narrowPeak
+<span class="m">65837</span> NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoC_Abs_peaks.narrowPeak
+<span class="m">50420</span> NBIS_Pugacheva2020_K562_ChIP_CTCF_RabbitC_Abs_peaks.narrowPeak
+<span class="m">40077</span> NBIS_Pugacheva2020_K562_ChIP_CTCF_MonoN_Abs_Rep1_peaks.narrowPeak
+<span class="m">828</span>   NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control_peaks.narrowPeak
+
+<span class="m">67164</span> NBIS_Skene2017_K562_CTCF_CnR_9m_peaks.narrowPeak
+<span class="m">52647</span> NBIS_Skene2017_K562_CTCF_CnR_3m_peaks.narrowPeak
+<span class="m">34678</span> NBIS_Skene2017_K562_CTCF_CnR_452_peaks.narrowPeak
+<span class="m">3782</span>  NBIS_Skene2017_K562_CTCF_ChIP_loMN_peaks.narrowPeak
+<span class="m">3348</span>  NBIS_Skene2017_K562_CTCF_ChIP_medMN_peaks.narrowPeak
+<span class="m">2897</span>  NBIS_Skene2017_K562_CTCF_CnR_15s_peaks.narrowPeak
+<span class="m">2413</span>  NBIS_Skene2017_K562_CTCF_CnR_5s_peaks.narrowPeak
+<span class="m">1611</span>  NBIS_Skene2017_K562_CTCF_ChIP_hiMN_peaks.narrowPeak
+</pre></div>
+</div>
+</div>
+<div class="section" id="peaks-overlap-using-intervene">
+<h3><a class="toc-backref" href="#id12">Peaks overlap using intervene</a><a class="headerlink" href="#peaks-overlap-using-intervene" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">intervene</span></code> is an easy to use tool to look for overlaps between BED files. It relies on <code class="docutils literal notranslate"><span class="pre">bedtools</span></code>, but saves some work when looking at different sets of files. You can install it using <code class="docutils literal notranslate"><span class="pre">pip</span></code> as they <a class="reference external" href="https://intervene.readthedocs.io/en/latest/install.html">explain</a>.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>There is no <code class="docutils literal notranslate"><span class="pre">intervene</span></code> module on Uppmax. If you want to run it there, you can probably install it using your usual <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment or <cite>pyenv</cite>. See how to set <code class="docutils literal notranslate"><span class="pre">pyenv</span></code> <a class="reference external" href="https://www.uppmax.uu.se/support/user-guides/python-modules-guide/">here</a>.</p>
+</div>
+<p>You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Back to your local laptop copy of the peaks and bw</span>
+<span class="n">cd</span> <span class="n">cnr_chip</span>
+
+<span class="n">intervene</span> <span class="n">venn</span> <span class="o">--</span><span class="ow">in</span> <span class="o">./</span><span class="n">peaks</span><span class="o">/</span><span class="n">NBIS_Pugacheva2020_K562_ChIP_CTCF_Mono</span><span class="o">*.</span><span class="n">narrowPeak</span>
+</pre></div>
+</div>
+<p>This will output a <code class="docutils literal notranslate"><span class="pre">Intervene_results</span></code> folder with a pdf file:</p>
+<a class="reference external image-reference" href="Figures/06_venn_1.png"><img alt="" src="../../../_images/06_venn_1.png" /></a>
+<p>As you can see there is a lot of overlap but MonoC dataset called much more peaks than MonoN.</p>
+<p>Note that this can also be refined by setting overlap thresholds. See intervene documentation for the possibilities. The default behavior is to count any overlap as overlap.</p>
+<p>A way of looking broadly at a set of BED files an the overlap between them is to do pairwise comparison:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>intervene pairwise --in ./peaks/*.narrowPeak -o pairwise_results
+</pre></div>
+</div>
+<p>will generate a plot like this in <code class="docutils literal notranslate"><span class="pre">./pairwise_results/</span></code>.</p>
+<a class="reference external image-reference" href="Figures/07_venn_pairwise.png"><img alt="" src="../../../_images/07_venn_pairwise.png" /></a>
+<p>Very different numbers of peaks!</p>
+<p><strong>Q: How do you think the number of peaks relate to the fingerprint? (the ones with the most accentuated fingerprint are the ones showing larger amounts of peaks, however the difference is not such for some of the CnR samples. Why can that be?</strong></p>
+<p>This has actually been noted in the CnR paper. They say that too scarce background read coverage can throw off traditional peak callers, thus they develop their own peak caller for CnR data.</p>
+<p><strong>Q: Now that you have peaks, think about what you could do with the peak information. How to make sense of the peaks? Would you use the dataset with the most or the least peaks for downstream analysis?</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">MACS</span></code> doesn’t just give peaks, it also assigns a score. High/confident peaks have high score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be extremely good.</p>
+</div>
+</div>
+</div>
+<div class="section" id="comparison-between-methods">
+<h2><a class="toc-backref" href="#id13">Comparison between methods</a><a class="headerlink" href="#comparison-between-methods" title="Permalink to this headline">¶</a></h2>
+<p>As an example, we are going to look at one peak set representative for each method: CnR_45s, CTCF_ChIP_medMN from Skene 2017 and ChIP_MonoC from Pugacheva 2020.</p>
+<p>We can look at the overlap between them in a venn diagram:</p>
+<a class="reference external image-reference" href="Figures/08_three_venn.png"><img alt="" src="../../../_images/08_three_venn.png" /></a>
+<p>There are quite some differences  between approaches, and one of the peak sets is very small compared to the others.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These venn diagrams are not size proportional. Automatically drawing size-proportional set intersections is a complex problem. <cite>eulerr</cite> is an <a class="reference external" href="https://cran.r-project.org/web/packages/eulerr/vignettes/introduction.html">R package</a> that does a really nice job at approximating this. However it’s only for drawing, not for computing the actual intersections.</p>
+</div>
+</div>
+<div class="section" id="heatmaps">
+<h2><a class="toc-backref" href="#id14">Heatmaps</a><a class="headerlink" href="#heatmaps" title="Permalink to this headline">¶</a></h2>
+<p>The fact that there are loci marked as peak in one dataset that do not appear in another does not mean that there is no signal there. It could not be called as peak due to lack of statistical power, the signal being weaker or a combination of other factors. Remember the example in the slides - some peaks don’t make the calling threshold, but still represent sites of enrichment:</p>
+<a class="reference external image-reference" href="Figures/09_peak_example.png"><img alt="" src="../../../_images/09_peak_example.png" /></a>
+<p>So another way to look at this is to plot the signal of every dataset in a given peakset, for instance. This was run on a subset of 20000 peaks from Skane2017_CnR_45s.</p>
+<a class="reference external image-reference" href="Figures/10_heatmaps_subsample.png"><img alt="" src="../../../_images/10_heatmaps_subsample.png" /></a>
+<p>These heatmaps can be generated using <code class="docutils literal notranslate"><span class="pre">seqplots</span></code>. <code class="docutils literal notranslate"><span class="pre">seqplots</span></code> is an <code class="docutils literal notranslate"><span class="pre">R</span></code> package that can be installed
+from <code class="docutils literal notranslate"><span class="pre">Bioconductor</span></code>. It can be run as a shiny app on a browser or from <code class="docutils literal notranslate"><span class="pre">Rstudio</span></code>. You can check
+how to use it <a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html">in this link</a>.</p>
+<p>The subset file this was created on can be copied from the <cite>tmp</cite> folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scp &lt;youruser&gt;@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/Skene2017_CTCF_CnR_45s_small.bed .
+</pre></div>
+</div>
+<p><strong>Q: how does the data compare? Note the difference in scale amongst the samples. What other features are different? Which dataset would be better to identify the CTCF binding motif?</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the Skene paper, the make a biological interpretation regarding the difference in peaks seen in native ChIP and CUT&amp;Run. They call the peaks uniquely present in CUT&amp;Run “indirect binding sites” because they infer that those peaks are not directly bound by CTCF. The tagging of sites potentially in intact nuclei works through space, thus tagging not only the loci that is bound by CTCF, but also those regions that are nearby in space (Hi-C contacts). So it is important to note that CUT&amp;Run may report ‘indirect’ or ‘shadow’ peaks that do not represent bona fide binding sites. For CTCF in principle the distinction should be easy since the ‘shadow’ peaks should not have CTCF binding motif.</p>
+</div>
+<a class="reference external image-reference" href="Figures/11_cut_run.png"><img alt="" src="../../../_images/11_cut_run.png" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="cut-and-tag-data.html" class="btn btn-neutral float-right" title="Analysis of CUT&amp;Tag H3K27me3 dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="setup-quant-chip.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

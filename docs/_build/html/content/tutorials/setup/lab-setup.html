@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Setting-up &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="DNA Methylation" href="../methylation_tutorials.html" />
+    <link rel="prev" title="Tutorials" href="../../tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-computational-resources">Using computational resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commands-and-modules">Commands and modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Setting-up</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/setup/lab-setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setting-up">
+<h1>Setting-up<a class="headerlink" href="#setting-up" title="Permalink to this headline">¶</a></h1>
+<p>Before we start tutorial, we need to set up our work environment. In particular, we need to:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="Usingcomputationalresources">be able to login to Uppmax and use the node allocation</a></p></li>
+<li><p><a class="reference external" href="Directorystructure">access files prepared for the tutorial</a> and keep folder structures organised</p></li>
+<li><p><a class="reference external" href="Commandsandmodules">learn how to read commands and use module system on Uppmax</a></p></li>
+</ol>
+<p><span class="raw-html"><br /></span></p>
+<div class="section" id="using-computational-resources">
+<h2>Using computational resources<a class="headerlink" href="#using-computational-resources" title="Permalink to this headline">¶</a></h2>
+<p>We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log to Rackham and run <code class="docutils literal notranslate"><span class="pre">salloc</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -Y &lt;username&gt;@rackham.uppmax.uu.se
+salloc -A g2020XXX -t <span class="m">04</span>:00:00 -p core -n <span class="m">8</span> --no-shell --reservation<span class="o">=</span>g2020XXX_X
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>where X should be 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access for four hours, so you will repeat this in the afternoon.</p>
+</div>
+<p>Please make sure you do it only <strong>ONCE</strong>, as by repeating this command you will use up resources reserved for others.</p>
+<p>Check which node you were assigned</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>squeue -u &lt;username&gt;
+</pre></div>
+</div>
+<p>And connect to your node with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -Y &lt;nodename&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="directory-structure">
+<h2>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>There are many files which are part of the data set as well as there are additional files with annotations that are required to run various steps in this tutorial. Therefore saving files in a structured manner is essential to keep track of the analysis steps (and always a good practice). We have preset data access and environment for you.</p>
+</div>
+<div class="section" id="commands-and-modules">
+<h2>Commands and modules<a class="headerlink" href="#commands-and-modules" title="Permalink to this headline">¶</a></h2>
+<p>Many commands are quite long as there are many input files as well as several parameters to set up. Consequently a command may span over several lines of text. The (backslash character <code class="docutils literal notranslate"><span class="pre">\</span></code> indicates to the interpreter that the command input will continue in the following line, not executing the command prematurely.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>To see all options for applications used throughout the class type <code class="docutils literal notranslate"><span class="pre">command</span> <span class="pre">-h</span></code> to view usage help.</p>
+</div>
+<p>You will notice that you will load and unload modules practically before and after each command. This is done because there are often dependency conflicts between the modules used in this exercise. If not unloaded, some modules will cause error messages from the module system on Rackham. More on <a class="reference external" href="https://www.uppmax.uu.se/resources/software/module-system/](https://www.uppmax.uu.se/resources/software/module-system/">module system used on Uppmax</a>.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The commands in this tutorial contain pathways as we set them up in the above steps. If you change file locations, you will need to adjust pathways to match these changes when running commands.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../methylation_tutorials.html" class="btn btn-neutral float-right" title="DNA Methylation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

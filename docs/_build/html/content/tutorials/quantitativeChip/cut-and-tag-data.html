@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Analysis of CUT&amp;Tag H3K27me3 dataset &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ChIP-seq with exogenous chromatin spike" href="lab-exospike.html" />
+    <link rel="prev" title="In-situ methods: CUT&amp;RUN and ChIP data for CTCF" href="cut-and-run-data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="setup-quant-chip.html">Setting up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cut-and-run-data.html">CUT&amp;RUN and ChIP data for CTCF</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CUT&amp;Tag H3K27me3 data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-preprocessing">Data preprocessing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#manual-inspection-of-bigwig-files-using-igv">Manual inspection of bigWig files using IGV</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="lab-exospike.html">Spike-in</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a> &raquo;</li>
+        
+      <li>Analysis of CUT&amp;Tag H3K27me3 dataset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/quantitativeChip/cut-and-tag-data.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="analysis-of-cut-tag-h3k27me3-dataset">
+<h1>Analysis of CUT&amp;Tag H3K27me3 dataset<a class="headerlink" href="#analysis-of-cut-tag-h3k27me3-dataset" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#background" id="id2">Background</a></p></li>
+<li><p><a class="reference internal" href="#datasets" id="id3">Datasets</a></p></li>
+<li><p><a class="reference internal" href="#data-preprocessing" id="id4">Data preprocessing</a></p></li>
+<li><p><a class="reference internal" href="#manual-inspection-of-bigwig-files-using-igv" id="id5">Manual inspection of bigWig files using IGV</a></p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2><a class="toc-backref" href="#id2">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>H3K27me3 is a histone modification associated with facultative heterochromatin, i.e. chromatin that is silenced in some but not all cell types within a body. It is written by Polycomb Repressive Complex 2. Important PRC2 targets are HOX gene cluster which delineate the body plan during embryogenesis. HOX genes are silenced in pluripotent stem cells before the come into action during early development.</p>
+</div>
+<div class="section" id="datasets">
+<h2><a class="toc-backref" href="#id3">Datasets</a><a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Table 1. H3K27me3 datasets used in this exercise.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GEO Accession</p></th>
+<th class="head"><p>Sample</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GSM3536498</p></td>
+<td><p>hESC_H1_H3K27me3_CnT</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM3677833</p></td>
+<td><p>NBIS_H1_H3K27me3_CnR</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>hESC_H1_H3K27me3_ChIP</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM1436879</p></td>
+<td><p>WIBR2_H3K27me3_ChIP</p></td>
+</tr>
+</tbody>
+</table>
+<p>H3K27me3-enriched regions from Court et. al. 2017: <code class="docutils literal notranslate"><span class="pre">Bivalent_primed.hg38.bed</span></code>.</p>
+<p>Court, Franck, and Philippe Arnaud. “An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research.” Oncotarget 8.3 (2017): 4110.
+<a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5354816/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5354816/</a></p>
+</div>
+<div class="section" id="data-preprocessing">
+<h2><a class="toc-backref" href="#id4">Data preprocessing</a><a class="headerlink" href="#data-preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>Primary analysis of the initial FASTQ files was performed beforehand. Reads were mapped with bowtie2 with default parameters. Resulting BAM files were deduplicated using Picard and blacklisted regions were removed. BigWig files were generated with deepTools to 1x coverage. Resulting files are available under <code class="docutils literal notranslate"><span class="pre">/sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3</span></code>.</p>
+<p>You can download bigWig and peak annotations. Most of what we are going to do can be done locally on a regular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.</p>
+<p>When running things on Uppmax, copy the files to your home directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>
+mkdir -p cnt_chip/bw
+<span class="nb">cd</span> cnt_chip/bw
+
+cp /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/bw/*.bw .
+
+<span class="c1"># Or you can create symlinks for the bigWig files instead:</span>
+<span class="k">for</span> i <span class="k">in</span> /sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/bw/*.bw<span class="p">;</span> <span class="k">do</span> ln -s <span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-inspection-of-bigwig-files-using-igv">
+<h2><a class="toc-backref" href="#id5">Manual inspection of bigWig files using IGV</a><a class="headerlink" href="#manual-inspection-of-bigwig-files-using-igv" title="Permalink to this headline">¶</a></h2>
+<p>HOXA locus.</p>
+<a class="reference external image-reference" href="Figures/12_cut_tag_hoxa.png"><img alt="" src="../../../_images/12_cut_tag_hoxa.png" /></a>
+<p>Smaller H3K27me3 domains.</p>
+<a class="reference external image-reference" href="Figures/13_cut_tag_igv.png"><img alt="" src="../../../_images/13_cut_tag_igv.png" /></a>
+<p><strong>Q: First impression browsing the H3K27me3 data? Consider the Y axis used for each dataset and what it means for signal/noise.</strong></p>
+<p>Let’s look more systematically at known H3K27me3 peaks. We are using a published bed file of bivalent domains (Court, 2017).</p>
+<a class="reference external image-reference" href="Figures/14_heatmap.png"><img alt="" src="../../../_images/14_heatmap.png" /></a>
+<p>These heatmaps can be generated using <code class="docutils literal notranslate"><span class="pre">seqplots</span></code>. <code class="docutils literal notranslate"><span class="pre">seqplots</span></code> is an <code class="docutils literal notranslate"><span class="pre">R</span></code> package that can be installed
+from <code class="docutils literal notranslate"><span class="pre">Bioconductor</span></code>. It can be run as a shiny app on a browser or from <code class="docutils literal notranslate"><span class="pre">Rstudio</span></code>. You can check
+how to use it <a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html">in this link</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be sure to mark <cite>custom</cite> as genome when uploading bigWig and BED files to <cite>seqplots</cite>. There may be
+some incompatibility between hg38 versions in this case.</p>
+</div>
+<p><strong>Q: While showing the highest signal to noise (note the scale of the heatmap 0-1000!). Could there be a problem with CUT&amp;Tag?</strong></p>
+<p>A common critique about the in-situ methods is that they may be generating false-positive peaks at accessible sites of the genome, since MNase likes to cut open chromatin and Tn5 also is known to integrate best in open chromatin (ATAC-Seq!).</p>
+<p>So we could also plot the signal over active enhancers which are 1) known to have open chromatin and 2) are decorated by H3K27ac, thus cannot have H3K27me3.</p>
+<a class="reference external image-reference" href="Figures/15_heatmap_2.png"><img alt="" src="../../../_images/15_heatmap_2.png" /></a>
+<p><strong>Q: Is the concern of false-positive peaks justified (consider the scale used here and above).</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="lab-exospike.html" class="btn btn-neutral float-right" title="ChIP-seq with exogenous chromatin spike" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cut-and-run-data.html" class="btn btn-neutral float-left" title="In-situ methods: CUT&amp;RUN and ChIP data for CTCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

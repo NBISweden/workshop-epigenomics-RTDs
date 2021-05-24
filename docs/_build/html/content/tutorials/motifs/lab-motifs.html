@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Motif finding exercise &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Detection of differential binding sites using csaw" href="../csaw/lab-csaw.html" />
+    <link rel="prev" title="ChIP-seq down-stream analysis" href="../diffBind/lab-diffBinding-remote.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../chipseeker/lab-ChIPseeker.html">Annotation using ChIPseeker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../diffBind/lab-diffBinding-local.html">Detection of differential binding sites using DiffBind local and annotation with ChIPpeakAnno</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../diffBind/lab-diffBinding-remote.html">Detection of differential binding sites using DiffBind remote</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Identification of sequence motifs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#set-up">0. Set up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-ctcf-data">1. Download CTCF data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prepare-peak-data">2. Prepare peak data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prepare-sequence-data">3. Prepare sequence data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-the-meme-suite-for-motif-finding">4. Use the MEME suite for motif finding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-are-the-motifs-we-have-found">5. What are the motifs we have found?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#try-a-data-set-from-the-previous-execise">6. Try a data set from the previous execise</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#try-homer">7. Try HOMER</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../csaw/lab-csaw.html">Detection of differential binding sites using csaw</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../chip_downstream_tutorials.html">Downstream Analyses</a> &raquo;</li>
+        
+      <li>Motif finding exercise</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/motifs/lab-motifs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="motif-finding-exercise">
+<h1>Motif finding exercise<a class="headerlink" href="#motif-finding-exercise" title="Permalink to this headline">¶</a></h1>
+<p>In this exercise we will try a few <em>de-novo</em> motif finding programs on data sets from human and mouse. We will also compare the motifs we find to a database of known motifs.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#set-up" id="id1">0. Set up</a></p></li>
+<li><p><a class="reference internal" href="#download-ctcf-data" id="id2">1. Download CTCF data</a></p></li>
+<li><p><a class="reference internal" href="#prepare-peak-data" id="id3">2. Prepare peak data</a></p></li>
+<li><p><a class="reference internal" href="#prepare-sequence-data" id="id4">3. Prepare sequence data</a></p></li>
+<li><p><a class="reference internal" href="#use-the-meme-suite-for-motif-finding" id="id5">4. Use the MEME suite for motif finding</a></p></li>
+<li><p><a class="reference internal" href="#what-are-the-motifs-we-have-found" id="id6">5. What are the motifs we have found?</a></p></li>
+<li><p><a class="reference internal" href="#try-a-data-set-from-the-previous-execise" id="id7">6. Try a data set from the previous execise</a></p></li>
+<li><p><a class="reference internal" href="#try-homer" id="id8">7. Try HOMER</a></p></li>
+</ul>
+</div>
+<div class="section" id="set-up">
+<h2><a class="toc-backref" href="#id1">0. Set up</a><a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h2>
+<p>Log in to Uppmax, and start an interactive session.</p>
+<p>Load the modules we will use in the exercise:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load bioinfo-tools
+module load BEDTools
+module load HOMER
+</pre></div>
+</div>
+<p>We will also use programs from the MEME suite. This is available on Uppmax as a module, but currently there are some problems with that version. Instead, we install MEME ourselves, with conda. We set up a conda environment with MEME installed, and activate it.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load conda
+conda create -n motif_lab -c bioconda meme
+conda activate motif_lab
+</pre></div>
+</div>
+<p>Create a working directory where you will do the exercise, and go there. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir motif_lab
+<span class="nb">cd</span> motif_lab
+</pre></div>
+</div>
+<p>Note that the programs used in this exercise produce html output. You view these directly on Uppmax, although this is a bit slow. Otherwise you can copy the files to you local computer, and open them there.</p>
+</div>
+<div class="section" id="download-ctcf-data">
+<h2><a class="toc-backref" href="#id2">1. Download CTCF data</a><a class="headerlink" href="#download-ctcf-data" title="Permalink to this headline">¶</a></h2>
+<p>First, we will look at a ChIP-seq experiment using an antibody against <em>CTCF</em>. <em>CTCF</em> (CCCTC-binding factor) is a zinc-finger protein that functions as a transcription factor. It also has insulator activity and is important for the 3D structure of chromatin, through formation of chromatin loops.</p>
+<a class="reference internal image-reference" href="../../../_images/F2.large.jpg"><img alt="CTCF loops" src="../../../_images/F2.large.jpg" style="width: 400px;" /></a>
+<p><em>CTCF</em> is a well studied protein, and many ChIP-seq data sets are available for CTCF. Its DNA motif is <a class="reference external" href="http://jaspar.genereg.net/matrix/MA0139.1/?revcomp=1">well known</a> (as you can tell from its name).</p>
+<a class="reference internal image-reference" href="../../../_images/MA0139.1.rc.svg"><img alt="CTCF motif" src="../../../_images/MA0139.1.rc.svg" width="400px" /></a>
+<p>We will use <a class="reference external" href="https://www.encodeproject.org/experiments/ENCSR572DUJ/">this data set</a>, from ENCODE. This page shows information about this particular experiment, along the experimental protocols and analysis pipelines used. Scroll down a bit and select the tab “File details”. Now you will see a list of file available for download. We will use the bed files with “pseudoreplicated idr thresholded peaks”. Download this file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://www.encodeproject.org/files/ENCFF693MYU/@@download/ENCFF693MYU.bed.gz
+gunzip ENCFF693MYU.bed.gz
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-peak-data">
+<h2><a class="toc-backref" href="#id3">2. Prepare peak data</a><a class="headerlink" href="#prepare-peak-data" title="Permalink to this headline">¶</a></h2>
+<p>The peaks are on the “narrowPeak bed format”, described <a class="reference external" href="https://genome.ucsc.edu/FAQ/FAQformat.html#format12">here</a></p>
+<p>Have a look at the file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>less ENCFF693MYU.bed
+</pre></div>
+</div>
+<p>It’s often a good idea to just use the peaks with the strongest signal for motif finding. This is becuase a) motif finding programs have a hard time handling large inputs, and b) the peaks with the strongest signal are most likely to be true binding sites and to contain the motif of interest. Therefore, we will run motif finding on the top 500 peaks. To get the top 500 peaks, we first sort the peaks on “signalValue” in column 7 (using the <code class="docutils literal notranslate"><span class="pre">sort</span></code> command) and then take the first 500 peaks (using the <code class="docutils literal notranslate"><span class="pre">head</span></code> command):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sort -k <span class="m">7</span>,7nr  ENCFF693MYU.bed <span class="p">|</span> head -n <span class="m">500</span> &gt; ENCFF693MY_top500.bed
+</pre></div>
+</div>
+<p>Have look at the resulting file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>less ENCFF693MY_top500.bed
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-sequence-data">
+<h2><a class="toc-backref" href="#id4">3. Prepare sequence data</a><a class="headerlink" href="#prepare-sequence-data" title="Permalink to this headline">¶</a></h2>
+<p>Next, we need to get the genome sequence at these 500 peaks. Since repeat elements can confuse the motif finding programs, we will use a repeat-masked version of the genome, where all repeat sequences have been replaced with Ns. Create a soft link to the repeat masked genome in you working directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -s /sw/courses/epigenomics/motif_finding/hg38.masked.fa* .
+</pre></div>
+</div>
+<p>We will now use <code class="docutils literal notranslate"><span class="pre">bedTools</span></code> to extract the genome sequence for the 500 peaks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bedtools getfasta -fo CTCF_top500_peak_seq.fa -fi hg38.masked.fa -bed ENCFF693MY_top500.bed
+</pre></div>
+</div>
+<p>You can see the documentation for the program you just used <a class="reference external" href="https://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html">getfasta</a>. Now, have a look at the fasta file produced:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>less CTCF_top500_peak_seq.fa
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-the-meme-suite-for-motif-finding">
+<h2><a class="toc-backref" href="#id5">4. Use the MEME suite for motif finding</a><a class="headerlink" href="#use-the-meme-suite-for-motif-finding" title="Permalink to this headline">¶</a></h2>
+<p>First we try DREME, which is a fast program that looks for regular expressions (documentation <a class="reference external" href="http://meme-suite.org/doc/dreme-tutorial.html">DREME</a>). This takes around 5 minutes to run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dreme -p CTCF_top500_peak_seq.fa -oc dreme_out
+</pre></div>
+</div>
+<p>DREME produces several output files. Take a look at the html file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>firefox dreme_out/dreme.html
+</pre></div>
+</div>
+<p>You see a list of motifs represented as regular expressions and sequence logos, along with e-values and some links.</p>
+<p>Next, we will try MEME-ChIP. This is a wrapper that runs several programs, including DREME, MEME, and Centrimo. It takes bit longer to run, around 10 minutes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>meme-chip -oc meme_chip_out CTCF_top500_peak_seq.fa
+</pre></div>
+</div>
+<p>This produces several output files. The file <code class="docutils literal notranslate"><span class="pre">meme_chip_out/dreme_out/dreme.html</span></code> is basically the same file as we saw in the previous step. There is also an output file from MEME, a different motif finding program:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>firefox meme_chip_out/meme_out/meme.html
+</pre></div>
+</div>
+<p>Here you can see all motifs found by MEME, with e-values etc.</p>
+<p><strong>What can you learn from all this output? Do the programs find the expected motif? Do they find other motifs? Where are the motifs located in the peaks?</strong></p>
+</div>
+<div class="section" id="what-are-the-motifs-we-have-found">
+<h2><a class="toc-backref" href="#id6">5. What are the motifs we have found?</a><a class="headerlink" href="#what-are-the-motifs-we-have-found" title="Permalink to this headline">¶</a></h2>
+<p>Often when we find a motif, we want to see if it is similar to any motif that is already known. One tool to do this is called Tomtom, and is part of the same suite of programs as MEME etc. MEME and DREME actually have convenient functions to directly look up motifs with Tomtom. To try this, open the MEME output again.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>firefox meme_chip_out/meme_out/meme.html
+</pre></div>
+</div>
+<p>Click on the rightward-pointing arrow next to the first motif (under <em>Submit/Download</em>). You can then select which tool you want to submit your motif to. Tomtom is already pre-selected, so just click on <em>Submit</em>. This takes you to the Tomtom website, where you click on <em>Start search</em>. After a short while you will see a page called <em>Results</em>. Clicking on <em>Tomtom HTML output</em> takes you to the result page. Here you can see the results of matching the motif we found (the “query motif”) to Tomtom’s data base.</p>
+<p><strong>What is the top scoring motif? Does it look similar to the motif we found? What about other motifs further down the list?</strong></p>
+<p>You can also access Tomtom directly from the <a class="reference external" href="http://meme-suite.org/tools/tomtom">web site</a>, or run it from the command line.</p>
+</div>
+<div class="section" id="try-a-data-set-from-the-previous-execise">
+<h2><a class="toc-backref" href="#id7">6. Try a data set from the previous execise</a><a class="headerlink" href="#try-a-data-set-from-the-previous-execise" title="Permalink to this headline">¶</a></h2>
+<p>In the previous exercise you analyzed <em>REST</em> ChIP-seq data. The DNA specificity of this transcription factor is <a class="reference external" href="http://jaspar.genereg.net/search?q=rest">known</a>, so it’s interesting to see if we are able to recover the same (or a similar) motif.</p>
+<p>In the previous exercise an earlier version of the human genome, hg19, was used. Also, only peaks on chromosomes 1 and 2 were considered. We have prepared a file with repeat-masked hg19 sequence from chromosomes 1 and 2. Create a soft link to this file in you work directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -s /sw/courses/epigenomics/motif_finding/hg19_chr_1_2.masked.fa* .
+</pre></div>
+</div>
+<p>Then copy one of the peak files from the previous exercise to work directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp /sw/courses/epigenomics/motif_finding/hela_1_peaks.chr12.bed rest_peaks.chr12.bed
+</pre></div>
+</div>
+<p>Now you are ready to repeat all steps on the new peak set: select the top 500 peaks, get repeat masked genome sequence for these peaks and run motif finding.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sort -k <span class="m">7</span>,7nr rest_peaks.chr12.bed <span class="p">|</span> head -n <span class="m">500</span> &gt; rest_top500.bed
+bedtools getfasta -fo rest_top500_peak_seq.fa -fi hg19_chr_1_2.masked.fa -bed rest_top500.bed
+dreme -p rest_top500_peak_seq.fa -oc dreme_out_rest
+meme-chip -oc meme_chip_out_rest rest_top500_peak_seq.fa
+</pre></div>
+</div>
+<p><strong>What do the programs find? Do DREME and MEME find similar motifs? Do these look like the known REST site? Do the motifs you found resemble any known motifs in Tomtom’s data base?</strong></p>
+</div>
+<div class="section" id="try-homer">
+<h2><a class="toc-backref" href="#id8">7. Try HOMER</a><a class="headerlink" href="#try-homer" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we will try another popular motif finding software, HOMER. Here we will look at a
+<a class="reference external" href="https://www.encodeproject.org/experiments/ENCSR000CBJ/">CTCF chipseq experiment from mouse</a>. First, download the bed file with the peaks and select the top 500 peaks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://www.encodeproject.org/files/ENCFF311HPG/@@download/ENCFF311HPG.bed.gz
+gunzip ENCFF311HPG.bed.gz
+sort -k <span class="m">7</span>,7nr ENCFF311HPG.bed <span class="p">|</span> head -n <span class="m">500</span> &gt; mouse_CTCF_top500.bed
+</pre></div>
+</div>
+<p>Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at.</p>
+<p>Have a look at the resuling html file. Here you can see a list of <em>de-novo</em> motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on <em>Known Motif Enrichment Results</em> to see the results.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>findMotifsGenome.pl mouse_CTCF_top500.bed mm10 homer_out_mouse_ctcf -size <span class="m">200</span> -mask -preparsedDir tmp_homer/
+firefox homer_out_mouse_ctcf/homerResults.html
+</pre></div>
+</div>
+<p><strong>What does HOMER find? is this output easy to interpret?</strong></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../csaw/lab-csaw.html" class="btn btn-neutral float-right" title="Detection of differential binding sites using csaw" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../diffBind/lab-diffBinding-remote.html" class="btn btn-neutral float-left" title="ChIP-seq down-stream analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

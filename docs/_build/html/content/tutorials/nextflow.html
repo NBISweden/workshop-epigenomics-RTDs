@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Introduction to Nextflow and nf-core &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Unsupervised data integration" href="unsupervised_data_integration/lab-unsupervised_data_integration.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Nextflow &amp; nf-core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#learning-outcomes">Learning outcomes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-nextflow">Setup: Nextflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environmet-variable-setup">Environmet variable setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#check-that-nextflow-works">Check that Nextflow works</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-nf-core">Setup: nf-core</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#setting-up-python-on-uppmax">Setting up Python on UPPMAX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install-nf-core">Install nf-core</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fetching-pipelines">Fetching pipelines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#listing-nf-core-pipelines">Listing nf-core pipelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-a-nextflow-pipeline">Downloading a Nextflow pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#downloading-a-specific-version-of-a-nextflow-pipeline">Downloading a specific version of a Nextflow pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-a-test-workflow">Running a test workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#trying-out-atacseq">Trying out atacseq</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generated-files">Generated files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#re-running-a-pipeline-with-resume">Re-running a pipeline with <code class="docutils literal notranslate"><span class="pre">-resume</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#read-the-docs">Read the docs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-a-real-workflow">Running a real workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-data">Example data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-the-sample-sheet">Preparing the sample sheet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-pipeline">Running the pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-help">Getting help</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Introduction to Nextflow and nf-core</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/content/tutorials/nextflow.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction-to-nextflow-and-nf-core">
+<h1>Introduction to Nextflow and nf-core<a class="headerlink" href="#introduction-to-nextflow-and-nf-core" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="learning-outcomes">
+<h2>Learning outcomes<a class="headerlink" href="#learning-outcomes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>To understand the basic components in a Nextflow run</p></li>
+<li><p>To understand the difference between Nextflow and nf-core</p></li>
+<li><p>To be able to find relevant nf-core pipelines</p></li>
+<li><p>To be able to download and update nf-core pipelines</p></li>
+<li><p>To be able to run a nf-core pipeline</p></li>
+</ul>
+</div>
+<div class="section" id="setup-nextflow">
+<h2>Setup: Nextflow<a class="headerlink" href="#setup-nextflow" title="Permalink to this headline">¶</a></h2>
+<p>These steps typically only need to be done once, to get you set up with Nextflow.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>To use Nextflow, either install it yourself in your home directory or use the UPPMAX environment module.</p>
+<p>To install yourself:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/bin    <span class="c1"># Your home directory bin folder - full of binary executable files, already on your PATH</span>
+curl -s https://get.nextflow.io <span class="p">|</span> bash
+</pre></div>
+</div>
+<p>Alternatively, to use the environment modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module purge                        <span class="c1"># Clears all existing loaded modules, to start fresh</span>
+module load uppmax bioinfo-tools    <span class="c1"># Base UPPMAX environment modules, needed for everything else</span>
+module load Nextflow                <span class="c1"># Note: Capital N!</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="environmet-variable-setup">
+<h3>Environmet variable setup<a class="headerlink" href="#environmet-variable-setup" title="Permalink to this headline">¶</a></h3>
+<p>Nextflow has a large list of bash <em>environment variables</em> that can be set to configure how it runs.
+There are some that you want to always be set the same, and the most convenient way to set these
+is to add them to your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> file in your home directory. Once here, they will be applied
+every time you log in automatically.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nextflow singularity image cachedir</span>
+<span class="nb">export</span> <span class="nv">NXF_SINGULARITY_CACHEDIR</span><span class="o">=</span>/proj/MYPROJ/nobackup/YOURNAME/singularity-images
+
+<span class="c1"># Don&#39;t let Java get carried away and use huge amounts of memory</span>
+<span class="nb">export</span> <span class="nv">NXF_OPTS</span><span class="o">=</span><span class="s1">&#39;-Xms1g -Xmx4g&#39;</span>
+
+<span class="c1"># Don&#39;t fill up your home directory with cache files</span>
+<span class="nb">export</span> <span class="nv">NXF_HOME</span><span class="o">=</span>/proj/MYPROJ/nobackup/YOURNAME/nxf-home
+<span class="nb">export</span> <span class="nv">NXF_TEMP</span><span class="o">=</span><span class="si">${</span><span class="nv">SNIC_TMP</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/glob/nxftmp</span><span class="si">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>NB: Replace <code class="docutils literal notranslate"><span class="pre">MYPROJ</span></code> and <code class="docutils literal notranslate"><span class="pre">YOURNAME</span></code> so that you have a sensible file path.</p>
+</div></blockquote>
+<div class="section" id="singularity-cache-dir-and-this-course">
+<h4>Singularity cache dir and this course<a class="headerlink" href="#singularity-cache-dir-and-this-course" title="Permalink to this headline">¶</a></h4>
+<p>To avoid everyone sitting and downloading the same Singularity images for the pipelines,
+we have done this in advance. You can find them at <code class="docutils literal notranslate"><span class="pre">/sw/courses/epigenomics/nextflow/singularity-images/</span></code>.</p>
+<p>Please copy these two files to the directory that you have set for <code class="docutils literal notranslate"><span class="pre">NXF_SINGULARITY_CACHEDIR</span></code>.</p>
+<p>If you try to run a different nf-core pipeline or a different version, Nextflow will try to download
+the missing Singularity image to this directory for you. This can often fail. If so, try running
+an interactive UPPMAX job and pulling the image to the cache directory manually:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$NXF_SINGULARITY_CACHEDIR</span>
+interactive -A MYPROJ    <span class="c1"># Your UPPMAX project ID. Starts an interactive job</span>
+singularity pull --name nfcore-PIPELINE-VERSION.img docker://nfcore/PIPELINE:VERSION
+</pre></div>
+</div>
+<p>Two things to note:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docker://nfcore</span></code> does <em>not</em> have a hyphen (<code class="docutils literal notranslate"><span class="pre">-</span></code>)</p></li>
+<li><p>The image filename must exactly match this pattern, otherwise Nextflow will ignore it and try to download again</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="check-that-nextflow-works">
+<h3>Check that Nextflow works<a class="headerlink" href="#check-that-nextflow-works" title="Permalink to this headline">¶</a></h3>
+<p>It’s always good to have a mini test to check that everything works.</p>
+<p>Make a new directory and run the Nextflow test command as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir nextflow-hello-test
+<span class="nb">cd</span> nextflow-hello-test
+nextflow run hello
+</pre></div>
+</div>
+<p>You should see something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>N E X T F L O W  ~  version 20.10.0
+Pulling nextflow-io/hello ...
+downloaded from https://github.com/nextflow-io/hello.git
+Launching `nextflow-io/hello` [sharp_sammet] - revision: 96eb04d6a4 [master]
+executor &gt;  local (4)
+[7d/f88508] process &gt; sayHello (4) [100%] 4 of 4 ✔
+Bonjour world!
+
+Ciao world!
+
+Hello world!
+
+Hola world!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="setup-nf-core">
+<h2>Setup: nf-core<a class="headerlink" href="#setup-nf-core" title="Permalink to this headline">¶</a></h2>
+<p>The nf-core package is totally separate to Nextflow and is not required to run Nextflow pipelines.
+It does however offer some conveinece functions to make your life a little easier.</p>
+<p>The nf-core helper package (often referred to as <code class="docutils literal notranslate"><span class="pre">nf-core/tools</span></code>) is written in Python.</p>
+<div class="section" id="setting-up-python-on-uppmax">
+<h3>Setting up Python on UPPMAX<a class="headerlink" href="#setting-up-python-on-uppmax" title="Permalink to this headline">¶</a></h3>
+<p>It’s highly recommended that you set up a custom Python environment on UPPMAX so that you
+can install whatever Python packages you want (such as nf-core).</p>
+<p>If in doubt, use <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html"><em>miniconda</em></a>.
+First, download and install the correct version for UPPMAX:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
+bash Miniconda2-latest-Linux-x86_64.sh
+</pre></div>
+</div>
+<p>Follow the instructions and say yes to everything.</p>
+<p>Nearly all common bioinformatics tools are available through <a class="reference external" href="https://bioconda.github.io/">Bioconda</a>,
+including nf-core/tools. To use bioconda, you must first set up the conda channels:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+</pre></div>
+</div>
+<p>Conda uses different <em>environments</em>, so you now want to create a new environment that you can
+use to install packages. To make a new environment with Python v3.8, called <code class="docutils literal notranslate"><span class="pre">work</span></code>, do the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name work <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8 --yes
+</pre></div>
+</div>
+<p>You may be tidy and use different environments for different tasks, or you can be lazy and just
+use one environment for everything - it’s up to you! If you fall into the latter category,
+you may want to add the following line to your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file so that you always activate this
+conda environment every time you log in:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate work
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-nf-core">
+<h3>Install nf-core<a class="headerlink" href="#install-nf-core" title="Permalink to this headline">¶</a></h3>
+<p>If you’re using conda, the easiest way to install nf-core is via bioconda:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install nf-core
+</pre></div>
+</div>
+<p>Alternatively, you can install from the Python Package Index with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install nf-core
+</pre></div>
+</div>
+<p>You can check to see if the installation has worked by trying the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nf-core --version
+</pre></div>
+</div>
+<p>You should see something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                          ,--./,-.
+          ___     __   __   __   ___     /,-._.--~\
+    |\ | |__  __ /  ` /  \ |__) |__         }  {
+    | \| |       \__, \__/ |  \ |___     \`-._,-`-,
+                                          `._,._,&#39;
+
+    nf-core/tools version 1.12
+
+nf-core, version 1.12
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fetching-pipelines">
+<h2>Fetching pipelines<a class="headerlink" href="#fetching-pipelines" title="Permalink to this headline">¶</a></h2>
+<p>Nextflow is pretty clever about working with GitHub and can manage a local cache of pipeline repositories.
+Unless you plan on writing your own pipelines, this is nearly always sufficient.</p>
+<div class="section" id="listing-nf-core-pipelines">
+<h3>Listing nf-core pipelines<a class="headerlink" href="#listing-nf-core-pipelines" title="Permalink to this headline">¶</a></h3>
+<p>nf-core can help you find pipelines and pipeline updates, and tells you whether your Nextflow cache is up to date.</p>
+<p>First, list all nf-core pipelines:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nf-core list
+</pre></div>
+</div>
+<p>There are quite a lot, so now filter just those for <code class="docutils literal notranslate"><span class="pre">chipseq</span></code> (try also <code class="docutils literal notranslate"><span class="pre">rna</span></code>, <code class="docutils literal notranslate"><span class="pre">proteomics</span></code> etc)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nf-core list chipseq
+</pre></div>
+</div>
+<p>You should see something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                          ,--./,-.
+          ___     __   __   __   ___     /,-._.--~\
+    |\ | |__  __ /  ` /  \ |__) |__         }  {
+    | \| |       \__, \__/ |  \ |___     \`-._,-`-,
+                                          `._,._,&#39;
+
+    nf-core/tools version 1.12
+
+┏━━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Pipeline Name ┃ Stars ┃ Latest Release ┃     Released ┃ Last Pulled ┃ Have latest release? ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ chipseq       │    62 │          1.2.1 │ 4 months ago │           - │ -                    │
+└───────────────┴───────┴────────────────┴──────────────┴─────────────┴──────────────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="downloading-a-nextflow-pipeline">
+<h3>Downloading a Nextflow pipeline<a class="headerlink" href="#downloading-a-nextflow-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>Just running a pipeline with <code class="docutils literal notranslate"><span class="pre">nextflow</span> <span class="pre">run</span> <span class="pre">&lt;name&gt;</span></code> will fetch it if you don’t already have it in the cache,
+however you can also explicitly pull a pipeline if you wish. Try by pulling the chipseq pipeline:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nextflow</span> <span class="n">pull</span> <span class="n">nf</span><span class="o">-</span><span class="n">core</span><span class="o">/</span><span class="n">chipseq</span>
+</pre></div>
+</div>
+<p>Now if you re-run the <code class="docutils literal notranslate"><span class="pre">nf-core</span> <span class="pre">list</span> <span class="pre">chipseq</span></code> command you should see that you have the latest release locally:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┏━━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Pipeline Name ┃ Stars ┃ Latest Release ┃     Released ┃ Last Pulled ┃ Have latest release? ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ chipseq       │    62 │          1.2.1 │ 4 months ago │   yesterday │ Yes (v1.2.1)         │
+└───────────────┴───────┴────────────────┴──────────────┴─────────────┴──────────────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="downloading-a-specific-version-of-a-nextflow-pipeline">
+<h3>Downloading a specific version of a Nextflow pipeline<a class="headerlink" href="#downloading-a-specific-version-of-a-nextflow-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>It’s always a good idea to be specific about the release (or branch) of the Nextflow pipeline that you are running.
+That way, if you reuse the command you can be sure that you will be using the same version of the pipeline.</p>
+<p>Try downloading an older release of the chipseq pipeline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nextflow pull nf-core/chipseq -r <span class="m">1</span>.2.0
+</pre></div>
+</div>
+<p>You should now see that <code class="docutils literal notranslate"><span class="pre">nf-core</span> <span class="pre">list</span> <span class="pre">chipseq</span></code> shows that your local cache is not the latest release:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┏━━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Pipeline Name ┃ Stars ┃ Latest Release ┃     Released ┃ Last Pulled ┃ Have latest release? ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ chipseq       │    62 │          1.2.1 │ 4 months ago │   yesterday │ No (v1.2.0)          │
+└───────────────┴───────┴────────────────┴──────────────┴─────────────┴──────────────────────┘
+</pre></div>
+</div>
+<p><strong>Important!</strong> If you don’t specify <code class="docutils literal notranslate"><span class="pre">-r</span></code> when using the <code class="docutils literal notranslate"><span class="pre">nextflow</span> <span class="pre">run</span></code> command, Nextflow will
+use whatever version of the pipeline you have in your local cache. This is another good reason
+to always specify it when running a pipeline.</p>
+</div>
+</div>
+<div class="section" id="running-a-test-workflow">
+<h2>Running a test workflow<a class="headerlink" href="#running-a-test-workflow" title="Permalink to this headline">¶</a></h2>
+<p>It’s always a good idea to start working with a tiny test workflow when using a new Nextflow pipeline.
+This confirms that everything is set up and working properly, before you start moving around massive data files.</p>
+<p>All nf-core pipelines come with a configuration profile called <code class="docutils literal notranslate"><span class="pre">test</span></code> which will run a minimal test dataset
+through the pipeline without needing any other pipeline parameters.</p>
+<div class="section" id="trying-out-atacseq">
+<h3>Trying out atacseq<a class="headerlink" href="#trying-out-atacseq" title="Permalink to this headline">¶</a></h3>
+<p>To try out the nf-core/atacseq pipeline and see if everything is working, let’s try the test dataset.</p>
+<p>Remember the key points:</p>
+<ul class="simple">
+<li><p>Start with a fresh new empty directory</p></li>
+<li><p>Specify the pipeline version number with <code class="docutils literal notranslate"><span class="pre">-r</span></code></p></li>
+<li><p>Run in the background with <code class="docutils literal notranslate"><span class="pre">-bg</span></code></p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">uppmax</span></code> configuration profile to run on UPPMAX</p>
+<ul>
+<li><p>If using this, also specify an UPPMAX project with <code class="docutils literal notranslate"><span class="pre">--project</span></code> (two hyphens!)</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">atacseq</span><span class="o">-</span><span class="n">test</span>
+<span class="n">cd</span> <span class="n">atacseq</span><span class="o">-</span><span class="n">test</span>
+<span class="n">nextflow</span> <span class="n">run</span> <span class="n">nf</span><span class="o">-</span><span class="n">core</span><span class="o">/</span><span class="n">atacseq</span> <span class="o">-</span><span class="n">r</span> <span class="mf">1.2</span><span class="o">.</span><span class="mi">1</span> <span class="o">-</span><span class="n">profile</span> <span class="n">test</span><span class="p">,</span><span class="n">uppmax</span> <span class="o">--</span><span class="n">project</span> <span class="n">XXX</span> <span class="o">-</span><span class="n">bg</span>
+</pre></div>
+</div>
+<p>Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point.
+But that’s ok, that’s why we run a small test dataset!
+This is where you ask for help on Slack instead of suffering in silence.</p>
+<p>If all goes well, you should start seeing some log output from Nextflow appearing on your console.
+If you run <code class="docutils literal notranslate"><span class="pre">jobinfo</span> <span class="pre">-u</span> <span class="pre">USERNAME</span></code> you will hopefully see lots of jobs entering the queue.</p>
+</div>
+<div class="section" id="generated-files">
+<h3>Generated files<a class="headerlink" href="#generated-files" title="Permalink to this headline">¶</a></h3>
+<p>The pipeline will create a bunch of files in your working directory as it goes:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls -a1
+<span class="go">./</span>
+<span class="go">../</span>
+<span class="go">.nextflow/</span>
+<span class="go">.nextflow.log</span>
+<span class="go">.nextflow.pid</span>
+<span class="go">results/</span>
+<span class="go">work/</span>
+</pre></div>
+</div>
+<p>The hidden <code class="docutils literal notranslate"><span class="pre">.nextflow</span></code> files and folders contain information for the cache and detailed logs.</p>
+<p>Each task of the pipeline runs in its own isolated directory, these can be found under <code class="docutils literal notranslate"><span class="pre">work</span></code>.
+The name of each <code class="docutils literal notranslate"><span class="pre">work</span></code> directory corresponds to the task hash which is listed in the Nextflow log.</p>
+<p>As the pipeline runs, it saves the final files it generates to <code class="docutils literal notranslate"><span class="pre">results</span></code> (customise this location with <code class="docutils literal notranslate"><span class="pre">--outdir</span></code>).
+Once you are happy that the pipeline has finished properly, you can delete the temporary files in <code class="docutils literal notranslate"><span class="pre">work</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm -rf work/
+</pre></div>
+</div>
+</div>
+<div class="section" id="re-running-a-pipeline-with-resume">
+<h3>Re-running a pipeline with <code class="docutils literal notranslate"><span class="pre">-resume</span></code><a class="headerlink" href="#re-running-a-pipeline-with-resume" title="Permalink to this headline">¶</a></h3>
+<p>Nextflow is very clever about using cached copies of pipeline steps if you re-run a pipeline.</p>
+<p>Once the test workflow has finished, try running the same command again with the <code class="docutils literal notranslate"><span class="pre">-resume</span></code> flag.
+Hopefully almost all steps will use the previous cached copies of results and the pipeline
+will finish extremely quickly.</p>
+<p>This option is very useful if a pipeline fails unexpectedly, as it allows you to start again
+and pick up where you left off.</p>
+</div>
+<div class="section" id="read-the-docs">
+<h3>Read the docs<a class="headerlink" href="#read-the-docs" title="Permalink to this headline">¶</a></h3>
+<p>The documentation for nf-core pipelines is a big part of the community ethos.</p>
+<p>Whilst the test dataset is running (it’s small, but the UPPMAX job queue can be slow), check out
+the nf-core website. Every pipeline has its own page with extensive documentation.
+For example, the atacseq docs are at <a class="reference external" href="https://nf-co.re/atacseq">https://nf-co.re/atacseq</a></p>
+<p>nf-core pipelines also have some documentation on the command line. You can run this
+as you would a real pipeline run, but with the <code class="docutils literal notranslate"><span class="pre">--help</span></code> option.</p>
+<p>In a new fresh directory(!), try this out:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir atacseq-help
+<span class="nb">cd</span> atacseq-help
+nextflow run nf-core/atacseq -r <span class="m">1</span>.2.1 --help
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="running-a-real-workflow">
+<h2>Running a real workflow<a class="headerlink" href="#running-a-real-workflow" title="Permalink to this headline">¶</a></h2>
+<p>Now we get to the real deal! Once you’ve gotten this far, you start to leave behind the
+generalisations that apply to all nf-core pipelines. Now you have to rely on your wits
+and the nf-core documentation.</p>
+<div class="section" id="example-data">
+<h3>Example data<a class="headerlink" href="#example-data" title="Permalink to this headline">¶</a></h3>
+<p>We have prepared some example data for you that comes from the exercises you’ve worked on
+earlier in the week. The files have been subsampled to make them small and quick to run,
+and are supplied as gzipped (compressed) FastQ files here: <code class="docutils literal notranslate"><span class="pre">/sw/courses/epigenomics/nextflow/fastq_sub12_gz/</span></code></p>
+<p>Copy this directory to your own working space: (it’s 4.2GB so may take a minute or two)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir epigenomics_nextflow_data
+<span class="nb">cd</span> epigenomics_nextflow_data
+cp -R /sw/courses/epigenomics/nextflow/fastq_sub12_gz/ .
+</pre></div>
+</div>
+</div>
+<div class="section" id="preparing-the-sample-sheet">
+<h3>Preparing the sample sheet<a class="headerlink" href="#preparing-the-sample-sheet" title="Permalink to this headline">¶</a></h3>
+<p>The nf-core/chipseq pipeline uses a comma-separated sample sheet file to list all of the input
+files and which replicate / condition they belong to.</p>
+<p>Take a moment to <a class="reference external" href="https://nf-co.re/chipseq/1.2.1/usage#input">read the documentation</a> and
+make sure that you understand the fields and structure of the file.</p>
+<p>We have made a sample sheet for you which describes the different conditions, which can be found
+in the folder you copied: <code class="docutils literal notranslate"><span class="pre">fastq_sub12_gz/exp_design_HeLa_neuron.txt</span></code></p>
+<p><em>HOWEVER</em> - it’s not yet complete. The file paths are incorrect and need to be fixed.
+The file paths are <strong>relative to where you launch Nextflow</strong>, so will depend a little
+on where you copied the data and where you made your new empty directory to run Nextflow.</p>
+<p>Remember that you can softlink files in Linux (kind of like making a shortcut link).
+This is often a good way of keeping a nicely organised work directory without having to
+move the data itself. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">my_analysis</span>
+<span class="n">mkdir</span> <span class="n">input_files</span>
+<span class="n">cd</span> <span class="n">input_files</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">epigenomics_nextflow_data</span><span class="o">/*/*.</span><span class="n">fastq</span><span class="o">.</span><span class="n">gz</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>You can check whether this has worked by using <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span></code>, which should show the full link.
+For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls -l
+
+<span class="go">total 0</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OWM.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/neural/ENCFF000OWM.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OWQ.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/neural/ENCFF000OWQ.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OXB.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/neural/ENCFF000OXB.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000OXE.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/neural/ENCFF000OXE.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PED.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hela/ENCFF000PED.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PEE.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hela/ENCFF000PEE.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PET.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hela/ENCFF000PET.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PMG.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hepg2/ENCFF000PMG.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PMJ.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hepg2/ENCFF000PMJ.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000POM.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hepg2/ENCFF000POM.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000PON.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/hepg2/ENCFF000PON.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RAG.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/sknsh/ENCFF000RAG.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RAH.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/sknsh/ENCFF000RAH.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RBT.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/sknsh/ENCFF000RBT.chr12.rmdup.fastq.gz</span>
+<span class="go">lrwxrwxrwx 1 phil snic-xxx Nov 25 07:57 ENCFF000RBU.chr12.rmdup.fastq.gz -&gt; ../../fastq_sub12/sknsh/ENCFF000RBU.chr12.rmdup.fastq.gz</span>
+</pre></div>
+</div>
+<div class="section" id="things-to-look-out-for">
+<h4>Things to look out for<a class="headerlink" href="#things-to-look-out-for" title="Permalink to this headline">¶</a></h4>
+<p>The following things are easy mistakes when working with chipseq sample sheets - be careful!</p>
+<ul class="simple">
+<li><p>File paths are relative to where you launch Nextflow, not relative to the sample sheet</p></li>
+<li><p>Do not have any blank newlines at the end of the file</p></li>
+<li><p>Use Linux line endings (<code class="docutils literal notranslate"><span class="pre">\n</span></code>), not windows (<code class="docutils literal notranslate"><span class="pre">\r\n</span></code>)</p></li>
+<li><p>If using single end data, keep the empty column for the second FastQ file</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-the-pipeline">
+<h3>Running the pipeline<a class="headerlink" href="#running-the-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>Once you’ve got your sample sheet ready, you can launch the analysis!</p>
+<p>Remember the core Nextflow flags that you will need (one hyphen!)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">1.2.1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bg</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-profile</span> <span class="pre">uppmax</span></code></p></li>
+</ul>
+<p>Remember the pipeline paprameter flags that you will need (two hyphens!)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--project</span> <span class="pre">xxx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--genome</span> <span class="pre">GRCh37</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--input</span> <span class="pre">./my_samplesheet.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--single_end</span></code></p></li>
+</ul>
+<p>If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data!
+Once it’s finished, take a look in the <code class="docutils literal notranslate"><span class="pre">results</span></code> folder and see what it generated.</p>
+</div>
+</div>
+<div class="section" id="getting-help">
+<h2>Getting help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
+<p>Remember that you’re not on your own! If you’re still struggling after checking the
+documentation, jump on to the nf-core Slack and ask for help.</p>
+<p>Every pipeline has it’s own Slack channel (eg. <code class="docutils literal notranslate"><span class="pre">#atacseq</span></code>, <code class="docutils literal notranslate"><span class="pre">#chipseq</span></code> etc) where people will be happy to help.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="unsupervised_data_integration/lab-unsupervised_data_integration.html" class="btn btn-neutral float-left" title="Unsupervised data integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

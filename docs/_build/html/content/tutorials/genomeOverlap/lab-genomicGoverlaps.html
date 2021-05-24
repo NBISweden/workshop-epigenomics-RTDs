@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Genomic overlaps &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Unsupervised data integration" href="../unsupervised_data_integration/lab-unsupervised_data_integration.html" />
+    <link rel="prev" title="Integrating scATAC-seq and scRNA-seq data" href="../scAtacSeq/lab-sc_atac_seq.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../scAtacSeq/lab-sc_atac_seq.html">scATAC-seq analysis and integraion with scRNA-seq data</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Genomic overlaps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#learning-outcomes">Learning outcomes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-up">Setting up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#introduction-to-genomic-ranges">Introduction to genomic ranges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#statistical-significance-of-overlaps">Statistical significance of overlaps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-with-insulator-elements">Example with insulator elements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../unsupervised_data_integration/lab-unsupervised_data_integration.html">BONUS EXERCISE: Unsupervised data integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../data_integration_tutorials.html">Data integration</a> &raquo;</li>
+        
+      <li>Genomic overlaps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/genomeOverlap/lab-genomicGoverlaps.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genomic-overlaps">
+<h1>Genomic overlaps<a class="headerlink" href="#genomic-overlaps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="learning-outcomes">
+<h2>Learning outcomes<a class="headerlink" href="#learning-outcomes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>To be able to manipulate genomic ranges using the <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> package.</p></li>
+<li><p>To compute statistical significance of overlaps between two sets of genomic ranges using randomization tests, and to understand some of the pitfalls when interpreting stuch tests.</p></li>
+</ul>
+<div class="section" id="table-of-contents">
+<h3>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="#setting-up">Setting up</a></p></li>
+<li><p><a class="reference external" href="#introduction-to-genomic-ranges">Introduction to genomic ranges</a></p>
+<ul>
+<li><p><a class="reference external" href="#operations-on-a-single-gragnes-object">Operations on a single GRagnes object</a></p></li>
+<li><p><a class="reference external" href="#comparing-granges">Comparing GRanges</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#statistical-significance-of-overlaps">Statistical significance of overlaps</a></p></li>
+<li><p><a class="reference external" href="#example-with-insulator-elements">Example with insulator elements</a></p>
+<ul>
+<li><p><a class="reference external" href="#different-sampling-method">Different sampling method</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="setting-up">
+<h2>Setting up<a class="headerlink" href="#setting-up" title="Permalink to this headline">¶</a></h2>
+<p>To run this exercise on uppmax, first load the following modules on uppmax:</p>
+<div class="highlight-{bash eval=FALSE} notranslate"><div class="highlight"><pre><span></span>module load bioinfo-tools
+module load R/4.0.0
+module load R_packages/4.0.0
+module load RStudio
+module load samtools
+</pre></div>
+</div>
+<p>Then set up a working directory, in which you create links to all data files needed for the exercise, e.g with <code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">/sw/courses/epigenomics/genomic_overlaps/*</span> <span class="pre">.</span></code>.</p>
+<p>Now start <code class="docutils literal notranslate"><span class="pre">R</span></code>, or <code class="docutils literal notranslate"><span class="pre">rstudio</span></code>.</p>
+</div>
+<div class="section" id="introduction-to-genomic-ranges">
+<h2>Introduction to genomic ranges<a class="headerlink" href="#introduction-to-genomic-ranges" title="Permalink to this headline">¶</a></h2>
+<p>Genomic regions can be used to represent the locations of many features on the genome, e.g. genes, enchancers, open chromatin, transcripsion factor binding sites, CpG islands, SNPs and more. Handling genomic regions is useful for a wide variety of bioinformatic applications. Some examples are:</p>
+<ul class="simple">
+<li><p>Find all promoter regions of a group of genes</p></li>
+<li><p>What are the closest genes to our transcription factor binding sites?</p></li>
+<li><p>Which SNPs overlap the binding sites of a transcription factor we are looking at?</p></li>
+<li><p>How much do our transcription factor binding sites overlap heterochromatin or insulator elements? Do they overlap more than expected by chance?</p></li>
+</ul>
+<p>In R, the <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> package provides an easy way to work with genomic regions. More information on the <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> package can be found <a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html">here</a>.</p>
+<p>We will start by looking at some methods to manipulate genomic ranges, using ChIP-seq data from <a class="reference external" href="http://genesdev.cshlp.org/content/27/6/602.short">Dai et al. 2013</a>.  This study, in <em>Drosophila melanogaster</em> embryos, examined the protein Insensitive (Insv). Two ChIP-seq experiments were made, on 2-6 hour embryos and 6-12 hour embryos. (The peaks for these data sets were called using the <a class="reference external" href="http://www.nature.com/nmeth/journal/v5/n9/full/nmeth.1246.html">Quest</a> peak caller, which reports peaks in a slightly odd format: Here peaks are represented by the 2bp sequences corresponding to the peak summits.)</p>
+<p>We start by loading the libraries needed for this exercise.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">library</span><span class="p">(</span><span class="s2">&quot;rtracklayer&quot;</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="s2">&quot;regioneR&quot;</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="s2">&quot;BSgenome.Dmelanogaster.UCSC.dm3&quot;</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="s2">&quot;pheatmap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, we load the first Insv data set. We use the function <code class="docutils literal notranslate"><span class="pre">import.bed</span></code>, which reads a file and returns a <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> object. This holds information on one or more regions across a genome. Have a look at it. There are corresponding functions to load gff, bw and bedGraph files too. We also use the function <code class="docutils literal notranslate"><span class="pre">filterChromosomes</span></code> to remove special chromosomes present in the <em>Drosophila</em> genome, e.g. heterochromatin and a special “chromosome” made up of unassembled contigs.</p>
+<p><em>Can you understand the output? How many peaks does this data set have?</em></p>
+<div class="highlight-{r granges_intro1} notranslate"><div class="highlight"><pre><span></span>set.seed(1234)
+
+insv.2.6 &lt;- import.bed(&quot;insv_2_6h.bed&quot;)
+insv.2.6 &lt;- filterChromosomes(insv.2.6, organism = &quot;dm3&quot;)
+insv.2.6
+
+head(start(insv.2.6))
+head(end(insv.2.6))
+head(width(insv.2.6))
+sum(width(insv.2.6))
+length(insv.2.6)
+</pre></div>
+</div>
+<div class="section" id="operations-on-a-single-gragnes-object">
+<h3>Operations on a single GRagnes object<a class="headerlink" href="#operations-on-a-single-gragnes-object" title="Permalink to this headline">¶</a></h3>
+<p>There are several operations you can perform on a <code class="docutils literal notranslate"><span class="pre">Granges</span></code> object: shift al regions to the left or right, change their size, get flanking regions, merge overlapping regions, find everything not covered by the regions etc. Try out a few of these. <em>Do you understand what these functions do? Otherwise try e.g. <code class="docutils literal notranslate"><span class="pre">?flank</span></code>.</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get flanking regions</span>
+<span class="n">flank</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+<span class="n">flank</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># Shift regions</span>
+<span class="n">shift</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">shift</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="o">-</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="c1"># Change size of regions</span>
+<span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> <span class="o">+</span> <span class="mi">10</span>
+<span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> <span class="o">-</span> <span class="mi">10</span>
+
+<span class="c1"># Merge overlapping regions</span>
+<span class="n">reduce</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> <span class="o">+</span> <span class="mi">249</span><span class="p">)</span>
+
+<span class="c1"># Get everything not covered by the regions</span>
+<span class="n">gaps</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparing-granges">
+<h3>Comparing GRanges<a class="headerlink" href="#comparing-granges" title="Permalink to this headline">¶</a></h3>
+<p>In integrating different data sets, it is often useful to compare several <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> objects, to see how much they overlap, or where they differ. Here we load the other Insv data set, from 6-12 hour embryos, and compare it to the data from 2-6 hours. Since each peak is only represented by the 2 bp peak summit, we start by exteding the peaks so they are 500 bp, and merging overlapping peaks.</p>
+<p>Common operations for comparing two <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> are: union (all sequence covered by any of the <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> objects), intersect (all sequence covered by both of the <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> objects), setdiff (all sequence covered by one <code class="docutils literal notranslate"><span class="pre">GRanges</span></code> object but not the other).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span> <span class="o">&lt;-</span> <span class="n">import</span><span class="o">.</span><span class="n">bed</span><span class="p">(</span><span class="s2">&quot;insv_6_12h.bed&quot;</span><span class="p">)</span>
+<span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span> <span class="o">&lt;-</span> <span class="n">filterChromosomes</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">,</span> <span class="n">organism</span> <span class="o">=</span> <span class="s2">&quot;dm3&quot;</span><span class="p">)</span>
+<span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> <span class="o">&lt;-</span> <span class="n">reduce</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> <span class="o">+</span> <span class="mi">249</span><span class="p">)</span>
+<span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span> <span class="o">&lt;-</span> <span class="n">reduce</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span> <span class="o">+</span> <span class="mi">249</span><span class="p">)</span>
+
+<span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span> 
+<span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span>
+
+<span class="c1"># Union</span>
+<span class="n">union</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)</span>
+<span class="n">union</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">gaps</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">))</span>
+
+<span class="c1"># How many bp are present in each peaks set? In any of the peak sets?</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">))</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">))</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">union</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)))</span>
+
+<span class="c1"># Intersection</span>
+<span class="n">intersect</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)</span>
+
+<span class="c1"># How many bp are present in both peak sets?</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">intersect</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)))</span>
+
+<span class="c1"># Setdiff</span>
+<span class="n">setdiff</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)</span>
+
+<span class="c1"># How many bp are prsent in the 2-6 hour peak set, but not in the 6-12 hour peak set?</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">setdiff</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)))</span>
+
+<span class="c1"># Can you figure out what this means?</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">setdiff</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)))</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">width</span><span class="p">(</span><span class="n">intersect</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>If we have two data sets, the function <code class="docutils literal notranslate"><span class="pre">findOverlaps</span></code> calculates which of the regions in the two data sets that overlap.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Which regions overlap?</span>
+<span class="n">ol</span> <span class="o">&lt;-</span> <span class="n">findOverlaps</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">)</span>
+<span class="n">ol</span>
+
+<span class="c1"># One range in object A may overlap several ranges in object B, and the other way around</span>
+<span class="n">which</span><span class="p">(</span><span class="n">duplicated</span><span class="p">(</span><span class="n">queryHits</span><span class="p">(</span><span class="n">ol</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="statistical-significance-of-overlaps">
+<h2>Statistical significance of overlaps<a class="headerlink" href="#statistical-significance-of-overlaps" title="Permalink to this headline">¶</a></h2>
+<p>Determining if two sets of genomic regions overlap more than expected by chance is a common problem in genomics. Here we will try the <code class="docutils literal notranslate"><span class="pre">regioneR</span></code> package to do this, but there are many other methods available. As you will see this is a quite difficult problen, and the results should be interpreted with caution.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">regioneR</span></code> package uses randomization tests to asses how significant the overlap between two data sets is. The basic idea is to:</p>
+<ol class="simple">
+<li><p>Calulate the overlap between the two given data sets A and B</p></li>
+<li><p>Create a randomized data set B’, with the same number of regions, and the same sizes as B, distributes randomly across the genome.</p></li>
+<li><p>Calculate the overlap between A and B’.</p></li>
+<li><p>Repeat steps 2 and 3 many times (e.g. 1000) to get a distribution of how many overlaps we would expect by chance.</p></li>
+<li><p>Compare the results from step 1 (A vs B) to the results for all the randomized data sets. This makes it possible to calculate a p-value and a z-score.</p></li>
+</ol>
+<p>To illustrate this, we create a data set of 100 regions, randomly ditributed across the genome. Using the test with 100 randomizations, we check if there is a signficant between the Insv peaks and our random data set. <em>How do you interpret the results?</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read sizes of chromosomes</span>
+<span class="n">dm3</span> <span class="o">&lt;-</span> <span class="n">read</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;dm3_chrom_sizes.txt&quot;</span><span class="p">)</span>
+<span class="n">dm3</span> <span class="o">&lt;-</span> <span class="n">filterChromosomes</span><span class="p">(</span><span class="n">getGenome</span><span class="p">(</span><span class="n">dm3</span><span class="p">),</span> <span class="n">organism</span><span class="o">=</span><span class="s2">&quot;dm3&quot;</span><span class="p">)</span>
+
+<span class="n">rr</span> <span class="o">&lt;-</span> <span class="n">createRandomRegions</span><span class="p">(</span><span class="n">nregions</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">length</span><span class="o">.</span><span class="n">mean</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">length</span><span class="o">.</span><span class="n">sd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="n">dm3</span><span class="p">)</span>
+
+<span class="n">permRes</span> <span class="o">&lt;-</span> <span class="n">overlapPermTest</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">rr</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">ntimes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;greater&quot;</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="n">getGenome</span><span class="p">(</span><span class="n">dm3</span><span class="p">),</span> <span class="n">mc</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">permRes</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">permRes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the same strategy, we can check if there is a significant overlap between the two Insv data sets, from different time points. <em>How do you interpret the results?</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">permRes</span> <span class="o">&lt;-</span> <span class="n">overlapPermTest</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">,</span> <span class="n">ntimes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;greater&quot;</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="n">getGenome</span><span class="p">(</span><span class="n">dm3</span><span class="p">),</span> <span class="n">mc</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">permRes</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">permRes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-with-insulator-elements">
+<h2>Example with insulator elements<a class="headerlink" href="#example-with-insulator-elements" title="Permalink to this headline">¶</a></h2>
+<p>In <a class="reference external" href="http://genesdev.cshlp.org/content/29/1/48.short">Dai et al. 2015</a> it was shown that Insv often binds together with insulator proteins (BEAF-32, CP190, CTCF and others) across the <em>Drosophila</em> genome.</p>
+<p>Insulator elements were <a class="reference external" href="http://genesdev.cshlp.org/content/10/24/3202.abstract">first described</a> as DNA elements that can restrict e.g. interactions between enhancers and target genes or the spread of heterochromatin.</p>
+<p><img alt="(Hagstrom et al. 1996, Genes &amp; Development)" src="../../../_images/hagstrom_insulator.png" /></p>
+<p>Later it was found that insulator elements control DNA looping, so that enhancers and target genes can end up in different loop domains (≈ topologically associated domains, TADs). Image taken from <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0959437X1500132X">this</a> review.</p>
+<p><img alt="(Ali et al. 2016, Current Opinion in Genetics &amp; Development)" src="../../../_images/ali_insulator.png" /></p>
+<p>To check for ourselves if Insv overlaps isulator elements, we use some public data on insulator proteins, and compare these to the Insv regions. We start by loading and formatting data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add chr</span>
+<span class="n">beaf32</span> <span class="o">&lt;-</span> <span class="n">import</span><span class="o">.</span><span class="n">gff3</span><span class="p">(</span><span class="s2">&quot;beaf32.gff3&quot;</span><span class="p">)</span>
+<span class="n">cp190</span> <span class="o">&lt;-</span> <span class="n">import</span><span class="o">.</span><span class="n">gff3</span><span class="p">(</span><span class="s2">&quot;cp190.gff3&quot;</span><span class="p">)</span>
+<span class="n">ctcf</span><span class="o">.</span><span class="mi">1</span> <span class="o">&lt;-</span> <span class="n">import</span><span class="o">.</span><span class="n">gff3</span><span class="p">(</span><span class="s2">&quot;ctcf.gff3&quot;</span><span class="p">)</span>
+
+<span class="n">allDataSets</span> <span class="o">&lt;-</span> <span class="nb">list</span><span class="p">(</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="o">=</span><span class="n">insv</span><span class="o">.</span><span class="mf">2.6</span><span class="p">,</span>
+                    <span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="o">=</span><span class="n">insv</span><span class="o">.</span><span class="mf">6.12</span><span class="p">,</span>
+		    <span class="n">beaf32</span><span class="o">=</span><span class="n">beaf32</span><span class="p">,</span>
+		    <span class="n">cp190</span><span class="o">=</span><span class="n">cp190</span><span class="p">,</span>
+		    <span class="n">ctcf</span><span class="o">.</span><span class="mi">1</span><span class="o">=</span><span class="n">ctcf</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># These data sets are from different studies, and on different formats. </span>
+<span class="c1"># We have to make sure that they are all on the same format, so that all chromosome names match.</span>
+<span class="n">lapply</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">,</span> <span class="n">seqlevelsStyle</span><span class="p">)</span>
+
+<span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)){</span>
+	<span class="n">seqlevelsStyle</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]])</span><span class="o">&lt;-</span><span class="s2">&quot;UCSC&quot;</span>
+	<span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">filterChromosomes</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]],</span> <span class="n">organism</span> <span class="o">=</span> <span class="s2">&quot;dm3&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">lapply</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">,</span> <span class="n">seqlevelsStyle</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, we simply count the overlaps between the various data sets. We loop though all pairs of data sets <em>i</em>,<em>j</em>, and coout the overlaps. In the matrix below each, entry <em>i,j,</em> represents the fraction of regions in data set <em>i</em> that overlap with data set <em>j</em>. We also plot the results as a heat map, where different levels of overlap are represented by different colors. <em>Does Insv overlap a lot woth the insulator proteins?</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">overlapFraction</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">))</span>
+<span class="n">rownames</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">names</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)</span>
+<span class="n">colnames</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">names</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)</span>
+<span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)){</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)){</span>
+		<span class="n">overlapFraction</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;-</span>	<span class="n">numOverlaps</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]],</span> <span class="n">B</span><span class="o">=</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">j</span><span class="p">]])</span><span class="o">/</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]])</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="nb">round</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">useCols</span> <span class="o">&lt;-</span> <span class="n">colorRampPalette</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">))(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">pheatmap</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">,</span> <span class="n">cluster_rows</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">cluster_cols</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">useCols</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">% o</span><span class="s2">verlap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For comparison, we add data on an unrelated transcription factor, CtBP, and re-run the analysis. <em>How much does Insv overlap the insulator proteins BEAF-32, CP190 and CTCT, compared to CtBP?</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load and format CtBp data</span>
+<span class="n">ctbp</span> <span class="o">&lt;-</span> <span class="n">import</span><span class="o">.</span><span class="n">bed</span><span class="p">(</span><span class="s2">&quot;ctbp.bed&quot;</span><span class="p">)</span>
+<span class="n">seqlevelsStyle</span><span class="p">(</span><span class="n">ctbp</span><span class="p">)</span><span class="o">&lt;-</span><span class="s2">&quot;UCSC&quot;</span>
+<span class="n">ctbp</span> <span class="o">&lt;-</span> <span class="n">filterChromosomes</span><span class="p">(</span><span class="n">ctbp</span><span class="p">,</span> <span class="n">organism</span> <span class="o">=</span> <span class="s2">&quot;dm3&quot;</span><span class="p">)</span>
+
+<span class="n">allDataSets</span> <span class="o">&lt;-</span> <span class="n">c</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">,</span> <span class="n">ctbp</span><span class="o">=</span><span class="n">ctbp</span><span class="p">)</span>
+
+<span class="c1"># Re-run overlap analysis</span>
+<span class="n">overlapFraction</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">NA</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">))</span>
+<span class="n">rownames</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">names</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)</span>
+<span class="n">colnames</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">names</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)</span>
+<span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)){</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="ow">in</span> <span class="mi">1</span><span class="p">:</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">)){</span>
+		<span class="n">overlapFraction</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;-</span>	<span class="n">numOverlaps</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]],</span> <span class="n">B</span><span class="o">=</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">j</span><span class="p">]])</span><span class="o">/</span><span class="n">length</span><span class="p">(</span><span class="n">allDataSets</span><span class="p">[[</span><span class="n">i</span><span class="p">]])</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="nb">round</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">useCols</span> <span class="o">&lt;-</span> <span class="n">colorRampPalette</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">))(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">pheatmap</span><span class="p">(</span><span class="n">overlapFraction</span><span class="p">,</span> <span class="n">cluster_rows</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">cluster_cols</span><span class="o">=</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">useCols</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">% o</span><span class="s2">verlap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can now check if the overlaps between the different proteins are more common than would be expected by chance. Again, we loop though all pairs of data sets <em>i</em>,<em>j</em>, but this this we do a randomization test for each pair <em>i</em>,<em>j</em>, and save the p-values and z-scores. Because this takes a while to run, we only use 50 randomization rounds. (To reduce runtime even more, we only compare each pair of data sets once and don’t compare data sets to themselves.)</p>
+<p>Looking at the p-values is not very informative, since they are all quite low. To get even lower p-values, we would have to run a lot more randomization rounds, which takes time. (P-values of 1e5 would require 100000 randomizations.) In this case, Z-scores are more informative, since they can provide a measure of how much bigger the overlap between data sets is, compared to randomized data.</p>
+<div class="highlight-{r overlap_significance} notranslate"><div class="highlight"><pre><span></span>overlapP &lt;- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets))
+rownames(overlapP) &lt;- names(allDataSets)
+colnames(overlapP) &lt;- names(allDataSets)
+
+overlapZ &lt;- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets))
+rownames(overlapZ) &lt;- names(allDataSets)
+colnames(overlapZ) &lt;- names(allDataSets)
+
+nTimes &lt;- 50
+
+for(i in 1:length(allDataSets)){
+	for(j in 1:length(allDataSets)){
+		if(i&lt;j){
+			permRes &lt;- overlapPermTest(A=allDataSets[[i]], 
+                                                   B=allDataSets[[j]], 
+						   ntimes=nTimes, 
+						   alternative=&quot;greater&quot;, 
+						   genome=getGenome(dm3), 
+						   mc.set.seed=FALSE, 
+						   verbose=FALSE)
+			overlapP[i,j] &lt;- permRes$numOverlaps$pval
+			overlapZ[i,j] &lt;- permRes$numOverlaps$zscore
+		}
+	}
+}
+
+# Fill in the missing values.
+for(i in 1:length(allDataSets)){
+	for(j in 1:length(allDataSets)){
+		if(i&gt;j){
+			overlapP[i,j] &lt;- overlapP[j,i]
+			overlapZ[i,j] &lt;- overlapZ[j,i]
+		}
+	}
+}
+diag(overlapP) &lt;- 0
+diag(overlapZ) &lt;- NA
+
+round(overlapP,2)
+round(overlapZ,2)
+
+useCols &lt;- colorRampPalette(c(&quot;white&quot;, &quot;red&quot;))(100)
+pheatmap(overlapP, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main=&quot;P-values&quot;)
+pheatmap(overlapZ, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main=&quot;z-scores&quot;)
+</pre></div>
+</div>
+<div class="section" id="different-sampling-method">
+<h3>Different sampling method<a class="headerlink" href="#different-sampling-method" title="Permalink to this headline">¶</a></h3>
+<p>When testing if the overlap between two data sets is significant, there are many choices that could have a big impact on the results. For example, most transcription factor binding sites are enriched around transcription start sites (TSS). This means that if we use a randomization strategy where we can place regions over the entire genome, we might overestimate the significance of the overlaps.</p>
+<p>Below, we check if results change if we instead focus on promoter regions only. For this we load coordinates of promoter regions, here defined as [TSS-1500, TSS+500]. We then only consider binding sites that fall within the prometer regions. As you can see, we still retain most binding sites. In the resampling strategy, we now only now <strong>sample promoter regions instead of sampling random regions across the genome</strong>. <em>How does this affect the results?</em></p>
+<p>(Since this randomization strategy is faster than sampling random regions, we now use 500 radnomization rounds.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Load promoter regions
+us &lt;- import.bed(&quot;genes1000bpupstream.bed&quot;) + 500
+seqlevelsStyle(us)&lt;-&quot;UCSC&quot;
+us &lt;- filterChromosomes(us, organism = &quot;dm3&quot;)
+
+# Only use peaks within promoter regions
+allDataSetsUs &lt;- lapply(allDataSets, function(x){GenomicRanges::intersect(x,us,ignore.strand=TRUE) })
+lapply(allDataSetsUs , length)
+
+# Re-run ovlerap analysis
+overlapP &lt;- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets))
+rownames(overlapP) &lt;- names(allDataSets)
+colnames(overlapP) &lt;- names(allDataSets)
+
+overlapZ &lt;- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets))
+rownames(overlapZ) &lt;- names(allDataSets)
+colnames(overlapZ) &lt;- names(allDataSets)
+
+nTimes &lt;- 500
+
+for(i in 1:length(allDataSets)){
+	for(j in 1:length(allDataSets)){
+		if(i&lt;j){
+			permRes &lt;- permTest(A=allDataSets[[i]], 
+			                    B=allDataSets[[j]], 
+					    ntimes=nTimes,
+					    randomize.function=resampleRegions, 
+					    universe=us,
+					    alternative=&quot;greater&quot;, evaluate.function=numOverlaps,
+					    count.once=TRUE, mc.set.seed=FALSE, mc.cores=4)
+			overlapP[i,j] &lt;- permRes$numOverlaps$pval
+			overlapZ[i,j] &lt;- permRes$numOverlaps$zscore
+		}
+	}
+}
+
+# Fill in the missing values.
+for(i in 1:length(allDataSets)){
+	for(j in 1:length(allDataSets)){
+		if(i&gt;j){
+			overlapP[i,j] &lt;- overlapP[j,i]
+			overlapZ[i,j] &lt;- overlapZ[j,i]
+		}
+	}
+}
+diag(overlapP) &lt;- 0
+diag(overlapZ) &lt;- NA
+
+round(overlapP,3)
+round(overlapZ,2)
+
+useCols &lt;- colorRampPalette(c(&quot;white&quot;, &quot;red&quot;))(100)
+pheatmap(overlapP, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main=&quot;P-values&quot;)
+pheatmap(overlapZ, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main=&quot;z-scores&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../unsupervised_data_integration/lab-unsupervised_data_integration.html" class="btn btn-neutral float-right" title="Unsupervised data integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../scAtacSeq/lab-sc_atac_seq.html" class="btn btn-neutral float-left" title="Integrating scATAC-seq and scRNA-seq data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

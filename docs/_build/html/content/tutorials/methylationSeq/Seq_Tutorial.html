@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DNA Methylation: Bisulfite Sequencing Workflow &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ChIP-seq" href="../chipseq_tutorials.html" />
+    <link rel="prev" title="DNA Methylation: Array Workflow" href="../methylationArray/Array_Tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../methylationArray/Array_Tutorial.html">Array workflow</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sequencing workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-packages">Load Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-datasets">Load Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#descriptive-statistics">Descriptive Statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filter-step">Filter Step</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#normalization">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#merge-data">Merge Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-filtering">Further Filtering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-structure-outlier-detection">Data Structure/Outlier Detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#differential-methylation">Differential Methylation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#visualization">Visualization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gene-set-enrichment">Gene Set Enrichment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alternative-workflows">Alternative workflows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../methylation_tutorials.html">DNA Methylation</a> &raquo;</li>
+        
+      <li>DNA Methylation: Bisulfite Sequencing Workflow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/methylationSeq/Seq_Tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dna-methylation-bisulfite-sequencing-workflow">
+<h1>DNA Methylation: Bisulfite Sequencing Workflow<a class="headerlink" href="#dna-methylation-bisulfite-sequencing-workflow" title="Permalink to this headline">¶</a></h1>
+<p><strong>Learning Outcomes</strong></p>
+<p>During this tutorial, you will learn how to use the <em>methylKit</em> R package to perform a basic bisulfite sequencing data analysis: loading data, basic quality control and filtering, data exploration and differential methylation at the CpG and regional level.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#datasets" id="id4">Datasets</a></p></li>
+<li><p><a class="reference internal" href="#load-packages" id="id5">Load Packages</a></p></li>
+<li><p><a class="reference internal" href="#load-datasets" id="id6">Load Datasets</a></p></li>
+<li><p><a class="reference internal" href="#descriptive-statistics" id="id7">Descriptive Statistics</a></p></li>
+<li><p><a class="reference internal" href="#filter-step" id="id8">Filter Step</a></p></li>
+<li><p><a class="reference internal" href="#normalization" id="id9">Normalization</a></p></li>
+<li><p><a class="reference internal" href="#merge-data" id="id10">Merge Data</a></p></li>
+<li><p><a class="reference internal" href="#further-filtering" id="id11">Further Filtering</a></p></li>
+<li><p><a class="reference internal" href="#data-structure-outlier-detection" id="id12">Data Structure/Outlier Detection</a></p></li>
+<li><p><a class="reference internal" href="#differential-methylation" id="id13">Differential Methylation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#single-cpg-sites" id="id14">Single CpG Sites</a></p></li>
+<li><p><a class="reference internal" href="#cpg-annotation" id="id15">CpG Annotation</a></p></li>
+<li><p><a class="reference internal" href="#differentially-methylated-regions" id="id16">Differentially Methylated Regions</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#visualization" id="id17">Visualization</a></p></li>
+<li><p><a class="reference internal" href="#gene-set-enrichment" id="id18">Gene Set Enrichment</a></p></li>
+<li><p><a class="reference internal" href="#alternative-workflows" id="id19">Alternative workflows</a></p></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Since its first use in 1992, bisulfite (BS) sequencing of DNA has become the gold standard for analysis of DNA methylation due to the potential whole-genome coverage and single-base resolution.</p>
+<p>There are different protocols available to assess DNA methylation using NGS. The easiest way is to add the bisulfite reaction to the sequencing workflow and do Whole-Genome Bisulfite Sequencing (WGBS). However, this requires sufficient read depths to reliably determine methylation status. When working on an organism with a large genome size, this can lead to high costs for sequencing. The benefits of WGBS are that it typically reaches a coverage &gt;90% of the CpGs in the human genome in unbiased representation. It allows identification of non-CG methylation as well as identification of partially methylated domains, low methylated regions at distal regulatory elements and DNA methylation valleys in embryonic stem cells. Despite its advantages, WGBS remains the most expensive technique and is usually not applied to a large number of samples.</p>
+<p>As an alternative, one could focus the detection of DNA methylation to a specific subset of the genome, thereby reducing the data volume of the experiment and subsequently the cost. One popular approach to this is Reduced Representation Bisulfite Sequencing (RRBS). The fundamental idea of RRBS is to get a “reduced representation” of the genome, with a focus on CpG islands. This involves the addition of restriction enzymes to digest the DNA during the fragmentation step. Typically, the enzyme MspI is used which is methylation insensitive. It cuts at 5’-CCGG-3’ sites, and since the genome is largely depleted of CpGs except for promoters/CpG islands, the “reduced representation” is largely capturing only these promoter regions for further analysis.</p>
+<p>Regardless of the approach, the rationale behind bisulfite sequencing is fairly simple. Bisulfite treatment changes unmethylated cytosine (C) via uracil (U) to thymine (T), while methylated cytosines are protected from this conversion. Quantification of methylation is thus simply done by identifying C-to-T conversions in the aligned bisulfite treated reads and dividing the number of Cs by the sum of Ts and Cs for each cytosine in the genome.</p>
+<a class="reference external image-reference" href="Figures/biseq.png"><img alt="" src="../../../_images/biseq.png" /></a>
+<p><em>Fig. 1: Bisulfite sequencing overview.</em></p>
+<p>Being able to do this quantification reliably depends on rigorous quality control before alignment, the choice of alignment method and post-alignment quality control. Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment.  A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see <a class="reference external" href="https://nf-co.re/methylseq">methylseq</a>). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example nf-core methylseq.</p>
+</div>
+<div class="section" id="datasets">
+<h2><a class="toc-backref" href="#id4">Datasets</a><a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<p>To showcase a basic analysis, a small set of samples has been collected consisting of mouse mammary gland cells. The epithelium of the mammary gland exists in a highly dynamic state, undergoing dramatic changes during puberty, pregnancy, lactation and regression. Characterization of the lineage hierarchy of cells in the mammary epithelium is an important step toward understanding which cells are predisposed to oncogenesis.</p>
+<p>In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the methylseq nf-core pipeline.</p>
+</div>
+<a class="reference external image-reference" href="Figures/coverage.png"><img alt="" src="../../../_images/coverage.png" /></a>
+<p><em>Table 1: Example of a Bismark coverage files. One of the input types fit for methylKit.</em></p>
+</div>
+<div class="section" id="load-packages">
+<h2><a class="toc-backref" href="#id5">Load Packages</a><a class="headerlink" href="#load-packages" title="Permalink to this headline">¶</a></h2>
+<p>This exercise has been set up on Uppmax, so connect to Uppmax as described in <a class="reference internal" href="../setup/lab-setup.html"><span class="doc">Setting-up</span></a>. On Uppmax, most packages are already installed, and can be loaded into R after the <code class="docutils literal notranslate"><span class="pre">R/4.0.0</span></code> and  <code class="docutils literal notranslate"><span class="pre">R_packages/4.0.0</span></code> modules have been loaded. If you are running on Uppmax, start by loading the following modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load R/4.0.0
+module load R_packages/4.0.0
+module load RStudio
+</pre></div>
+</div>
+<p>Start the analysis by initiating <em>RStudio</em>… This might take a few seconds and a <code class="code docutils literal notranslate"><span class="pre">libGL</span> <span class="pre">error</span></code> can be shown before loading the RStudio graphical interface.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rstudio
+</pre></div>
+</div>
+<p>Workflows for the downstream analysis of Bisulfite sequencing data are in general less standardized than those for the analysis of array data and might require a somewhat more advanced knowledge of R to make the most of the data. The workflow we will present today is based on the <a class="reference external" href="https://bioconductor.org/packages/release/bioc/html/methylKit.html">methylKit</a> R package. This package has been developed as a comprehensive package for the analysis of genome-wide DNA methylation profiles providing functions for clustering, sample quality visualization and differential methylation analysis. <a class="reference external" href="https://www.bioconductor.org/packages/release/bioc/vignettes/genomation/inst/doc/GenomationManual.html">genomation</a> will be used to perform feature annotation.</p>
+<p>Start by loading the required packages.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main analysis package</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;methylKit&quot;</span><span class="p">)</span>
+<span class="c1"># Annotation package</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;genomation&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;GenomicRanges&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>methylKit</em> has an active discussion group <a class="reference external" href="https://groups.google.com/g/methylkit_discussion">here</a>, if you have further questions regarding the package and/or analysis.</p>
+</div>
+</div>
+<div class="section" id="load-datasets">
+<h2><a class="toc-backref" href="#id6">Load Datasets</a><a class="headerlink" href="#load-datasets" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned above, the samples we will be using as input files are Bismark coverage files, which need to be collected in a list R object prior to be loaded in <em>methylKit</em> using the <code class="docutils literal notranslate"><span class="pre">methRead</span></code> function. The data files have been uploaded to Uppmax before. Important is that you supply sample location, sample IDs and the genome assembly. Moreover, you should supply which pipeline was used to produce the input files and a <code class="docutils literal notranslate"><span class="pre">treatment</span></code> parameter indicating which sample is “control” or “0” and which is “test” or “1”. Additionally, you can define a minimum read coverage for CpG sites to be included in the object with <code class="docutils literal notranslate"><span class="pre">mincov</span></code>. Depending on the type of input data, additional parameters are available.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Don’t forget to check <code class="docutils literal notranslate"><span class="pre">?methRead</span></code> for more info about parameter options.</p>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the list containing the bismark coverage files.</span>
+<span class="n">file.list</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span>
+   <span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data/P6_1.bismark.cov.gz&quot;</span><span class="p">,</span>
+   <span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data/P6_4.bismark.cov.gz&quot;</span><span class="p">,</span>
+   <span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data/P8_3.bismark.cov.gz&quot;</span><span class="p">,</span>
+   <span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data/P8_6.bismark.cov.gz&quot;</span><span class="p">)</span>
+
+<span class="c1"># read the listed files into a methylRawList object making sure the other</span>
+<span class="c1"># parameters are filled in correctly.</span>
+<span class="n">myobj</span> <span class="o">&lt;-</span> <span class="nf">methRead</span><span class="p">(</span><span class="n">file.list</span><span class="p">,</span>
+           <span class="n">sample.id</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="s">&quot;Luminal_1&quot;</span><span class="p">,</span><span class="s">&quot;Luminal_2&quot;</span><span class="p">,</span><span class="s">&quot;Basal_1&quot;</span><span class="p">,</span><span class="s">&quot;Basal_2&quot;</span><span class="p">),</span>
+           <span class="n">pipeline</span> <span class="o">=</span> <span class="s">&quot;bismarkCoverage&quot;</span><span class="p">,</span>
+           <span class="n">assembly</span><span class="o">=</span><span class="s">&quot;mm10&quot;</span><span class="p">,</span>
+           <span class="n">treatment</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span>
+           <span class="n">mincov</span> <span class="o">=</span> <span class="m">10</span>
+           <span class="p">)</span>
+
+<span class="c1"># check number of samples</span>
+<span class="n">myobj</span>
+
+<span class="c1"># What type of data is stored here?</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">myobj</span><span class="p">[[</span><span class="m">1</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>This will result in <code class="docutils literal notranslate"><span class="pre">methylRawList</span></code> object containing the data and metadata. What do the columns “numCs” and “numTs” in each sample correspond to? Can you see how many CpG sites are included in each sample?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you prefer to run this tutorial locally, you can also download these data filesto your personal computer. To do this, navigate to the folder on your own conputer where you want to deposit the data and execute <code class="code docutils literal notranslate"><span class="pre">scp</span> <span class="pre">-r</span> <span class="pre">&lt;username&gt;&#64;rackham.uppmax.uu.se:/sw/courses/epigenomics/DNAmethylation/biseq_data</span> <span class="pre">.</span></code>. Of course, you will also have to install the analysis packages locally!</p>
+</div>
+</div>
+<div class="section" id="descriptive-statistics">
+<h2><a class="toc-backref" href="#id7">Descriptive Statistics</a><a class="headerlink" href="#descriptive-statistics" title="Permalink to this headline">¶</a></h2>
+<p>With all data collected in a single object, we can now have a look at some basic statistics per sample, such as the percentage methylation and coverage. For this, the functions <code class="docutils literal notranslate"><span class="pre">getMethylationStats</span></code> and <code class="docutils literal notranslate"><span class="pre">getCoverageStats</span></code> can be used. These stats can be plotted for each strand separately, but since Bismark coverage files do not include the strand origins of each CpG, the <code class="docutils literal notranslate"><span class="pre">both.strands</span></code> parameter has to be set to FALSE.  <code class="docutils literal notranslate"><span class="pre">myobj</span></code> is basically a list object in R so by changing the number in the double brackets, you can specify a certain sample. Have a look at the stats for the 4 different different samples. Do they look as expected?</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a histogram of the methylation percentage per sample</span>
+<span class="c1"># Here for sample 1</span>
+<span class="nf">getMethylationStats</span><span class="p">(</span><span class="n">myobj</span><span class="p">[[</span><span class="m">1</span><span class="p">]],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">both.strands</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Typically, percentage methylation histograms should have peaks on both ends of the distribution. In any given cell, any given cytosine is either methylated or not. Therefore, looking at many cells should yield a similar pattern where we see lots of locations with high methylation and lots of locations with low methylation and a lower number of locations with intermediate methylation. Because bisulfite sequencing has a relatively high error rate, samples between 0% and 10% are usually classified as “unmethylated”, and samples between 90% and 100% are classified as “fully methylated”, although these thresholds are not fixed.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a histogram of the read coverage per sample</span>
+<span class="nf">getCoverageStats</span><span class="p">(</span><span class="n">myobj</span><span class="p">[[</span><span class="m">1</span><span class="p">]],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">both.strands</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="c1"># Get percentile data by setting plot=FALSE</span>
+<span class="nf">getCoverageStats</span><span class="p">(</span><span class="n">myobj</span><span class="p">[[</span><span class="m">1</span><span class="p">]],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span> <span class="n">both.strands</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Experiments that are suffering from PCR duplication bias will have a secondary peak towards the right hand side of the coverage histogram.</p>
+</div>
+<div class="section" id="filter-step">
+<h2><a class="toc-backref" href="#id8">Filter Step</a><a class="headerlink" href="#filter-step" title="Permalink to this headline">¶</a></h2>
+<p>It might be useful to filter samples based on coverage. In particular, if samples are suffering from PCR bias or overamplification it could be useful to discard bases with very high read coverage. Furthermore, we would also like to discard bases that have very low read coverage, because these tend to produce unreliable and unstable statistics in the downstream analysis. The code below filters a <code class="docutils literal notranslate"><span class="pre">methylRawList</span></code> and discards bases that have coverage below 10 reads (in this case we already did this when reading in the files…) and also discards the bases that have more than 99.9th percentile of coverage in each sample.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">myobj.filt</span> <span class="o">&lt;-</span> <span class="nf">filterByCoverage</span><span class="p">(</span><span class="n">myobj</span><span class="p">,</span>
+                      <span class="n">lo.count</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
+                      <span class="n">lo.perc</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
+                      <span class="n">hi.count</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
+                      <span class="n">hi.perc</span><span class="o">=</span><span class="m">99.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="normalization">
+<h2><a class="toc-backref" href="#id9">Normalization</a><a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h2>
+<p>Next, a basic normalization of the coverage values between samples is performed by using a scaling factor derived from differences between the median of the coverage distributions. In the dowstream differential analysis, we will be comparing methylation fractions between samples, so one could think that sequence depth would not matter all that much. After all, 40/80 (mC/C) reads is the same fraction as 400/800 (mC/C) reads. However, certain statistical tests (i.e. Fisher’s exact test) will result in different p-values depending on the total number of reads. Thus, if the coverage is quite similar across the samples, this step is not really essential, otherwise it might be a good idea to normalize the data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">myobj.filt.norm</span> <span class="o">&lt;-</span> <span class="nf">normalizeCoverage</span><span class="p">(</span><span class="n">myobj.filt</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;median&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="merge-data">
+<h2><a class="toc-backref" href="#id10">Merge Data</a><a class="headerlink" href="#merge-data" title="Permalink to this headline">¶</a></h2>
+<p>In order to do further analysis, we will need to extract the bases that are covered by reads in all our samples. The following function will merge all samples to one object with base-pair locations that are covered in all samples. Setting <code class="docutils literal notranslate"><span class="pre">destrand=TRUE</span></code> (the default is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>) will merge reads on both strands of a CpG dinucleotide. This provides better coverage, but only advised when looking at CpG methylation (for CpH methylation this will cause wrong results in subsequent analyses; can you figure out why?). In addition, setting <code class="docutils literal notranslate"><span class="pre">destrand=TRUE</span></code> will only work when operating on base-pair resolution, otherwise setting this option <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> will have no effect. Our data contains no strand info, so the <code class="docutils literal notranslate"><span class="pre">destrand</span></code> option is not applicable. The <code class="docutils literal notranslate"><span class="pre">unite</span></code> function will return a <code class="docutils literal notranslate"><span class="pre">methylBase</span></code> object which will be our main object for all comparative analysis. The <code class="docutils literal notranslate"><span class="pre">methylBase</span></code> object contains methylation information for regions/bases that are covered in all samples.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">meth</span> <span class="o">&lt;-</span> <span class="nf">unite</span><span class="p">(</span><span class="n">myobj.filt.norm</span><span class="p">,</span> <span class="n">destrand</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="n">meth</span>
+</pre></div>
+</div>
+<p>How many bases were kept for downstream analysis?</p>
+</div>
+<div class="section" id="further-filtering">
+<h2><a class="toc-backref" href="#id11">Further Filtering</a><a class="headerlink" href="#further-filtering" title="Permalink to this headline">¶</a></h2>
+<p>High-throughput methylation data contains a lot of CpG sites that have no or little variation among study subjects and are not all that informative for downstream analyses. Nonspecific CpG filtering (i.e., not considering phenotype) is a common dimension reduction procedure performed prior to cluster analysis and differential methylation. For exploratory analysis, it is of general interest to see how samples relate to each other and we might want to remove CpGs that are not variable before doing that. For differential methylation, removing non variable CpGs prior to the analysis will lower the number of tests that needs to be performed, thus reducing multiple correction penalties.</p>
+<p>The most commonly used and simple method of standard deviation filtering on methylation ratio values (equivalent to Beta values) has been shown to be robust and consistent to different real datasets and would suffice for most occasions.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># get percent methylation matrix</span>
+<span class="n">pm</span><span class="o">=</span><span class="nf">percMethylation</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
+
+<span class="c1"># calculate standard deviation of CpGs</span>
+<span class="n">sds</span><span class="o">=</span><span class="n">matrixStats</span><span class="o">::</span><span class="nf">rowSds</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
+
+<span class="c1"># Visualize the distribution of the per-CpG standard deviation</span>
+<span class="c1"># to determine a suitable cutoff</span>
+<span class="nf">hist</span><span class="p">(</span><span class="n">sds</span><span class="p">,</span> <span class="n">breaks</span> <span class="o">=</span> <span class="m">100</span><span class="p">)</span>
+
+<span class="c1"># keep only CpG with standard deviations larger than 2%</span>
+<span class="n">meth</span> <span class="o">&lt;-</span> <span class="n">meth</span><span class="p">[</span><span class="n">sds</span> <span class="o">&gt;</span> <span class="m">2</span><span class="p">]</span>
+
+<span class="c1"># This leaves us with this number of CpG sites</span>
+<span class="nf">nrow</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can further remove known C -&gt; T mutations. These locations should be removed from the analysis as they do not represent true bisulfite-treatment-associated conversions. Mutation locations can be stored in a GRanges object, and we can use that to remove the CpGs overlapping with the mutations. In order to do the overlap operation, we will convert the methylKit object to a GRanges object and do the filtering with the <code class="docutils literal notranslate"><span class="pre">%over%</span></code> function. The returned object will still be a methylKit object.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># give the locations of 2 example SNPs</span>
+<span class="n">mut</span> <span class="o">&lt;-</span> <span class="nf">GRanges</span><span class="p">(</span><span class="n">seqnames</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;chr21&quot;</span><span class="p">,</span><span class="s">&quot;chr21&quot;</span><span class="p">),</span>
+         <span class="n">ranges</span><span class="o">=</span><span class="nf">IRanges</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">9853296</span><span class="p">,</span> <span class="m">9853326</span><span class="p">),</span>
+                        <span class="n">end</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span> <span class="m">9853296</span><span class="p">,</span><span class="m">9853326</span><span class="p">)))</span>
+
+<span class="c1"># select CpGs that do not overlap with mutations</span>
+<span class="n">meth</span> <span class="o">&lt;-</span> <span class="n">meth</span><span class="p">[</span><span class="o">!</span><span class="nf">as</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span><span class="s">&quot;GRanges&quot;</span><span class="p">)</span> <span class="o">%over%</span> <span class="n">mut</span><span class="p">,</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-structure-outlier-detection">
+<h2><a class="toc-backref" href="#id12">Data Structure/Outlier Detection</a><a class="headerlink" href="#data-structure-outlier-detection" title="Permalink to this headline">¶</a></h2>
+<p>We can check the correlation between samples using <code class="docutils literal notranslate"><span class="pre">getCorrelation</span></code>. This function will either plot scatter plot and Pearson correlation coefficients or just print a correlation matrix if <code class="docutils literal notranslate"><span class="pre">plot=FALSE</span></code>. What does this plot tell you about the structure in the data? Which samples resemble each other the most?</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">getCorrelation</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The data structure can additionally be visualized in a dendrogram using hierarchical clustering of distance measures derived from each samples’ percentage methylation. Clustering is used for grouping data points by their similarity. It is a general concept that can be achieved by many different algorithms. Check <code class="docutils literal notranslate"><span class="pre">?clusterSamples</span></code> to see which distance measures and clustering methods are available.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">clusterSamples</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="s">&quot;correlation&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;ward&quot;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another very useful visualization is obtained by plotting the samples in a principal component space. Using this kind of PCA plot we project multidimensional data (i.e. we have as many dimensions in this data as there are CpG loci in <code class="docutils literal notranslate"><span class="pre">meth</span></code>) into 2 or 3-dimensional space while at the same time maintaining as much variation in the data as possible. Samples that are more alike will be clustered together in PC space, so by looking at this plot we can see what is the largest source of variation in data and whether there are sample swaps and/or outlier samples. <code class="docutils literal notranslate"><span class="pre">PCASamples</span></code> is a function in <em>methylKit</em> that will perform PCA and plot the first two principal components. What does the PCA plot of our dataset tell you? What is the biggest source of variation on the data? Does it look samples are swapped? Do there seem to be outliers among the samples?</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">PCASamples</span><span class="p">(</span><span class="n">meth</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="differential-methylation">
+<h2><a class="toc-backref" href="#id13">Differential Methylation</a><a class="headerlink" href="#differential-methylation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-cpg-sites">
+<h3><a class="toc-backref" href="#id14">Single CpG Sites</a><a class="headerlink" href="#single-cpg-sites" title="Permalink to this headline">¶</a></h3>
+<p>If the basic statistics of the samples look OK and the data structure seems reasonable, we can proceed to the differential methylation step. Differential DNA methylation is usually calculated by comparing the proportion of methylated Cs in a test sample relative to a control. In simple comparisons between such pairs of samples (i.e. test and control), methods such as Fisher’s Exact Test can be applied when there are no replicates for test and control cases. If replicates are available, regression based methods are generally used to model methylation levels in relation to the sample groups and variation between replicates. In addition, an advantage of regression methods over Fisher’s exact test is that it allows for the inclusion of sample specific covariates (continuous or categorical) and the ability to adjust for confounding variables.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">calculateDiffMeth</span></code> function is the main function to calculate differential methylation in the <em>methylKit</em> package. Depending on the sample size per each set it will either use Fisher’s exact or logistic regression to calculate P-values. In practice, the number of samples per group will determine which of the two methods will be used (logistic regression or Fisher’s exact test). If there are multiple samples per group, <em>methylKit</em> will employ the logistic regression test. Otherwise, when there is one sample per group, Fisher’s exact test will be used. P-values will automatically be corrected for multiple testing using the Benjamini-Hochberg FDR method.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In its simplest form, where there are no covariates, the logistic regression will try to model the log odds ratio which is based on the methylation proportion of a CpG, <span class="math notranslate nohighlight">\(\pi_i\)</span>, using the treatment vector which denotes the sample group membership for the CpGs in the model. Below, the “Treatment” variable is used to predict the log-odds ratio of methylation proportions.</p>
+<div class="math notranslate nohighlight">
+\[log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i\]</div>
+<p>The logistic regression model is fitted per CpG and we test if the treatment has any effect on the outcome variable or not. In other words, we are testing if <span class="math notranslate nohighlight">\(log(\pi_i/(1-\pi_i)) = \beta_0 + \beta_1*Treatment_i\)</span> is a “better” model than <span class="math notranslate nohighlight">\(log(\pi_i/(1-\pi_i)) = \beta_0\)</span>.</p>
+</div>
+<p>The following code tests for the differential methylation of our dataset; i.e comparing methylation levels between “treatment” (or Luminal samples) and “control” (Basal smaples). Since the example data has replicates, logistic regression will be used.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test for differential methylation... This might take a few minutes.</span>
+<span class="n">myDiff</span> <span class="o">&lt;-</span> <span class="nf">calculateDiffMeth</span><span class="p">(</span><span class="n">meth</span><span class="p">,</span>
+                            <span class="n">overdispersion</span> <span class="o">=</span> <span class="s">&quot;MN&quot;</span><span class="p">,</span>
+                            <span class="n">adjust</span><span class="o">=</span><span class="s">&quot;BH&quot;</span><span class="p">)</span>
+<span class="n">myDiff</span>
+</pre></div>
+</div>
+<p>The output of <code class="docutils literal notranslate"><span class="pre">calculateDiffMeth</span></code> is a <code class="docutils literal notranslate"><span class="pre">methylDiff</span></code> object containing information about the difference in percentage methylation between treatment and control, and the p- and q-value of the model for all CpG sites. No reordering, filtering or sorting has happened here yet.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple volcano plot to get an overview of differential methylation</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">myDiff</span><span class="o">$</span><span class="n">meth.diff</span><span class="p">,</span> <span class="o">-</span><span class="nf">log10</span><span class="p">(</span><span class="n">myDiff</span><span class="o">$</span><span class="n">qvalue</span><span class="p">))</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Alternatively, the function <code class="docutils literal notranslate"><span class="pre">calculateDiffMethDSS</span></code> provides an interface to the beta-binomial model from the <em>DSS</em> package. This might sometimes be more statistically sound as it can account for both sampling and epigenetic variability</p></li>
+<li><p>If you want to compare multiple treatment groups, you can do as above using a treatment vector as c(2,2,1,1,0,0) to detect CpGs differing in any of the groups. For specific pairwise comparisons you have to use the <code class="docutils literal notranslate"><span class="pre">reorganize</span></code> function and rerun <code class="docutils literal notranslate"><span class="pre">calculateDiffMeth</span></code></p></li>
+</ul>
+</div>
+<p>Next, visualize the number of hyper- and hypomethylation events per chromosome, as a percent of the sites with minimum coverage and minimal differential methylation. By default this is a 25% change in methylation and all samples with 10X coverage.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Overview of percentage hyper and hypo CpGs per chromosome.</span>
+<span class="nf">diffMethPerChr</span><span class="p">(</span><span class="n">myDiff</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After q-value calculation, we can select the differentially methylated regions/bases based on q-value and percent methylation difference cutoffs of Treatment versus control. Following bits of code selects the bases that have q-value &lt; 0.01 and percent methylation difference larger than 25%. If you specify <code class="docutils literal notranslate"><span class="pre">type=&quot;hyper&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">type=&quot;hypo&quot;</span></code> options, you will extract the hyper-methylated or hypo-methylated regions/bases.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># get hyper methylated bases and order by qvalue</span>
+<span class="n">myDiff25p.hyper</span> <span class="o">&lt;-</span> <span class="nf">getMethylDiff</span><span class="p">(</span><span class="n">myDiff</span><span class="p">,</span>
+                              <span class="n">difference</span><span class="o">=</span><span class="m">25</span><span class="p">,</span>
+                              <span class="n">qvalue</span><span class="o">=</span><span class="m">0.01</span><span class="p">,</span>
+                              <span class="n">type</span><span class="o">=</span><span class="s">&quot;hyper&quot;</span><span class="p">)</span>
+<span class="n">myDiff25p.hyper</span> <span class="o">&lt;-</span> <span class="n">myDiff25p.hyper</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">myDiff25p.hyper</span><span class="o">$</span><span class="n">qvalue</span><span class="p">),]</span>
+
+<span class="c1"># get hypo methylated bases and order by qvalue</span>
+<span class="n">myDiff25p.hypo</span> <span class="o">&lt;-</span> <span class="nf">getMethylDiff</span><span class="p">(</span><span class="n">myDiff</span><span class="p">,</span>
+                             <span class="n">difference</span><span class="o">=</span><span class="m">25</span><span class="p">,</span>
+                             <span class="n">qvalue</span><span class="o">=</span><span class="m">0.01</span><span class="p">,</span>
+                             <span class="n">type</span><span class="o">=</span><span class="s">&quot;hypo&quot;</span><span class="p">)</span>
+<span class="n">myDiff25p.hypo</span> <span class="o">&lt;-</span> <span class="n">myDiff25p.hypo</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">myDiff25p.hypo</span><span class="o">$</span><span class="n">qvalue</span><span class="p">),]</span>
+
+<span class="c1"># get all differentially methylated bases and order by qvalue</span>
+<span class="n">myDiff25p</span> <span class="o">&lt;-</span> <span class="nf">getMethylDiff</span><span class="p">(</span><span class="n">myDiff</span><span class="p">,</span>
+                        <span class="n">difference</span><span class="o">=</span><span class="m">25</span><span class="p">,</span>
+                        <span class="n">qvalue</span><span class="o">=</span><span class="m">0.01</span><span class="p">)</span>
+<span class="n">myDiff25p</span> <span class="o">&lt;-</span> <span class="n">myDiff25p</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">myDiff25p</span><span class="o">$</span><span class="n">qvalue</span><span class="p">),]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you need to interact with these objects, it is sometimes necessary to first extract the data using the <code class="docutils literal notranslate"><span class="pre">getData</span></code> function.</p>
+</div>
+<p>If necessary, covariates (such as age, sex, smoking status, …) can be included in the regression analysis. The function will then try to separate the influence of the covariates from the treatment effect via the logistic regression model. In this case, the test would be whether the full model (model with treatment and covariates) is better than the model with the covariates only. If there is no effect due to the treatment (sample groups), the full model will not explain the data better than the model with covariates only. In <code class="docutils literal notranslate"><span class="pre">calculateDiffMeth</span></code>, this is achieved by supplying the covariates argument in the format of a dataframe.</p>
+</div>
+<div class="section" id="cpg-annotation">
+<h3><a class="toc-backref" href="#id15">CpG Annotation</a><a class="headerlink" href="#cpg-annotation" title="Permalink to this headline">¶</a></h3>
+<p>To help with the biological interpretation of the data, we will annotate the differentially methylated regions/bases using the <em>genomation</em> package. The most common annotation task is to see where CpGs of interest land in relation to genes and gene parts and regulatory regions: Do they mostly occupy promoter, intronic or exonic regions? Do they overlap with repeats? Do they overlap with other epigenomic markers or long-range regulatory regions? In this example, we read the gene annotation information from a BED file (Browser Extensible Data - file format containing genome coordinates and associated annotations) and annotate our differentially methylated regions with that information using <em>genomation</em> functions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<blockquote>
+<div><p>The annotation tables used below (.bed files) can be downloaded from the <a class="reference external" href="https://genome.ucsc.edu/cgi-bin/hgTables">UCSC TableBrowser</a>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>For gene annotation, select “Genes and Gene prediction tracks” from the “group” drop-down menu. Following that, select “Refseq Genes” from the “track” drop-down menu. Select “BED- browser extensible data” for the “output format”. Click “get output” and on the following page click “get BED” without changing any options. Save the output as a text file.</p></li>
+<li><p>For CpG island annotation, select “Regulation” from the “group” drop-down menu. Following that, select “CpG islands” from the “track” drop-down menu. Select “BED- browser extensible data” for the “output format”. Click “get output” and on the following page click “get BED” without changing any options. Save the output as a text file.</p></li>
+</ul>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># First load the annotation data; i.e the coordinates of promoters, TSS, intron and exons</span>
+<span class="n">refseq_anot</span> <span class="o">&lt;-</span> <span class="nf">readTranscriptFeatures</span><span class="p">(</span><span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data//mm10.refseq.genes.bed&quot;</span><span class="p">)</span>
+
+<span class="c1"># Annotate hypermethylated CpGs (&quot;target&quot;) with promoter/exon/intron</span>
+<span class="c1"># information (&quot;feature&quot;). This function operates on GRanges objects, so we # first coerce the methylKit object to GRanges.</span>
+<span class="n">myDiff25p.hyper.anot</span> <span class="o">&lt;-</span> <span class="nf">annotateWithGeneParts</span><span class="p">(</span><span class="n">target</span> <span class="o">=</span> <span class="nf">as</span><span class="p">(</span><span class="n">myDiff25p.hyper</span><span class="p">,</span><span class="s">&quot;GRanges&quot;</span><span class="p">),</span>
+                                       <span class="n">feature</span> <span class="o">=</span> <span class="n">refseq_anot</span><span class="p">)</span>
+
+<span class="c1"># Summary of target set annotation</span>
+<span class="n">myDiff25p.hyper.anot</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The GenomicRanges package defines general purpose containers for storing and manipulating genomic intervals and variables defined along a genome.</p>
+</div>
+<p>This function creates an <em>AnnotationByGeneParts</em> object, containing - for each target CpG - data such as the nearest transcription start site and the genomic structure it is located on. Several accessor functions from the <em>genomation</em> package allow for interaction with such an object.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># View the distance to the nearest Transcription Start Site; the target.row column in the output indicates the row number in the initial target set</span>
+<span class="n">dist_tss</span> <span class="o">&lt;-</span> <span class="nf">getAssociationWithTSS</span><span class="p">(</span><span class="n">myDiff25p.hyper.anot</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">dist_tss</span><span class="p">)</span>
+
+<span class="c1"># See whether the differentially methylated CpGs are within promoters,introns or exons; the order is the same as the target set</span>
+<span class="nf">getMembers</span><span class="p">(</span><span class="n">myDiff25p.hyper.anot</span><span class="p">)</span>
+
+<span class="c1"># This can also be summarized for all differentially methylated CpGs</span>
+<span class="nf">plotTargetAnnotation</span><span class="p">(</span><span class="n">myDiff25p.hyper.anot</span><span class="p">,</span> <span class="n">main</span> <span class="o">=</span> <span class="s">&quot;Differential Methylation Annotation&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similarly, it is possible to annotate the differentially methylated CpGs with CpG Island membership using <code class="docutils literal notranslate"><span class="pre">readFeatureFlank</span></code> and <code class="docutils literal notranslate"><span class="pre">annotateWithFeatureflank</span></code>. Using these functions you read from a BED file with feature info (here the location of the CpG Islands) and with the flank parameter you can define a region around these features (here the “shores” are defined as 2000 bases around the Islands).</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the CpG info</span>
+<span class="n">cpg_anot</span> <span class="o">&lt;-</span> <span class="nf">readFeatureFlank</span><span class="p">(</span><span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/biseq_data/mm10.cpg.bed&quot;</span><span class="p">,</span> <span class="n">feature.flank.name</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;CpGi&quot;</span><span class="p">,</span> <span class="s">&quot;shores&quot;</span><span class="p">),</span> <span class="n">flank</span><span class="o">=</span><span class="m">2000</span><span class="p">)</span>
+<span class="n">diffCpGann</span> <span class="o">&lt;-</span> <span class="nf">annotateWithFeatureFlank</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">myDiff25p</span><span class="p">,</span><span class="s">&quot;GRanges&quot;</span><span class="p">),</span> <span class="n">feature</span> <span class="o">=</span> <span class="n">cpg_anot</span><span class="o">$</span><span class="n">CpGi</span><span class="p">,</span> <span class="n">flank</span> <span class="o">=</span> <span class="n">cpg_anot</span><span class="o">$</span><span class="n">shores</span><span class="p">,</span> <span class="n">feature.name</span> <span class="o">=</span> <span class="s">&quot;CpGi&quot;</span><span class="p">,</span> <span class="n">flank.name</span> <span class="o">=</span> <span class="s">&quot;shores&quot;</span><span class="p">)</span>
+
+<span class="c1"># See whether the CpG in myDiff25p belong to a CpG Island or Shore</span>
+<span class="nf">head</span><span class="p">(</span><span class="nf">getMembers</span><span class="p">(</span><span class="n">diffCpGann</span><span class="p">))</span>
+
+<span class="c1"># This can also be summarized for all differentially methylated CpGs</span>
+<span class="nf">plotTargetAnnotation</span><span class="p">(</span><span class="n">diffCpGann</span><span class="p">,</span> <span class="n">main</span> <span class="o">=</span> <span class="s">&quot;Differential Methylation Annotation&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In general, this workflow can be used to annotate a CpG list with any set of features contained in a BED file.</p>
+</div>
+<div class="section" id="differentially-methylated-regions">
+<h3><a class="toc-backref" href="#id16">Differentially Methylated Regions</a><a class="headerlink" href="#differentially-methylated-regions" title="Permalink to this headline">¶</a></h3>
+<p>Since we are often more interested in the different methylation of multiple CpGs across samples instead of a single site, we can also summarize methylation information over a set of defined functional regions such as promoters or CpG islands. The function below summarizes the methylation information over a given set of CpG Islands and outputs a <em>methylRaw</em> or <em>methylRawList</em> object depending on the input. We are using the output of <em>genomation</em> functions used above to provide the locations of the Islands. For these regional summary functions, we need to provide regions of interest as GRanges object.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summarize the original object counts over a certain region, here the CpG Islands</span>
+<span class="c1"># You can ignore the warnings here...</span>
+<span class="n">myobj_islands</span> <span class="o">&lt;-</span> <span class="nf">regionCounts</span><span class="p">(</span><span class="n">myobj</span><span class="p">,</span> <span class="n">cpg_anot</span><span class="o">$</span><span class="n">CpGi</span><span class="p">)</span>
+<span class="c1"># Filter the summarized counts by coverage</span>
+<span class="n">myobj_islands_filt</span> <span class="o">&lt;-</span> <span class="nf">filterByCoverage</span><span class="p">(</span><span class="n">myobj_islands</span><span class="p">,</span>
+                      <span class="n">lo.count</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
+                      <span class="n">lo.perc</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
+                      <span class="n">hi.count</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span>
+                      <span class="n">hi.perc</span><span class="o">=</span><span class="m">99.9</span><span class="p">)</span>
+<span class="c1"># Perform simple normalization</span>
+<span class="n">myobj_islands_filt_norm</span> <span class="o">&lt;-</span> <span class="nf">normalizeCoverage</span><span class="p">(</span><span class="n">myobj_islands_filt</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;median&quot;</span><span class="p">)</span>
+<span class="c1"># Merge the samples again</span>
+<span class="n">meth_islands</span> <span class="o">&lt;-</span> <span class="nf">unite</span><span class="p">(</span><span class="n">myobj_islands_filt_norm</span><span class="p">,</span> <span class="n">destrand</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, differential methylation is performed as for the single CpGs.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test for differential methylation... This might take a few minutes.</span>
+<span class="n">myDiff_islands</span> <span class="o">&lt;-</span> <span class="nf">calculateDiffMeth</span><span class="p">(</span><span class="n">meth_islands</span><span class="p">)</span>
+<span class="c1"># Rank by significance</span>
+<span class="n">myDiff_islands</span> <span class="o">&lt;-</span> <span class="n">myDiff_islands</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">myDiff_islands</span><span class="o">$</span><span class="n">qvalue</span><span class="p">),]</span>
+<span class="c1"># get all differentially methylated CpG Islands</span>
+<span class="n">myDiff_islands_25p</span> <span class="o">&lt;-</span> <span class="nf">getMethylDiff</span><span class="p">(</span><span class="n">myDiff_islands</span><span class="p">,</span><span class="n">difference</span><span class="o">=</span><span class="m">25</span><span class="p">,</span><span class="n">qvalue</span><span class="o">=</span><span class="m">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And just like for the single CpGs, annotation using the <em>genomation</em> functions is possible.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">myDiff_islands_25p_ann</span> <span class="o">&lt;-</span> <span class="nf">annotateWithGeneParts</span><span class="p">(</span><span class="nf">as</span><span class="p">((</span><span class="n">myDiff_islands_25p</span><span class="p">),</span> <span class="s">&quot;GRanges&quot;</span><span class="p">),</span> <span class="n">refseq_anot</span><span class="p">)</span>
+<span class="c1"># View the distance to the nearest Transcription Start Site; the target.row column indicates the row number in myDiff_islands_25p</span>
+<span class="nf">head</span><span class="p">(</span><span class="nf">getAssociationWithTSS</span><span class="p">(</span><span class="n">myDiff_islands_25p_ann</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Besides grouping by functional regions, you can also group CpGs in a sliding window along the genome for a more unbiased approach. As for the functional regions, we would start again from the original object but this time group the CpGs in a certain predefined window. After this, the usual <code class="docutils literal notranslate"><span class="pre">filterByCoverage</span></code>, <code class="docutils literal notranslate"><span class="pre">normalizeCoverage</span></code> and <code class="docutils literal notranslate"><span class="pre">unite</span></code> functions are used before doing <code class="docutils literal notranslate"><span class="pre">calculatedDiffMeth</span></code>. Give it a go if you happen to have some spare time at the end of this tutorial!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reconstruct original object, keeping a lower coverage this time</span>
+<span class="n">myobj_lowCov</span> <span class="o">&lt;-</span> <span class="n">methRead</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">list</span><span class="p">,</span>
+           <span class="n">sample</span><span class="o">.</span><span class="n">id</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s2">&quot;Luminal_1&quot;</span><span class="p">,</span><span class="s2">&quot;Luminal_2&quot;</span><span class="p">,</span><span class="s2">&quot;Basal_1&quot;</span><span class="p">,</span><span class="s2">&quot;Basal_2&quot;</span><span class="p">),</span>
+           <span class="n">pipeline</span> <span class="o">=</span> <span class="s2">&quot;bismarkCoverage&quot;</span><span class="p">,</span>
+           <span class="n">assembly</span><span class="o">=</span><span class="s2">&quot;mm10&quot;</span><span class="p">,</span>
+           <span class="n">treatment</span><span class="o">=</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+           <span class="n">mincov</span> <span class="o">=</span> <span class="mi">3</span>
+           <span class="p">)</span>
+
+<span class="c1"># Group the counts</span>
+<span class="n">tiles</span> <span class="o">&lt;-</span> <span class="n">tileMethylCounts</span><span class="p">(</span><span class="n">myobj_lowCov</span><span class="p">,</span><span class="n">win</span><span class="o">.</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">step</span><span class="o">.</span><span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">cov</span><span class="o">.</span><span class="n">bases</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Inspect data</span>
+<span class="n">head</span><span class="p">(</span><span class="n">tiles</span><span class="p">[[</span><span class="mi">1</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="visualization">
+<h2><a class="toc-backref" href="#id17">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<p>The results of a differential analysis can be exported as a bedGraph; a format that allows display of continuous-valued data in track format. This display type is useful for probability scores, percentages and transcriptome data. By uploading this BED file to a genome browser such as the <a class="reference external" href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&amp;lastVirtModeType=default&amp;lastVirtModeExtraState=&amp;virtModeType=default&amp;virtMode=0&amp;nonVirtPosition=&amp;position=chr1%3A134369628%2D136772024&amp;hgsid=936224469_kTHLULnq2frGTQtwufy02ky7TjXA">UCSC Genome Browser</a>, you can create custom visualizations of the genome architecture surrounding CpGs or regions of interest. The <code class="docutils literal notranslate"><span class="pre">bedgraph</span></code> function produces a UCSC compatible file; by specifying the <code class="docutils literal notranslate"><span class="pre">col.name</span></code> the exact information to be plotted can be collected. For a <code class="docutils literal notranslate"><span class="pre">methylDiff</span></code> object this can be one of “pvalue”, “qvalue” or “meth.diff”.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">bedgraph</span><span class="p">(</span><span class="n">myDiff25p</span><span class="p">,</span> <span class="n">col.name</span> <span class="o">=</span> <span class="s">&quot;meth.diff&quot;</span><span class="p">,</span> <span class="n">file.name</span> <span class="o">=</span> <span class="s">&quot;diff_cpg_25p.bed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A tutorial of the Genome Browser is out of scope for this workshop; but a step-by-step approach for visualizing your own data tracks can be found <a class="reference external" href="https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html#CustomTracks">here</a>. An example of such a custom visualization of the methylation difference between treatment and control can be seen in Figure 2. Notice how differentially methylated CpGs tend to group together in similarly regulated regions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to download from Uppmax, execute following code from a folder on your local computer: <code class="code docutils literal notranslate"><span class="pre">scp</span> <span class="pre">&lt;username&gt;&#64;rackham.uppmax.uu.se:diff_cpg_25p.bed</span> <span class="pre">.</span></code>. Don’t forget the trailing <code class="code docutils literal notranslate"><span class="pre">.</span></code>! This will download the diff_cpg_25p.bed file to that particular folder.</p>
+</div>
+<a class="reference external image-reference" href="Figures/UCSC_bed_2.png"><img alt="" src="../../../_images/UCSC_bed_2.png" /></a>
+<p><em>Figure 2: UCSC Genome Browser example with three main annotation tracks. Upper track: percentage methylation difference between treatment and control samples for significantly differential methylated CpGs. Middle track: RefSeq gene structure. Lower track: CpG Island location.</em></p>
+<p>Exactly how to produce these plots is out of the scope of these exercises, but I encourage you to try it later with - for example - the bedgraph of all differentially methylated CpGs.</p>
+</div>
+<div class="section" id="gene-set-enrichment">
+<h2><a class="toc-backref" href="#id18">Gene Set Enrichment</a><a class="headerlink" href="#gene-set-enrichment" title="Permalink to this headline">¶</a></h2>
+<p>Methylation is a DNA mark that can occur anywhere on the genome and is not as directly related to genes as expression data. Therefore, a methylation specific issue in performing gene set testing is how to assign differentially methylated features to genes. In addition, measured CpG sites are not distributed evenly across the genome, and it has been shown that genes that have more CpG sites measured across them are more likely to be detected as differentially methylated compared to genes that have fewer measured CpG sites. Moreover, approximately 10% of gene-annotated CpGs are assigned to more than one gene, violating assumptions of independently measured genes. Thus far, there are very few gene set testing methods designed specifically for DNA methylation data and their usefulness can be very limited. The <em>MissMethyl</em>  package was presented in the array tutorial as a potential tool, but is specific for array data.</p>
+<p>For bisulfite sequencing data, most often <em>ad hoc</em> approaches are used to select a subset of genes associated with differently methylated CpGs or regions. Next, this list of genes can be analyzed with traditional gene set enrichment tools such as <em>GOseq</em> (see more info <a class="reference external" href="https://academic.oup.com/bioinformatics/article/29/15/1851/265573">here</a>, where the authors used this package to correct the “CpG sites per gene” bias).</p>
+</div>
+<div class="section" id="alternative-workflows">
+<h2><a class="toc-backref" href="#id19">Alternative workflows</a><a class="headerlink" href="#alternative-workflows" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>DSS</dt><dd><p>beta-binomial models with empirical Bayes for moderating dispersion.</p>
+</dd>
+<dt>BSseq</dt><dd><p>Regional differential methylation analysis using smoothing and linear-regression-based tests.</p>
+</dd>
+<dt>BiSeq</dt><dd><p>Regional differential methylation analysis using beta-binomial models.</p>
+</dd>
+<dt>MethylSeekR</dt><dd><p>Methylome segmentation using HMM and cutoffs.</p>
+</dd>
+<dt>QuasR</dt><dd><p>Methylation aware alignment and methylation calling, as well as fastQC-like fastq raw data quality check features.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../chipseq_tutorials.html" class="btn btn-neutral float-right" title="ChIP-seq" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../methylationArray/Array_Tutorial.html" class="btn btn-neutral float-left" title="DNA Methylation: Array Workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

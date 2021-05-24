@@ -1,0 +1,835 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DNA Methylation: Array Workflow &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="DNA Methylation: Bisulfite Sequencing Workflow" href="../methylationSeq/Seq_Tutorial.html" />
+    <link rel="prev" title="DNA Methylation" href="../methylation_tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Array workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-packages">Load Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-datasets">Load Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-note-on-class-structure">A Note on Class Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quality-control">Quality control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#normalization">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-exploration">Data exploration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filtering">Filtering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#probe-wise-differential-methylation">Probe-Wise Differential Methylation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#regional-differential-methylation-dmr">Regional Differential Methylation (DMR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gene-ontology-testing">Gene Ontology Testing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cell-type-composition">Cell Type Composition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alternative-workflows">Alternative Workflows</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../methylationSeq/Seq_Tutorial.html">Sequencing workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../methylation_tutorials.html">DNA Methylation</a> &raquo;</li>
+        
+      <li>DNA Methylation: Array Workflow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/methylationArray/Array_Tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dna-methylation-array-workflow">
+<h1>DNA Methylation: Array Workflow<a class="headerlink" href="#dna-methylation-array-workflow" title="Permalink to this headline">¶</a></h1>
+<p><strong>Learning Outcomes</strong></p>
+<p>In this tutorial, we will provide examples of the steps involved in analyzing 450K methylation array data using R and Bioconductor. The different steps include: importing the raw data, quality control checks, data filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#datasets" id="id4">Datasets</a></p></li>
+<li><p><a class="reference internal" href="#load-packages" id="id5">Load Packages</a></p></li>
+<li><p><a class="reference internal" href="#load-datasets" id="id6">Load Datasets</a></p></li>
+<li><p><a class="reference internal" href="#a-note-on-class-structure" id="id7">A Note on Class Structure</a></p></li>
+<li><p><a class="reference internal" href="#quality-control" id="id8">Quality control</a></p></li>
+<li><p><a class="reference internal" href="#normalization" id="id9">Normalization</a></p>
+<ul>
+<li><p><a class="reference internal" href="#preprocessraw" id="id10">preprocessRaw</a></p></li>
+<li><p><a class="reference internal" href="#preprocessillumina" id="id11">preprocessIllumina</a></p></li>
+<li><p><a class="reference internal" href="#preprocessswan" id="id12">preprocessSWAN</a></p></li>
+<li><p><a class="reference internal" href="#preprocessfunnorm" id="id13">preprocessFunnorm</a></p></li>
+<li><p><a class="reference internal" href="#preprocessquantile" id="id14">preprocessQuantile</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#data-exploration" id="id15">Data exploration</a></p></li>
+<li><p><a class="reference internal" href="#filtering" id="id16">Filtering</a></p></li>
+<li><p><a class="reference internal" href="#probe-wise-differential-methylation" id="id17">Probe-Wise Differential Methylation</a></p></li>
+<li><p><a class="reference internal" href="#regional-differential-methylation-dmr" id="id18">Regional Differential Methylation (DMR)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#location-based-regions" id="id19">Location-based Regions</a></p></li>
+<li><p><a class="reference internal" href="#functional-regions" id="id20">Functional Regions</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#gene-ontology-testing" id="id21">Gene Ontology Testing</a></p></li>
+<li><p><a class="reference internal" href="#cell-type-composition" id="id22">Cell Type Composition</a></p></li>
+<li><p><a class="reference internal" href="#alternative-workflows" id="id23">Alternative Workflows</a></p></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented.</p>
+<p>But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. Introduced in 2011, the 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. If bisulfite converted DNA matches the probe, the probe is extended with a nucleotide  attached to a red or green dye. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization (the methylated signal is measured in the green channel and the unmethylated signal in the red channel) [See Figure 1]. In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with &gt;90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the <em>de facto</em> standard for methylation analyses; the data processing for both is however fairly similar.</p>
+<a class="reference external image-reference" href="Figures/Infinium.png"><img alt="" src="../../../_images/Infinium.png" /></a>
+<p><em>Fig. 1: Infinium I and II design.</em></p>
+<p>Regardless of array type, both the 450k and EPIC record two measurements for each CpG: a methylated intensity (M) and an unmethylated intensity (U). Using these values, the proportion of methylation at each site CpG locus can be determined. The level of methylation at a locus is commonly reported as the Beta-value, <em>i.e.</em> the ratio of the methylated probe intensity and the overall intensity:</p>
+<div class="math notranslate nohighlight">
+\[\beta = M/(M + U)\]</div>
+<p>Illumina recommends adding a constant offset α (by default, α = 100) to the denominator to regularize Beta value when both methylated and unmethylated probe intensities are low. The Beta-value statistic results in a number between 0 and 1, or 0 and 100%. Under ideal conditions, a value of zero indicates that all copies of the CpG site in the sample were completely unmethylated (no methylated molecules were measured) and a value of one indicates that every copy of the site was methylated.</p>
+<p>A second common metric to describe the methylation level is the M-value, <em>i.e</em> the log2 ratio of the intensities of methylated probe versus unmethylated probe:</p>
+<div class="math notranslate nohighlight">
+\[Mvalue = log2(M/U)\]</div>
+<p>A M-value close to 0 indicates a similar intensity between the methylated and unmethylated probes, which means the CpG site is about half-methylated, assuming that the intensity data has been properly normalized. Positive M-values mean that more molecules are methylated than unmethylated, while negative M-values mean the opposite.</p>
+<p>Beta and M-values are related to each other but Beta-values are generally preferable for the graphical representation of methylation levels as <em>percentage methylation</em> has a more intuitive biological interpretation. Due to their distributional properties, M-values are more statistically valid for the differential analysis of methylation levels. A thorough comparison of both metrics, can be found <a class="reference external" href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-587">here</a>.</p>
+<a class="reference external image-reference" href="Figures/Beta_M.png"><img alt="" src="../../../_images/Beta_M.png" /></a>
+<p><em>Fig. 2: Relationship between Beta and M-values.</em></p>
+</div>
+<div class="section" id="datasets">
+<h2><a class="toc-backref" href="#id4">Datasets</a><a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<p>To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset (<a class="reference external" href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667">GSE49667</a>). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals: M28, M29, M30). Not all individuals contributed all 4 cell types, so there are 10 samples in total. An additional birth sample (individual VICS-72098-18-B) is included from another study (<a class="reference external" href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180">GSE51180</a>) to illustrate approaches for identifying and excluding poor quality samples.</p>
+</div>
+<div class="section" id="load-packages">
+<h2><a class="toc-backref" href="#id5">Load Packages</a><a class="headerlink" href="#load-packages" title="Permalink to this headline">¶</a></h2>
+<p>This exercise has been set up on Uppmax, so connect to Uppmax as described in <a class="reference internal" href="../setup/lab-setup.html"><span class="doc">Setting-up</span></a>. On Uppmax, most packages are already installed, and can be loaded into R after the <em>R/4.0.0</em> and  <em>R_packages/4.0.0</em> modules have been loaded. If you are running on Uppmax, start by loading the following modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load R/4.0.0
+module load R_packages/4.0.0
+module load RStudio
+</pre></div>
+</div>
+<p>Start the analysis by initiating <em>RStudio</em>… This might take a few seconds and a <code class="code docutils literal notranslate"><span class="pre">libGL</span> <span class="pre">error</span></code> can be shown before loading the RStudio graphical interface.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rstudio
+</pre></div>
+</div>
+<p>Next, run the R commands by copying them from this website into the Rstudio terminal and pressing <em>Enter</em>. Start by loading the set of R packages that will be needed during the analysis: <em>limma</em> provides the statistical framework for testing differential methylation. <em>minfi</em>, <em>missMethyl</em>, <em>minfiData</em> and <em>DMRcate</em> are packages developed to work with methylation data. <em>Gviz</em> and <em>RColorBrewer</em> provide functions for the visualization of the data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># load packages required for analysis</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;limma&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;minfi&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;RColorBrewer&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;missMethyl&quot;</span><span class="p">)</span> <span class="c1"># Can take a short time...</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;minfiData&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;Gviz&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;DMRcate&quot;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&quot;stringr&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Included with <em>minfi</em> is the <em>IlluminaHumanMethylation450kanno.ilmn12.hg19</em> package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context and to link the Red and Green raw data to methylated and unmethylated status.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ann450k</span> <span class="o">&lt;-</span> <span class="nf">getAnnotation</span><span class="p">(</span><span class="n">IlluminaHumanMethylation450kanno.ilmn12.hg19</span><span class="p">)</span>
+<span class="c1"># Use the head command to get a quick overview of the data and see what types of annotations are available</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">ann450k</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These packages are of course also available for the later array versions. The EPIC array annotation package is called <em>IlluminaHumanMethylationEPICanno.ilm10b2.hg19</em> and also included in <em>minfi</em>.</p>
+</div>
+</div>
+<div class="section" id="load-datasets">
+<h2><a class="toc-backref" href="#id6">Load Datasets</a><a class="headerlink" href="#load-datasets" title="Permalink to this headline">¶</a></h2>
+<p>The datasets have been uploaded to Uppmax prior to the workshop, so you just need to point R towards the directory they are saved. The <code class="docutils literal notranslate"><span class="pre">list.files</span></code> command will return the list of files in the specified directory.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dataDirectory</span> <span class="o">&lt;-</span> <span class="s">&quot;/sw/courses/epigenomics/DNAmethylation/array_data/&quot;</span>
+<span class="c1"># list the files</span>
+<span class="nf">list.files</span><span class="p">(</span><span class="n">dataDirectory</span><span class="p">,</span> <span class="n">recursive</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Illumina methylation data is usually obtained in the form of Intensity Data (IDAT) Files. This is a proprietary format that is output by the slide scanner and stores the intensities for each probe on the array. Typically, each IDAT file is approximately 8MB in size. The simplest way to import the raw methylation data into R is using the minfi function <code class="docutils literal notranslate"><span class="pre">read.metharray.sheet</span></code>, along with the path to the IDAT files and a sample sheet. The sample sheet is a CSV (comma-separated) file containing one line per sample, with a number of columns describing each sample. The format expected by the <code class="docutils literal notranslate"><span class="pre">read.metharray.sheet</span></code> function is based on the sample sheet file that usually accompanies Illumina methylation array data. It is also very similar to the targets file described by the limma package. Importing the sample sheet into R creates a dataframe with one row for each sample and several columns. The <code class="docutils literal notranslate"><span class="pre">read.metharray.sheet</span></code> function uses the specified path and other information from the sample sheet to create a column called Basename which specifies the location of each individual IDAT file in the experiment. Import the metadata and have a look at the different samples.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the sample sheet for the experiment</span>
+<span class="n">targets</span> <span class="o">&lt;-</span> <span class="nf">read.metharray.sheet</span><span class="p">(</span><span class="n">dataDirectory</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s">&quot;SampleSheet.csv&quot;</span><span class="p">)</span>
+<span class="n">targets</span>
+</pre></div>
+</div>
+<p>Now we know where the data is located and we have essential information on each samples identity, we can read in the raw intensity data into R using the <code class="docutils literal notranslate"><span class="pre">read.metharray.exp</span></code> function. This creates an <em>RGChannelSet</em> object that contains all the raw intensity data, from both the red and green colour channels, for each of the samples. This is the initial object of a minfi analysis that contains the raw intensities in the green and red channels. Note that this object contains the intensities of the internal control probes as well. Because we read the data from a data sheet experiment, the phenotype data is also stored in the <em>RGChannelSet</em> and can be accessed via the accessor command <code class="docutils literal notranslate"><span class="pre">pData</span></code>. Also the probed design can be summarized by querying this object. Before starting the actual analysis it is good practice to get a feel of the structure and content of the <em>RGChannelSet</em> object in this way.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the raw data from the IDAT files; warnings can be ignored.</span>
+<span class="n">rgSet</span> <span class="o">&lt;-</span> <span class="nf">read.metharray.exp</span><span class="p">(</span><span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">)</span>
+
+<span class="c1"># Get an overview of the data</span>
+<span class="n">rgSet</span>
+<span class="nf">pData</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+<span class="nf">getManifest</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It might be useful to change the names of the samples into something a little more descriptive.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># give the samples descriptive names</span>
+<span class="n">targets</span><span class="o">$</span><span class="n">ID</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">,</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Name</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+<span class="nf">sampleNames</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">targets</span><span class="o">$</span><span class="n">ID</span>
+
+<span class="c1"># Check the names have been updated by looking at the rownames of the phenoData</span>
+<span class="nf">pData</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you prefer to run this tutorial locally, you can also download the dataset to your personal computer. To do this, navigate to the folder on your own conputer where you want to deposit the data and execute <code class="code docutils literal notranslate"><span class="pre">scp</span> <span class="pre">-r</span> <span class="pre">&lt;username&gt;&#64;rackham.uppmax.uu.se:/sw/courses/epigenomics/DNAmethylation/array_data</span> <span class="pre">.</span></code>. Then you can point the <code class="code docutils literal notranslate"><span class="pre">dataDirectory</span></code> to this local directory. Of course, you will also have to install all packages locally!</p>
+</div>
+</div>
+<div class="section" id="a-note-on-class-structure">
+<h2><a class="toc-backref" href="#id7">A Note on Class Structure</a><a class="headerlink" href="#a-note-on-class-structure" title="Permalink to this headline">¶</a></h2>
+<p>minfi generates a number of classes corresponding to various transformations of the raw data. It is important to understand how these classes relate to each other. Figure 2 provides a useful overview. In a first step, IDAT files are collected in a <em>RGChannelSet</em> object, transformed in a <em>MethylSet</em> through a preprocess function and via two functions <em>ratioConvert</em> and <em>mapToGenome</em> (order does not matter) converted into an analysis-ready <em>GenomicRatioSet</em>.</p>
+<a class="reference external image-reference" href="Figures/Classes.png"><img alt="" src="../../../_images/Classes.png" /></a>
+<p><em>Fig. 2: Flowchart of the different *minfi</em> class objects.*</p>
+<p>As of now, our dataset is an <em>RGChannelSet</em> object containing the raw green and red intensity data. To proceed, this needs to be transformed into a <em>MethylSet</em> object containing the methylated and unmethylated signals. The most basic way to construct a <em>MethylSet</em> is to use the function <em>preprocessRaw</em> which uses the array design to match up the different probes and color channels to construct the methylated and unmethylated signals. This function does not do any normalization (in a later step we will add normalization, but this step is useful for initial quality control). Do this now for your object and have a look at the changes in the metadata. Notice that the red and green assays have been transformed in Meth and Unmeth signals.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">MSet</span> <span class="o">&lt;-</span> <span class="nf">preprocessRaw</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+<span class="n">MSet</span>
+<span class="c1"># Compare to previous object</span>
+<span class="n">rgSet</span>
+</pre></div>
+</div>
+<p>The accessors <em>getMeth</em> and <em>getUnmeth</em> can now be used on the <em>MethylSet</em> to get the methylated and unmethylated intensities matrices, if necessary.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="nf">getMeth</span><span class="p">(</span><span class="n">MSet</span><span class="p">)[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">])</span>
+<span class="nf">head</span><span class="p">(</span><span class="nf">getUnmeth</span><span class="p">(</span><span class="n">MSet</span><span class="p">)[,</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>A <em>RatioSet</em> object is class designed to store Beta and/or M-values instead of the (un)methylated signals. An optional copy number matrix, CN, the sum of the methylated and unmethylated signals, can be also stored. Mapping a <em>MethylSet</em> to a <em>RatioSet</em> is irreversible, i.e. one cannot technically retrieve the methylated and unmethylated signals from a <em>RatioSet</em>. A <em>RatioSet</em> can be created with the function ratioConvert. The function <em>mapToGenome</em> applied to a <em>RatioSet</em> object will add genomic coordinates to each probe together with some additional annotation information. The output object is a <em>GenomicRatioSet</em></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratioSet</span> <span class="o">&lt;-</span> <span class="nf">ratioConvert</span><span class="p">(</span><span class="n">MSet</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s">&quot;both&quot;</span><span class="p">,</span> <span class="n">keepCN</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1"># Observe the change of the assays</span>
+<span class="n">ratioSet</span>
+
+<span class="n">gset</span> <span class="o">&lt;-</span> <span class="nf">mapToGenome</span><span class="p">(</span><span class="n">ratioSet</span><span class="p">)</span>
+<span class="n">gset</span>
+</pre></div>
+</div>
+<p>The functions <em>getBeta</em>, <em>getM</em> and <em>getCN</em> work on the <em>GenomicRatioSet</em> return respectively the Beta value matrix, M value matrix and a the Copy Number matrix.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">beta</span> <span class="o">&lt;-</span> <span class="nf">getBeta</span><span class="p">(</span><span class="n">gset</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">&lt;-</span> <span class="nf">getM</span><span class="p">(</span><span class="n">gset</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">cn</span> <span class="o">&lt;-</span> <span class="nf">getCN</span><span class="p">(</span><span class="n">gset</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">cn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Much more annotation data can be extracted from this object (see the <em>minfi</em> <a class="reference external" href="http://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html">documentation</a>). Now we have a analysis ready object, albeit unnormalized. As we will see in a later section, there are several normalization options that automatically take care of the preprocessing and conversion of a <em>RGChannelSet</em> to a <em>GenomicRatioSet</em>. But before doing this, an important step is Quality Control</p>
+</div>
+<div class="section" id="quality-control">
+<h2><a class="toc-backref" href="#id8">Quality control</a><a class="headerlink" href="#quality-control" title="Permalink to this headline">¶</a></h2>
+<p><em>minfi</em> provides a simple quality control plot that uses the log median intensity in both the methylated (M) and unmethylated (U) channels. When plotting these two medians against each other, good samples tend to cluster together, while failed samples tend to separate and have lower median intensities. In general, users should make the plot and make a judgement. The line separating ”bad” from ”good” samples represent a useful cutoff, which is not always very clear and may have to be adapted to a specific dataset. The functions <em>getQC</em> and <em>plotQC)</em> are designed to extract and plot the quality control information from the <em>MethylSet</em>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">qc</span> <span class="o">&lt;-</span> <span class="nf">getQC</span><span class="p">(</span><span class="n">MSet</span><span class="p">)</span>
+<span class="nf">plotQC</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, the cutoff line suggests 3 “bad” samples. Can you determine which samples these are?</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>the <em>pData</em> function might be of help here.</p>
+</div>
+<p>In general, a decision of good versus bad quality should be based on multiple metrics, not just one. Therefore, we can additionally look at the detection p-values for every CpG in every sample, which is indicative of the quality of the signal. The method used by <em>minfi</em> to calculate detection p-values compares the total signal (M+U) for each probe to the background signal level, which is estimated from the negative control probes. Very small p-values are indicative of a reliable signal whilst large p-values, for example &gt;0.01, generally indicate a poor quality signal.</p>
+<p>Plotting the mean detection p-value for each sample allows us to gauge the general quality of the samples in terms of the overall signal reliability. Samples that have many failed probes will have relatively large mean detection p-values.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the detection p-values</span>
+<span class="n">detP</span> <span class="o">&lt;-</span> <span class="nf">detectionP</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">detP</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These p-values can be summarized in a single plot to simplify the comparison between samples</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># examine mean detection p-values across all samples to identify any failed samples</span>
+<span class="nf">barplot</span><span class="p">(</span><span class="nf">colMeans</span><span class="p">(</span><span class="n">detP</span><span class="p">),</span> <span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">cex.names</span><span class="o">=</span><span class="m">0.8</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Mean detection p-values&quot;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="m">0.05</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Poor quality samples can be easily excluded from the analysis using a detection p-value cutoff, for example &gt;0.05. For this particular dataset, the <em>birth</em> sample shows a very high mean detection p-value.</p>
+<p>The overall density distribution of Beta values for each sample is another useful metric to determine sample quality. Usually, one would expect to see most Beta values to be either close to 0 or 1, indicating most of the CpG sites in the sample are unmethylated or methylated. The <em>densityPlot</em> function plots these distribution for each sample.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">phenoData</span> <span class="o">&lt;-</span> <span class="nf">pData</span><span class="p">(</span><span class="n">MSet</span><span class="p">)</span>
+<span class="nf">densityPlot</span><span class="p">(</span><span class="n">MSet</span><span class="p">,</span> <span class="n">sampGroups</span> <span class="o">=</span> <span class="n">phenoData</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The 450k array contains several internal control probes that can be used to assess the quality control of different sample preparation steps (bisulfite conversion, hybridization, etc.). The values of these control probes are stored in the initial <em>RGChannelSet</em> and can be plotted by using the function <em>controlStripPlot</em> and by specifying the control probe type. We will not go into the details of each control probe type, but these might be useful to determine the exact reason a sample failed QC.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">controlStripPlot</span><span class="p">(</span><span class="n">rgSet</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="s">&quot;BISULFITE CONVERSION II&quot;</span><span class="p">)</span>
+<span class="c1"># The plots of the different control probes can be exported into a pdf file in one step using the function qcReport</span>
+<span class="c1">#qcReport(rgSet, pdf= &quot;qcReport.pdf&quot;)</span>
+</pre></div>
+</div>
+<p>Taking these different metrics into account, it seems clear that the <em>birth</em> sample is of lower quality than the other samples. Therefore, we can decide to exclude it from the initial <em>rgSet</em> prior to further analysis.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># select the samples to keep for further analysis</span>
+<span class="n">keep</span> <span class="o">&lt;-</span> <span class="o">!</span><span class="nf">colnames</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;birth.11&quot;</span>
+<span class="c1"># subset rgSet</span>
+<span class="n">rgSet</span> <span class="o">&lt;-</span> <span class="n">rgSet</span><span class="p">[,</span><span class="n">keep</span><span class="p">]</span>
+<span class="c1"># Check the sample has been removed by looking at the number of colnames</span>
+<span class="n">rgSet</span>
+<span class="c1"># subset target as well</span>
+<span class="n">targets</span> <span class="o">&lt;-</span> <span class="n">targets</span><span class="p">[</span><span class="n">keep</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="normalization">
+<h2><a class="toc-backref" href="#id9">Normalization</a><a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h2>
+<p>So far, we did not use any normalization to process the data. Due to the intrinsic chip design of 2 types of chemistry probes, data normalization or preprocessing is a <strong>critical step</strong> to consider before data analysis. Given the higher dynamic range of type I probes, one expects that  - when left uncorrected - there would be a relative overenrichment of type I over type II probes in a top ranked list of probes correlating with a phenotype.</p>
+<p>Additionally, there is often systematic bias between arrays due to a variety of variable experimental conditions such as concentrations of reagents or temperature, especially when the experiments are carried out in several batches. Relevant biological signals may be masked by technical differences, also called batch effects and there are two fundamental ways to deal with them. One possibility is to consider batch effects in the statistical analysis, for instance by introducing a dummy variable for the batch in a linear model. However, batch effects may alter the data in complicated ways for which the statistical model in mind may not be adequate. It might therefore be preferable to remove these technical differences in a preprocessing step.</p>
+<p>Several distinct preprocessing and normalization procedures are therefore available in <em>minfi</em> (see below). A choice of different options raise of course the question which one is best or most optimal for your particular dataset. This is a difficult question to answer beforehand and selecting the best option is in practice often an iterative procedure while looking at the distribution of the Beta values (see example of different methods in Figure 4). Nevertheless, there are some general guidelines and the authors of <em>minfi</em> have the following to say about this:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>“Many people have asked us which normalization they should apply to their dataset. Our rule of thumb is the following. If there exist global biological methylation differences between your samples, as for instance a dataset with cancer and normal samples, or a dataset with different tissues/cell types, use the preprocessFunnorm function as it is aimed for such datasets. On the other hand, if you do not expect global differences between your samples, for instance a blood dataset, or one-tissue dataset, use the preprocessQuantile function. In our experience, these two normalization procedures perform always better than the functions preprocessRaw, preprocessIllumina and preprocessSWAN discussed below. For convenience, these functions are still implemented in the minfi package.”</p>
+</div>
+<p>So, try different methods and compare the normalized data. Do the Beta values of the different probes or different samples look more comparable after normalization?</p>
+<a class="reference external image-reference" href="Figures/norms.jpg"><img alt="" src="../../../_images/norms.jpg" /></a>
+<p><em>Fig. 4: (A) No normalization. (B) Lumi-based classical quantile normalization. (C) Peak-based correction followed by quantile normalization. (D) Subset quantile normalization with a unique set of reference quantiles computed from Infinium I signals. (E) Subset quantile normalization with a reference quantiles set computed from Infinium I signals for each kind of probe category according to the ‘relation to CpG’ annotations provided by Illumina (CA, USA). (F) Subset quantile normalization with a reference quantiles set computed from Infinium I signals for each kind of probe category. NT: Density plot of the median β-value profile for nontumoral samples; T: Density plot of the median β-value profile for tumoral samples.</em></p>
+<p>Below a short overview of the normalization methods included in <em>minfi</em>.</p>
+<div class="section" id="preprocessraw">
+<h3><a class="toc-backref" href="#id10">preprocessRaw</a><a class="headerlink" href="#preprocessraw" title="Permalink to this headline">¶</a></h3>
+<p>As seen before, this function converts a <em>RGChannelSet</em> to a <em>MethylSet</em> by converting the Red and Green channels into a matrix of methylated signals and a matrix of unmethylated signals. No normalization is performed.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">Input: <em>RGChannelSet</em></div>
+<div class="line">Output: <em>MethylSet</em></div>
+</div>
+</div>
+</div>
+<div class="section" id="preprocessillumina">
+<h3><a class="toc-backref" href="#id11">preprocessIllumina</a><a class="headerlink" href="#preprocessillumina" title="Permalink to this headline">¶</a></h3>
+<p>Convert a <em>RGChannelSet</em> to a <em>MethylSet</em> by implementing the preprocessing choices as available in Genome Studio: background subtraction and control normalization. Both of them are optional and turning them off is equivalent to raw preprocessing (<em>preprocessRaw</em>):</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">Input: <em>RGChannelSet</em></div>
+<div class="line">Output: <em>MethylSet</em></div>
+</div>
+</div>
+</div>
+<div class="section" id="preprocessswan">
+<h3><a class="toc-backref" href="#id12">preprocessSWAN</a><a class="headerlink" href="#preprocessswan" title="Permalink to this headline">¶</a></h3>
+<p>Perform Subset-quantile within array normalization (SWAN), a within-array normalization correction for the technical differences between the Type I and Type II array designs. The algorithm matches the Beta-value distributions of the Type I and Type II probes by applying a within-array quantile normalization separately for different subsets of probes (divided by CpG content). The input of SWAN is a <em>MethylSet</em>, and the function returns a <em>MethylSet</em> as well. If an <em>RGChannelSet</em> is provided instead, the function will first call <em>preprocessRaw</em> on the <em>RGChannelSet</em>, and then apply the SWAN normalization.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">Input: <em>RGChannelSet</em> or <em>MethylSet</em></div>
+<div class="line">Output: <em>MethylSet</em></div>
+</div>
+</div>
+</div>
+<div class="section" id="preprocessfunnorm">
+<h3><a class="toc-backref" href="#id13">preprocessFunnorm</a><a class="headerlink" href="#preprocessfunnorm" title="Permalink to this headline">¶</a></h3>
+<p>The function <em>preprocessFunnorm</em> uses the internal control probes present on the array to infer between-array technical variation. It is particularly useful for studies comparing conditions with known large-scale differences, such as cancer/normal studies, or between-tissue studies. It has been shown that for such studies, functional normalization outperforms other existing approaches. By default, is uses the first two principal components of the control probes to infer the unwanted variation.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">Input: <em>RGChannelSet</em></div>
+<div class="line">Output: <em>GenomicRatioSet</em></div>
+</div>
+</div>
+</div>
+<div class="section" id="preprocessquantile">
+<h3><a class="toc-backref" href="#id14">preprocessQuantile</a><a class="headerlink" href="#preprocessquantile" title="Permalink to this headline">¶</a></h3>
+<p>This function implements stratified <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile_normalization">quantile normalization</a> preprocessing. The normalization procedure is applied to the Meth and Unmeth intensities separately. The distribution of type I and type II signals is forced to be the same by first quantile normalizing the type II probes across samples and then interpolating a reference distribution to which we normalize the type I probes. Since probe types and probe regions are confounded and we know that DNA methylation varies across regions we stratify the probes by region before applying this interpolation. Note that this algorithm relies on the assumptions necessary for quantile normalization to be applicable and thus is not recommended for cases where global changes are expected such as in cancer-normal comparisons as these would be removed by the normalization.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">Input: <em>RGChannelSet</em></div>
+<div class="line">Output: <em>GenomicRatioSet</em></div>
+</div>
+</div>
+<p>As we are comparing different blood cell types, which are globally relatively similar, we will apply the preprocessQuantile method to our data.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This assumption might not be true; in an actual analysis it would be advised to try and compare different normalization methods.</p>
+</div>
+<p>Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an initial quality control.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># normalize the data; this results in a GenomicRatioSet object</span>
+<span class="n">mSetSq</span> <span class="o">&lt;-</span> <span class="nf">preprocessQuantile</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compare with the unnormalized data to visualize the effect of the normalization. First a comparison of the Beta distributions for the different probe designs. This will give an indication of the effectiveness of the within-array normalization.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="c1"># Plot distributions prior to normalization for sample 1</span>
+<span class="nf">plotBetasByType</span><span class="p">(</span><span class="n">MSet</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">main</span><span class="o">=</span><span class="s">&quot;Raw&quot;</span><span class="p">)</span>
+<span class="c1"># The normalized object is a GenomicRatioSet which does not contain</span>
+<span class="c1"># the necessary probe info, we need to extract this from the MethylSet first.</span>
+<span class="n">typeI</span> <span class="o">&lt;-</span> <span class="nf">getProbeInfo</span><span class="p">(</span><span class="n">MSet</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&quot;I&quot;</span><span class="p">)[,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="s">&quot;nCpG&quot;</span><span class="p">)]</span>
+<span class="n">typeII</span> <span class="o">&lt;-</span> <span class="nf">getProbeInfo</span><span class="p">(</span><span class="n">MSet</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">&quot;II&quot;</span><span class="p">)[,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="s">&quot;nCpG&quot;</span><span class="p">)]</span>
+<span class="n">probeTypes</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">typeI</span><span class="p">,</span> <span class="n">typeII</span><span class="p">)</span>
+<span class="n">probeTypes</span><span class="o">$</span><span class="n">Type</span> <span class="o">&lt;-</span> <span class="nf">rep</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;I&quot;</span><span class="p">,</span> <span class="s">&quot;II&quot;</span><span class="p">),</span> <span class="n">times</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="nf">nrow</span><span class="p">(</span><span class="n">typeI</span><span class="p">),</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">typeII</span><span class="p">)))</span>
+<span class="c1"># Now plot the distributions of the normalized data for sample 1</span>
+<span class="nf">plotBetasByType</span><span class="p">(</span><span class="nf">getBeta</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">)[,</span><span class="m">1</span><span class="p">],</span> <span class="n">probeTypes</span> <span class="o">=</span> <span class="n">probeTypes</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s">&quot;Normalized&quot;</span><span class="p">,)</span>
+<span class="c1"># Close double plotting window</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Does it look like the normalization brought the distributions closer to each other? Now let’s see how the between-array normalization worked…</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># visualise what the data looks like before and after normalisation</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">densityPlot</span><span class="p">(</span><span class="n">rgSet</span><span class="p">,</span> <span class="n">sampGroups</span><span class="o">=</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">,</span><span class="n">main</span><span class="o">=</span><span class="s">&quot;Raw&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)),</span>
+       <span class="n">text.col</span><span class="o">=</span><span class="nf">brewer.pal</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="s">&quot;Dark2&quot;</span><span class="p">))</span>
+<span class="nf">densityPlot</span><span class="p">(</span><span class="nf">getBeta</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">),</span> <span class="n">sampGroups</span><span class="o">=</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">,</span>
+            <span class="n">main</span><span class="o">=</span><span class="s">&quot;Normalized&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span> <span class="n">legend</span> <span class="o">=</span> <span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)),</span>
+       <span class="n">text.col</span><span class="o">=</span><span class="nf">brewer.pal</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="s">&quot;Dark2&quot;</span><span class="p">))</span>
+<span class="c1"># Close the double plotting window</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Click on Zoom above the RStudio plot panel to watch a larger version of the plotted figure.</p>
+</div>
+</div>
+</div>
+<div class="section" id="data-exploration">
+<h2><a class="toc-backref" href="#id15">Data exploration</a><a class="headerlink" href="#data-exploration" title="Permalink to this headline">¶</a></h2>
+<p>After normalization of your data is a good time to look at the similarities and differences between the various samples. One way to do this is by creating a MDS or Multi-Dimenional Scaling plot. This is a method to graphically represent relationships between objects (here the different samples) in multidimensional space onto 2 or 3 dimensional space. Dimension one (or principal component one) captures the greatest source of variation in the data, dimension two captures the second greatest source of variation in the data and so on. Colouring the data points or labels by known factors of interest can often highlight exactly what the greatest sources of variation are in the data. In a good quality dataset, one would hope that biological differences would show up as one of the greatest sources of variation. It is also possible to use MDS plots to decipher sample mix-ups. The following code creates the MDS plot twice but the samples in the left plot are colored according to celltype, while the plot on the right is colored according to “individual”. Before you proceed think a moment about what this figure tells you about the sources in variation in the data. Try changing the <code class="docutils literal notranslate"><span class="pre">dim=c(1,2)</span></code> parameter to for example <code class="docutils literal notranslate"><span class="pre">dim=c(1,3)</span></code> or other values to get an even deeper understanding of the variation in the data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># MDS plots to look at largest sources of variation</span>
+<span class="c1"># Create color panel</span>
+<span class="n">pal</span> <span class="o">&lt;-</span> <span class="nf">brewer.pal</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="s">&quot;Dark2&quot;</span><span class="p">)</span>
+<span class="c1"># Plot figures</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">plotMDS</span><span class="p">(</span><span class="nf">getM</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">),</span> <span class="n">top</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span> <span class="n">gene.selection</span><span class="o">=</span><span class="s">&quot;common&quot;</span><span class="p">,</span>
+        <span class="n">col</span><span class="o">=</span><span class="n">pal</span><span class="p">[</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)),</span> <span class="n">text.col</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span>
+       <span class="n">bg</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">0.7</span><span class="p">)</span>
+
+<span class="nf">plotMDS</span><span class="p">(</span><span class="nf">getM</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">),</span> <span class="n">top</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span> <span class="n">gene.selection</span><span class="o">=</span><span class="s">&quot;common&quot;</span><span class="p">,</span>
+        <span class="n">col</span><span class="o">=</span><span class="n">pal</span><span class="p">[</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Source</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Source</span><span class="p">)),</span> <span class="n">text.col</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span>
+       <span class="n">bg</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">0.7</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Examining the MDS plots for this dataset demonstrates that the largest source of variation is the difference between individuals. The higher dimensions reveal that the differences between cell types are largely captured by the third and fourth principal components. This type of information is useful in that it can inform downstream analysis. If obvious sources of unwanted variation are revealed by the MDS plots, we can include them in our statistical model to account for them. In the case of this particular dataset, we will include individual to individual variation in our statistical model.</p>
+</div>
+<div class="section" id="filtering">
+<h2><a class="toc-backref" href="#id16">Filtering</a><a class="headerlink" href="#filtering" title="Permalink to this headline">¶</a></h2>
+<p>Poor performing probes can obscure the biological signals in the data and are generally filtered out prior to differential methylation analysis. As the signal from these probes is unreliable, by removing them we perform fewer statistical tests and thus lower the multiple testing penalty. We filter out probes that have failed in one or more samples based on detection p-value.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># ensure probes are in the same order in the mSetSq and detP objects</span>
+<span class="n">detP</span> <span class="o">&lt;-</span> <span class="nf">detectionP</span><span class="p">(</span><span class="n">rgSet</span><span class="p">)</span>
+<span class="n">detP</span> <span class="o">&lt;-</span> <span class="n">detP</span><span class="p">[</span><span class="nf">match</span><span class="p">(</span><span class="nf">featureNames</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">),</span><span class="nf">rownames</span><span class="p">(</span><span class="n">detP</span><span class="p">)),]</span>
+
+<span class="c1"># remove any probes that have failed in one or more samples; this next line</span>
+<span class="c1"># checks for each row of detP whether the number of values &lt; 0.01 is equal</span>
+<span class="c1"># to the number of samples (TRUE) or not (FALSE)</span>
+<span class="n">keep</span> <span class="o">&lt;-</span> <span class="nf">rowSums</span><span class="p">(</span><span class="n">detP</span> <span class="o">&lt;</span> <span class="m">0.01</span><span class="p">)</span> <span class="o">==</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">mSetSq</span><span class="p">)</span>
+<span class="nf">table</span><span class="p">(</span><span class="n">keep</span><span class="p">)</span>
+<span class="c1"># Subset the GenomicRatioSet</span>
+<span class="n">mSetSqFlt</span> <span class="o">&lt;-</span> <span class="n">mSetSq</span><span class="p">[</span><span class="n">keep</span><span class="p">,]</span>
+<span class="n">mSetSqFlt</span>
+</pre></div>
+</div>
+<p>Because the presence of short nucleotide polymorphisms (or SNPs) inside the probe body or at the nucleotide extension can have important consequences on the downstream analysis, <em>minfi</em> offers the possibility to remove such probes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Can you see why SNP can be a problem in methylation data analysis (Hint: C to T conversions are the most common type of SNP in the human genome)?</p>
+</div>
+<p>There is a function in <em>minfi</em> that provides a simple interface for the removal of probes where common SNPs may affect the CpG. You can either remove all probes affected by SNPs (default), or only those with minor allele frequencies greater than a specified value.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mSetSqFlt</span> <span class="o">&lt;-</span> <span class="nf">dropLociWithSnps</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">)</span>
+<span class="n">mSetSqFlt</span>
+</pre></div>
+</div>
+<p>Once the data has been filtered and normalised, it is often useful to re-examine the MDS plots to see if the relationship between the samples has changed. From the new MDS plots it is apparent that much of the inter-individual variation has been removed as this is no longer the first principal component, likely due to the removal of the SNP-affected CpG probes. However, the samples do still cluster by individual in the second dimension and thus a factor for individual should still be included in the model.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">plotMDS</span><span class="p">(</span><span class="nf">getM</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">),</span> <span class="n">top</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span> <span class="n">gene.selection</span><span class="o">=</span><span class="s">&quot;common&quot;</span><span class="p">,</span>
+        <span class="n">col</span><span class="o">=</span><span class="n">pal</span><span class="p">[</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)],</span> <span class="n">cex</span><span class="o">=</span><span class="m">0.8</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)),</span> <span class="n">text.col</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span>
+       <span class="n">cex</span><span class="o">=</span><span class="m">0.65</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">)</span>
+
+<span class="nf">plotMDS</span><span class="p">(</span><span class="nf">getM</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">),</span> <span class="n">top</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span> <span class="n">gene.selection</span><span class="o">=</span><span class="s">&quot;common&quot;</span><span class="p">,</span>
+        <span class="n">col</span><span class="o">=</span><span class="n">pal</span><span class="p">[</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Source</span><span class="p">)])</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Source</span><span class="p">)),</span> <span class="n">text.col</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span>
+       <span class="n">cex</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="probe-wise-differential-methylation">
+<h2><a class="toc-backref" href="#id17">Probe-Wise Differential Methylation</a><a class="headerlink" href="#probe-wise-differential-methylation" title="Permalink to this headline">¶</a></h2>
+<p>After all this preprocessing and filtering, the time has come to address the actual biological question of interest! Namely, which CpG sites are differentially differentially methylated between the different cell types? To do this, we will design a linear model in <em>limma</em>.</p>
+<p>As was apparent from the MDS plots, there is an additional factor that we need to take into account when performing the statistical analysis needed to solve this question. In the targets file, there is a column called Sample_Source, which refers to the individuals that the samples were collected from. Hence, when we specify our design matrix, we need to include two factors: individual and cell type. This style of analysis is called a paired analysis; differences between cell types are calculated within each individual, and then these differences are averaged across individuals to determine whether there is an overall significant difference in the mean methylation level for each CpG site.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This design is fit for this dataset, and this dataset only. For future analyses, you will have to adapt the analysis style and design to your particular dataset. The <a class="reference external" href="https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf">limma User’s Guide</a> extensively covers the different types of designs that are commonly used for microarray experiments and how to analyse them in R.</p>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate M-values for statistical analysis: as previously mentioned, M-values have nicer statistical properties and are thus better for use in statistical analysis of methylation data</span>
+<span class="n">mVals</span> <span class="o">&lt;-</span> <span class="nf">getM</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">)</span>
+
+<span class="c1"># Set up the design matrix for the Differential Methylation analysis</span>
+<span class="c1"># Define the factor of interest</span>
+<span class="n">cellType</span> <span class="o">&lt;-</span> <span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">)</span>
+<span class="c1"># Define is the individual effect that we need to account for</span>
+<span class="n">individual</span> <span class="o">&lt;-</span> <span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Source</span><span class="p">)</span>
+<span class="c1"># use the above to create a design matrix</span>
+<span class="n">design</span> <span class="o">&lt;-</span> <span class="nf">model.matrix</span><span class="p">(</span><span class="o">~</span><span class="m">0</span><span class="o">+</span><span class="n">cellType</span><span class="o">+</span><span class="n">individual</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">targets</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">design</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">cellType</span><span class="p">),</span><span class="nf">levels</span><span class="p">(</span><span class="n">individual</span><span class="p">)[</span><span class="m">-1</span><span class="p">])</span>
+
+<span class="c1"># fit the actual linear model to the data</span>
+<span class="n">fit</span> <span class="o">&lt;-</span> <span class="nf">lmFit</span><span class="p">(</span><span class="n">mVals</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We are interested in pairwise comparisons between the four cell types, taking into account variation between individuals. We perform this analysis on the matrix of M-values in <em>limma</em>, obtaining t-statistics and associated p-values for each CpG site. A convenient way to set up the model when the user has many comparisons of interest that they would like to test is to use a contrasts matrix in conjunction with the design matrix. A contrasts matrix will take linear combinations of the columns of the design matrix corresponding to the comparisons of interest, essentially subsetting the data to these comparisons.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a contrast matrix for specific comparisons</span>
+<span class="n">contMatrix</span> <span class="o">&lt;-</span> <span class="nf">makeContrasts</span><span class="p">(</span><span class="n">naive</span><span class="o">-</span><span class="n">rTreg</span><span class="p">,</span>
+                           <span class="n">naive</span><span class="o">-</span><span class="n">act_naive</span><span class="p">,</span>
+                           <span class="n">rTreg</span><span class="o">-</span><span class="n">act_rTreg</span><span class="p">,</span>
+                           <span class="n">act_naive</span><span class="o">-</span><span class="n">act_rTreg</span><span class="p">,</span>
+                           <span class="n">levels</span><span class="o">=</span><span class="n">design</span><span class="p">)</span>
+<span class="n">contMatrix</span>
+</pre></div>
+</div>
+<p>Next, these contrasts are fitted to the model and the statistics and p-values of differential expression are calculated by the function <em>eBayes</em>. this function is used to rank genes in order of evidence for differential methylation. We will not delve too deep into the background of this statistical testing framework; if you are interested in this more info can be found <a class="reference external" href="Linearmodelsandempiricalbayesmethodsforassessingdifferentialexpr…">here</a>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fit the contrasts</span>
+<span class="n">fit2</span> <span class="o">&lt;-</span> <span class="nf">contrasts.fit</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">contMatrix</span><span class="p">)</span>
+<span class="c1"># Rank genes</span>
+<span class="n">fit2</span> <span class="o">&lt;-</span> <span class="nf">eBayes</span><span class="p">(</span><span class="n">fit2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the <em>topTable</em> function in <em>limma</em>, the differentially methylated genes per comparison/contrast can be extracted. To order these by p-value, the user can specify sort.by=”p”. The results of the analysis for the first comparison, naive vs. rTreg, can be saved as a data.frame by setting <em>coef=1</em>. The <em>coef</em> parameter explicitly refers to the column in the contrasts matrix which corresponds to the comparison of interest.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the table of results for the first contrast (naive - rTreg)</span>
+<span class="n">DMPs</span> <span class="o">&lt;-</span> <span class="nf">topTable</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="kc">Inf</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">DMPs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can add a bit more annotation to this list of CpGs, by adding a <em>genelist</em> parameter to the <em>topTable</em> function. This can be useful to retrieve the location of the CpG, the nearest gene or CpG island and other information.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve data from the array annotation package; this is array-specific</span>
+<span class="n">ann450kSub</span> <span class="o">&lt;-</span> <span class="n">ann450k</span><span class="p">[</span><span class="nf">match</span><span class="p">(</span><span class="nf">rownames</span><span class="p">(</span><span class="n">mVals</span><span class="p">),</span><span class="n">ann450k</span><span class="o">$</span><span class="n">Name</span><span class="p">),</span>
+                      <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span><span class="m">12</span><span class="o">:</span><span class="m">19</span><span class="p">,</span><span class="m">24</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">ann450k</span><span class="p">))]</span>
+<span class="n">DMPs</span> <span class="o">&lt;-</span> <span class="nf">topTable</span><span class="p">(</span><span class="n">fit2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="kc">Inf</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">genelist</span><span class="o">=</span><span class="n">ann450kSub</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">DMPs</span><span class="p">)</span>
+
+<span class="c1"># The resulting data.frame can easily be written to a CSV file, which can be opened in Excel.</span>
+<span class="c1"># write.table(DMPs, file=&quot;DMPs.csv&quot;, sep=&quot;,&quot;, row.names=FALSE)</span>
+</pre></div>
+</div>
+<p>It is always a good idea to plot the most differentially methylated sites as a quick sanity check; if the plot does not make sense there might have been an issue with the model design or setup of the contrast matrix. To do this, we first extract the Beta-values (remember these are the preferential values to visualize).</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># eXtract Beta-values</span>
+<span class="n">bVals</span> <span class="o">&lt;-</span> <span class="nf">getBeta</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">)</span>
+
+<span class="c1"># Plot most significant differentially methylated CpG</span>
+<span class="nf">plotCpg</span><span class="p">(</span><span class="n">bVals</span><span class="p">,</span> <span class="n">cpg</span><span class="o">=</span><span class="s">&quot;cg07499259&quot;</span><span class="p">,</span> <span class="n">pheno</span><span class="o">=</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">,</span> <span class="n">ylab</span> <span class="o">=</span> <span class="s">&quot;Beta values&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Does this plot makes sense? Are the differences in methylation percentage as expected?</p>
+</div>
+<div class="section" id="regional-differential-methylation-dmr">
+<h2><a class="toc-backref" href="#id18">Regional Differential Methylation (DMR)</a><a class="headerlink" href="#regional-differential-methylation-dmr" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="location-based-regions">
+<h3><a class="toc-backref" href="#id19">Location-based Regions</a><a class="headerlink" href="#location-based-regions" title="Permalink to this headline">¶</a></h3>
+<p>Often, differential methylation of a single CpG is not so informative or can be hard to detect. Therefore, knowing whether several CpGs near to each other (or <em>regions</em>) are concordantly differentially methylated can be of greater interest.</p>
+<p>There are several Bioconductor packages that have functions for identifying differentially methylated regions from 450k data. Some of the most popular are the <em>dmrFind</em> function in the <em>charm</em> package, which has been somewhat superseded for 450k arrays by the <em>bumphunter</em> function in <em>minfi</em>, and, the <em>dmrcate</em> in the <em>DMRcate</em> package. They are each based on different statistical methods, but we will be using <em>dmrcate</em> here, as it is based on <em>limma</em> and thus we can use the design and contrast matrix we defined earlier.</p>
+<p>We will again start from our matrix of M-values. For this kind of analysis, this matrix has to be annotated with the chromosomal position of the CpGs and their gene annotations. Because in a first step the <em>limma</em> differential methylation analysis for single CpGs will be run again, we need to specify the design matrix, contrast matrix and contrast of interest.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>More info on the different options can always be found in the manual; <em>i.e</em> by using <em>?cpg.annotate</em> in R.</p>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">myAnnotation</span> <span class="o">&lt;-</span> <span class="nf">cpg.annotate</span><span class="p">(</span><span class="n">object</span> <span class="o">=</span> <span class="n">mVals</span><span class="p">,</span>
+                             <span class="n">datatype</span> <span class="o">=</span> <span class="s">&quot;array&quot;</span><span class="p">,</span>
+                             <span class="n">what</span> <span class="o">=</span> <span class="s">&quot;M&quot;</span><span class="p">,</span>
+                             <span class="n">analysis.type</span> <span class="o">=</span> <span class="s">&quot;differential&quot;</span><span class="p">,</span>
+                             <span class="n">design</span> <span class="o">=</span> <span class="n">design</span><span class="p">,</span>
+                             <span class="n">contrasts</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+                             <span class="n">cont.matrix</span> <span class="o">=</span> <span class="n">contMatrix</span><span class="p">,</span>
+                             <span class="n">coef</span> <span class="o">=</span> <span class="s">&quot;naive - rTreg&quot;</span><span class="p">,</span>
+                             <span class="n">arraytype</span> <span class="o">=</span> <span class="s">&quot;450K&quot;</span><span class="p">)</span>
+<span class="n">myAnnotation</span>
+</pre></div>
+</div>
+<p>Once we have the relevant statistics for the individual CpGs, we can then use the <em>dmrcate</em> function to combine them to identify differentially methylated regions. Of particular interest here is the <em>lambda</em> parameter; this value is the number of nucleotides that is allowed between significant CpGs before splitting them up in different regions. So a smaller <em>lambda</em> will result in more but smaller regions. For array data, the authors of the <em>dmrcate</em> package currently recommend a lambda of 1000. The main output table DMRs contains all of the regions found, along with their genomic annotations and p-values. To inspect this object and further visualization, you can best use the <em>extractRanges</em> function to create a <em>GRanges</em> object.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">DMRs</span> <span class="o">&lt;-</span> <span class="nf">dmrcate</span><span class="p">(</span><span class="n">myAnnotation</span><span class="p">,</span> <span class="n">lambda</span><span class="o">=</span><span class="m">1000</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="n">DMRs</span>
+<span class="c1"># Create GRanges object; create directory when prompted</span>
+<span class="n">results.ranges</span> <span class="o">&lt;-</span> <span class="nf">extractRanges</span><span class="p">(</span><span class="n">DMRs</span><span class="p">)</span>
+<span class="n">results.ranges</span>
+</pre></div>
+</div>
+<p>Just as for the single CpG analysis, it is a good idea to visually inspect the results to make sure they make sense. For this, use the <em>DMR.plot</em> function. By default, this plot draws the location of the DMR in the genome, the position of nearby genes, the positions of the CpG probes, the Beta value levels of each sample as a heatmap and the mean methylation levels for the various sample groups in the experiment.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the grouping variables and colours</span>
+<span class="n">pal</span> <span class="o">&lt;-</span> <span class="nf">brewer.pal</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="s">&quot;Dark2&quot;</span><span class="p">)</span>
+<span class="n">groups</span> <span class="o">&lt;-</span> <span class="n">pal</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">))]</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">levels</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">))</span>
+<span class="n">cols</span> <span class="o">&lt;-</span> <span class="n">groups</span><span class="p">[</span><span class="nf">as.character</span><span class="p">(</span><span class="nf">factor</span><span class="p">(</span><span class="n">targets</span><span class="o">$</span><span class="n">Sample_Group</span><span class="p">))]</span>
+<span class="c1"># draw the plot for the second DMR - first gives error for some reason...</span>
+<span class="nf">DMR.plot</span><span class="p">(</span><span class="n">ranges</span> <span class="o">=</span> <span class="n">results.ranges</span><span class="p">,</span>
+         <span class="n">dmr</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span>
+         <span class="n">CpGs</span> <span class="o">=</span> <span class="n">mSetSqFlt</span><span class="p">,</span>
+         <span class="n">phen.col</span> <span class="o">=</span> <span class="n">cols</span><span class="p">,</span>
+         <span class="n">genome</span> <span class="o">=</span> <span class="s">&quot;hg19&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Interestingly, the hypomethylation of the second DMR, near TIGIT, in Treg was  one of the main conclusions of the paper base don this dataset:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>…In support of the view that methylation limits access of FOXP3 to its DNA targets, we showed that increased expression of the immune suppressive receptor T-cell immunoglobulin and immunoreceptor tyrosine-based inhibitory motif domain (TIGIT), which delineated Treg from activated effector T cells, was associated with hypomethylation and FOXP3 binding at the TIGIT locus…</p>
+</div>
+</div>
+<div class="section" id="functional-regions">
+<h3><a class="toc-backref" href="#id20">Functional Regions</a><a class="headerlink" href="#functional-regions" title="Permalink to this headline">¶</a></h3>
+<p>An alternative approach to detect DMRs is to predefine the regions to be tested; so, as opposed to the previous approach where the regions are defined according to heuristic distance rules we can define regions based on a shared function. For this, we will used the package <em>mCSEA</em> which contains three types of regions for 450K and EPIC arrays: promoter regions, gene body and CpG Islands. <em>mCSEA</em> is based on Gene Set Enrichment analysis (GSEA), a popular methodology for functional analysis that was specifically designed to avoid some drawbacks in the field of gene expression. Briefly, CpG sites are ranked according to a metric (logFC, t-statistic, …) and an enrichment score (ES) is calculated for each region. This is done by running through the entire ranked CpG list, increasing the score when a CpG in the region is encountered and decreasing the score when the gene encountered is not in the region. A high ES indicates these probes are found high up in the ranked list. In other words, a high (N)ES value means that for the CpG sites in this region there is - on average - a shift towards a higher methylation level. This approach has been <a class="reference external" href="https://academic.oup.com/bioinformatics/article/35/18/3257/5316232">shown</a> to be more effective to detect smaller but consistent methylation differences.</p>
+<p>Here, we will apply this method to the output of the “naive-rTreg” comparison, ranking the CpGs by logFC differences. We specify “promoters” as the type of regions to be considered, but other options such as CpG Islands or gene bodies are possible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>“Promoters” are not really restricted to pure promoters, but also include UTR, 1st Exon and a region upstream of the TSS.</p>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&quot;mCSEA&quot;</span><span class="p">)</span>
+<span class="c1"># Create a named vector containing the rank metric (here: logFC)</span>
+<span class="n">myRank</span> <span class="o">&lt;-</span> <span class="n">DMPs</span><span class="o">$</span><span class="n">logFC</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">myRank</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">rownames</span><span class="p">(</span><span class="n">DMPs</span><span class="p">)</span>
+
+<span class="c1"># Reshape the phenotype data to a format suitable for mCSEA</span>
+<span class="n">pheno</span> <span class="o">&lt;-</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">pData</span><span class="p">(</span><span class="n">mSetSqFlt</span><span class="p">))</span>
+<span class="n">pheno</span> <span class="o">&lt;-</span> <span class="n">pheno</span><span class="p">[,</span><span class="s">&quot;Sample_Group&quot;</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">]</span>
+
+<span class="c1"># Run the mCSEA</span>
+<span class="n">myResults</span> <span class="o">&lt;-</span> <span class="nf">mCSEATest</span><span class="p">(</span><span class="n">myRank</span><span class="p">,</span>
+                       <span class="n">bVals</span><span class="p">,</span>
+                       <span class="n">pheno</span><span class="p">,</span>
+                       <span class="n">regionsTypes</span> <span class="o">=</span> <span class="s">&quot;promoters&quot;</span><span class="p">,</span>
+                       <span class="n">platform</span> <span class="o">=</span> <span class="s">&quot;450k&quot;</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">myResults</span><span class="o">$</span><span class="n">promoters</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The main results are found in <em>myResults$promoters</em>. This data frame contains the (normalized) enrichment score, p-values, total number of associated CpGs and the leading edge CpGs. The leading edge CpGs are the real drivers of the ES; these can be considered the most important CpGs with the largest logFC.
+The results of selected results can be visualized using <em>mCSEAPlot</em>, by specifying the <em>regionType</em> and the <em>dmrName</em>. Here an example of the second hit of the DMRs based on location; the promoter of TIGIT. Note that the gene name indicates the promoter of said gene, since we specified we only consider promoter regions in this analysis. The result of this visualization are the chromosomal location, Beta levels per CpG per sample, leading edge status (green if in leading edge set) and gene annotation.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">mCSEAPlot</span><span class="p">(</span><span class="n">myResults</span><span class="p">,</span>
+          <span class="n">regionType</span> <span class="o">=</span> <span class="s">&quot;promoters&quot;</span><span class="p">,</span>
+          <span class="n">dmrName</span> <span class="o">=</span> <span class="s">&quot;TIGIT&quot;</span><span class="p">,</span>
+          <span class="n">transcriptAnnotation</span> <span class="o">=</span> <span class="s">&quot;symbol&quot;</span><span class="p">,</span>
+          <span class="n">makePDF</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="gene-ontology-testing">
+<h2><a class="toc-backref" href="#id21">Gene Ontology Testing</a><a class="headerlink" href="#gene-ontology-testing" title="Permalink to this headline">¶</a></h2>
+<p>After obtaining a - potentially long - list of significantly differentially methylated CpG sites, one might wonder whether there is a (or multiple) specific biological pathway(s) over-represented in this list. In some cases it is relatively straightforward to link the top differentially methylated CpGs to genes that make biological sense in terms of the cell types or samples being studied, but there may be many thousands of CpGs significantly differentially methylated. Gene-set analysis (GSA) is frequently used to discover meaningful biological patterns from lists of genes generated from high-throughput experiments, including genome-wide DNA methylation studies. The objective is typically to identify similarities between the genes, with respect to annotations available from sources such as the Gene Ontology (GO) or Kyoto Encyclopedia of Genes and Genomes (KEGG).</p>
+<p>We can perform this type of analysis using the <em>gometh</em> function in the <em>missMethyl</em> package. This function takes as input a character vector of the names (e.g. cg20832020) of the significant CpG sites, and optionally, a character vector of all CpGs tested. This is recommended particularly if extensive filtering of the CpGs has been performed prior to analysis as it constitutes the “background” out of which any significant CpG could be chosen. For gene ontology testing, the user can specify collection=”GO” (which is the default option). For testing KEGG pathways, specify collection=”KEGG”. In this tutorial, we will continue with the results from the single-probe “naive vs rTreg” comparison and select all CpG sites that have an adjusted p-value of less than 0.05.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the significant CpG sites at less than 5% FDR</span>
+<span class="n">sigCpGs</span> <span class="o">&lt;-</span> <span class="n">DMPs</span><span class="o">$</span><span class="n">Name</span><span class="p">[</span><span class="n">DMPs</span><span class="o">$</span><span class="n">adj.P.Val</span><span class="o">&lt;</span><span class="m">0.05</span><span class="p">]</span>
+<span class="c1"># First 10 significant CpGs</span>
+<span class="n">sigCpGs</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">]</span>
+<span class="c1"># Total number of significant CpGs at 5% FDR</span>
+<span class="nf">length</span><span class="p">(</span><span class="n">sigCpGs</span><span class="p">)</span>
+<span class="c1"># Get all the CpG sites used in the analysis to form the background</span>
+<span class="n">all</span> <span class="o">&lt;-</span> <span class="n">DMPs</span><span class="o">$</span><span class="n">Name</span>
+<span class="c1"># Total number of CpG sites tested</span>
+<span class="nf">length</span><span class="p">(</span><span class="n">all</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A key assumption of GSA methods is that all genes have, <em>a priori</em>, the same probability of appearing in the list of significant genes. If this is not true, that is, if certain genes are more likely to appear in the list, regardless of the treatments or conditions being investigated, this has the potential to cause misleading results from GSA. This has been <a class="reference external" href="https://academic.oup.com/bioinformatics/article/29/15/1851/265573">shown</a> to be a major source of bias in genome-wide methylation gene set analysis. Essentially it comes down to this: genes that have more CpGs associated with them will have a much higher probability of being identified as differentially methylated compared to genes with fewer CpGs. As a result gene sets containing many “highly covered” genes will be found to be significantly enriched much easier than other gene sets, regardless of the treatment or condition. For the 450k array, the numbers of CpGs mapping to genes can vary from as few as 1 to as many as 1200. The <em>gometh</em> function takes into account the varying numbers of CpGs associated with each gene on the Illumina methylation arrays. If you want to try alternative methods, keep in mind to check how they handle this source of bias.</p>
+</div>
+<p>After having defined the significant and background sites, it is time to run the enrichment analysis itself.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run enrichment - Can take a bit of time...</span>
+<span class="n">gst</span> <span class="o">&lt;-</span> <span class="nf">gometh</span><span class="p">(</span><span class="n">sig.cpg</span><span class="o">=</span><span class="n">sigCpGs</span><span class="p">,</span> <span class="n">all.cpg</span><span class="o">=</span><span class="n">all</span><span class="p">)</span>
+<span class="c1"># Top 10 GO categories</span>
+<span class="nf">topGSA</span><span class="p">(</span><span class="n">gst</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="m">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Can you find the top 10 KEGG pathways? Do they make sense biologically?</p>
+<p>While gene set testing is useful for providing some biological insight in terms of what pathways might be affected by abberant methylation, care should be taken not to over-interpret the results. Gene set testing should be used for the purpose of providing some biological insight that ideally would be tested and validated in further laboratory experiments. It is important to keep in mind that we are not observing gene level activity such as in RNA-Seq experiments, and that we have had to take an extra step to associate CpGs with genes.</p>
+</div>
+<div class="section" id="cell-type-composition">
+<h2><a class="toc-backref" href="#id22">Cell Type Composition</a><a class="headerlink" href="#cell-type-composition" title="Permalink to this headline">¶</a></h2>
+<p>As methylation is cell type specific and methylation arrays provide CpG methylation values for a population of cells, biological findings from samples that are comprised of a mixture of cell types, such as blood, can be confounded with cell type composition. In order to estimate the confounding levels between phenotype and cell type composition, the function <em>estimateCellCounts</em> (depending on the package <em>FlowSorted.Blood.450k</em>) can be used to estimate the cell type composition of blood samples. The function takes as input a <em>RGChannelSet</em> and returns a cell counts vector for each samples. If there seems to be a large difference in cell type composition in the different levels of the phenotype, it might be needed to include the celltype proportions in the <em>limma</em> model to account for this confounding. Since we have been working with sorted populations of cells, this was not necessary for our data.</p>
+</div>
+<div class="section" id="alternative-workflows">
+<h2><a class="toc-backref" href="#id23">Alternative Workflows</a><a class="headerlink" href="#alternative-workflows" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt><a class="reference external" href="https://rnbeads.org">RnBeads</a></dt><dd><p>R-based and user-friendly; includes modules for data import, quality control, filtering and normalization (“preprocessing”), export of processed data (“tracks and tables”), covariate inference (e.g., predicting epigenetic age and cell type heterogeneity from DNA methylation data), exploratory analysis (e.g., dimension reduction, global distribution of DNA methylation levels, hierarchical clustering), and differential DNA methylation analysis. Each analysis module generates an HTML report that combines method descriptions, results tables, and publication-grade plots. These reports provide the user with a comprehensive and readily sharable summary of the dataset.</p>
+</dd>
+<dt><a class="reference external" href="https://www.bioconductor.org/packages/release/bioc/html/COHCAP.html">COHCAP</a></dt><dd><p>R-based; provides a pipeline to analyze single-nucleotide resolution methylation data (Illumina 450k/EPIC methylation array, targeted BS-Seq, etc.). It provides differential methylation for CpG Sites, differential methylation for CpG Islands, integration with gene expression data, with visualizaton options.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../methylationSeq/Seq_Tutorial.html" class="btn btn-neutral float-right" title="DNA Methylation: Bisulfite Sequencing Workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../methylation_tutorials.html" class="btn btn-neutral float-left" title="DNA Methylation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

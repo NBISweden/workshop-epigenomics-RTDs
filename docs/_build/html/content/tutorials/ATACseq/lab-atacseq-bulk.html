@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ATAC-seq &mdash; Epigenomics Workshop 2020 1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Advanced ChIP methods" href="../quantitative_chip_tutorials.html" />
+    <link rel="prev" title="ATAC-seq" href="../atacseq_tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Epigenomics Workshop 2020
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../precourse.html">Pre-course Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../online-classroom.html">Online classroom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../schedule.html">Schedule</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup/lab-setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../methylation_tutorials.html">DNA Methylation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chipseq_tutorials.html">ChIPseq</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../atacseq_tutorials.html">ATACseq</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ATACseq: processing and peak detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alignment-processing-and-qc">Alignment Processing and QC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peak-calling">Peak Calling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quantitative_chip_tutorials.html">Advanced ChIP methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chip_downstream_tutorials.html">Downstream Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../expdesign_data.html">Experimental Design and Data Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_integration_tutorials.html">Data Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nextflow.html">Nextflow &amp; nf-core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Epigenomics Workshop 2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../atacseq_tutorials.html">ATAC-seq</a> &raquo;</li>
+        
+      <li>ATAC-seq</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/content/tutorials/ATACseq/lab-atacseq-bulk.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="atac-seq">
+<h1>ATAC-seq<a class="headerlink" href="#atac-seq" title="Permalink to this headline">¶</a></h1>
+<p>ATAC-seq (Assay for Transposase-Accessible Chromatin with high-throughput sequencing) is a method for determining chromatin accessibility across the genome. It utilizes a hyperactive Tn5 transposase to insert sequencing adapters into open chromatin regions. High-throughput sequencing then yields reads that indicate these regions of increased accessibility.</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Figure 1. Overview of ATAC-seq (Buenrostro et al., 2015).</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/atac-seq-figure1.png"><img alt="../../../_images/atac-seq-figure1.png" src="../../../_images/atac-seq-figure1.png" style="width: 400px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The sample processing workflow is similar to that of ChIP-seq. There are some small changes, however, and we’ll discuss them here.</p>
+<p>First of all, the sample should be sequenced using the paired end (PE) protocol. Single end sequencing for ATAC-seq is strongly discouraged, for reasons mentioned below.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#data" id="id7">Data</a></p></li>
+<li><p><a class="reference internal" href="#alignment-processing-and-qc" id="id8">Alignment Processing and QC</a></p></li>
+<li><p><a class="reference internal" href="#peak-calling" id="id9">Peak Calling</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id10">Genrich</a></p></li>
+<li><p><a class="reference internal" href="#macs" id="id11">MACS</a></p></li>
+<li><p><a class="reference internal" href="#comparing-results-of-macs-and-genrich" id="id12">Comparing results of MACS and Genrich</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="data">
+<h2><a class="toc-backref" href="#id7">Data</a><a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial we will use data from the study of Buenrostro et al. 2013, the first paper on the ATAC-seq method. The data is from a human cell line of purified CD4+ T cells. The original dataset had 2 x 200 million reads and would be too big to process in a training session, so the original dataset was downsampled to 200,000 randomly selected reads. Additionally, about 200,000 reads pairs that will map to chromosome 22 were included to have a good profile on this chromosome, similar to what you might get with a typical ATAC-seq sample.</p>
+<p>Prior to aligning reads to the reference genome, the reads must be properly trimmed off adapters - because we will allow “dovetailing” (with the mates seemingly extending “past” each other) of read pairs during alignment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;--------------------Mate <span class="m">1</span>-----------------------
+AGCTTCAACATCGAATACGCCGCAGGCCCCTTCGCCCTATTCTTCATAGC
+  CTTCAACATCGAATACGCCGCAGGCCCCTTCGCCCTATTCTTCATAGCCT
+  ----------------------Mate <span class="m">2</span>---------------------&gt;
+</pre></div>
+</div>
+<p>Read alignment can be performed using any aligner which performs global i.e. end-to-end alignment, such as <code class="docutils literal notranslate"><span class="pre">bwa-mem</span></code>, <code class="docutils literal notranslate"><span class="pre">bowtie</span></code>, <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> (newer versions). In this tutorial we used <code class="docutils literal notranslate"><span class="pre">bowtie2</span></code> for read mapping, for details see the header of bam file. We start from the bam file which contains subset reads aligned to <code class="docutils literal notranslate"><span class="pre">hg38</span></code> assembly.</p>
+</div>
+<div class="section" id="alignment-processing-and-qc">
+<h2><a class="toc-backref" href="#id8">Alignment Processing and QC</a><a class="headerlink" href="#alignment-processing-and-qc" title="Permalink to this headline">¶</a></h2>
+<p>First, you need to link the bam file in your working directory. This file has been filtered off alignments with low quality score and contains only properly paired read pairs. You can refer to <a class="reference external" href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#paired-sam-output">bowtie2 manual</a> for details. The file is also sorted and inexed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p atacseq/bam
+<span class="nb">cd</span> atacseq/bam
+
+ln -s /sw/courses/epigenomics/ATACseq_bulk/results/bam/SRR891268_hg38.bowtie2.q30.sorted.bam .
+ln -s /sw/courses/epigenomics/ATACseq_bulk/results/bam/SRR891268_hg38.bowtie2.q30.sorted.bam.bai .
+</pre></div>
+</div>
+<p>First, we would like to know how many fragments mapped to <code class="docutils literal notranslate"><span class="pre">chrM</span></code>, as reads derived from mitochondrial DNA represent noise in ATAC-seq datasets and can substantially inflate the background level in peak identification.</p>
+<p>The output is TAB-delimited with each line consisting of reference sequence name, sequence length, # mapped read-segments and # unmapped read-segments.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>samtools idxstats SRR891268_hg38.bowtie2.q30.sorted.bam &gt;SRR891268.idxstats.txt
+
+<span class="c1">#total fragments</span>
+awk <span class="s1">&#39;{sum += $3} END {print sum}&#39;</span> SRR891268.idxstats.txt
+
+<span class="c1">#chrM fragments</span>
+awk <span class="s1">&#39;$1 ~ /chrM/ {print $3}&#39;</span> SRR891268.idxstats.txt
+
+&gt; <span class="m">165586</span>/437490
+<span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="m">0</span>.3784909
+</pre></div>
+</div>
+<p>You can see that almost 40% of the fragments mapped to mitochondrial DNA. This is often the case in ATAC-seq experiments (depending on the protocol) and should be taken into account when planning the experiment. We remove these reads in the next step.</p>
+<p>The alignment processing steps are similar to <a class="reference internal" href="../chipseqProc/lab-chipseq-processing.html"><span class="doc">ChIP-seq data processing</span></a>. In this example we do not filter out reads mapping to blaclisted regions (found in Encode accession <code class="docutils literal notranslate"><span class="pre">ENCFF356LFX</span></code>), this step may be necessary, depending on the dataset.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>samtools view -h SRR891268_hg38.bowtie2.q30.sorted.bam <span class="p">|</span> awk <span class="s1">&#39;($3 != &quot;chrM&quot;)&#39;</span> <span class="p">|</span> samtools view -Shbo SRR891268_hg38.bowtie2.q30.sorted.noM.bam -
+
+samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.bam
+
+samtools stats SRR891268_hg38.bowtie2.q30.sorted.noM.bam &gt;SRR891268.stats.txt
+</pre></div>
+</div>
+<p>The last command collects statistics from BAM files and outputs in a text format. To see the summary:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="sb">`</span>grep ^SN SRR891268.stats.txt <span class="p">|</span> cut -f <span class="m">2</span>-<span class="sb">`</span>
+
+<span class="c1"># the interesting part</span>
+insert size average:    <span class="m">231</span>.6
+insert size standard deviation: <span class="m">188</span>.8
+</pre></div>
+</div>
+<p>You will remove duplicated reads (which likely are PCR duplicates) and collect detailed insert size metrics.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module load picard/2.23.4
+
+java -Xmx64G -jar <span class="nv">$PICARD_HOME</span>/picard.jar MarkDuplicates -I SRR891268_hg38.bowtie2.q30.sorted.noM.bam <span class="se">\</span>
+-O SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam -M dedup_metrics.txt <span class="se">\</span>
+-VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES <span class="nb">true</span> -ASSUME_SORTED <span class="nb">true</span>
+
+java -Xmx64G -jar <span class="nv">$PICARD_HOME</span>/picard.jar CollectInsertSizeMetrics <span class="se">\</span>
+-I SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam -O SRR891268_insert_size_metrics.txt <span class="se">\</span>
+-H SRR891268_insert_size_histogram.pdf -M <span class="m">0</span>.5
+</pre></div>
+</div>
+<p>View the resulting histogram of insert sizes <code class="docutils literal notranslate"><span class="pre">SRR891268_insert_size_histogram.pdf</span></code>. Generating this important QC plot is only possible for PE libraries. Could you guess what the peaks at approximately 50bp, 200bp, 400bp and 600bp correspond to?</p>
+<p>To give some context compare to plots on Figure 2.</p>
+<table class="colwidths-given docutils align-default" id="id3">
+<caption><span class="caption-text">Figure 2. Examples of insert size distribution for ATAC-seq experiments.</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Naked DNA</p></th>
+<th class="head"><p>Failed ATAC-seq</p></th>
+<th class="head"><p>Noisy ATAC-seq</p></th>
+<th class="head"><p>Successful ATAC-seq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><a class="reference internal image-reference" href="../../../_images/Screenshot_sizeDistribution_Naked.png"><img alt="../../../_images/Screenshot_sizeDistribution_Naked.png" src="../../../_images/Screenshot_sizeDistribution_Naked.png" style="width: 200px;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/Screenshot_sizeDistribution_Failed.png"><img alt="../../../_images/Screenshot_sizeDistribution_Failed.png" src="../../../_images/Screenshot_sizeDistribution_Failed.png" style="width: 200px;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/Screenshot_sizeDistribution_Failed2.png"><img alt="../../../_images/Screenshot_sizeDistribution_Failed2.png" src="../../../_images/Screenshot_sizeDistribution_Failed2.png" style="width: 200px;" /></a>
+</td>
+<td><a class="reference internal image-reference" href="../../../_images/Screenshot_sizeDistribution_Good.png"><img alt="../../../_images/Screenshot_sizeDistribution_Good.png" src="../../../_images/Screenshot_sizeDistribution_Good.png" style="width: 200px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="peak-calling">
+<h2><a class="toc-backref" href="#id9">Peak Calling</a><a class="headerlink" href="#peak-calling" title="Permalink to this headline">¶</a></h2>
+<p>We have now finished the data preprocessing. Next, to find regions corresponding to potential open chromatin regions, we want to identify regions where reads have piled up (peaks) greater than the background read coverage.</p>
+<p>The tools which are currently used are <a class="reference external" href="https://github.com/jsh58/Genrich">Genrich</a> and <a class="reference external" href="https://github.com/taoliu/MACS">MACS2</a>. Genrich has a mode dedicated to ATAC-Seq but is still not published, so both are presented here. The differences between these two are discussed <a class="reference external" href="https://informatics.fas.harvard.edu/atac-seq-guidelines.html#peak">here</a>.</p>
+<p>It is very important at this point that we center the reads on the 5’ extremity (read start site) as this is where Tn5 cuts. You want your peaks around the nucleosomes and not directly on the nucleosome. However, if we only assess the coverage of the start sites of the reads, the data would be too sparse and it would be impossible to call peaks. Thus, we will extend the start sites of the reads by 100bp (50 bp in each direction) to assess coverage.</p>
+<table class="colwidths-given docutils align-default" id="id4">
+<caption><span class="caption-text">Figure 3. Scheme of ATAC-Seq reads relative to nucleosomes.</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/nucleosomes_atacseq.jpg"><img alt="../../../_images/nucleosomes_atacseq.jpg" src="../../../_images/nucleosomes_atacseq.jpg" style="width: 400px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>When Tn5 cuts an accessible chromatin locus it inserts adapters separated by 9bp, see Figure 4. This means that to have the read start site reflect the centre of where Tn5 bound, the reads on the <strong>positive strand</strong> should be <strong>shifted 4 bp to the right</strong> and reads on the <strong>negative strand</strong> should be <strong>shifted 5 bp to the left</strong> as in Buenrostro et al. 2013.</p>
+<table class="colwidths-given docutils align-default" id="id5">
+<caption><span class="caption-text">Figure 4. Nextera Library Construction.</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/NexteraLibraryConstruction.jpg"><img alt="../../../_images/NexteraLibraryConstruction.jpg" src="../../../_images/NexteraLibraryConstruction.jpg" style="width: 400px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id10">Genrich</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Genrich can apply the read shifts when ATAC-seq mode <code class="docutils literal notranslate"><span class="pre">-j</span></code> is selected.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ../genrich
+<span class="nb">cd</span> ../genrich
+
+<span class="c1"># we link the input bam file</span>
+ln -s /sw/courses/epigenomics/ATACseq_bulk/results/bam/SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
+<span class="c1"># in case not already loaded</span>
+module load bioinfo-tools
+module load samtools/1.8
+
+<span class="c1"># sort the bam file by read name</span>
+samtools sort -n -o SRR891268_hg38.nsort.bam -T sort.tmp SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
+
+/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t SRR891268_hg38.nsort.bam  -o SRR891268_genrich.narrowPeak
+</pre></div>
+</div>
+<p>The output file produced by Genrich is in <a class="reference external" href="https://genome.ucsc.edu/FAQ/FAQformat.html#format12">ENCODE narrowPeak format</a>, listing the genomic coordinates of each peak called and various statistics.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chr start end name score strand signalValue pValue qValue peak
+
+signalValue - Measurement of overall <span class="o">(</span>usually, average<span class="o">)</span> enrichment <span class="k">for</span> the region.
+pValue - Measurement of statistical significance <span class="o">(</span>-log10<span class="o">)</span>. Use -1 <span class="k">if</span> no pValue is assigned.
+qValue - Measurement of statistical significance using <span class="nb">false</span> discovery rate <span class="o">(</span>-log10<span class="o">)</span>. Use -1 <span class="k">if</span> no qValue is assigned.
+</pre></div>
+</div>
+<p>How many peaks were detected?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wc -l SRR891268_genrich.narrowPeak
+<span class="m">130617</span> SRR891268_genrich.narrowPeak
+</pre></div>
+</div>
+<p>Unfortunately, Genrich does not work very well with our small training dataset (every covered region is called a peak). This is because most of the data is on chr22 whereas the background model was built on the whole genome (Genrich consideres length of all reference seqences included in bam header).</p>
+<p>Let’s try again with properly prepared bam file, i.e such that the header contains only the chromosome of interest (chr22).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># we need indexed bam</span>
+samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam
+
+<span class="c1">#subset bam and change header</span>
+samtools view -h SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam chr22 <span class="p">|</span> grep -P <span class="s2">&quot;@HD|@PG|chr22&quot;</span> <span class="p">|</span> samtools view -Shbo SRR891268_hg38.chr22_rh.bam
+
+
+<span class="c1"># sort by read name</span>
+samtools sort -n -o SRR891268_hg38.nsort.chr22_rh.bam -T sort.tmp SRR891268_hg38.chr22_rh.bam
+
+<span class="c1"># call peaks</span>
+/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t SRR891268_hg38.nsort.chr22_rh.bam  -o SRR891268_chr22_genrich.narrowPeak
+
+<span class="c1">#how many peaks</span>
+wc -l SRR891268_chr22_genrich.narrowPeak
+<span class="m">1017</span> SRR891268_chr22_genrich.narrowPeak
+</pre></div>
+</div>
+</div>
+<div class="section" id="macs">
+<h3><a class="toc-backref" href="#id11">MACS</a><a class="headerlink" href="#macs" title="Permalink to this headline">¶</a></h3>
+<p>We need to convert BAM file to BEDPE to correctly apply read shifts to center fragments on the insertion sites.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ../macs
+<span class="nb">cd</span> ../macs
+
+module load BEDTools/2.25.0
+bedtools bamtobed -bedpe -i ../genrich/SRR891268_hg38.nsort.chr22_rh.bam &gt;SRR891268_22_pe.bed
+
+module load MACS/2.2.6
+macs2 callpeak -t SRR891268_22_pe.bed -n SRR891268_macs_chr22_bedpe -f BEDPE -g <span class="m">50818468</span> --nomodel --extsize <span class="m">100</span> --shift -50 --call-summits
+</pre></div>
+</div>
+<p>We chose genome size <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">50818468</span></code> - because it is the length of chromosome 22, which is the only one included in the input file.</p>
+<p>Please note that we selected <code class="docutils literal notranslate"><span class="pre">--extsize</span> <span class="pre">100</span></code>  to match the behaviour of Genrich. Normally <code class="docutils literal notranslate"><span class="pre">--extsize</span> <span class="pre">200</span></code> would be selected. <code class="docutils literal notranslate"><span class="pre">--shift</span></code> needs to be minus half of the size of <code class="docutils literal notranslate"><span class="pre">--extsize</span></code> to be centered on the 5’, so normally -100. <code class="docutils literal notranslate"><span class="pre">--shift</span> <span class="pre">-100</span> <span class="pre">--extsize</span> <span class="pre">200</span></code> will amplify the cutting sites’ enrichment from ATAC-seq data. So in the end, the peak is where Tn5 transposase likes to attack.</p>
+<p>How many peaks were detected?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wc -l SRR891268_macs_chr22_bedpe_peaks.narrowPeak
+<span class="m">126</span> SRR891268_macs_chr22_bedpe_peaks.narrowPeak
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparing-results-of-macs-and-genrich">
+<h3><a class="toc-backref" href="#id12">Comparing results of MACS and Genrich</a><a class="headerlink" href="#comparing-results-of-macs-and-genrich" title="Permalink to this headline">¶</a></h3>
+<p>How many peaks actually overlap?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ..
+
+bedtools intersect -a macs/SRR891268_macs_chr22_bedpe_peaks.narrowPeak  -b genrich/SRR891268_chr22_genrich.narrowPeak  -f <span class="m">0</span>.50 -r &gt;peaks_common.bed
+
+wc -l peaks_common.bed
+<span class="m">125</span> peaks_common.bed
+</pre></div>
+</div>
+<p>Inspetion of the peak tracks in IGV reveals small differences in peaks called by MACS and Genrich. The very shallow signal in this example does not produce peaks of good quality by neither method. Usually MACS tends to detect many shorter peaks whereas Genrich tends to merge these shorter peaks into longer intervals.</p>
+<p>Below is zoom on <code class="docutils literal notranslate"><span class="pre">chr22:46,033,366-46,038,084</span></code> one of the locations where both MACS and Genrich found a peak.</p>
+<table class="colwidths-given docutils align-default" id="id6">
+<caption><span class="caption-text">Figure 5. Visalisation of read alignments and peaks detected by Genrich and MACS.</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><a class="reference internal image-reference" href="../../../_images/igv2.png"><img alt="../../../_images/igv2.png" src="../../../_images/igv2.png" style="width: 600px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p><span class="raw-html"><br /></span></p>
+<p><span class="raw-html"><br /></span></p>
+<p><span class="raw-html"><br /></span></p>
+<hr class="docutils" />
+<p>(Tutorial modified from <a class="reference external" href="https://training.galaxyproject.org/topics/epigenetics/tutorials/atac-seq/tutorial.html">https://training.galaxyproject.org/topics/epigenetics/tutorials/atac-seq/tutorial.html</a>)</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../quantitative_chip_tutorials.html" class="btn btn-neutral float-right" title="Advanced ChIP methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../atacseq_tutorials.html" class="btn btn-neutral float-left" title="ATAC-seq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, NBIS Epigenomics Workshop Team. All rights reserved..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
