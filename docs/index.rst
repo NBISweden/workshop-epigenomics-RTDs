@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2020 Page!
+Welcome to Epigenomics Workshop 2021 Page!
 ==========================================================
 
 
@@ -27,7 +27,7 @@ This workshop builds on our previous `ChIPseq data analysis workshop <https://nb
 
 Date
 ----
-23rd - 27th November 2020
+25th - 29th October 2021
 
 :raw-html:`<br />`
 
@@ -38,8 +38,10 @@ Date
 Application
 -----------
 
-- Application is now closed
-- Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
+.. - Application is now closed
+.. - Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
+
+Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online/>`_
 
 :raw-html:`<br />`
 
@@ -156,12 +158,23 @@ Teaching team
 
 - `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
 
-- `Harshil Patel <https://www.researchgate.net/profile/Harshil_Patel12>`_ <Harshil.Patel@crick.ac.uk>
-
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
+
+- Carmen Navarro Luzón <carmen.navarro@scilifelab.se>
 
 - `Jessica Nordlund <https://katalog.uu.se/profile/?id=N8-1393>`_ <Jessica.Nordlund@medsci.uu.se>
 
+
+
+
+.. - `Harshil Patel <https://www.researchgate.net/profile/Harshil_Patel12>`_ <Harshil.Patel@crick.ac.uk>
+
+
+
+Computational Resources
+-----------------------
+
+This workshop relies on HPC infrastructure `Uppmax <https://www.uppmax.uu.se/>`_ kindly provided by `SNIC <https://www.snic.se/>`_ .
 
 
 
