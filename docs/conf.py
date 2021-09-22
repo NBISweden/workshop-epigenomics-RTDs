@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Epigenomics Workshop 2020'
-copyright = '2020, NBIS Epigenomics Workshop Team. All rights reserved.'
-author = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef'
+copyright = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef, Phil Ewels, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund'
+author = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef, Phil Ewels, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund'
 
 # The full version, including alpha/beta/rc tags
 release = '1'
