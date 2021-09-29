@@ -9,7 +9,7 @@ Schedule
 
 
 
-Monday (23 November 2020)
+Monday (25 November 2021)
 --------------------------
 
 *DNA methylation with Illumina 450K arrays and Bisulfite-seq*
@@ -39,7 +39,7 @@ Monday (23 November 2020)
 
 
 
-Tuesday (24 November 2020)
+Tuesday (26 November 2021)
 ---------------------------
 
 *ChIP-seq and ATAC-seq data processing and analysis principles*
@@ -61,7 +61,7 @@ Tuesday (24 November 2020)
 
 
 
-Wednesday (25 November 2020)
+Wednesday (27 November 2021)
 ------------------------------
 
 *New methods and quantitative ChIP-seq*
@@ -85,7 +85,7 @@ Wednesday (25 November 2020)
 
 
 
-Thursday (26 November 2020)
+Thursday (28 November 2021)
 ----------------------------
 
 *Nf-core pipelines: Methylseq, Chipseq, Atacseq*
@@ -110,7 +110,7 @@ Thursday (26 November 2020)
 
 
 
-Friday (27 November 2020)
+Friday (29 November 2021)
 --------------------------
 
 *Integrative and single cell omics*
