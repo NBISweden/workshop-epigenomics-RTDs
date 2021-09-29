@@ -97,18 +97,18 @@ Makes learning experience easier:
 :raw-html:`<br />`
 
 
-.. image:: content/icons/application.png
-	:height: 40
-   	:width: 40
+.. .. image:: content/icons/application.png
+.. 	:height: 40
+..    	:width: 40
 
-Application
------------
+.. Application
+.. -----------
 
-- Application is now closed
-- Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
+.. - Application is now closed
+.. - Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
 
 
-:raw-html:`<br />`
+.. :raw-html:`<br />`
 
 
 .. image:: content/icons/selection.png
