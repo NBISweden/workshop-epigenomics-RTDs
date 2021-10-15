@@ -67,16 +67,38 @@ ATAC-seq
 ============
 
 .. list-table:: Requirements for ATAC-seq labs.
-   :widths: 30 25 25
+   :widths: 25 25 25 25
    :header-rows: 1
 
    * - Software
      - Version
+     - Lab
      - Comment
    * - samtools
      - 1.18
      - 
+     - 
    * - 
      - 
      - 
+     - 
+
+
+
+.. NNN
+.. ============
+
+.. .. list-table:: Requirements for NNN labs.
+..    :widths: 25 25 25 25
+..    :header-rows: 1
+
+..    * - Software
+..      - Version
+..      - Lab
+..      - Comment
+..    * - 
+..      - 
+..      - 
+..      - 
+
 
