@@ -146,5 +146,4 @@ No access to Uppmax
 
 If you have no access to Uppmax, where all software is preinstalled, you can configure your own system to follow the exercises.
 
-The dependencies are listed in Dependencies <dependencies.rst>
-
+The dependencies are listed in :doc:`Dependencies <dependencies.rst>`.
