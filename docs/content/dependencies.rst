@@ -27,42 +27,31 @@ ChIP-seq
    * - Software
      - Version
      - Comment
-
    * - samtools
-   	 - 0.1.19 & 1.18
-   	 - both versions
-
+     - 0.1.19 & 1.18
+     - both versions
    * - phantompeakqualtools
-   	 -
-   	 - https://github.com/kundajelab/phantompeakqualtools
-
+     -
+     - https://github.com/kundajelab/phantompeakqualtools
    * - Picard
-   	 - 2.23.4
-   	 - 
-
+     - 2.23.4
+     - 
    * - NGSUtils
-   	 - 0.5.9
-   	 -
-
+     - 0.5.9
+     -
    * - deepTools
-   	 - 3.3.2
-   	 - 
-
+     - 3.3.2
+     - 
    * - MACS
-   	 - 3?
-   	 - not tested yet
-
+     - 3?
+     - not tested yet
    * - BEDTools
-   	 - 2.29.2
-   	 - 
-
+     - 2.29.2
+     - 
    * - BEDOPS
-   	 - 2.4.3
-   	 - 
+     - 2.4.3
+     - 
 
-   * - 
-   	 - 
-   	 - 
 
 
 ATAC-seq
