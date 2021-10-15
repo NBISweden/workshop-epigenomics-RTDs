@@ -34,11 +34,11 @@ During the course we will be using Uppsala University’s high performance compu
 
 To be able to follow exercises we ask you to
 
-* configure access to `Uppmax <https://uppmax.uu.se/>`_;
+- configure access to `Uppmax <https://uppmax.uu.se/>`_;
 
-* install `R <https://cran.r-project.org/>`_ and `RStudio <https://rstudio.com/>`_ on your laptop;
+- install `R <https://cran.r-project.org/>`_ and `RStudio <https://rstudio.com/>`_ on your laptop;
 
-* install `Integrative Genomics Viewer <https://software.broadinstitute.org/software/igv/>`_ on your laptop.
+- install `Integrative Genomics Viewer <https://software.broadinstitute.org/software/igv/>`_ on your laptop.
 
 
 Uppmax
@@ -65,11 +65,14 @@ This involves few steps. Briefly,
 * applying for an account at Uppmax.
 
 
-To go through the steps follow the instructions on Uppmax website. While at this keep this information handy:
+.. note::
 
-* Cluster name: rackham
+	To go through the steps follow the instructions on Uppmax website. While at this keep this information handy:
 
-* Project ID:  **g2021025**
+	* Cluster name: rackham
+
+	* Project ID:  **g2021025**
+
 
 
 Request membership in the course project (for those already having Uppmax account)
