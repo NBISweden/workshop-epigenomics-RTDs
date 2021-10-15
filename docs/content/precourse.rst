@@ -8,8 +8,15 @@ Pre-course Information
 ======================
 
 
+.. .. contents:: 
+..     :local:
+
+
 .. contents:: 
-    :local:
+   :depth: 1
+   :local:
+   :backlinks: none
+
 
 :raw-html:`<br />`
 
