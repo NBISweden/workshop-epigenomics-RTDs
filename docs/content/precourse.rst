@@ -1,3 +1,8 @@
+.. below role allows to use the html syntax, for example :raw-html:`<br />`
+.. role:: raw-html(raw)
+    :format: html
+
+
 ======================
 Pre-course Information
 ======================
@@ -6,9 +11,14 @@ Pre-course Information
 .. contents:: 
     :local:
 
+:raw-html:`<br />`
+
 
 There are few things to do ***before*** the course starts. Please read carefully and follow the instructions so we can have a good start to the course. Contact us in case anything in unclear.
 
+
+:raw-html:`<br />`
+:raw-html:`<br />`
 
 Computational Resources
 =======================
@@ -43,7 +53,7 @@ This involves few steps. Briefly,
 
 * accepting the User Agreement;
 
-* becoming a member in the project ( ***XXXX***);
+* becoming a member in the project ( **g2021025**);
 
 * applying for an account at Uppmax.
 
@@ -52,7 +62,7 @@ To go through the steps follow the instructions on Uppmax website. While at this
 
 * Cluster name: rackham
 
-* Project ID:  ***XXXX***
+* Project ID:  **g2021025**
 
 
 Request membership in the course project (for those already having Uppmax account)
@@ -92,11 +102,15 @@ IGV
 To install, follow the instructions on the `IGV website <https://software.broadinstitute.org/software/igv/>`_.
 
 
+:raw-html:`<br />`
+:raw-html:`<br />`
+
 Further optional preparations
 ==============================
 
 For those of you wanting to start ahead and/or brush up on various skills before the course.
 
+:raw-html:`<br />`
 
 Computer skills
 ------------------
