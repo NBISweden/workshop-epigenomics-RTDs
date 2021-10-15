@@ -21,6 +21,52 @@ ChIP-seq
 
 
 .. list-table:: Requirements for ChIP-seq labs.
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - Software
+     - Version
+     - Lab
+     - Comment
+   * - samtools
+     - 0.1.19 & 1.18
+     - processing and QC
+     - both versions
+   * - phantompeakqualtools
+     - ?
+     - processing and QC
+     - https://github.com/kundajelab/phantompeakqualtools
+   * - Picard
+     - 2.23.4
+     - processing and QC
+     - 
+   * - NGSUtils
+     - 0.5.9
+     - processing and QC
+     -
+   * - deepTools
+     - 3.3.2
+     - processing and QC; visualisation
+     - 
+   * - MACS
+     - 3?
+     - peak calling
+     - not tested yet
+   * - BEDTools
+     - 2.29.2
+     - peak calling
+     - 
+   * - BEDOPS
+     - 2.4.3
+     - peak calling
+     - 
+
+
+
+ATAC-seq
+============
+
+.. list-table:: Requirements for ATAC-seq labs.
    :widths: 30 25 25
    :header-rows: 1
 
@@ -28,31 +74,9 @@ ChIP-seq
      - Version
      - Comment
    * - samtools
-     - 0.1.19 & 1.18
-     - both versions
-   * - phantompeakqualtools
-     -
-     - https://github.com/kundajelab/phantompeakqualtools
-   * - Picard
-     - 2.23.4
+     - 1.18
      - 
-   * - NGSUtils
-     - 0.5.9
-     -
-   * - deepTools
-     - 3.3.2
+   * - 
      - 
-   * - MACS
-     - 3?
-     - not tested yet
-   * - BEDTools
-     - 2.29.2
-     - 
-   * - BEDOPS
-     - 2.4.3
      - 
 
-
-
-ATAC-seq
-============
