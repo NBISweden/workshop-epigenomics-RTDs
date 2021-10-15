@@ -141,3 +141,10 @@ ChIP-seq
 * Q&A: ChIP-seq technologies and the study of gene regulation `article <https://bmcbiol.biomedcentral.com/articles/10.1186/1741-7007-8-56>`_.
 
 
+No access to Uppmax
+=====================
+
+If you have no access to Uppmax, where all software is preinstalled, you can configure your own system to follow the exercises.
+
+The dependencies are listed in Dependencies <dependencies.rst>
+
