@@ -27,7 +27,7 @@ We have booked half a node on Rackham per course participant. To run the tutoria
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
-	salloc -A g2020XXX -t 04:00:00 -p core -n 8 --no-shell --reservation=g2020XXX_X
+	salloc -A g2021025 -t 04:00:00 -p core -n 10 --no-shell --reservation=g2021025_X
 
 
 .. HINT::
