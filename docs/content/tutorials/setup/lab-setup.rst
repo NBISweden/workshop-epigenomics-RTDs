@@ -82,5 +82,5 @@ Software Dependencies
 
 If you have no access to Uppmax, where all software is preinstalled, you can configure your own system to follow the exercises.
 
-The dependencies are listed in :doc:`Dependencies <./dependencies>` .
+The dependencies are listed in :doc:`Dependencies <../dependencies>` .
 
