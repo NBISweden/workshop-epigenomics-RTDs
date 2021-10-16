@@ -14,6 +14,7 @@ Before we start tutorial, we need to set up our work environment. In particular,
 1. `be able to login to Uppmax and use the node allocation <Using computational resources>`_
 2. `access files prepared for the tutorial <Directory structure>`_ and keep folder structures organised
 3. `learn how to read commands and use module system on Uppmax <Commands and modules>`_
+4. if you work without access to Uppmax: `check the dependencies <Software Dependencies>`_
 
 :raw-html:`<br />`
 
@@ -73,4 +74,13 @@ You will notice that you will load and unload modules practically before and aft
 .. HINT::
 
 	The commands in this tutorial contain pathways as we set them up in the above steps. If you change file locations, you will need to adjust pathways to match these changes when running commands.
+
+
+
+Software Dependencies
+=====================
+
+If you have no access to Uppmax, where all software is preinstalled, you can configure your own system to follow the exercises.
+
+The dependencies are listed in :doc:`Dependencies <./dependencies>` .
 
