@@ -195,3 +195,4 @@ Site Contents
    content/online-classroom
    content/schedule
    content/tutorials
+   content/dependencies
