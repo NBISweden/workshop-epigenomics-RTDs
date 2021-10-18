@@ -21,8 +21,14 @@ ChIP-seq data processing tutorial
 .. Contents
 .. =========
 
-.. contents:: 
-    :local:
+.. .. contents:: 
+..     :local:
+
+
+.. contents:: Table of Contents
+   :depth: 1
+   :local:
+   :backlinks: none
 
 
 
@@ -41,13 +47,13 @@ The "Did my ChIP work?" question is impossible to answer by simply counting numb
 
 In the **third part** we look at the data: mapped reads, coverage profiles and peaks.
 
-**All three parts** come together to be able to assess the quality of the ChIP-seq experiment and are essential before running any down-stream analysis or drawing any biological conclusions from the data.
+**All three parts** come together to be able to assess the quality of the ChIP-seq experiment and are essential before running any downstream analysis or drawing any biological conclusions from the data.
 
 
 Data
 =====
 
-We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These are ChIP-seq libraries (in duplicates) prepared to analyze REST transcription factor (mentioned in `Introduction`_ in several human cell lines and *in vitro* differentiated neural cells. The ChIP data come with matching input chromatin samples. The accession numbers are listed in Table 1 and individual sample accession numbers are listed in Table 2.
+We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These are ChIP-seq libraries (in duplicates) prepared to analyse binding patterns of REST transcription factor (mentioned in `Introduction`_ in several human cell lines and *in vitro* differentiated neural cells. The ChIP data come with matching input chromatin samples. The accession numbers are listed in Table 1 and individual sample accession numbers are listed in Table 2.
 
 
 
@@ -129,6 +135,13 @@ We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These
      - ENCFF000RBU
 
 
+We have processed the data, starting from aligned reads in *bam* format, as follows: 
+
+* alignments were subset to only include chromosomes 1 and 2;
+
+* bam files were further processed to add necessary bam tags, to comply with the SAM format supported by recent versions of `samtools`.
+
+
 
 
 Methods
@@ -137,7 +150,7 @@ Methods
 Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using ``bowtie``, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
 
 **To shorten computational time** required to run steps in this tutorial we scaled down dataset by keeping reads mapping to **chromosomes 1 and 2 only**. For the post peak-calling QC and differential occupancy part of the tutorials, peaks were called using entire data set. Note that all methods used in this exercise perform significantly better when used on complete (i.e. non-subset) data sets. Their accuracy most often scales with the number of mapped reads in each library, but so does the run time. For reference we include the key plots generated analysing the complete data set 
-(`Appendix`_).
+(`Appendix`_ and drop-down windows in each section).
 
 Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the ``~/chipseq/results`` directory.
 
@@ -157,8 +170,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_data.sh .
-  cp /sw/courses/epigenomics/chipseq_processing/scripts/chipseq_env.sh .
+  cp /proj/g2021025/nobackup/chipseq_proc/chipseq_data.sh .
+  cp /proj/g2021025/nobackup/chipseq_proc/chipseq_env.sh .
 
 
   source chipseq_env.sh 
@@ -199,6 +212,13 @@ Strand Cross Correlation
 Strand cross-correlation is based on the fact that a high-quality ChIP-seq experiment produces significant clustering of enriched DNA sequence tags at locations bound by the protein of interest. Density of the sequence tags mapped to forward and reverse strands is centered around the binding site.
 
 The **cross-correlation metric** is computed as the **Pearson's linear correlation between tag density on the forward and reverse strand**, after shifting reverse strand by *k* base pairs. This typically produces two peaks when cross-correlation is plotted against the shift value: a peak of enrichment corresponding to the predominant fragment length and a peak corresponding to the read length ("phantom" peak).
+
+.. admonition:: Strand cross correlation for ChIP-seq
+   :class: dropdown, warning
+
+   .. image:: figures/xcor-theory.png
+          :width: 300px
+
 
 
 We will calculate cross correlation for REST ChIP-seq in HeLa cells using a tool called `phantompeakqualtools <https://github.com/kundajelab/phantompeakqualtools>`_
@@ -279,6 +299,7 @@ To copy type from **a terminal window on your computer NOT logged in to Uppmax**
 
 
 
+
 .. list-table:: Figure 1. Cross correlations in REST ChIP-seq in HeLa cells.
    :widths: 25 25 25
    :header-rows: 1
@@ -310,6 +331,12 @@ To copy type from **a terminal window on your computer NOT logged in to Uppmax**
 
 
 
+.. admonition:: Cross correlation for REST ChIP in HeLa cells (ENCFF000PED)
+   :class: dropdown, warning
+
+   .. image:: figures/resENCFF000PEDchr12xcor.png
+          :width: 300px
+
 
 
 **What do you think?** Did the ChIP-seq experiment work?
@@ -328,7 +355,11 @@ To copy type from **a terminal window on your computer NOT logged in to Uppmax**
 Alignment processing
 -----------------------
 
-Now we will do some data cleaning to try to improve the libraries quality. First, **duplicated reads are marked and removed** using ``MarkDuplicates`` tool from `Picard <http://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates>`_ . Marking as "duplicates" is based on their alignment location, not sequence.
+Now we will do some data cleaning to try to improve the libraries quality and remove unwanted signal. First, **duplicated reads are marked and removed** using ``MarkDuplicates`` tool from `Picard <http://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates>`_ . Marking as "duplicates" is based on their alignment location, not sequence. 
+
+.. Note::
+
+  Please note that usually the first step in processing alignments is to remove reads which map to more than one location with equally good score ("multi-mapping reads"). This is because we want to remove ambiguous reads whose exact origin cannot be traced. In this tutorial we do not perform this step because such reads were not present in the starting bam files from ENCODE.
 
 
 .. code-block:: bash
@@ -347,6 +378,7 @@ Now we will do some data cleaning to try to improve the libraries quality. First
 
 
 Check out ``dedup_metrics.txt`` for details of this step.
+
 
 
 Second, **reads mapped to ENCODE blacklisted regions** in accession `ENCFF000KJP <https://www.encodeproject.org/annotations/ENCSR636HFF/>`_ **are removed**. The DAC Blacklisted Regions aim to identify a comprehensive set of regions in the human genome that have anomalous, unstructured, high signal/read counts in next gen sequencing experiments independent of cell line and type of experiment. 
@@ -374,6 +406,10 @@ Third, the processed **bam files are sorted and indexed**:
   module unload picard
   module unload NGSUtils
 
+This concludes processing of alignments to remove unwanted signal. 
+
+
+:raw-html:`<br />`
 
 
 **Finally** we can compute the **read coverage normalised to 1x coverage** using tool ``bamCoverage`` from `deepTools <http://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html>`_, a set of tools developed for ChIP-seq data analysis and visualisation. Normalised tracks enable comparing libraries sequenced to a different depth when viewing them in a genome browser such as ``IGV``.
@@ -387,7 +423,7 @@ We are still working with subset of data (chromosomes 1 and 2) hence the **effec
 
 .. code-block:: bash
 
-	module load deepTools/3.3.2
+  module load deepTools/3.3.2
 
   bamCoverage --bam ENCFF000PED.chr12.rmdup.filt.sort.bam \
     --outFileName ENCFF000PED.chr12.cov.norm1x.bedgraph \
@@ -402,7 +438,7 @@ We are still working with subset of data (chromosomes 1 and 2) hence the **effec
 Cumulative enrichment
 ----------------------
 
-`Cumulative enrichment <http://deeptools.readthedocs.io/en/latest/content/tools/plotFingerprint.html>`_, aka BAM fingerprint, is yet another way of checking the quality of ChIP-seq signal. It determines how well the signal in the ChIP-seq sample can be differentiated from the background distribution of reads in the control input sample.
+`Cumulative enrichment <http://deeptools.readthedocs.io/en/latest/content/tools/plotFingerprint.html>`_, aka BAM fingerprint, is yet another way of assesing the quality of ChIP-seq signal. It determines how well the signal in the ChIP-seq sample can be differentiated from the background distribution of reads in the control input sample.
 
 Cumulative enrichment is obtained by sampling indexed BAM files and plotting a profile of cumulative read coverages for each. All reads overlapping a window (bin) of the specified length are counted; these counts are sorted and the cumulative sum is finally plotted.
 
@@ -416,6 +452,13 @@ To compute cumulative enrichment for HeLa REST ChIP and the corresponding input 
     ../../data/bam/hela/ENCFF000PEE.chr12.rmdup.sort.bam \
     ../../data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
     --extendReads 110  --binSize=1000 --plotFile HeLa.fingerprint.pdf --labels HeLa_rep1 HeLa_rep2 HeLa_input -p 5 &> fingerprint.log
+
+.. admonition:: Fingerprint for REST ChIP in HeLa cells
+   :class: dropdown, warning
+
+   .. image:: figures/resHelaChr12Fingerprint.png
+          :width: 300px
+
 
 
 
@@ -466,14 +509,14 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir hepg2
 	mkdir sknsh
 	mkdir neural
-	ln -s /proj/g2020022/chipseq_proc/data/bam/hela/* ./hela
-	ln -s /proj/g2020022/chipseq_proc/data/bam/hepg2/* ./hepg2
-	ln -s /proj/g2020022/chipseq_proc/data/bam/sknsh/* ./sknsh
-	ln -s /proj/g2020022/chipseq_proc/data/bam/neural/* ./neural
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
 
 
 
-Now we are ready to compute the read coverages for genomic regions for the BAM files for the entire genome using bin mode with ``multiBamSummary`` as well as to visualise sample correlation based on the output of ``multiBamSummary``.
+Now we are ready to compute the read coverages for genomic regions for the BAM files for the entire genome using bin mode with ``multiBamSummary`` as well as to visualise sample correlation based on the output of ``multiBamSummary``. We chose to compute pairwise Spearman correlation coefficients for this step, as they are based on ranks of each bin rather than signal values.
 
 
 .. code-block:: bash
@@ -497,6 +540,14 @@ Now we are ready to compute the read coverages for genomic regions for the BAM f
     --plotFile REST_bam_correlation_bin.pdf --outFileCorMatrix corr_matrix_bin.txt \
     --whatToPlot heatmap --corMethod spearman
 
+
+
+
+.. admonition:: Correlation of binned REST ChIP-seq signal in different cell types.
+   :class: dropdown, warning
+
+   .. image:: figures/bin5kchr12spear.png
+          :width: 300px
 
 
 What do you think?
@@ -547,11 +598,10 @@ To avoid long paths in the command line let's create links to BAM files with ChI
   mkdir peak_calling
   cd peak_calling
 
-  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
   ./ENCFF000PED.preproc.bam
-  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
   ./ENCFF000PET.preproc.bam
-
 
 Before we run ``MACS`` we need to **look at parameters** as there are several of them affecting peak calling as well as reporting the results. It is important to understand them to be able to modify the command to the needs of your data set.
 
@@ -570,7 +620,8 @@ Parameters:
 * ``-q 0.01``: q value (false discovery rate, FDR) cutoff for reporting peaks; this is recommended over reporting raw (un-adjusted) p values.
 
 
-Let's run ``MACS2`` now. ``MACS2`` prints messages as it progresses through different stages of the process. This step may take more than 10 minutes.
+
+Let's run ``MACS`` now. ``MACS`` prints messages as it progresses through different stages of the process. This step may take more than 10 minutes.
 
 .. code-block:: bash
 
@@ -583,7 +634,7 @@ Let's run ``MACS2`` now. ``MACS2`` prints messages as it progresses through diff
   module unload python
 
 
-The output of a ``MACS2`` run consists of several files. To inspect files type
+The output of a ``MACS`` run consists of several files. To inspect files type
 
 .. code-block:: bash
 
@@ -595,6 +646,24 @@ Have a look at the ``narrowPeak`` files that we will focus on in the subsequent 
 .. code-block:: bash
 
 	head -n 50 hela_1_REST.chr12.macs2_peaks.narrowPeak
+
+.. admonition:: First 10 lines of MACS output.
+   :class: dropdown, warning
+
+
+   .. code-block:: bash
+
+      head -n 10 hela_1_REST.chr12.macs2_peaks.narrowPeak
+      chr1    847423  847543  hela_1_REST.chr12.macs2_peak_1  136     .       9.25098 17.08663        13.67332        59
+      chr1    877950  878046  hela_1_REST.chr12.macs2_peak_2  40      .       5.28616 7.21332 4.07769 12
+      chr1    970997  971113  hela_1_REST.chr12.macs2_peak_3  63      .       6.58098 9.61504 6.37483 60
+      chr1    1014869 1014981 hela_1_REST.chr12.macs2_peak_4  77      .       7.29421 11.01285        7.72970 83
+      chr1    1234313 1235015 hela_1_REST.chr12.macs2_peak_5  3404    .       102.78651       345.18491       340.42007       315
+      chr1    1235518 1235680 hela_1_REST.chr12.macs2_peak_6  113     .       8.81027 14.70193        11.32821        78
+      chr1    1235892 1236089 hela_1_REST.chr12.macs2_peak_7  173     .       11.69162        20.85139        17.38216        120
+      chr1    1270145 1270634 hela_1_REST.chr12.macs2_peak_8  3380    .       105.12469       342.76355       338.02234       296
+      chr1    1310608 1310704 hela_1_REST.chr12.macs2_peak_9  65      .       6.56930 9.75057 6.50721 53
+      chr1    1408352 1408522 hela_1_REST.chr12.macs2_peak_10 197     .       12.33438        23.21906        19.72035        84
 
 
 These files are in `BED <https://genome.ucsc.edu/FAQ/FAQformat.html#format1>`_ format, one of the most used file formats in genomics, used to store information on genomic ranges such as ChIP-seq peaks, gene models, transcription starts sites, etc. ``BED`` files can be also used for visualisation in genome browsers, including the popular `UCSC Genome Browser <https://genome.ucsc.edu/cgi-bin/hgTracks>`_ and `IGV <https://www.broadinstitute.org/igv>`_. We will try this later in `Visualisation <Part III: Visualisation of mapped reads, coverage profiles and peaks>`_ part.
@@ -611,6 +680,31 @@ Peaks detected on chromosomes 1 and 2 are present in directory ``/results/peaks_
 .. code-block:: bash
 	
 	wc -l ../../results/peaks_bed/*.bed
+
+
+.. admonition:: Number of peaks detected in different samples.
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+      #HeLa cells, replicate 1 subset to chr 1 and 2:
+
+      wc -l hela_1_REST.chr12.macs2_peaks.narrowPeak
+        2244 hela_1_REST.chr12.macs2_peaks.narrowPeak
+
+      #All cell lines, complete data:
+
+      wc -l ../../results/peaks_bed/*.bed
+      
+        2252 ../../results/peaks_bed/hela_1_peaks.chr12.bed
+        2344 ../../results/peaks_bed/hela_2_peaks.chr12.bed
+        2663 ../../results/peaks_bed/hepg2_1_peaks.chr12.bed
+        4326 ../../results/peaks_bed/hepg2_2_peaks.chr12.bed
+        5948 ../../results/peaks_bed/neural_1_peaks.chr12.bed
+        3003 ../../results/peaks_bed/neural_2_peaks.chr12.bed
+       17047 ../../results/peaks_bed/rest_peaks.chr12.bed
+        8700 ../../results/peaks_bed/sknsh_1_peaks.chr12.bed
+        3524 ../../results/peaks_bed/sknsh_2_peaks.chr12.bed
 
 
 
@@ -641,13 +735,21 @@ Let's select two replicates of the same condition to investigate the peaks overl
 
 .. code-block:: bash
 
-	module load BEDTools/2.25.0
+	module load BEDTools/2.29.2
 
 	bedtools intersect -a ../../results/peaks_bed/hela_1_peaks.chr12.bed -b ../../results/peaks_bed/hela_2_peaks.chr12.bed -f 0.50 -r \
 	> peaks_hela.chr12.bed
 
 	wc -l peaks_hela.chr12.bed
 
+
+.. admonition:: Number of reproducible peaks in HeLa cells.
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+    wc -l peaks_hela.chr12.bed
+    1088 peaks_hela.chr12.bed
 
 
 This way one can compare peaks from replicates of the same condition and beyond, that is peaks present in different conditions. For the latter, we need to create files with peaks common to replicates for the cell types to be able to compare. For instance, to inspect reproducible peaks between HeLa and HepG2 we need to run:
@@ -656,13 +758,26 @@ This way one can compare peaks from replicates of the same condition and beyond,
 
   module load BEDTools/2.29.2
 
-	bedtools intersect -a ../../results/peaks_bed/hepg2_1_peaks.chr12.bed -b ../../results/peaks_bed/hepg2_2_peaks.chr12.bed -f 0.50 -r \
-	> peaks_hepg2.chr12.bed
+  bedtools intersect -a ../../results/peaks_bed/hepg2_1_peaks.chr12.bed -b ../../results/peaks_bed/hepg2_2_peaks.chr12.bed -f 0.50 -r \
+  > peaks_hepg2.chr12.bed
 
-	bedtools intersect -a ../../results/peaks_bed/peaks_hepg2.chr12.bed -b ../../results/peaks_bed/peaks_hela.chr12.bed -f 0.50 -r \
-	> peaks_hepg2_hela.chr12.bed
+  bedtools intersect -a peaks_hepg2.chr12.bed -b peaks_hela.chr12.bed -f 0.50 -r \
+  > peaks_hepg2_hela.chr12.bed
 
-	wc -l peaks_hepg2_hela.chr12.bed
+  wc -l peaks_hepg2_hela.chr12.bed
+
+
+.. admonition:: Number of reproducible peaks in HeLa and HepG2 cell.
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+    wc -l *chr12.bed
+    
+    1088 peaks_hela.chr12.bed
+     519 peaks_hepg2.chr12.bed
+     10 peaks_hepg2_hela.chr12.bed
+
 
 
 Feel free to experiment more. When you have done all intersections you were interested in unload the BEDTools module.
@@ -706,6 +821,16 @@ These files are already prepared and are under ``peak_calling`` directory
   wc -l REST_peaks.chr12.bed
 
 
+.. admonition:: Number of merged peaks in all cell types on chr 1 and 2.
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+    wc -l REST_peaks.chr12.bed 
+    
+    17047 REST_peaks.chr12.bed
+
+
 
 For example, to identify and merge all peaks reproducible within replicates:
 
@@ -723,13 +848,24 @@ For example, to identify and merge all peaks reproducible within replicates:
   wc -l REST*
 
 
+.. admonition:: Number of merged reproducible peaks in all cell types on chr 1 and 2.
+   :class: dropdown, warning
+
+    .. code-block:: bash
+
+      wc -l REST*
+    
+     17047 REST_peaks.chr12.bed
+      3411 REST_reproducible_peaks.chr12.bed
+
+
 .. HINT::
 
   In case things go wrong at this stage you can find the merged list of all peaks in the ``/results`` directory. Simply link the file to your current directory to go further:
 
   .. code-block:: bash
 
-  	ln -s ../../results/peaks_bed/rest_peaks.chr12.bed ./rest_peaks.chr12.bed
+  	ln -s ../../results/peaks_bed/rest_peaks.chr12.bed ./REST_peaks.chr12.bed
 
 
 
@@ -759,10 +895,10 @@ in ``chipseq/analysis/``
   mkdir hepg2
   mkdir sknsh
   mkdir neural
-  ln -s /proj/g2020022/chipseq_proc/data/bam/hela/* ./hela
-  ln -s /proj/g2020022/chipseq_proc/data/bam/hepg2/* ./hepg2
-  ln -s /proj/g2020022/chipseq_proc/data/bam/sknsh/* ./sknsh
-  ln -s /proj/g2020022/chipseq_proc/data/bam/neural/* ./neural
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
+  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
 
   ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
@@ -787,6 +923,13 @@ in ``chipseq/analysis/``
 	--whatToPlot heatmap --corMethod pearson --plotNumbers --removeOutliers
 
   module unload deepTools
+
+
+.. admonition:: Correlation of REST ChIP-seq signal in peaks in different cell types.
+   :class: dropdown, warning
+
+   .. image:: figures/peaksbedchr12pears.png
+          :width: 300px
 
 
 What do you think?
@@ -823,12 +966,20 @@ and corresponding input files:
 
 * ``~/chipseq/results/coverage/ENCFF000PET.cov.norm1x.bedgraph``
 
-Let's copy them to local computers, do you remember how? From your local terminal e.g.
+Let's copy them to local computers, do you remember how?
 
 
-.. code-block:: bash
 
-	scp -r <username>@rackham.uppmax.uu.se:<pathway><filename> .
+.. admonition:: Let's copy files to local computers, do you remember how?
+   :class: dropdown, warning
+
+    From your local terminal:
+
+    .. code-block:: bash
+
+        scp -r <username>@rackham.uppmax.uu.se:<path><filename> .
+
+
 
 
 
@@ -913,42 +1064,42 @@ Now we know how to inspect ChIP-seq data and judge quality. If the data quality 
 Appendix
 =========
 
-Figures generated during class
--------------------------------
+.. Figures generated during class
+.. -------------------------------
 
 
-.. image:: figures/resENCFF000PEDchr12xcor.png
-   			:width: 400px
+.. .. image:: figures/resENCFF000PEDchr12xcor.png
+..    			:width: 400px
 
-Figure 6. Cross correlation plot for REST ChIP in Hela cells, replicate 1, chromosome 1 and 2.
+.. Figure 6. Cross correlation plot for REST ChIP in Hela cells, replicate 1, chromosome 1 and 2.
 
-----
+.. ----
 
-.. image:: figures/peaksbedchr12pears.png
-   			:width: 400px
-
-
-Figure 7. Sample clustering (pearson) by reads mapped in merged peaks; only chromosomes 1 and 2 included.
+.. .. image:: figures/peaksbedchr12pears.png
+..    			:width: 400px
 
 
-----
-
-.. image:: figures/resHelaChr12Fingerprint.png
-   			:width: 400px
-
-Figure 8. Fingerprint plot for REST ChIP in Hela cells, replicate 1, chromosome 1 and 2.
+.. Figure 7. Sample clustering (pearson) by reads mapped in merged peaks; only chromosomes 1 and 2 included.
 
 
-----
+.. ----
 
-.. image:: figures/bin5kchr12spear.png
-   			:width: 400px
+.. .. image:: figures/resHelaChr12Fingerprint.png
+..    			:width: 400px
+
+.. Figure 8. Fingerprint plot for REST ChIP in Hela cells, replicate 1, chromosome 1 and 2.
 
 
-Figure 9. Sample clustering (spearman) by reads mapped in bins genome-wide; only chromosomes 1 and 2 included.
+.. ----
+
+.. .. image:: figures/bin5kchr12spear.png
+..    			:width: 400px
 
 
-:raw-html:`<br />`
+.. Figure 9. Sample clustering (spearman) by reads mapped in bins genome-wide; only chromosomes 1 and 2 included.
+
+
+.. :raw-html:`<br />`
 
 
 Figures generated using complete dataset
@@ -960,7 +1111,7 @@ Figures generated using complete dataset
    			:width: 400px
 
 
-Figure 10. Cumulative enrichment in  HeLa replicate 1, aka bam fingerprint.
+Figure. Cumulative enrichment in  HeLa replicate 1, aka bam fingerprint.
 
 
 ----
@@ -969,7 +1120,7 @@ Figure 10. Cumulative enrichment in  HeLa replicate 1, aka bam fingerprint.
    			:width: 400px
 
 
-Figure 11. Sample clustering (spearman) by reads mapped in bins genome-wide.
+Figure. Sample clustering (Spearman) by reads mapped in bins genome-wide.
 
 
 ----
@@ -979,7 +1130,7 @@ Figure 11. Sample clustering (spearman) by reads mapped in bins genome-wide.
    			:width: 400px
 
 
-Figure 12. Sample clustering (pearson) by reads mapped in merged peaks.
+Figure. Sample clustering (Pearson) by reads mapped in merged peaks.
 
 .. ----
 
