@@ -8,3 +8,5 @@ This is a collection of reviews and tutorials on experimental design and differe
    :maxdepth: 1
 
    Public resources <publicResources/lab-public-resources.rst>
+   Experiment design for ChIP-seq <expdesign/expdes-ChIPseq.rst>
+   
