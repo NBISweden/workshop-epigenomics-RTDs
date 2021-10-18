@@ -1,6 +1,6 @@
 version: 2
 
-formats: [html]
+formats: []
 # Build from the docs/ directory with Sphinx
 sphinx:
   configuration: docs/conf.py
