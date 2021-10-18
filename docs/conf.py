@@ -60,6 +60,3 @@ html_static_path = ['_static','slides']
 #https://stackoverflow.com/questions/56336234/build-fail-sphinx-error-contents-rst-not-found
 master_doc = 'index'
 
-#no pdf and epub
-sphinx_enable_pdf_build=False
-sphinx_enable_epub_build=False
