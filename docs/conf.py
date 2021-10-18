@@ -31,7 +31,8 @@ release = '1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [	'recommonmark',
-				'sphinx.ext.intersphinx'
+				'sphinx.ext.intersphinx',
+				'sphinx_togglebutton'
 			]
 
 # Add any paths that contain templates here, relative to this directory.
