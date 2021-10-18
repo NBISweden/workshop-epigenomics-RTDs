@@ -31,8 +31,8 @@ release = '1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [	'recommonmark',
-				'sphinx.ext.intersphinx',
-				'sphinx_togglebutton'
+				'sphinx.ext.intersphinx'#,
+				#'sphinx_togglebutton'
 			]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -59,3 +59,7 @@ html_static_path = ['_static','slides']
 
 #https://stackoverflow.com/questions/56336234/build-fail-sphinx-error-contents-rst-not-found
 master_doc = 'index'
+
+#no pdf and epub
+sphinx_enable_pdf_build=False
+sphinx_enable_epub_build=False
