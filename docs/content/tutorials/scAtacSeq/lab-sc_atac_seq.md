@@ -528,8 +528,8 @@ plot1 | plot2
 Genomic coordinates are difficult to interpret on their own, and often it is interesting to know which genes are near, or at, the genomic regions. Below we find the nearest gene, and the distance to it, for each region. This makes it easy to check for regions near genes of interest, and to analyze genes further, e.g though a Gene Ontology analysis.
 
 ```{r seurat_peak_annot}
-open_cd4naive <- rownames(da_peaks[da_peaks$avg_logFC > 0.5, ])
-open_cd14mono <- rownames(da_peaks[da_peaks$avg_logFC < -0.5, ])
+open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 0.5, ])
+open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -0.5, ])
 
 closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
 closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
