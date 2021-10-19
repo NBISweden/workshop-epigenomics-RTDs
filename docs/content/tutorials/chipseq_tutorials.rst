@@ -16,7 +16,7 @@ ChIP-sequencing, also known as ChIP-seq, is a method used to analyze protein int
 
 :raw-html:`<br />`
 
-The workflow in a typical ChIP-seq experiment can be divided into sample preparation (A) and data analysis (B). In this class we focus on the data analysis part. Some practical considerations for experiment design and sample preparation are given in :doc:`Experiment Design for ChIP seq <./expdesign/expdes-ChIPseq>` .
+The workflow in a typical ChIP-seq experiment can be divided into sample preparation (A) and data analysis (B). In this course we focus on the data analysis part. Some practical considerations for experiment design and sample preparation are given in :doc:`Experiment Design for ChIP seq <./expdesign/expdes-ChIPseq>` .
 
 
 .. image:: chipseqProc/figures/chipseqExperiment.png
