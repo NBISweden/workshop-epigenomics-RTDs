@@ -767,7 +767,7 @@ This way one can compare peaks from replicates of the same condition and beyond,
   wc -l peaks_hepg2_hela.chr12.bed
 
 
-.. admonition:: Number of reproducible peaks in HeLa and HepG2 cell.
+.. admonition:: Number of reproducible peaks in HeLa and HepG2 cells.
    :class: dropdown, warning
 
    .. code-block:: bash
