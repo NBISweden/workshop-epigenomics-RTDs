@@ -27,9 +27,11 @@ Detection of broad peaks from ChIP-seq data
 Requirements
 ==============
 
-* ``MACS 2.2.6``
-* ``R`` version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-* ``csaw`` and its dependencies
+* ``MACS 3.0.0a6``
+* ``epic2 0.0.52``
+* ``R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"``
+* ``csaw 1.24.3`` and its dependencies
+
 
 Bioconductor packages required for annotation:
 
@@ -37,18 +39,27 @@ Bioconductor packages required for annotation:
 * ``TxDb.Hsapiens.UCSC.hg38.knownGene``
 
 
-Please note that this lab consists of two parts: 
+Please note that this lab consists of three parts: 
 
-(i) calling broad peaks using ``MACS`` (on Uppmax) and 
+(i) calling broad peaks using ``MACS`` (on Uppmax);
 
-(ii) finding enriched genomic windows using  ``csaw`` in ``R``  (Uppmax / local).
+(ii) calling broad peaks using ``epic2`` (on Uppmax); and 
 
-
-Please note that this workflow has been tested using ``R 4.0.3`` and ``csaw 1.24.3``.
-
+(iii) finding enriched genomic windows using  ``csaw`` in ``R``  (Uppmax / local).
 
 
-Instructions how to install **R and Bioconductor packages** (including dependencies for csaw) can be found in instructions to previous labs, for example :doc:`csaw tutorial <../csaw/lab-csaw>`.
+Notes on software
+-------------------
+
+We provide a conda environment to run ``epic2``. This package proved a bit tricky to install because of dependency incompatibilities. To find how this environment was constructed, please visit :doc:`Dependencies <../../dependencies>`.
+
+
+Please note that this workflow has been tested using ``R 4.0.3`` and ``csaw 1.24.3`` on Uppmax only.
+
+
+Instructions how to install **R and Bioconductor packages** (including dependencies for ``csaw``) can be found in instructions to previous labs, for example :doc:`csaw tutorial <../csaw/lab-csaw>`.
+
+
 
 Data
 =====
