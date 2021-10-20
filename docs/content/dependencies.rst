@@ -111,6 +111,8 @@ Methylation
    :widths: 25 25 25 25
    :header-rows:    
    
+   * - Software
+     - Version
    * - R
      - 4.0.0
    * - limma
