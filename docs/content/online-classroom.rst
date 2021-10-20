@@ -7,7 +7,7 @@ Online classroom
 General info
 -------------
 
-As of this year, all of the courses administered by NBIS are transitioning to the learning platform Canvas. So is the Epigenomics Data analysis workshop. This year however, is still a bit of a transition year between the previous wwebsite-based editions and the full Canvas experience. This means that much of the content will be linked from the *readthedocs* website onto the Canvas website. So, on Canvas you will find the schedule for this week with links to the content and exercises on the website. After the course, the material will also be made avialable from Canvas.
+As of this year, all of the courses administered by NBIS are transitioning to the learning platform Canvas. So is the Epigenomics Data analysis workshop. This year however, is still a bit of a transition year between the previous wwebsite-based editions and the full Canvas experience. This means that much of the content will be linked from the *readthedocs* website onto the `Canvas website <https://uppsala.instructure.com/courses/51975>`_. So, on Canvas you will find the schedule for this week with links to the content and exercises on the website. After the course, the material will also be made avialable from Canvas.
 
 Most interactions and talks will be happening on Zoom (Zoom link: TBD). For this, we have created several rooms to accommodate the main session, exercises and group discussions:
 
