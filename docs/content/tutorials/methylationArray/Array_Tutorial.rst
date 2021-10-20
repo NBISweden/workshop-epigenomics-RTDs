@@ -54,10 +54,16 @@ Datasets
 
 To demonstrate the various aspects of analysing methylation data, we will be using a small, publicly available 450k methylation dataset (\ `GSE49667 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49667>`_). The dataset contains 10 samples in total: there are 4 different sorted T-cell types (naive, rTreg, act_naive, act_rTreg, collected from 3 different individuals: M28, M29, M30). Not all individuals contributed all 4 cell types, so there are 10 samples in total. An additional birth sample (individual VICS-72098-18-B) is included from another study (`GSE51180 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE51180>`_) to illustrate approaches for identifying and excluding poor quality samples.
 
-Load Packages
--------------
+Set Up R environment
+--------------------
 
-This exercise has been set up on Uppmax, so connect to Uppmax as described in :doc:`../setup/lab-setup`. On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
+This exercise has been set up to run on Uppmax, so connect to the server as described in :doc:`../setup/lab-setup`. Now, there are two options to set up the R environment. 
+
+**Option A**
+
+The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first.
+
+On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
 .. code-block:: bash
 
@@ -71,7 +77,37 @@ Start the analysis by initiating *RStudio*... This might take a few seconds and 
 
    rstudio
 
-Next, run the R commands by copying them from this website into the Rstudio terminal and pressing *Enter*. Start by loading the set of R packages that will be needed during the analysis: *limma* provides the statistical framework for testing differential methylation. *minfi*\ , *missMethyl*\ , *minfiData* and *DMRcate* are packages developed to work with methylation data. *Gviz* and *RColorBrewer* provide functions for the visualization of the data.
+Next, run the R commands by copying them from this website into the Rstudio terminal and pressing *Enter*. 
+
+**Option B**
+
+Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. Containers are a relatively new method to package software together with all its dependencies and an operating system. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. Containers will be discussed in a bit more detail on Thursday. A benefit of using it here is that Rstudio runs a whole lot faster using the container approach. However, to access it from Uppmax, a few more steps are necessary. First, make sure you are connected to your alloted node (described in :doc:`../setup/lab-setup`) and then perform following steps.
+
+.. code-block:: bash
+
+   # Run the startup script; this will start the container and run Rstudio
+   sh /sw/courses/epigenomics/DNAmethylation/startup_script.sh
+
+You should see something like this:
+
+.. code-block: bash
+
+   1. SSH tunnel from your workstation using the following command:
+
+   ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
+
+   and point your web browser to http://localhost:8787
+
+   2. log in to RStudio Server using the following credentials:
+
+   user: vincent
+   password: epi2021
+
+Now, open a second terminal and run **your** ssh command from 1. Then open your web rowser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
+
+**Load Libraries**
+
+After setting up Rstudio with by either option A or B start by loading the set of R packages that will be needed during the analysis: *limma* provides the statistical framework for testing differential methylation. *minfi*\ , *missMethyl*\ , *minfiData* and *DMRcate* are packages developed to work with methylation data. *Gviz* and *RColorBrewer* provide functions for the visualization of the data.
 
 .. code-block:: r
 
