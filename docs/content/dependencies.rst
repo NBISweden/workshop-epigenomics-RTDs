@@ -108,8 +108,8 @@ Methylation
 ============
 
 .. list-table:: Requirements for both methylation labs (all of these are R packages).
-   :widths: 25 25 25 25
-   :header-rows:    
+   :widths: 25 25
+   :header-rows: 1   
    
    * - Software
      - Version
