@@ -59,7 +59,7 @@ Load Packages
 
 This exercise has been set up on Uppmax, so connect to Uppmax as described in :doc:`../setup/lab-setup`. On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
-.. code-block:: r
+.. code-block:: bash
 
    module load R/4.0.0
    module load R_packages/4.0.0
@@ -67,7 +67,7 @@ This exercise has been set up on Uppmax, so connect to Uppmax as described in :d
 
 Start the analysis by initiating *RStudio*... This might take a few seconds and a :code:`libGL error` can be shown before loading the RStudio graphical interface.
 
-.. code-block:: r
+.. code-block:: bash
 
    rstudio
 
