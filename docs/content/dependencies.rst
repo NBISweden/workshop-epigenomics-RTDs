@@ -102,3 +102,40 @@ ATAC-seq
 ..      - 
 
 
+
+
+Methylation
+============
+
+.. list-table:: Requirements for both methylation labs (all of these are R packages).
+   :widths: 25 25 25 25
+   :header-rows:    
+   
+   * - R
+     - 4.0.0
+   * - limma
+     - 3.44.3
+   * - minfi
+     - 1.34.0
+   * - RColorBrewer
+     - 1.1-2
+   * - missMethyl
+     - 1.22.0
+   * - minfiData
+     - 0.34.0
+   * - Gviz
+     - 1.32.0
+   * - DMRcate
+     - 2.2.3
+   * - DMRcatedata
+     - 2.10.0
+   * - stringr
+     - 1.4.0
+   * - mCSEA
+     - 1.12.0
+   * - methylKit
+     - 1.14.2
+   * - genomation
+     - 1.20.0
+   * - GenomicRanges
+     - 1.40.0
