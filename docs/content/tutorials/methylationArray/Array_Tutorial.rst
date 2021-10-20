@@ -83,7 +83,9 @@ Next, run the R commands by copying them from this website into the Rstudio term
    library("minfiData")
    library("Gviz")
    library("DMRcate")
+   library("DMRcatedata")
    library("stringr")
+   library("mCSEA")
 
 Included with *minfi* is the *IlluminaHumanMethylation450kanno.ilmn12.hg19* package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context and to link the Red and Green raw data to methylated and unmethylated status.
 
@@ -397,6 +399,7 @@ After normalization of your data is a good time to look at the similarities and 
            col=pal[factor(targets$Sample_Source)], dim=c(1,2))
    legend("top", legend=levels(factor(targets$Sample_Source)), text.col=pal,
           bg="white", cex=0.7)
+   dev.off()
 
 Examining the MDS plots for this dataset demonstrates that the largest source of variation is the difference between individuals. The higher dimensions reveal that the differences between cell types are largely captured by the third and fourth principal components. This type of information is useful in that it can inform downstream analysis. If obvious sources of unwanted variation are revealed by the MDS plots, we can include them in our statistical model to account for them. In the case of this particular dataset, we will include individual to individual variation in our statistical model.
 
@@ -599,7 +602,6 @@ Here, we will apply this method to the output of the "naive-rTreg" comparison, r
 
 .. code-block:: r
 
-   library("mCSEA")
    # Create a named vector containing the rank metric (here: logFC)
    myRank <- DMPs$logFC
    names(myRank) <- rownames(DMPs)
