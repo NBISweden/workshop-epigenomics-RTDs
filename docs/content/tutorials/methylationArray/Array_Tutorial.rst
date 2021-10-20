@@ -90,12 +90,12 @@ Alternatively, we provide a containerized environment consisting of R, Rstudio a
 
 You should see something like this:
 
-.. code-block: bash
+.. code-block:: bash
 
    1. SSH tunnel from your workstation using the following command:
 
    ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
-
+   
    and point your web browser to http://localhost:8787
 
    2. log in to RStudio Server using the following credentials:
@@ -103,7 +103,7 @@ You should see something like this:
    user: vincent
    password: epi2021
 
-Now, open a second terminal and run **your** ssh command from 1. Then open your web rowser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
+Now, open a second terminal and run **your** ssh command from 1. Then open your web browser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
 
 **Load Libraries**
 
