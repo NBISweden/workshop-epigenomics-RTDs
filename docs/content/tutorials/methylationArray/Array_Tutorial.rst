@@ -449,6 +449,7 @@ Once the data has been filtered and normalised, it is often useful to re-examine
            col=pal[factor(targets$Sample_Source)])
    legend("right", legend=levels(factor(targets$Sample_Source)), text.col=pal,
           cex=0.7, bg="white")
+   dev.off()
 
 Probe-Wise Differential Methylation
 -----------------------------------
