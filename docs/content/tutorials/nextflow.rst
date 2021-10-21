@@ -290,7 +290,6 @@ Once you’ve got your sample sheet ready, you can launch the analysis! For this
 Remember the core Nextflow flags that you will need (one hyphen!)
 
 * ``-profile uppmax``
-* ``-r 1.2.2``
 
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
@@ -300,6 +299,11 @@ Remember the pipeline specific parameter flags that you will need (two hyphens!)
 * ``--single_end``
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+
+.. admonition:: CHiP command
+   :class: dropdown, note
+
+    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end
 
 Methyl-seq
 -----------
@@ -327,16 +331,20 @@ In this folder you can launch the analysis! For this, try to figure out the comm
 Remember the core Nextflow flags that you will need (one hyphen!)
 
 * ``-profile uppmax``
-* ``-r 1.6.1``
 
 Figure out the pipeline specific parameter flags that you will need (two hyphens!). Have a look at the `list of parameters <https://nf-co.re/methylseq/1.6.1/parameters>`_ to get an idea which options are possible and make sure to use the essential parameters.
 
-* ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R*.fastq.gz'
-* ``--aligner bismark
+* ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz'``
+* ``--aligner bismark``
 * ``--project g2021025``
 * ``--genome mm10``
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+
+.. admonition:: minimal methylseq command
+   :class: dropdown, note
+
+    nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
 
 
 Getting help
