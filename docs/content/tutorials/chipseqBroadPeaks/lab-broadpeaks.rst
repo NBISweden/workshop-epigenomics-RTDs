@@ -408,7 +408,7 @@ Please note the length of these detected domains.
 
 .. list-table:: Figure 3. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks
    :widths: 60
-   :header-rows: 1
+   :header-rows: 0
 
    * - .. image:: figures/macs3-rep1-peak1.png
    			:width: 600px
@@ -570,7 +570,7 @@ You can visualise the peaks as for MACS. Below are some of the locations as befo
 
 .. list-table:: Figure 4. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3 and epic2. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange)
    :widths: 60
-   :header-rows: 1
+   :header-rows: 0
 
    * - .. image:: figures/epic2-macs3-peak1.png
         :width: 600px
@@ -716,7 +716,7 @@ Sort out the working directory and file paths:
   You can also find it directly from R using ``getwd``::
 
     > getwd()
-    [1] "/crex/course_data/epigenomics/broad_peaks2021/results/csaw/bam"
+    [1] "/crex/course_data/epigenomics/broad_peaks2021/results/csaw"
 
 
 
@@ -972,9 +972,9 @@ You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.
 Below is the IGV snapshot of top peak, this time with csaw peaks added in light blue.
 
 
-.. list-table:: Figure 4. Results of broad peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3, epic2 and csaw. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange), peaks deteced by csaw (light blue).
+.. list-table:: Figure 5. Results of broad peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3, epic2 and csaw. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange), peaks deteced by csaw (light blue).
    :widths: 60
-   :header-rows: 1
+   :header-rows: 0
 
    * - .. image:: figures/csaw_peak1.png
         :width: 600px
