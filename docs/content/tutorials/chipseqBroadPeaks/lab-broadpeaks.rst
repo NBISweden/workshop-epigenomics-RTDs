@@ -41,9 +41,9 @@ Bioconductor packages required for annotation:
 
 Please note that this lab consists of three parts: 
 
-(i) calling broad peaks using ``MACS`` (on Uppmax);
+(i) calling broad peaks using ``MACS`` (Uppmax);
 
-(ii) calling broad peaks using ``epic2`` (on Uppmax); and 
+(ii) calling broad peaks using ``epic2`` (Uppmax); and 
 
 (iii) finding enriched genomic windows using  ``csaw`` in ``R``  (Uppmax / local).
 
@@ -64,52 +64,51 @@ Instructions how to install **R and Bioconductor packages** (including dependenc
 Data
 =====
 
-We will use ChIP-seq of H3K79me2 from Orlando et al, 2014 ("Quantitative ChIP-Seq Normalization Reveals Global Modulation of the Epigenome"). H3K79me2 is enriched at **active promoters** and linked to transcriptional activation. This is a SE data set, which admitedly is not the best design for broad marks. To use this procedure with PE data, please follow modifications listed on `MACS2 repository homepage <https://github.com/taoliu/MACS>`_.
+We will use ChIP-seq of **H3K79me2** from ENCODE. H3K79me2 is enriched at **active promoters** and linked to transcriptional activation as it tends to accumulate in **transcribed regions of active genes**. 
+
+The samples are from GM23338 cell line (human induced pluripotent stem cell from skin fibroblasts) before and after stimulation with doxycycline to form bipolar neurons.
+
+These data are paired-end with read length 76 bp (2x76) and consist of duplicates of H3K79me2 ChIP and matching input samples. Raw data was processed using ENCODE3 pipeline and mapped to ``GRCh38`` genome assembly. We have further processed the data to remove unwanted signal and subset to chromosomes 1 and 2, as in the tutorial :doc:`ChIPseq data processing <../chipseqProc/lab-chipseq-processing>`. Accession details are summarised in Table 1.
 
 
-GEO accession is ``GSE60104``
 
-ENA accession is ``PRJNA257491``
-
-
-.. list-table:: Table 1. Files in the data set used in this exercise.
+.. list-table:: Table 1. Samples and accessions in the data set used in this exercise.
    :widths: 40 25 25
    :header-rows: 1
 
    * - Sample
-     - GEO Accession
-     - SRA Accession
-   * - Jurkat_K79_100%_R1
-     - GSM1465008
-     - SRR1536561
-   * - Jurkat_K79_100%_R2
-     - GSM1464998
-     - SRR1536551
-   * - Jurkat_K79_50%_R1
-     - GSM1465006
-     - SRR1536559
-   * - Jurkat_K79_0%_R1
-     - GSM1465004
-     - SRR1536557
-   * - Jurkat_WCE_100%_R1
-     - GSM1511469
-     - SRR1584493
-   * - Jurkat_WCE_100%_R2
-     - GSM1511474
-     - SRR1584498
-   * - Jurkat_WCE_50%_R1
-     - GSM1511467
-     - SRR1584491
-   * - Jurkat_WCE_0%_R1
-     - GSM1511465
-     - SRR1584489
+     - ENCODE Accession
+     - Replicate
+   * - GM23338, H3K79me2 ChIP
+     - ENCFF263XBT
+     - rep 1
+   * - GM23338, H3K79me2 ChIP
+     - ENCFF531WSU
+     - rep 2
+   * - GM23338, input
+     - ENCFF992ZBS
+     - rep 1
+   * - GM23338, input
+     - ENCFF237PRF
+     - rep 2
+   * - neuro GM23338, H3K79me2 ChIP
+     - ENCFF395DAJ
+     - rep 1
+   * - neuro GM23338, H3K79me2 ChIP
+     - ENCFF806KRA
+     - rep 2
+   * - neuro GM23338, input
+     - ENCFF956GLJ
+     - rep 1
+   * - neuro GM23338, input
+     - ENCFF687LIL
+     - rep 2
 
 
 
-We will call peaks from *one sample only*, and compare the results to other samples processed earlier.
+We will detect occupancy regions from *one sample only*, and compare the results to other samples processed earlier.
 
 
-Data have been processed in the same way as for the TF ChIP-seq, i.e. the duplicated reads were removed, as were the reads mapped to the ENCODE blacklisted regions. In this case the reads were mapped to ``hg38`` assembly of human genome.
 
 :raw-html:`<br />`
 
@@ -117,204 +116,480 @@ Data have been processed in the same way as for the TF ChIP-seq, i.e. the duplic
 Quality control
 ================
 
-As always, one should start the analysis from assesment of data quality. This is already performed, and the plots and metrics are included below.
+As always, one should start the analysis from assesment of data quality. This is already performed to save time, and the plots and metrics are included below.
+
 
 Cross-correlation and related metrics
 ----------------------------------------
 
 The files discussed in this section can be accessed at 
-``/sw/courses/epigenomics/broad_peaks/results_pre/fingerprint``
-and
-``/sw/courses/epigenomics/broad_peaks/results_pre/xcor``
-.
+``/sw/courses/epigenomics/broad_peaks2021/results/qc``
 
-These metrics have been developed with application to TF ChIP-seq in mind, and you can see that the results for broad peaks are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. Already from these plots alone it is evident that the data has some quality issues. At this point you should be able to identify them.
+These metrics have been developed with application to TF ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
+
+Already from these plots alone it is evident that the data has some quality issues. At this point you should be able to identify them.
 
 
-.. list-table:: Figure 1. Cross correlations in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014).
+.. list-table:: Figure 1. Cross correlations in H3K79me2 ChIP  and input samples in GM23338-derived neuron cells (ENCODE).
    :widths: 40 40
    :header-rows: 1
 
-   * - K79me2 ChIP (SRR1536557)
-     - input (SRR1584489)
-   * - .. image:: figures/SRR1536557_xcor.png
+   * - K79me2 ChIP (ENCFF395DAJ)
+     - input (ENCFF956GLJ)
+   * - .. image:: figures/ENCFF395DAJ-xcor.png
    			:width: 300px
-     - .. image:: figures/SRR1584489_xcor.png
+     - .. image:: figures/ENCFF956GLJ-xcor.png
    			:width: 300px
 
 
 
-As for the ChIP, the cross correlation profile of factors with broad occupancy patterns is not going to be as sharp as for TFs, and the values of NSC and RSC tend to be lower, which does not mean that the ChIP failed. In fact, the developers of the tool do not recommend using the same NSC / RSC values as quality cutoffs for broad marks. However, input samples should not display signs of enrichment, as is the case here.
+The cross correlation profile of factors with broad occupancy patterns is not going to be as sharp as for TFs, and the values of NSC and RSC tend to be lower, which does not mean that the ChIP failed. In fact, the developers of the tool do not recommend using the same NSC / RSC values as quality cutoffs for broad marks. However, input samples should not display signs of enrichment, as is the case here.
+
+:raw-html:`<br />`
 
 Cumulative enrichment
 ----------------------
 
 Another plot worth examining is cumulative enrichment (aka fingerprint from deepTools):
 
-.. list-table:: Figure 2. Cumulative enrichment (bamFingerprint) for ChIP and input samples in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014).
+.. list-table:: Figure 2. Cumulative enrichment (bamFingerprint) in H3K79me2 ChIP and input samples in GM23338-derived neuron cells (ENCODE).
    :widths: 60
    :header-rows: 1
 
    * - all samples
-   * - .. image:: figures/cmplGSE60104fingerprint.png
+   * - .. image:: figures/nGM23338_fingerprint.png
    			:width: 600px
 
 
 
-You can see that even though the cross correlation metrics don't look great, some enrichment can be observed for the ChIP samples (SRR1536561, SRR1536551, SRR1536559, SRR1536557), and not for the input samples. As this data is data from very shallow sequencing, the fraction of the genome covered by reads is smaller than expected (0.3 for the best sample). Thus we do not expect to detect all occupancy sites, only the ones which give the strongest signal (this is actually an advantage for this class, as it reduces the running time).
 
 
-Peak calling using MACS2
-=========================
+You can see that even though the cross correlation metrics don't look great, a significant enrichment can be observed for the ChIP samples (ENCFF395DAJ, ENCFF806KRA), and not for the input samples.
 
-You will call peaks using sample Jurkat_K79_50_R1 ``SRR1536559`` and its matching input ``SRR1584491``.
 
-Effective genome size for ``hg38`` is ``3.0e9``.
+:raw-html:`<br />`
+:raw-html:`<br />`
 
-The estimated fragment size is ``180 bp`` (``phantompeakqualtools``).
+
+Broad peak calling using MACS
+===============================
+
+MACS: Model-based Analysis for ChIP-Seq is one of the leading peak calling algorithms. It has been excellent for detection of point-source peaks. However, until the recent version 3, it somewhat underperformed when used for detection of broad signal. Fortunatley, version 3, which is still under active development and hasn't been officially released, seems to fix issues with calling broad peaks. We will use this new version in this tutorial.
+
+
+
+You will call peaks using sample GM23338 neuro - H3K79me2 ChIP  ``ENCFF395DAJ`` and its matching input ``ENCFF956GLJ``.
+
+Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
+
 
 
 .. code-block:: bash
 	
-	mkdir -p results/macs
-	cd results/macs
+  mkdir -p results/macs3
+  cd results/macs3
 
-	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1536559.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
-	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1584491.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
-	module load bioinfo-tools #if needed
-	module load macs/2.2.6
+  module load bioinfo-tools #if needed
+  module load MACS/3.0.0a6
 
-	macs2 callpeak -t SRR1536559.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584491.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 50_R1 --outdir 50_R1 -f BAM --gsize 3.0e9 -q 0.1 --nomodel --extsize 180 --broad --broad-cutoff 0.1
-
-
-The main difference here, in comparison to detecting narrow peaks, is using the options ``--broad --broad-cutoff 0.1``. The ``--broad`` on, MACS will try to composite broad regions in BED12 (gene-model-like format) by putting nearby highly enriched regions into a broad region with loose cutoff. The broad region is controlled by another cutoff through ``--broad-cutoff``. If ``-p`` is set, this is a p-value cutoff, otherwise, it's a q-value (FDR) cutoff.
-
-Additonally, one should always use ``--nomodel --extsize NN`` for calling broad peaks. They tell MACS2 not to perform the fragment length estimation (because this does not work well for broad marks - the method is similar to the cross correlation) and instead we use 180 bp as a fragment length. Ideally, using PE data fragment length would be taken directly from data (because both ends of each fragment are sequenced).
+  macs3 callpeak --broad \
+  -t ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
+  -c ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
+  -f BAMPE  -g 04.9e8 --broad-cutoff 0.1 -n GM23338_rep1
 
 
-If you would like to compare the results of two different methods of finding broad peaks, repeat this with another data set:
+
+The main difference here, in comparison to detecting narrow peaks, is using the options ``--broad --broad-cutoff 0.1``. With the option ``--broad`` on, MACS will try to composite broad regions in BED12 (gene-model-like format) by putting nearby highly enriched regions into a broad region with loose cutoff. The broad region is controlled by another cutoff through ``--broad-cutoff``. If ``-p`` is set, this is a p-value cutoff, otherwise, it's a q-value (FDR) cutoff.
+
+Because we use PE data, there is no need to build a model to estimate fragment length (similar to cross correlation) necessary for extending the SE reads. We know precisely how long each fragment is because its both ends are sequenced and mapped to the reference.
+
+
+
+.. If you would like to compare the results of two different methods of finding broad peaks, repeat this with another data set:
+
+.. .. code-block:: bash
+
+.. 	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+.. 	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
+
+.. 	macs2 callpeak -t SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 100_R1 --outdir 100_R1 -f BAM --gsize 3.0e9 -q 0.1 --nomodel --extsize 180 --broad --broad-cutoff 0.1
+
+
+
+
+You can now inspect the results in the output folder ``macs3``. The structure is alike the output for calling narrow peaks. The file ``*.broadPeak`` is in ``BED6+3`` format which is similar to ``narrowPeak`` file used for point-source factors, except for missing the 10th column for annotating peak summits. Look at `MACS repository homepage <https://github.com/macs3-project/MACS/blob/master/docs/callpeak.md>`_ for details.
+
+The meaning of columns in ``NAME_peaks.xls`` files:
+
+chr
+  chromosome name
+
+start
+  start position of peak
+
+end
+   end position of peak
+
+length
+  length of peak region
+
+pileup
+  pileup height at peak summit
+
+-log10(pvalue)
+  -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
+
+fold_enrichment
+  fold enrichment for this peak summit against random Poisson distribution with local lambda
+
+-log10(qvalue)
+  -log10(qvalue) at peak summit
+
+name
+  peak id
+ 
+    
+
+Let's take a look at another format of the output ``broadPeak``. It is compatible with major genome browsers (IGV, UCSC Genome Browser) and easier to work with because it does not contain a long header.
+
+This is an example::
+
+  head neuroGM23338_macs3_rep1_peaks.broadPeak
+
+  chr1  777491  778262  neuroGM23338_macs3_rep1_peak_1  34  . 3.542 4.93525 3.48401
+  chr1  779812  780867  neuroGM23338_macs3_rep1_peak_2  10  . 2.28884 2.27839 1.03252
+  chr1  782000  784521  neuroGM23338_macs3_rep1_peak_3  17  . 2.6654  3.01765 1.70342
+  chr1  820548  826643  neuroGM23338_macs3_rep1_peak_4  36  . 3.5486  5.10182 3.65624
+  chr1  828271  830128  neuroGM23338_macs3_rep1_peak_5  34  . 3.4958  4.87316 3.42798
+  chr1  831350  833671  neuroGM23338_macs3_rep1_peak_6  22  . 2.7518  3.55309 2.20097
+  chr1  882552  890194  neuroGM23338_macs3_rep1_peak_7  34  . 3.21783 4.86863 3.43262
+  chr1  925794  926897  neuroGM23338_macs3_rep1_peak_8  18  . 2.71963 3.12803 1.80546
+  chr1  957085  959246  neuroGM23338_macs3_rep1_peak_9  60  . 4.54986 7.61848 6.03443
+  chr1  999291  999914  neuroGM23338_macs3_rep1_peak_10 16  . 2.63811 2.95948 1.65064
+
+
+
+The meaning of columns in ``NAME.broadPeak`` files:
+
+    
+chrom
+  Name of the chromosome (or contig, scaffold, etc.).
+chromStart
+  The starting position of the feature in the chromosome or scaffold. The first base in a chromosome is numbered 0.
+chromEnd
+  The ending position of the feature in the chromosome or scaffold. The chromEnd base is not included in the display of the feature. For example, the first 100 bases of a chromosome are defined as chromStart=0, chromEnd=100, and span the bases numbered 0-99. If all scores were "0" when the data were submitted to the DCC, the DCC assigned scores 1-1000 based on signal value. Ideally the average signalValue per base spread is between 100-1000.
+name
+  Name given to a region (preferably unique). Use "." if no name is assigned.
+score
+  Indicates how dark the peak will be displayed in the browser (0-1000).
+strand
+  +/- to denote strand or orientation (whenever applicable). Use "." if no orientation is assigned.
+signalValue
+  Measurement of overall (usually, average) enrichment for the region.
+pvalue
+  Measurement of statistical significance (-log10). Use -1 if no pValue is assigned.
+qValue
+  Measurement of statistical significance using false discovery rate (-log10). Use -1 if no qValue is assigned.
+
+
+
+How many peaks were identified in replicate 1?
+
 
 .. code-block:: bash
 
-	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
-	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
-
-	macs2 callpeak -t SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 100_R1 --outdir 100_R1 -f BAM --gsize 3.0e9 -q 0.1 --nomodel --extsize 180 --broad --broad-cutoff 0.1
+  wc -l neuroGM23338_macs3_rep1_peaks.broadPeak
+  6826 neuroGM23338_macs3_rep1_peaks.broadPeak
 
 
-
-
-You can now inspect the results in the output folder ``50_R1``. The structure is alike the output for calling narrow peaks. The file ``*.broadPeak`` is in ``BED6+3`` format which is similar to ``narrowPeak`` file used for point-source factors, except for missing the 10th column for annotating peak summits. Look at `MACS2 repository homepage <https://github.com/taoliu/MACS>`_ for details.
-
-How many peaks were identified?
-
-
-.. code-block:: bash
-
-	[agata@r483 50_R1]$ wc -l *Peak
-	  27699 50_R1_peaks.broadPeak
-
-
-This is a preliminary peak list, and in case of broad peaks, it almost always needs some processing or filtering.
 
 .. HINT::
 
 	You can also copy the results from
-	``/sw/courses/epigenomics/broad_peaks/results_pre/macs``
+	``/sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338``
+
+This is a preliminary peak list, and in case of broad domains, it often needs some processing or filtering.
 
 
-Visual inspection of the peaks
-================================
+Firstly, let's select the peaks reproducible in both replicates. 
+
+
+.. admonition:: Select reproducible peaks (MACS).
+   :class: dropdown, warning
+
+
+   .. code-block:: bash
+
+      #link the files if you are in a different directory
+      ln -s /sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
+      ln -s /sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
+
+      #make bed
+      cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
+      cut -f 1-6 neuroGM23338_macs3_rep2_peaks.broadPeak >neuroGM23338_macs3_rep2_peaks.bed
+
+
+      #intersect bed files
+      module load BEDTools/2.29.2
+      bedtools intersect -a neuroGM23338_macs3_rep1_peaks.bed -b neuroGM23338_macs3_rep2_peaks.bed -f 0.50 -r > peaks_macs3_neuroGM23338.chr12.bed
+
+      #how many peaks which overlap?
+      wc -l peaks_macs3_neuroGM23338.chr12.bed 
+      2679 peaks_macs3_neuroGM23338.chr12.bed
+
+
+
+
+
+
+Visual inspection of the peaks (MACS)
+======================================
 
 You will use ``IGV`` for this step, and it is recommended that you run it locally on your own computer. Please load ``hg38`` reference genome.
 
 Required files are:
 
-* ``SRR1536559.bwt.hg38_dm6.sorted.hg38.BLfilt.bam`` and matching ``bai``
-* ``SRR1584491.bwt.hg38_dm6.sorted.hg38.BLfilt.bam`` and matching ``bai``
-* ``50_r1_peaks.broadPeak``
+* ChIP ``ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam`` and matching ``bai``
+* input ``ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam`` and matching ``bai``
+* signal domains ``neuroGM23338_macs3_rep1_peaks.broadPeak``
+* reproducible signal domains ``peaks_macs3_neuroGM23338.chr12.bed``
 
 
 .. HINT::
 
 	You can access the bam and bai files from
-	``/sw/courses/epigenomics/broad_peaks/bam/``
+	``/sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338``
 
 
-You can look at some locations of interest. Some peaks with low FDR (q value) or high fold enrichment may be worth checking out. Or check your favourite gene.
 
-Some ideas:
+You can look at some locations of interest. Peaks with low FDR (q value) or high fold enrichment may be worth checking out. Or check your favourite gene.
+
+.. admonition:: Potentially interesting locations to view (MACS peaks).
+   :class: dropdown, warning
+
+   Let's sort the broadPeak file using the score column to find the peaks with the strongest signal
+
+   .. code-block:: bash
+
+    sort -k5,5rn neuroGM23338_macs3_rep1_peaks.broadPeak | head
+
+    chr1 226062814 226073870 neuroGM23338_macs3_rep1_peak_3341 518 . 13.0292 54.709  51.8498
+    chr1  234598782 234610959 neuroGM23338_macs3_rep1_peak_3515 513 . 12.139  54.2276 51.3993
+    chr2  101698297 101748719 neuroGM23338_macs3_rep1_peak_5147 462 . 13.375  49.0116 46.2392
+    chr2  47158830  47176361  neuroGM23338_macs3_rep1_peak_4479 449 . 12.5555 47.6423 44.96
+    chr1  204403186 204412701 neuroGM23338_macs3_rep1_peak_2999 431 . 10.9654 45.8227 43.1784
+    chr1  220527779 220538029 neuroGM23338_macs3_rep1_peak_3239 414 . 11.5724 44.1237 41.4922
+    chr1  244049535 244060201 neuroGM23338_macs3_rep1_peak_3688 403 . 10.2749 42.9757 40.397
+    chr2  54970096  55050304  neuroGM23338_macs3_rep1_peak_4577 401 . 11.3781 42.7092 40.1167
+    chr2  5692693 5703228 neuroGM23338_macs3_rep1_peak_3837 399 . 10.6746 42.502  39.9488
+    chr1  150568640 150579241 neuroGM23338_macs3_rep1_peak_2121 394 . 11.0116 42.0139 39.4717
+
+
+chr1:779812-780867
+
+
+Below you see IGV visualisations of the following regions (top two peaks and one of the bottom rank):
 
 .. code-block:: bash
 
-	chr	start	end	length	pileup	-log10(pvalue)	fold_enrichment	-log10(qvalue)	name
-	chr1	15864352	15871317	6966	8.31	8.77860	6.24525	6.17940	50_r1_peak_174
-	chr1	6197308	6199294	1987	17.78	12.94012	7.17401	10.00101	50_r1_peak_74
-	chr1	23336678	23344012	7335	16.27	14.83352	8.39527	11.73484	50_r1_peak_352
-	chr1	31060370	31065323	4954	16.87	14.33009	8.02259	11.28237	50_r1_peak_531
-	chr1	31920283	31923371	3089	14.80	18.46969	10.69499	15.06099	50_r1_peak_543
-	chr1	31923542	31937975	14434	18.04	18.76121	10.30353	15.33368	50_r1_peak_544
+  chr1:226,055,687-226,080,997
+  chr1:234,592,216-234,617,526
+  chr1:777,176-783,503
 
-	chr1:15864352-15871317
-	chr1:6197308-6199294
-	chr1:23336678-23344012
-	chr1:31060370-31065323
-	chr1:31923542-31937975
+IGV settings for this visualiation: Group alignments (by read strand); Colour alignments (by read strand); Squished.
 
-Below you see IGV visualisations of the following
+Regions detected by ``MACS3`` are the topmost purple track, two bam files are ChIP and input (with their pileups calculated by IGV), and the bottom panel are gene models and, finally the regions reproducible between both replicates in green.
 
-.. code-block:: bash
-
-	chr1:230,145,433-230,171,784
-	chr1:235,283,256-235,296,431
-	chr1:244,857,626-244,864,213
-	chr1:45,664,079-45,690,431
-
-The first two locations visualise peaks longer than 2kb. The third and the fourth are a 4 kb-long peaks with strong fold erichment over background.
+Please note the length of these detected domains. 
 
 
 
-.. list-table:: Figure 3. Results of peak calling in H3K79me2 ChIP-seq in Jurkat cells (Orlando et al, 2014); sample sample 100_r1.
+.. list-table:: Figure 3. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks
    :widths: 60
    :header-rows: 1
 
-   * - two upper tracks are ChIP samples, the bottom track is input
-   * - .. image:: figures/broad3.png
+   * - .. image:: figures/macs3-rep1-peak1.png
    			:width: 600px
+   * - .. image:: figures/macs3-rep1-peak2.png
+        :width: 600px
+   * - .. image:: figures/macs3-rep1-peak3.png
+        :width: 600px
 
 
 
-All the above demonstrate one of the common caveats of calling broad peaks: regions obviously enriched in a mark of interest are represented as a series of adjoining peaks which in fact should be merged into one long enrichment domain. You may leave it as is, or merge the peaks into longer ones, depending on the downstream application.
+
+.. Postprocessing of peak candidates
+.. ====================================
+
+.. Please note that this step is only an example, as **any postprocessing of peak calling results is highly project specific**.
+
+.. Normally, you would work with replicated data. As in the case of TFs earlier, it is recommended to continue working with peaks reproducible between replicates.
+
+.. The peak candidate lists can and should be further filtered, based on fold enrichment and pileup value, to remove peaks which could have a high fold enrichment but low signal, as these are likely non-informative. Any filtering, however has to be performed having in mind the biological characteristics of the signal.
+
+.. You can merge peaks which are close to one another using `bedtools <https://bedtools.readthedocs.io/en/latest/>`_. You will control the distance of features to be merged using option ``-d``. Here we arbitrarily choose 1 kb.
 
 
-Postprocessing of peak candidates
-====================================
+.. .. code-block:: bash
 
-Please note that this step is only an example, as **any postprocessing of peak calling results is highly project specific**.
+.. 	cp 50_R1_peaks.broadPeak 50_r1.bed
 
-Normally, you would work with replicated data. As in the case of TFs earlier, it is recommended to continue working with peaks reproducible between replicates.
+.. 	module load bioinfo-tools
+.. 	module load BEDTools/2.27.1
 
-The peak candidate lists can and should be further filtered, based on fold enrichment and pileup value, to remove peaks which could have a high fold enrichment but low signal, as these are likely non-informative. Any filtering, however has to be performed having in mind the biological characteristics of the signal.
+.. 	bedtools merge -d 1000 -i 50_r1.bed > 50_r1.merged.bed
 
-You can merge peaks which are close to one another using `bedtools <https://bedtools.readthedocs.io/en/latest/>`_. You will control the distance of features to be merged using option ``-d``. Here we arbitrarily choose 1 kb.
+.. 	#how many peaks?
+.. 	wc -l *bed
+.. 	27699 50_r1.bed
+..   	11732 50_r1.merged.bed
+
+:raw-html:`<br />`
+
+
+Broad peak calling using epic2
+===============================
+
+epic2 is an ultraperformant reimplementation of SICER, an algorithm developed especially for detection of broad marks. It focuses on speed, low memory overhead and ease of use. It also contains a reimplementation of the SICER-df scripts for differential enrichment and a script to create many kinds of bigwigs from your data. In this tutorial we will use it to detect domains in the same data as we used earlier for MACS. At the end we will compare the results.
+
+Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem to throw errors when used with ``epic2``. For details please consult :doc:`Dependencies <../../dependencies>`.
+
 
 
 .. code-block:: bash
+  
+  mkdir ../epic2
+  cd ../epic2
 
-	cp 50_R1_peaks.broadPeak 50_r1.bed
+  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
-	module load bioinfo-tools
-	module load BEDTools/2.27.1
+  conda activate /sw/courses/epigenomics/software/conda/epic_2b
 
-	bedtools merge -d 1000 -i 50_r1.bed > 50_r1.merged.bed
-
-	#how many peaks?
-	wc -l *bed
-	27699 50_r1.bed
-  	11732 50_r1.merged.bed
+  epic2 --treatment ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
+   --control ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
+    -fdr 0.05 --effective-genome-fraction 0.95 \
+    --chromsizes /sw/courses/epigenomics/broad_peaks2/annot/hg38_chr12.chromsizes \
+    --guess-bampe --output neuroGM23338.rep1.epic2
 
 
+The result looks like this::
+
+  head neuroGM23338.rep1.epic2
+  #Chromosome Start End PValue  Score Strand  ChIPCount InputCount  FDR log2FoldChange
+  chr1  777400  778199  1.525521715195486e-17 302.351431362403  . 28  4 3.6469084588658344e-17  3.02351431362403
+  chr1  821600  822599  9.82375064925635e-15  309.0628509482567 . 22  3 2.149649196967778e-14 3.090628509482567
+  chr1  823400  826599  1.912606813336636e-50 258.96177870938703  . 114 22  7.16207410279741e-50  2.58961778709387
+  chr1  828200  830399  5.824989404621774e-19 201.13395996779278  . 59  17  1.4498521203360967e-18  2.0113395996779277
+  chr1  831400  833599  2.388427396703667e-14 151.73289262869903  . 69  28  5.17334134771682e-14  1.5173289262869905
+  chr1  880600  885799  2.569723734705377e-37 153.80874864537878  . 195 78  8.520333236155976e-37 1.538087486453788
+  chr1  886600  890199  1.481460204837024e-22 165.05622157122005  . 100 37  3.9835062883707675e-22  1.6505622157122006
+  chr1  925800  926999  8.491192455372113e-17 280.11218922875815  . 30  5 1.9845609170824598e-16  2.801121892287582
+  chr1  957000  959199  4.1356938759907084e-64  337.1437617044337 . 98  11  1.688095302270476e-63 3.3714376170443368
+
+
+The meaning of the columns:
+
+PValue
+  Poisson-computed PValue based on the number of ChIP count vs. library-size normalized Input count in the region
+Score
+  Log2FC * 100 (capped at 1000). Regions with a larger relative ChIP vs. Input count will show as darker in the UCSC genome browser
+ChIPCount
+  The number of ChIP counts in the region (also including counts from windows with a count below the cutoff)
+InputCount
+  The number of Input counts in the region
+FDR
+  Benjamini-Hochberg correction of the p-values
+log2FoldChange
+  Log2 of the region ChIP count vs. the library-size corrected region Input count
+
+
+
+How many domains were found? (the first line is a header)
+
+.. code-block:: bash
+
+  wc -l neuroGM23338.rep1.epic2
+  5242 neuroGM23338.rep1.epic2
+
+
+
+
+How many domains reproducible between replicates?
+
+
+.. admonition:: Select reproducible peaks (epic2).
+   :class: dropdown, warning
+
+
+   .. code-block:: bash
+
+      #link the files if you are in a different directory
+      ln -s /sw/courses/epigenomics/broad_peaks2021/results/epic2/neuroGM23338/neuroGM23338.rep1.epic2
+      ln -s /sw/courses/epigenomics/broad_peaks2021/results/epic2/neuroGM23338/neuroGM23338.rep2.epic2
+
+      #make bed
+      cut -f 1-3 neuroGM23338.rep1.epic2 >neuroGM23338_epic2_rep1_peaks.bed
+      cut -f 1-3 neuroGM23338.rep2.epic2 >neuroGM23338_epic2_rep2_peaks.bed
+
+      #intersect bed files
+      module load bioinfo-tools #if necessary
+      module load BEDTools/2.29.2
+      bedtools intersect -a neuroGM23338_epic2_rep1_peaks.bed -b neuroGM23338_epic2_rep2_peaks.bed -f 0.50 -r > peaks_epic2_neuroGM23338.chr12.bed
+
+      #how many peaks which overlap?
+      wc -l peaks_epic2_neuroGM23338.chr12.bed
+      2692 peaks_epic2_neuroGM23338.chr12.bed
+
+
+How about the overlap between different methods?
+
+
+.. admonition:: Compare MACS3 and epic2.
+   :class: dropdown, warning
+
+   (please make sure the relative path to macs3 results is correct in the command below)
+
+   .. code-block:: bash
+
+      #intersect bed files
+      module load bioinfo-tools #if necessary
+      module load BEDTools/2.29.2
+      bedtools intersect -a peaks_epic2_neuroGM23338.chr12.bed -b ../macs3/peaks_macs3_neuroGM23338.chr12.bed \
+      -f 0.50 -r > peaks_epic2macs3_neuroGM23338.chr12.bed
+      
+      #how many peaks which overlap?
+      wc -l peaks_epic2macs3_neuroGM23338.chr12.bed
+      1629 peaks_epic2macs3_neuroGM23338.chr12.bed
+
+
+You can visualise the peaks as for MACS. Below are some of the locations as before, with peaks detected by both epic2 and MACS marked in orange.
+
+
+.. list-table:: Figure 4. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3 and epic2. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange)
+   :widths: 60
+   :header-rows: 1
+
+   * - .. image:: figures/epic2-macs3-peak1.png
+        :width: 600px
+   * - .. image:: figures/epic2-macs3-peak2.png
+        :width: 600px
+   * - .. image:: figures/epic2-macs3-peak3.png
+        :width: 600px
+
+
+
+.. admonition:: Locations plotted.
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+    chr1:226,055,687-226,080,997
+    chr1:237,310,726-237,323,381
+    chr2:202,204,546-202,229,168
 
 
 :raw-html:`<br />`

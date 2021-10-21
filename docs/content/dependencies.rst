@@ -61,9 +61,9 @@ ChIP-seq
      - peak calling
      - 
    * - epic2
-     - 0.0.52
+     - 0.0.52 (**)
      - broad peaks
-     - (**)
+     - https://github.com/biocore-ntnu/epic2
 
 
 (*) 
