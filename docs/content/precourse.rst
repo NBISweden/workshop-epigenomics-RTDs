@@ -80,7 +80,7 @@ Request membership in the course project (for those already having Uppmax accoun
 
 * log in to SUPR;
 
-* under Projects: Requesting Membership in Projects, request membership in ***XXXX***
+* under Projects: Requesting Membership in Projects, request membership in ***g2021025***
 
 
 
