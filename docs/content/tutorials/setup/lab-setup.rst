@@ -27,16 +27,15 @@ We have booked half a node on Rackham per course participant. To run the tutoria
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
-	salloc -A g2021025 -t 04:00:00 -p core -n 10 --no-shell --reservation=g2021025_X
+	salloc -A g2021025 -t 08:00:00 -p core -n 10 --no-shell --reservation=g2021025_X
 
 
 .. HINT::
 
-	where X should be 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access for four hours, so you will repeat this in the afternoon.
+	Replace X with the date of the day of the workshop. So, 25 for day one, 26 for day, 27 for day 3 and so on. This gives you access to 10 cores for eight hours or until 17:00, whichever comes first.
 
 
 Please make sure you do it only **ONCE**, as by repeating this command you will use up resources reserved for others.
-
 
 Check which node you were assigned
 
@@ -44,15 +43,13 @@ Check which node you were assigned
 
 	squeue -u <username>
 
-
-
 And connect to your node with
 
 .. code-block:: bash
 
 	ssh -Y <nodename>
 
-
+If you lose connection to the server during a tutorial, please connect again to Rackham and do ``ssh -Y <nodename>`` again. You will reconnect to your set of cores.
 
 Directory structure
 ======================
