@@ -18,13 +18,17 @@ tmux
 
 Before starting the Nextflow tutorial it might be useful to introduce you to tmux. Tmux is a very useful little tool that will allow you to start a process (such as the pipelines in this tutorial) and run it in the background, allowing you to do other stuff during long calculations. As an added bonus, it will keep your processes going if you leave the server or your connection is unstable and crashes. It first needs to be loaded using UPPMAX's module system, after which you can initiate a new terminal in tmux.
 
+.. attention::
+
+    Do these next steps after connecting to the rackham, but **before** requesting a personal node with ``salloc``!
+
 .. code-block:: bash
 
     module load tmux
     tmux new -s nf_tutorial # or any other name you like
     tmux set mouse on # enable mouse support for things like scrolling and selecting text 
 
-Now, anything you do in this new terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
+Now, anything you do in this new terminal session is "save" and you can run the ``salloc`` command. When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
 
 .. code-block:: bash
 
@@ -92,7 +96,7 @@ Make a new directory and run the Nextflow test command as follows:
 
 .. code-block::
 
-    cd /proj/g2021025/private/$USER
+    cd ~ # go to your home directory
     mkdir nextflow-hello-test
     cd nextflow-hello-test
     nextflow run hello
@@ -160,7 +164,7 @@ Remember the key points:
 
 .. code-block:: bash
 
-    cd /proj/g2021025/private/$USER
+    cd ~
     mkdir atacseq-test
     cd atacseq-test
     nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project g2021025
@@ -219,14 +223,18 @@ In a new fresh directory(!), try this out:
 
 .. code-block:: bash
 
-    mkdir /proj/g2021025/private/$USER/atacseq-help
-    cd /proj/g2021025/private/$USER/atacseq-help
+    cd ~
+    mkdir atacseq-help
+    cd atacseq-help
     nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow --help
 
 Running a real workflow
 -----------------------------
 
-Now we get to the real deal! Once you’ve gotten this far, you start to leave behind the generalisations that apply to all nf-core pipelines. Now you have to rely on your wits and the nf-core documentation.
+Now we get to the real deal! Once you’ve gotten this far, you start to leave behind the generalisations that apply to all nf-core pipelines. Now you have to rely on your wits and the nf-core documentation. We have prepared small datasets for a chip-seq analysis and a BS-seq analysis. You can choose to do the one that interests you most or if you have time you can try both!
+
+CHiP-seq
+---------
 
 Example data
 ##############
@@ -237,8 +245,9 @@ Make a new directory for this CHiP seq analysis and link the data files to a dat
 
 .. code-block:: bash
 
-    mkdir /proj/g2021025/private/$USER/chip_seq_analysis
-    cd /proj/g2021025/private/$USER/chip_seq_analysis
+    cd ~
+    mkdir chip_seq_analysis
+    cd chip_seq_analysis
     mkdir input_files
     cd input_files
     ln -s /sw/courses/epigenomics/nextflow/fastq_sub12_gz/neural/*.fastq.gz .
@@ -280,7 +289,8 @@ Once you’ve got your sample sheet ready, you can launch the analysis! For this
 
 Remember the core Nextflow flags that you will need (one hyphen!)
 
-* ``profile uppmax``
+* ``-profile uppmax``
+* ``-r 1.2.2``
 
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
@@ -289,7 +299,45 @@ Remember the pipeline specific parameter flags that you will need (two hyphens!)
 * ``--input samplesheet.csv``
 * ``--single_end``
 
-If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the results folder and see what it generated. Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+
+Methyl-seq
+-----------
+
+nf-core/methylseq is an analysis pipeline used for methylation (Bisulfite) sequencing data. It pre-processes raw data from FastQ inputs, aligns the reads and extract methylation calls and performs extensive quality-control on the results. The default workflow uses Bismark with Bowtie2 as alignment tool: unless specified otherwise, nf-core/methylseq will run this pipeline.
+
+Example data
+##############
+
+We have prepared some example data that has been subsampled to make them small and quick to run, and are supplied as gzipped (compressed) FastQ files here: ``/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R[1,2].fastq.gz``. This is mouse data so remember to use the correct genome to map to.
+
+Running the pipeline
+#####################
+
+Begin with making a fresh analysis directory in your home directory
+
+.. code-block:: bash
+
+    cd ~
+    mkdir methylseq_analysis
+    cd methylseq_analysis
+
+In this folder you can launch the analysis! For this, try to figure out the command you should run. Try to execute the methylseq pipeline with version 1.6.1 using the FastQ files you just linked to.
+
+Remember the core Nextflow flags that you will need (one hyphen!)
+
+* ``-profile uppmax``
+* ``-r 1.6.1``
+
+Figure out the pipeline specific parameter flags that you will need (two hyphens!). Have a look at the `list of parameters <https://nf-co.re/methylseq/1.6.1/parameters>`_ to get an idea which options are possible and make sure to use the essential parameters.
+
+* ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R*.fastq.gz'
+* ``--aligner bismark
+* ``--project g2021025``
+* ``--genome mm10``
+
+If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+
 
 Getting help
 -------------
