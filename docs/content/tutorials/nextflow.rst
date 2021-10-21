@@ -281,6 +281,7 @@ Once you’ve got your sample sheet ready, you can launch the analysis! For this
 Remember the core Nextflow flags that you will need (one hyphen!)
 
 * ``profile uppmax``
+
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
 * ``--project g2021025``
