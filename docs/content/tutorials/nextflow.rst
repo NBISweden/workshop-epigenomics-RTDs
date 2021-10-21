@@ -301,7 +301,7 @@ Remember the pipeline specific parameter flags that you will need (two hyphens!)
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
 .. admonition:: CHiP command
-   :class: dropdown, note
+   :class: dropdown, code-block
 
     nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end
 
@@ -342,7 +342,7 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
 .. admonition:: minimal methylseq command
-   :class: dropdown, note
+   :class: dropdown, code-block
 
     nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
 
