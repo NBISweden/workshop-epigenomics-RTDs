@@ -267,7 +267,7 @@ We have made a sample sheet for you which describes the different condition: ``s
 .. code-block:: bash
 
     cd .. # move up one directory
-    cp /św/courses/epigenomics/nextflow/samplesheet.csv .
+    cp /sw/courses/epigenomics/nextflow/samplesheet.csv .
     cat samplesheet.csv
 
 The cat command shows you the contents of the sample sheet.
