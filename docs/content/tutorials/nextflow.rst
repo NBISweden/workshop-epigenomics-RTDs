@@ -16,11 +16,11 @@ Nextflow and nf-core
 tmux
 -----
 
-Before starting the Nextflow tutorial it might be useful to introduce you to tmux. Tmux is a very useful little tool that will allow you to start a process (such as the pipelines in this tutorial) and run it in the background, allowing you to do other stuff during long calculations. As an added bonus, it will keep your processes going if you leave the server or your connection is unstable and crashes. It first needs to be loaded using UPPMAX's module system, after which you can initiate a new terminal in tmux.
+Before starting the tutorial it might be useful to introduce you to tmux. Tmux is a very useful little tool that will allow you to start a process and run it in the background, allowing you to do other stuff during long calculations. As an added bonus, it will keep your processes going if you leave the server or your connection is unstable and crashes. It first needs to be loaded using UPPMAX's module system, after which you can initiate a new terminal in tmux.
 
 .. attention::
 
-    Do these next steps after connecting to the rackham, but **before** requesting a personal node with ``salloc``!
+    Do these next steps **after** connecting to rackham and ssh-ing to your personal node as described in the setup!
 
 .. code-block:: bash
 
@@ -28,14 +28,14 @@ Before starting the Nextflow tutorial it might be useful to introduce you to tmu
     tmux new -s nf_tutorial # or any other name you like
     tmux set mouse on # enable mouse support for things like scrolling and selecting text 
 
-Now, anything you do in this new terminal session is "save" and you can run the ``salloc`` command. When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
+Now, anything you do in this new tmux terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and your personal node and do
 
 .. code-block:: bash
 
     module load tmux
     tmux attach -t nf_tutorial
 
-To put tmux in background and keep the processes inside running, press ``Ctrl+B``, release, press ``D``. With tmux ls you can see which sessions are ongoing (can be multiple ones!) and you could connect to. To reattach to your earlier session type ``tmux attach -t nf_tutorial`` as shown above. 
+To put tmux in background and keep the processes inside running, press ``Ctrl+B``, release, press ``D``. With ``tmux ls`` you can see which sessions are ongoing (can be multiple ones!) and you could connect to. To reattach to your earlier session type ``tmux attach -t nf_tutorial`` as shown above. 
 
 To kill a tmux session and stop any process running in it, press ``Ctrl+B``, release, press ``X`` followed by ``Y``.
 
