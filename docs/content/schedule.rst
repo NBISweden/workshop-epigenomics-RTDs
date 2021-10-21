@@ -2,12 +2,10 @@
 Schedule
 ========
 
-
+The latest schedule can be found on `Canvas <https://uppsala.instructure.com/courses/51975/pages/schedule>`_ .
 
 .. contents::
     :local:
-
-
 
 Monday (25 November 2021)
 --------------------------
