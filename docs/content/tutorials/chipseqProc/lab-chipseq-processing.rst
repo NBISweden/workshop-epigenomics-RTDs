@@ -223,6 +223,9 @@ The **cross-correlation metric** is computed as the **Pearson's linear correlati
 
 We will calculate cross correlation for REST ChIP-seq in HeLa cells using a tool called `phantompeakqualtools <https://github.com/kundajelab/phantompeakqualtools>`_
 
+We provide a conda environment to run ``phantompeakqualtools``. This package proved a bit tricky to install because of dependency incompatibilities. To find how this environment was constructed, please visit :doc:`Dependencies <../../dependencies>`.
+
+
 
 .. code-block:: bash
 
@@ -767,7 +770,7 @@ This way one can compare peaks from replicates of the same condition and beyond,
   wc -l peaks_hepg2_hela.chr12.bed
 
 
-.. admonition:: Number of reproducible peaks in HeLa and HepG2 cell.
+.. admonition:: Number of reproducible peaks in HeLa and HepG2 cells.
    :class: dropdown, warning
 
    .. code-block:: bash
