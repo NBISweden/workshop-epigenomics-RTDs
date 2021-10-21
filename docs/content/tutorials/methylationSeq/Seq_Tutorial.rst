@@ -37,7 +37,7 @@ To showcase a basic analysis, a small set of samples has been collected consisti
 In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example). 
 
 .. note::
-   These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the methylseq nf-core pipeline. 
+   In this tutorial we will be focusing on the downstream analysis of bisulfite sequencing data. Preprocessing steps such as mapping bisulfite treated sequencing reads to a genome and perform methylation calls need to be performed prior to this analysis. Here, we will start from coverage files.These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the `methylseq nf-core pipeline <https://nf-co.re/methylseq>`_. On Thursday, you will learn how to work with these type of nf-core pipelines! 
 
 
 .. image:: Figures/coverage.png
