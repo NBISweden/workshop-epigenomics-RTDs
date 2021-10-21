@@ -82,7 +82,7 @@ Nextflow has a large list of bash environment variables that can be set to confi
     export NXF_OPTS='-Xms1g -Xmx4g'
 
     # Don't fill up your home directory with cache files
-    export NXF_HOME=/proj/g2021025/nobackup/$USER/nxf-home
+    export NXF_HOME=$HOME/nxf-home
     export NXF_TEMP=${SNIC_TMP:-$HOME/glob/nxftmp}
 
 Upon execution of the command, ``$USER`` will be replaced with your login name.
