@@ -716,7 +716,7 @@ Sort out the working directory and file paths:
   You can also find it directly from R using ``getwd``::
 
     > getwd()
-    [1] "/crex/course_data/epigenomics/broad_peaks2021/results/csaw/bam"
+    [1] "/crex/course_data/epigenomics/broad_peaks2021/results/csaw"
 
 
 
