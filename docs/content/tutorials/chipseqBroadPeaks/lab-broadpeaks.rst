@@ -388,7 +388,6 @@ You can look at some locations of interest. Peaks with low FDR (q value) or high
     chr1  150568640 150579241 neuroGM23338_macs3_rep1_peak_2121 394 . 11.0116 42.0139 39.4717
 
 
-chr1:779812-780867
 
 
 Below you see IGV visualisations of the following regions (top two peaks and one of the bottom rank):
@@ -409,7 +408,7 @@ Please note the length of these detected domains.
 
 .. list-table:: Figure 3. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks
    :widths: 60
-   :header-rows: 1
+   :header-rows: 0
 
    * - .. image:: figures/macs3-rep1-peak1.png
    			:width: 600px
@@ -571,7 +570,7 @@ You can visualise the peaks as for MACS. Below are some of the locations as befo
 
 .. list-table:: Figure 4. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3 and epic2. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange)
    :widths: 60
-   :header-rows: 1
+   :header-rows: 0
 
    * - .. image:: figures/epic2-macs3-peak1.png
         :width: 600px
@@ -600,44 +599,44 @@ Alternative approach: window-based enrichment analysis (csaw)
 
 This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
 
-You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to ``chr1``.
+.. You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to ``chr1``.
 
 .. NOTE::
   
   This exercise was tested on Rackham using pre-installed R libraries. Local installation of recommended R packages may require additional software dependecies.
 
 
-Requirements Local
-----------------------
+.. Requirements Local
+.. ----------------------
 
-* ``csaw``
-* ``edgeR``
+.. * ``csaw``
+.. * ``edgeR``
 
-R packages required for annotation:
+.. R packages required for annotation:
 
-* ``org.Hs.eg.db``
-* ``TxDb.Hsapiens.UCSC.hg38.knownGene``
+.. * ``org.Hs.eg.db``
+.. * ``TxDb.Hsapiens.UCSC.hg38.knownGene``
 
-Recommended:
+.. Recommended:
 
-* R-Studio to work in
-
-
-
-**Getting the data**
+.. * R-Studio to work in
 
 
-First, you need to copy the necessary files to your laptop:
 
-.. code-block:: bash
+.. **Getting the data**
 
-	cd /desired/location
 
-	scp <USERNAME>@rackham.uppmax.uu.se:/sw/courses/epigenomics/broad_peaks/broad_peaks_bam.tar.gz .
+.. First, you need to copy the necessary files to your laptop:
 
-	#type your password at the prompt
+.. .. code-block:: bash
 
-	tar zdvf broad_peaks_bam.tar.gz
+.. 	cd /desired/location
+
+.. 	scp <USERNAME>@rackham.uppmax.uu.se:/sw/courses/epigenomics/broad_peaks/broad_peaks_bam.tar.gz .
+
+.. 	#type your password at the prompt
+
+.. 	tar zdvf broad_peaks_bam.tar.gz
 
 
 
@@ -654,27 +653,25 @@ To prepare the files, assuming you are in ``~/broad_peaks/results``:
    mkdir csaw
    cd csaw
 
-   mkdir bam_chr1
-   ln -s  /sw/courses/epigenomics/broad_peaks/bam_chr1/* bam_chr1
-
-..   cp /sw/courses/epigenomics/broad_peaks/bam_chr1 .
-
-A side note: You may have noticed that some of the bam files contain alignments to ``dm6`` - an assembly of `Drosophila melanogaster` genome. This is because we are using the same data set as for the quantitative ChIP-seq tutorial (on Wednesday). For now we ignore the alignments to ``dm6`` and focus on ``hg38``.
+   mkdir bam
+   ln -s  /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/* bam
 
 
-Remote:
+
+.. Remote:
 
 .. code-block:: bash
 
+    module load conda/latest
     conda activate /sw/courses/epigenomics/software/conda/v8
     R
 
-Or locally work in RStudio.
 
 The remaining part of the exercise is performed in ``R``.
 
 
-Remote:
+.. Remote:
+
 
 .. code-block:: R
 
@@ -692,28 +689,66 @@ Sort out the working directory and file paths:
 
 	setwd("/path/to/workdir")
 
-	dir.data = "/path/to/desired/location/bam_chr1"
+	dir.data = "/path/to/desired/location/bam"
 
 	#for example when in broad_peaks/csaw
-	dir.data = "./bam_chr1"	
+	dir.data = "./bam"	
 
-	k79_100_1=file.path(dir.data,"SRR1536561.bwt.hg38_dm6.sorted.chr1.hg38.bam")
-	k79_100_2=file.path(dir.data,"SRR1536551.bwt.hg38_dm6.sorted.chr1.hg38.bam")
-	k79_100_i1=file.path(dir.data,"SRR1584493.bwt.hg38_dm6.sorted.chr1.hg38.bam")
-	k79_100_i2=file.path(dir.data,"SRR1584498.bwt.hg38_dm6.sorted.chr1.hg38.bam")
+	k79_1=file.path(dir.data,"ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam")
+	input_1=file.path(dir.data,"ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam")
+	k79_2=file.path(dir.data,"ENCFF806KRA.chr12.MAPQ30.blcklst.rh.sorted.bam")
+	input_2=file.path(dir.data,"ENCFF687LIL.chr12.MAPQ30.blcklst.rh.sorted.bam")
 
-	bam.files <- c(k79_100_1,k79_100_2,k79_100_i1,k79_100_i2)
+	bam.files <- c(k79_1,k79_2,input_1,input_2)
+
+
+
+.. HINT:: Setting the paths in R
+
+  To find the path to your current location type ``pwd`` in the terminal. You can use this path in R like this:
+
+  .. code-block:: bash
+
+    setwd("/path/to/where_you_are")
+
+  All the paths will be then relative to ``/path/to/where_you_are``.
+
+  You can also find it directly from R using ``getwd``::
+
+    > getwd()
+    [1] "/crex/course_data/epigenomics/broad_peaks2021/results/csaw"
+
 
 
 Read in the data:
 
 .. code-block:: R
 
-	frag.len=180
+	frag.len=200
 
 	library(csaw)
 
 	data <- windowCounts(bam.files, ext=frag.len, width=100) 
+
+
+
+.. admonition:: data
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+     > data
+      class: RangedSummarizedExperiment 
+      dim: 8808414 4 
+      metadata(6): spacing width ... param final.ext
+      assays(1): counts
+      rownames: NULL
+      rowData names(0):
+      colnames: NULL
+      colData names(4): bam.files totals ext rlen
+
+
 
 
 
@@ -730,10 +765,25 @@ Information on the contrast to test:
 	contrast <- makeContrasts(chip - input, levels=design)
 
 
+.. admonition:: contrast
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+      > contrast
+       Contrasts
+      Levels  chip - input
+        chip             1
+        input           -1
+
+
+
+
 Next, you need to filter out uninformative windows with low signal prior to further analysis. Selection of appropriate filtering strategy and cutoff is key to a successful detection of differential occupancy events, and is data dependent. Filtering is valid so long as it is independent of the test statistic under the null hypothesis.
 One possible approach involves choosing a filter threshold based on the fold change over
 the level of non-specific enrichment (background). The degree of background enrichment is estimated
-by counting reads into large bins across the genome.
+by counting reads in large bins across the genome.
 
 The function ``filterWindowsGlobal`` returns the increase in the abundance of
 each window over the global background. 
@@ -743,7 +793,7 @@ In this example, you estimate the global background using ChIP samples only. You
 
 .. code-block:: R
 
-	bam.files_chip <- c(k79_100_1,k79_100_2)
+	bam.files_chip <- c(k79_1,k79_2)
 
 	bin.size <- 2000L
 	binned.ip <- windowCounts(bam.files_chip, bin=TRUE, width=bin.size, ext=frag.len)
@@ -760,7 +810,7 @@ To examine how many windows passed the filtering:
 
 	summary(keep)
   	 Mode   FALSE    TRUE 
-	logical   39272   48875 
+  logical 7892070  916344 
 
 To normalise the data for different library sizes you need to calculate normalisation factors based on large bins:
 
@@ -770,12 +820,12 @@ To normalise the data for different library sizes you need to calculate normalis
 	data.filt <- normFactors(binned, se.out=data.filt)
 
 	data.filt$norm.factors
-	## [1] 1.0106655 0.8825254 1.0076520 1.1126402
+	## [1] 0.6100099 0.6649707 1.5649880 1.5752503
 
 
 
 
-Detection of DB windows (in our case, the occupancy sites):
+Detection of DB windows (in our case, the occupancy sites, as we test for differences in ChIP vs. input):
 
 .. code-block:: R
 
@@ -790,14 +840,14 @@ You can inspect the raw results:
 
 .. code-block:: R
 
-	> head(results$table)
-	      logFC   logCPM         F    PValue
-	1 1.5993767 3.768796 1.9155001 0.1663567
-	2 1.5993767 3.768796 1.9155001 0.1663567
-	3 1.3875763 4.476065 1.9777830 0.1596273
-	4 0.9306821 4.812106 1.0695744 0.3010442
-	5 0.6936473 5.077305 0.6639666 0.4151651
-	6 0.9355537 5.218651 1.2539775 0.2627969
+	head(results$table)
+       logFC     logCPM        F       PValue
+  1 2.814162 -0.2316357 15.13205 1.056751e-03
+  2 3.221807 -0.3432297 14.69448 1.199631e-03
+  3 3.588308 -0.4335388 17.64303 5.279200e-04
+  4 3.790889 -0.1623742 27.22414 5.636337e-05
+  5 4.372525  0.5046133 54.82505 6.826942e-07
+  6 4.075533  0.5386263 49.87994 1.305226e-06
 
 
 The following steps will calculate the FDR for each peak, merge peaks within 1 kb and calculate the FDR for resulting composite peaks.
@@ -814,23 +864,23 @@ Short inspection of the results:
 
 	head(table.combined)
 
-	DataFrame with 6 rows and 8 columns
-	  num.tests num.up.logFC num.down.logFC    PValue       FDR   direction
-	  <integer>    <integer>      <integer> <numeric> <numeric> <character>
-	1        14            0              0  0.486592  0.527626       mixed
-	2        19            0              0  0.366146  0.404923        down
-	3         3            0              0  0.205758  0.241335        down
-	4         1            0              0  0.238252  0.274038        down
-	5         3            0              0  0.488160  0.528994          up
-	6         4            0              0  0.983807  0.985523       mixed
-	   rep.test  rep.logFC
-	  <integer>  <numeric>
-	1        10  0.9281614
-	2        33 -1.9986066
-	3        36 -1.3523859
-	4        37 -1.0531498
-	5        38  1.6221839
-	6        42  0.0184684
+  DataFrame with 6 rows and 8 columns
+    num.tests num.up.logFC num.down.logFC      PValue         FDR   direction
+    <integer>    <integer>      <integer>   <numeric>   <numeric> <character>
+  1        17           17              0 1.20248e-06 1.20918e-05          up
+  2        26           26              0 1.19007e-04 6.57639e-04          up
+  3         3            3              0 1.56689e-03 3.68082e-03          up
+  4         3            3              0 1.36304e-03 3.39817e-03          up
+  5        78           78              0 5.10443e-07 5.61850e-06          up
+  6        85           85              0 2.42116e-05 1.71896e-04          up
+     rep.test rep.logFC
+    <integer> <numeric>
+  1        13   4.14334
+  2        29   3.91717
+  3        44   2.32107
+  4        49   2.94867
+  5       114   4.43809
+  6       139   3.48985
 
 
 How many regions are up (i.e. enriched in chip compared to input)?
@@ -840,11 +890,11 @@ How many regions are up (i.e. enriched in chip compared to input)?
 	is.sig.region <- table.combined$FDR <= 0.1
 	table(table.combined$direction[is.sig.region])
 
- 	down mixed    up 
- 	  13     5  1283 
+     up 
+  10794 
 
 
-Does this make sense? How does it compare to results obtained from a MACS run?
+Does this make sense? How does it compare to results obtained from MACS and epic2 runs?
 
 You can now annotate the results as in the csaw TF exercise:
 
@@ -867,8 +917,35 @@ You can now annotate the results as in the csaw TF exercise:
 
 	head(all.results)
 
-	filename="k79me2_100_csaw.txt"
+	filename="k79me2_neuroGM_csaw.txt"
 	write.table(all.results,filename,sep="\t",quote=FALSE,row.names=FALSE)
+
+Let's inspect the results:
+
+.. code-block:: R
+
+  head(all.results)
+      seqnames  start    end num.tests num.up.logFC num.down.logFC       PValue
+    1     chr1 777251 778200        17           17              0 1.202476e-06
+    2     chr1 779251 784600        26           26              0 1.190072e-04
+    3     chr1 811251 811450         3            3              0 1.566886e-03
+    4     chr1 816101 816300         3            3              0 1.363039e-03
+    5     chr1 820551 826950        78           78              0 5.104427e-07
+    6     chr1 828201 833800        85           85              0 2.421162e-05
+               FDR direction rep.test rep.logFC                         overlap
+    1 1.209181e-05        up       13  4.143336 100133331:-:PI,LOC100288069:-:P
+    2 6.576393e-04        up       29  3.917169                   100133331:-:P
+    3 3.680820e-03        up       44  2.321065                                
+    4 3.398175e-03        up       49  2.948666                      FAM87B:+:P
+    5 5.618504e-06        up      114  4.438095   LINC01128:+:PE,LINC00115:-:PE
+    6 1.718961e-04        up      139  3.489853    LINC01128:+:PE,LINC00115:-:P
+                                      left           right
+    1 100133331:-:2971,LOC100288069:-:2971  100133331:-:84
+    2  100133331:-:625,LOC100288069:-:4971                
+    3                                                     
+    4                                        FAM87B:+:1071
+    5                         FAM87B:+:714 LINC01128:+:648
+    6       LINC01128:+:74,LINC00115:-:679                
 
 
 To compare with peaks detected by MACS it is convenient to save the results in ``BED`` format:
@@ -883,13 +960,29 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 
 	sig_bed=sig.up[,c(1,2,3)]
 
-	filename="k79me2_100_peaks.bed"
+	filename="k79me2_neuroGM_csaw_peaks.bed"
 	write.table(sig_bed,filename,sep="\t",col.names=FALSE,quote=FALSE,row.names=FALSE)
 
 .. nrow(sig_bed)
-.. 1060
+.. 10711
 
-You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosome 1.
+You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosomes 1 and 2.
+
+
+Below is the IGV snapshot of top peak, this time with csaw peaks added in light blue.
+
+
+.. list-table:: Figure 5. Results of broad peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3, epic2 and csaw. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange), peaks deteced by csaw (light blue).
+   :widths: 60
+   :header-rows: 0
+
+   * - .. image:: figures/csaw_peak1.png
+        :width: 600px
+
+
+As you can see the regions with strong signal (high enrichment in ChIP over input) are detected by all methods tested. What about the sites with weak signal?
+
+In this tutorial we have worked with good quality data which was sequenced to a recommended depth. All three methods tested in this tutorial perform well is such scenario. However, their preformace deteriorates with decreasing sequening depth (less data to rely on) and decreasing quality of the sample preparation (more noise).
 
 
 .. ----
