@@ -9,7 +9,9 @@ Alternative QC using ChIPQC
 **Learning outcomes**
 
 Using ``ChIPQC`` package
+
 - to generate a summary QC report for experimental sample groups
+
 - to be able to understand and assess QC metrics and plots
 
 .. contents:: 
@@ -28,8 +30,9 @@ Setting-up
 
 In principle one can run ``ChIPQC`` both on Uppmax or locally. 
 The instructions below are 
-to use the package on Uppmax. For local usage, please make sure the paths to files are correct.
+to use the package on Uppmax. For local usage, please make sure the paths to files are correct, and that all dependecies are properly installed for the version of R you are running.
 
+We provide a conda environment to run the version of ``R`` for which the tutorial was set up and tested. To find how this environment was constructed, please visit :doc:`Dependencies <../../dependencies>`.
 
 
 Follow set-up instructions from :doc:`Downstream analysis tutorial <../diffBind/lab-diffBinding-remote>`, differential binding part. We will need the same files and we can work in the same directory.
@@ -57,8 +60,6 @@ You can now load the version of R for which we tested this class along with othe
 	
 	cd analysis/R
 
-	module load bioinfo-tools
-	module load samtools/1.8
 	module load conda/latest
 	
 	conda activate /sw/courses/epigenomics/software/conda/v8
@@ -128,13 +129,18 @@ You need to copy the report to your local computer (copy the entire ``ChIPQCrepo
 
 .. code-block:: bash
 	
-	scp -r <USER>@rackham.uppmax.uu.se:path/to/ChIPQCreport .
+	scp -r <USER>@rackham.uppmax.uu.se:/path/to/ChIPQCreport .
+
+	#if you follow the paths used in this tutorial
+	scp -r <USER>@rackham.uppmax.uu.se:~/chipseq/analysis/R/ChIPQCreport .
+
 
 Examine the html report.
 
 What do you think?
 
-Are results in line with the previous quality control workflow?
+Are these results in line with the previous quality control workflow?
+
 
 ----------
 

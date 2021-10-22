@@ -64,6 +64,15 @@ ChIP-seq
      - 0.0.52 (**)
      - broad peaks
      - https://github.com/biocore-ntnu/epic2
+   * - csaw
+     - 1.24.3 (***)
+     - broad peaks
+     - 
+
+
+In addition, the following Bioconductor libraries are used in the tutorials: ``org.Hs.eg.db``, ``TxDb.Hsapiens.UCSC.hg19.knownGene``, ``TxDb.Hsapiens.UCSC.hg38.knownGene``, ``DiffBind``, ``edgeR``, ``ChIPQC ``, ````
+
+````,````,````,````,````,````,````,````
 
 
 (*) 
@@ -89,6 +98,11 @@ Conda environment was produced using::
   pip install pysam==0.15.2
   pip3 install epic2
 
+
+(***)
+This was tested under R run from conda environment with this package installed:
+
+``r-v8                      3.4.0             r40h4312b11_0    conda-forge``
 
 
 ATAC-seq
