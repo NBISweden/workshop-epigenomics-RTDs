@@ -29,7 +29,7 @@ Requirements
 
 * ``MACS 3.0.0a6``
 * ``epic2 0.0.52``
-* ``R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"``
+* ``R version 4.0.4 (2021-02-15) -- "Lost Library Book"``
 * ``csaw 1.24.3`` and its dependencies
 
 
@@ -37,6 +37,11 @@ Bioconductor packages required for annotation:
 
 * ``org.Hs.eg.db``
 * ``TxDb.Hsapiens.UCSC.hg38.knownGene``
+
+
+For details please consult :doc:`Dependencies <../../dependencies>`.
+
+:raw-html:`<br />`
 
 
 Please note that this lab consists of three parts: 
@@ -54,10 +59,10 @@ Notes on software
 We provide a conda environment to run ``epic2``. This package proved a bit tricky to install because of dependency incompatibilities. To find how this environment was constructed, please visit :doc:`Dependencies <../../dependencies>`.
 
 
-Please note that this workflow has been tested using ``R 4.0.3`` and ``csaw 1.24.3`` on Uppmax only.
+Please note that this workflow has been tested using ``R 4.0.4`` and ``csaw 1.24.3`` on Uppmax only.
 
 
-Instructions how to install **R and Bioconductor packages** (including dependencies for ``csaw``) can be found in instructions to previous labs, for example :doc:`csaw tutorial <../csaw/lab-csaw>`.
+.. Instructions how to install **R and Bioconductor packages** (including dependencies for ``csaw``) can be found in instructions to previous labs, for example :doc:`csaw tutorial <../csaw/lab-csaw>`.
 
 
 
@@ -123,7 +128,7 @@ Cross-correlation and related metrics
 ----------------------------------------
 
 The files discussed in this section can be accessed at 
-``/sw/courses/epigenomics/broad_peaks2021/results/qc``
+``/proj/g2021025/nobackup/broad_peaks/results/qc``
 
 These metrics have been developed with application to TF ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
 
@@ -186,11 +191,11 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
 
 .. code-block:: bash
 	
-  mkdir -p results/macs3
-  cd results/macs3
+  mkdir -p analysis/macs3
+  cd analysis/macs3
 
-  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
   module load bioinfo-tools #if needed
   module load MACS/3.0.0a6
@@ -198,24 +203,13 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
   macs3 callpeak --broad \
   -t ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
   -c ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
-  -f BAMPE  -g 04.9e8 --broad-cutoff 0.1 -n GM23338_rep1
+  -f BAMPE  -g 04.9e8 --broad-cutoff 0.1 -n neuroGM23338_macs3_rep1
 
 
 
 The main difference here, in comparison to detecting narrow peaks, is using the options ``--broad --broad-cutoff 0.1``. With the option ``--broad`` on, MACS will try to composite broad regions in BED12 (gene-model-like format) by putting nearby highly enriched regions into a broad region with loose cutoff. The broad region is controlled by another cutoff through ``--broad-cutoff``. If ``-p`` is set, this is a p-value cutoff, otherwise, it's a q-value (FDR) cutoff.
 
 Because we use PE data, there is no need to build a model to estimate fragment length (similar to cross correlation) necessary for extending the SE reads. We know precisely how long each fragment is because its both ends are sequenced and mapped to the reference.
-
-
-
-.. If you would like to compare the results of two different methods of finding broad peaks, repeat this with another data set:
-
-.. .. code-block:: bash
-
-.. 	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
-.. 	ln -s /sw/courses/epigenomics/broad_peaks/bam/SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam
-
-.. 	macs2 callpeak -t SRR1536561.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -c SRR1584493.bwt.hg38_dm6.sorted.hg38.BLfilt.bam -n 100_R1 --outdir 100_R1 -f BAM --gsize 3.0e9 -q 0.1 --nomodel --extsize 180 --broad --broad-cutoff 0.1
 
 
 
@@ -253,7 +247,7 @@ name
  
     
 
-Let's take a look at another format of the output ``broadPeak``. It is compatible with major genome browsers (IGV, UCSC Genome Browser) and easier to work with because it does not contain a long header.
+Let's take a look at another format of the output ``broadPeak``. It is a derivative of ``bed`` format and thus compatible with major genome browsers (IGV, UCSC Genome Browser) and easier to work with because it does not contain a long header.
 
 This is an example::
 
@@ -309,28 +303,32 @@ How many peaks were identified in replicate 1?
 .. HINT::
 
 	You can also copy the results from
-	``/sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338``
+	``/proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338``
 
 This is a preliminary peak list, and in case of broad domains, it often needs some processing or filtering.
 
 
-Firstly, let's select the peaks reproducible in both replicates. 
+Let's select the detected domains reproducible in both replicates. First, let's create a subdirectory ``peaks``, and link the results of broad peak calling. Then we select the first 6 columns of ``broadPeak`` to create files in ``BED-6`` format, which are ready for use by ``bedtools``. After completing the tutorial on data processing you should be able to find the peaks reproducible between the replicates. How many of them can we identify?
+
+
+.. code-block:: bash
+  
+    mkdir peaks
+    cd peaks
+    ln -s /proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
+    ln -s /proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
+
+    #make bed
+    cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
+    cut -f 1-6 neuroGM23338_macs3_rep2_peaks.broadPeak >neuroGM23338_macs3_rep2_peaks.bed
+
+
 
 
 .. admonition:: Select reproducible peaks (MACS).
    :class: dropdown, warning
 
-
    .. code-block:: bash
-
-      #link the files if you are in a different directory
-      ln -s /sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
-      ln -s /sw/courses/epigenomics/broad_peaks2021/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
-
-      #make bed
-      cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
-      cut -f 1-6 neuroGM23338_macs3_rep2_peaks.broadPeak >neuroGM23338_macs3_rep2_peaks.bed
-
 
       #intersect bed files
       module load BEDTools/2.29.2
@@ -361,11 +359,11 @@ Required files are:
 .. HINT::
 
 	You can access the bam and bai files from
-	``/sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338``
+	``/proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338``
 
 
 
-You can look at some locations of interest. Peaks with low FDR (q value) or high fold enrichment may be worth checking out. Or check your favourite gene.
+You can look at some locations of interest. Peaks with low FDR (q value) or high fold enrichment may be worth checking out. We find these peaks by numerically sorting the results in ``broadPeak`` by column "score" (the 5th column). Or check your favourite gene.
 
 .. admonition:: Potentially interesting locations to view (MACS peaks).
    :class: dropdown, warning
@@ -460,11 +458,14 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
 
 .. code-block:: bash
   
-  mkdir ../epic2
-  cd ../epic2
+  mkdir ../../epic2
+  cd ../../epic2
 
-  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+
 
   conda activate /sw/courses/epigenomics/software/conda/epic_2b
 
@@ -472,12 +473,12 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
    --control ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam \
     -fdr 0.05 --effective-genome-fraction 0.95 \
     --chromsizes /sw/courses/epigenomics/broad_peaks2/annot/hg38_chr12.chromsizes \
-    --guess-bampe --output neuroGM23338.rep1.epic2
+    --guess-bampe --output neuroGM23338_epic2_rep1_peaks
 
 
 The result looks like this::
 
-  head neuroGM23338.rep1.epic2
+  head neuroGM23338_epic2_rep1_peaks
   #Chromosome Start End PValue  Score Strand  ChIPCount InputCount  FDR log2FoldChange
   chr1  777400  778199  1.525521715195486e-17 302.351431362403  . 28  4 3.6469084588658344e-17  3.02351431362403
   chr1  821600  822599  9.82375064925635e-15  309.0628509482567 . 22  3 2.149649196967778e-14 3.090628509482567
@@ -511,7 +512,7 @@ How many domains were found? (the first line is a header)
 
 .. code-block:: bash
 
-  wc -l neuroGM23338.rep1.epic2
+  wc -l neuroGM23338_epic2_rep1_peaks
   5242 neuroGM23338.rep1.epic2
 
 
@@ -526,7 +527,10 @@ How many domains reproducible between replicates?
 
    .. code-block:: bash
 
-      #link the files if you are in a different directory
+      mkdir peaks
+      cd peaks
+
+      #link the files
       ln -s /sw/courses/epigenomics/broad_peaks2021/results/epic2/neuroGM23338/neuroGM23338.rep1.epic2
       ln -s /sw/courses/epigenomics/broad_peaks2021/results/epic2/neuroGM23338/neuroGM23338.rep2.epic2
 
@@ -557,7 +561,7 @@ How about the overlap between different methods?
       #intersect bed files
       module load bioinfo-tools #if necessary
       module load BEDTools/2.29.2
-      bedtools intersect -a peaks_epic2_neuroGM23338.chr12.bed -b ../macs3/peaks_macs3_neuroGM23338.chr12.bed \
+      bedtools intersect -a peaks_epic2_neuroGM23338.chr12.bed -b ../../macs3/peaks/peaks_macs3_neuroGM23338.chr12.bed \
       -f 0.50 -r > peaks_epic2macs3_neuroGM23338.chr12.bed
       
       #how many peaks which overlap?
@@ -591,60 +595,31 @@ You can visualise the peaks as for MACS. Below are some of the locations as befo
     chr2:202,204,546-202,229,168
 
 
+You can now deactivate the conda environment you've been working in::
+
+  conda deactivate
+
+
 :raw-html:`<br />`
 
 
 Alternative approach: window-based enrichment analysis (csaw)
 ===============================================================
 
-This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
+This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks and use of PE data. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
 
 .. You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to ``chr1``.
 
 .. NOTE::
   
-  This exercise was tested on Rackham using pre-installed R libraries. Local installation of recommended R packages may require additional software dependecies.
-
-
-.. Requirements Local
-.. ----------------------
-
-.. * ``csaw``
-.. * ``edgeR``
-
-.. R packages required for annotation:
-
-.. * ``org.Hs.eg.db``
-.. * ``TxDb.Hsapiens.UCSC.hg38.knownGene``
-
-.. Recommended:
-
-.. * R-Studio to work in
-
-
-
-.. **Getting the data**
-
-
-.. First, you need to copy the necessary files to your laptop:
-
-.. .. code-block:: bash
-
-.. 	cd /desired/location
-
-.. 	scp <USERNAME>@rackham.uppmax.uu.se:/sw/courses/epigenomics/broad_peaks/broad_peaks_bam.tar.gz .
-
-.. 	#type your password at the prompt
-
-.. 	tar zdvf broad_peaks_bam.tar.gz
-
+  This exercise was **tested on Rackham** using pre-installed R libraries. Local installation of recommended R packages may require additional software dependecies. Please see :doc:`Dependencies <../../dependencies>` for details.
 
 
 
 Requirements Remote (Uppmax)
 --------------------------------
 
-The software is configured.
+The software is configured, i.e. the correct R version is loaded via the module system and required libraries are preinstalled.
 
 To prepare the files, assuming you are in ``~/broad_peaks/results``:
 
@@ -658,29 +633,18 @@ To prepare the files, assuming you are in ``~/broad_peaks/results``:
 
 
 
-.. Remote:
+.. .. code-block:: bash
+
+..     module load conda/latest
+..     conda activate /sw/courses/epigenomics/software/conda/v8
+..     R
+
 
 .. code-block:: bash
 
-    module load conda/latest
-    conda activate /sw/courses/epigenomics/software/conda/v8
-    R
-
+   module load R_packages/4.0.4
 
 The remaining part of the exercise is performed in ``R``.
-
-
-.. Remote:
-
-
-.. code-block:: R
-
-  # provide the tutorial specific path to R libraries
-  assign(".lib.loc", "/sw/courses/epigenomics/software/R", envir = environment(.libPaths))
-
-  # verify that the tutorial-specific R library path is added
-  .libPaths()
-  [1] "/sw/courses/epigenomics/software/R"
 
 
 Sort out the working directory and file paths:
@@ -724,11 +688,26 @@ Read in the data:
 
 .. code-block:: R
 
-	frag.len=200
 
 	library(csaw)
 
-	data <- windowCounts(bam.files, ext=frag.len, width=100) 
+
+  pe.param <- readParam(max.frag=400, pe="both")
+	data <- windowCounts(bam.files, width=100, param=pe.param) 
+
+
+
+ChIP experiments with paired-end sequencing are accomodated by setting ``pe="both"`` in the
+``param`` object supplied to ``windowCounts``. Read extension is not required as the genomic interval
+spanned by the originating fragment is explicitly defined as that between the 5′positions of
+the paired reads. By default, only proper pairs are used in which the two paired reads are
+on the same chromosome, face inward and are no more than ``max.frag`` apart. 
+``width`` specifies the width of the window when counting the fragments.
+
+How many valid windows do we have?::
+
+  data$totals
+  [1]  3666329  5635840  4436456 16125939
 
 
 
@@ -787,7 +766,10 @@ by counting reads in large bins across the genome.
 
 The function ``filterWindowsGlobal`` returns the increase in the abundance of
 each window over the global background. 
-Windows are filtered by setting some minimum threshold on this increase. Here, a **fold change of 3** is necessary for a window to be considered as containing a binding site. 
+Windows are filtered by setting some minimum threshold on this increase. Here, a **fold change of 3** is necessary for a window to be considered as containing a binding site. This and other filtering procedures are described in detail in
+`csaw user guide <http://bioconductor.riken.jp/packages/3.10/workflows/vignettes/csawUsersGuide/inst/doc/csaw.pdf>`_ 
+. We use the "By global enrichment" strategy.
+
 
 In this example, you estimate the global background using ChIP samples only. You can do it using the entire dataset including inputs of course.
 
@@ -796,7 +778,7 @@ In this example, you estimate the global background using ChIP samples only. You
 	bam.files_chip <- c(k79_1,k79_2)
 
 	bin.size <- 2000L
-	binned.ip <- windowCounts(bam.files_chip, bin=TRUE, width=bin.size, ext=frag.len)
+	binned.ip <- windowCounts(bam.files_chip, bin=TRUE, width=bin.size, param=pe.param)
 	data.ip=data[,1:2]
 	filter.stat <- filterWindowsGlobal(data.ip, background=binned.ip)
 
@@ -810,18 +792,17 @@ To examine how many windows passed the filtering:
 
 	summary(keep)
   	 Mode   FALSE    TRUE 
-  logical 7892070  916344 
+  logical 7466311  731112 
 
 To normalise the data for different library sizes you need to calculate normalisation factors based on large bins:
 
 .. code-block:: R
 
-	binned <- windowCounts(bam.files, bin=TRUE, width=10000)
+	binned <- windowCounts(bam.files, bin=TRUE, width=10000, param=pe.param)
 	data.filt <- normFactors(binned, se.out=data.filt)
 
 	data.filt$norm.factors
-	## [1] 0.6100099 0.6649707 1.5649880 1.5752503
-
+  ## [1] 0.6094691 0.6654708 1.5651132 1.5753374
 
 
 
@@ -841,13 +822,13 @@ You can inspect the raw results:
 .. code-block:: R
 
 	head(results$table)
-       logFC     logCPM        F       PValue
-  1 2.814162 -0.2316357 15.13205 1.056751e-03
-  2 3.221807 -0.3432297 14.69448 1.199631e-03
-  3 3.588308 -0.4335388 17.64303 5.279200e-04
-  4 3.790889 -0.1623742 27.22414 5.636337e-05
-  5 4.372525  0.5046133 54.82505 6.826942e-07
-  6 4.075533  0.5386263 49.87994 1.305226e-06
+     logFC    logCPM        F       PValue
+  1 4.397419 0.1113531 39.71585 1.054723e-07
+  2 3.957880 0.1781093 36.54985 2.550295e-07
+  3 4.079911 0.2803444 42.31232 5.243527e-08
+  4 3.920461 0.4808799 47.20246 1.487789e-08
+  5 4.410081 0.5664205 59.33251 8.606713e-10
+  6 5.026440 0.6390274 69.96147 9.239046e-11
 
 
 The following steps will calculate the FDR for each peak, merge peaks within 1 kb and calculate the FDR for resulting composite peaks.
@@ -867,21 +848,20 @@ Short inspection of the results:
   DataFrame with 6 rows and 8 columns
     num.tests num.up.logFC num.down.logFC      PValue         FDR   direction
     <integer>    <integer>      <integer>   <numeric>   <numeric> <character>
-  1        17           17              0 1.20248e-06 1.20918e-05          up
-  2        26           26              0 1.19007e-04 6.57639e-04          up
-  3         3            3              0 1.56689e-03 3.68082e-03          up
-  4         3            3              0 1.36304e-03 3.39817e-03          up
-  5        78           78              0 5.10443e-07 5.61850e-06          up
-  6        85           85              0 2.42116e-05 1.71896e-04          up
+  1        12           12              0 1.10869e-09 6.83746e-09          up
+  2         9            9              0 5.54991e-06 1.53993e-05          up
+  3        54           54              0 1.28669e-10 9.16836e-10          up
+  4        29           29              0 3.25906e-08 1.59822e-07          up
+  5        36           36              0 3.14755e-07 1.26463e-06          up
+  6         1            1              0 1.06514e-05 2.62040e-05          up
      rep.test rep.logFC
     <integer> <numeric>
-  1        13   4.14334
-  2        29   3.91717
-  3        44   2.32107
-  4        49   2.94867
-  5       114   4.43809
-  6       139   3.48985
-
+  1         6   5.02644
+  2        14   4.11686
+  3        61   4.42842
+  4        85   3.70258
+  5       113   3.45417
+  6       141   3.45264
 
 How many regions are up (i.e. enriched in chip compared to input)?
 
@@ -891,7 +871,7 @@ How many regions are up (i.e. enriched in chip compared to input)?
 	table(table.combined$direction[is.sig.region])
 
      up 
-  10794 
+   8116
 
 
 Does this make sense? How does it compare to results obtained from MACS and epic2 runs?
@@ -925,27 +905,27 @@ Let's inspect the results:
 .. code-block:: R
 
   head(all.results)
-      seqnames  start    end num.tests num.up.logFC num.down.logFC       PValue
-    1     chr1 777251 778200        17           17              0 1.202476e-06
-    2     chr1 779251 784600        26           26              0 1.190072e-04
-    3     chr1 811251 811450         3            3              0 1.566886e-03
-    4     chr1 816101 816300         3            3              0 1.363039e-03
-    5     chr1 820551 826950        78           78              0 5.104427e-07
-    6     chr1 828201 833800        85           85              0 2.421162e-05
-               FDR direction rep.test rep.logFC                         overlap
-    1 1.209181e-05        up       13  4.143336 100133331:-:PI,LOC100288069:-:P
-    2 6.576393e-04        up       29  3.917169                   100133331:-:P
-    3 3.680820e-03        up       44  2.321065                                
-    4 3.398175e-03        up       49  2.948666                      FAM87B:+:P
-    5 5.618504e-06        up      114  4.438095   LINC01128:+:PE,LINC00115:-:PE
-    6 1.718961e-04        up      139  3.489853    LINC01128:+:PE,LINC00115:-:P
-                                      left           right
-    1 100133331:-:2971,LOC100288069:-:2971  100133331:-:84
-    2  100133331:-:625,LOC100288069:-:4971                
-    3                                                     
-    4                                        FAM87B:+:1071
-    5                         FAM87B:+:714 LINC01128:+:648
-    6       LINC01128:+:74,LINC00115:-:679                
+        seqnames     start       end num.tests num.up.logFC num.down.logFC
+  3799     chr1 226062751 226073900       213          213              0
+  870      chr1  35176951  35193200       319          319              0
+  5154     chr2  47157601  47178000       344          344              0
+  4233     chr1 244835751 244867200       617          617              0
+  4003     chr1 234598601 234610800       211          211              0
+  2608     chr1 160363601 160374200       205          205              0
+             PValue          FDR direction rep.test rep.logFC
+  3799 2.124641e-23 1.306798e-19        up   351746  6.758585
+  870  5.493232e-23 1.306798e-19        up    92252  7.177477
+  5154 6.358299e-23 1.306798e-19        up   459830  6.833969
+  4233 6.750822e-23 1.306798e-19        up   390369  6.430975
+  4003 8.050751e-23 1.306798e-19        up   369849  6.761304
+  2608 1.305657e-22 1.560297e-19        up   253600  6.381518
+                      overlap         left right
+  3799   H3-3A:+:PE,H3P6:+:PE   H3P6:+:657      
+  870  RNVU1-18:-:I,SFPQ:-:PE   SFPQ:-:477      
+  5154  STPG4:-:PE,CALM2:-:PE STPG4:-:2293      
+  4233 COX20:+:PE,HNRNPU:-:PE                   
+  4003           IRF2BP2:-:PE                   
+  2608             NHLH1:+:PE NCSTN:+:4649      
 
 
 To compare with peaks detected by MACS it is convenient to save the results in ``BED`` format:
@@ -964,7 +944,7 @@ To compare with peaks detected by MACS it is convenient to save the results in `
 	write.table(sig_bed,filename,sep="\t",col.names=FALSE,quote=FALSE,row.names=FALSE)
 
 .. nrow(sig_bed)
-.. 10711
+.. 8115
 
 You can now load the ``bed`` file to ``IGV`` along with the appropriate ``broad.Peak`` file and zoom in to your favourite location on chromosomes 1 and 2.
 
@@ -983,6 +963,64 @@ Below is the IGV snapshot of top peak, this time with csaw peaks added in light 
 As you can see the regions with strong signal (high enrichment in ChIP over input) are detected by all methods tested. What about the sites with weak signal?
 
 In this tutorial we have worked with good quality data which was sequenced to a recommended depth. All three methods tested in this tutorial perform well is such scenario. However, their preformace deteriorates with decreasing sequening depth (less data to rely on) and decreasing quality of the sample preparation (more noise).
+
+
+.. admonition:: sessionInfo()
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+     Random number generation:
+     RNG:     Mersenne-Twister 
+     Normal:  Inversion 
+     Sample:  Rejection 
+     
+    attached base packages:
+    [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+    [8] methods   base     
+
+    other attached packages:
+     [1] TxDb.Hsapiens.UCSC.hg38.knownGene_3.10.0
+     [2] GenomicFeatures_1.42.3                  
+     [3] org.Hs.eg.db_3.12.0                     
+     [4] AnnotationDbi_1.52.0                    
+     [5] edgeR_3.32.1                            
+     [6] limma_3.46.0                            
+     [7] csaw_1.24.3                             
+     [8] SummarizedExperiment_1.20.0             
+     [9] Biobase_2.50.0                          
+    [10] MatrixGenerics_1.2.1                    
+    [11] matrixStats_0.58.0                      
+    [12] GenomicRanges_1.42.0                    
+    [13] GenomeInfoDb_1.26.7                     
+    [14] IRanges_2.24.1                          
+    [15] S4Vectors_0.28.1                        
+    [16] BiocGenerics_0.36.0                     
+
+    loaded via a namespace (and not attached):
+     [1] locfit_1.5-9.4           Rcpp_1.0.6               lattice_0.20-41         
+     [4] Rsamtools_2.6.0          prettyunits_1.1.1        Biostrings_2.58.0       
+     [7] assertthat_0.2.1         utf8_1.2.1               BiocFileCache_1.14.0    
+    [10] R6_2.5.0                 RSQLite_2.2.6            httr_1.4.2              
+    [13] pillar_1.6.0             zlibbioc_1.36.0          rlang_0.4.10            
+    [16] progress_1.2.2           curl_4.3                 rstudioapi_0.13         
+    [19] blob_1.2.1               Matrix_1.3-2             splines_4.0.4           
+    [22] statmod_1.4.35           BiocParallel_1.24.1      stringr_1.4.0           
+    [25] RCurl_1.98-1.3           bit_4.0.4                biomaRt_2.46.3          
+    [28] DelayedArray_0.16.3      compiler_4.0.4           rtracklayer_1.50.0      
+    [31] pkgconfig_2.0.3          askpass_1.1              openssl_1.4.3           
+    [34] tidyselect_1.1.0         tibble_3.1.1             GenomeInfoDbData_1.2.4  
+    [37] XML_3.99-0.6             fansi_0.4.2              crayon_1.4.1            
+    [40] dplyr_1.0.5              dbplyr_2.1.1             GenomicAlignments_1.26.0
+    [43] bitops_1.0-6             rappdirs_0.3.3           grid_4.0.4              
+    [46] lifecycle_1.0.0          DBI_1.1.1                magrittr_2.0.1          
+    [49] stringi_1.5.3            cachem_1.0.4             XVector_0.30.0          
+    [52] xml2_1.3.2               ellipsis_0.3.1           vctrs_0.3.7             
+    [55] generics_0.1.0           tools_4.0.4              bit64_4.0.5             
+    [58] glue_1.4.2               purrr_0.3.4              hms_1.0.0               
+    [61] fastmap_1.1.0            memoise_2.0.0           
+
 
 
 .. ----
