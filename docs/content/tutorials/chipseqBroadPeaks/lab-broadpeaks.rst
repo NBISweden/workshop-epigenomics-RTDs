@@ -806,7 +806,7 @@ To normalise the data for different library sizes you need to calculate normalis
 
 
 
-Detection of DB windows (in our case, the occupancy sites, as we test for differences in ChIP vs. input):
+Detection of DB (differentially bound) windows (in our case, the occupancy sites, as we test for differences in ChIP vs. input):
 
 .. code-block:: R
 
