@@ -8,8 +8,11 @@ ChIP-seq down-stream analysis
 ################################
 
 **Learning outcomes**
+
 - obtain differentially bound sites with ``DiffBind``
+
 - annotate differentially bound sites with nearest genes and genomic features with ``ChIPpeakAnno``
+
 - perform functional enrichment analysis to identify predominant biological themes with ``ChIPpeakAnno`` and ``reactome.db``
 
 
@@ -81,10 +84,30 @@ Let's
 - load `R packges module <https://www.uppmax.uu.se/support/user-guides/r_packages-module-guide/>`_ that has a bunch of R packages, including ``DiffBind`` package, installed on Uppmax.
 -  go to the right directory given you are keeping files structure as for the first part of the tutorial.
 
-.. code-block:: R
 
-	module load R_packages/3.5.0
-	cd ~/chipseq/analysis/R
+
+.. HINT::
+	
+	If you start from a different location, you should ``cd ~/chipseq/analysis/R``
+
+
+You can now load the version of R for which we tested this class along with other dependencies:
+
+
+
+.. code-block:: bash
+
+   module load R_packages/4.0.4
+
+The remaining part of the exercise is performed in ``R``.
+
+
+
+.. HINT::
+
+	We are running 
+	``R version 4.0.4 (2021-02-15) -- "Lost Library Book"``
+
 
 
 In this directory we have placed a `sample sheet file` named ``samples_REST.txt`` that points to our BAM files as well as BED files with called peaks, following ``DiffBind`` specifications, and as created in :doc:`data processing <../chipseqProc/lab-chipseq-processing>` tutorial. To inspect sample sheet file:
@@ -115,6 +138,8 @@ Running ``DiffBind``
 
 We will now follow ``DiffBind`` example to obtain differentially bound sites, given our samples. You may want to open ``DiffBind`` tutorial and read section `3 Example Obtaining differentially bound sites <http://bioconductor.org/packages/devel/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf>`_ while typing the command to get more information about each step.
 
+First we need to create the object which holds data.
+
 .. code-block:: R
 
 	# reading in the sample information (metadata)
@@ -124,17 +149,102 @@ We will now follow ``DiffBind`` example to obtain differentially bound sites, gi
 	samples
 
 	#	creating an object containing data
-	res=dba(sampleSheet=samples, config=data.frame(RunParallel=FALSE))
+	res=dba(sampleSheet=samples, config=data.frame(RunParallel=TRUE))
 
 	# inspecting the object: how many peaks are identified given the default settings?
 	res
 
+
+.. admonition:: res
+   :class: dropdown, warning
+
+   .. code-block:: R
+
+	   8 Samples, 6518 sites in matrix (17056 total):
+	          ID Tissue Factor Replicate Intervals
+	1 REST_chip1   HeLa   REST         1      2252
+	2 REST_chip2   HeLa   REST         2      2344
+	3 REST_chip3 neural   REST         1      5948
+	4 REST_chip4 neural   REST         2      3003
+	5 REST_chip5  HepG2   REST         1      2663
+	6 REST_chip6  HepG2   REST         2      4326
+	7 REST_chip7  sknsh   REST         1      8700
+	8 REST_chip8  sknsh   REST         2      3524
+
+
+Let's continue with the analysis. The wrapper function ``dba.count`` reads in data.
+
+.. code-block:: R
+
 	# counting reads mapping to intervals (peaks)
-	# at this step a normalisation is applied by the default set to: score=DBA_SCORE_TMM_MINUS_FULL
 	res.cnt = dba.count(res, minOverlap=2, score=DBA_SCORE_TMM_MINUS_FULL, fragmentSize=130)
+	
+	# at this step the TMM normalisation is applied
+	res.norm=dba.normalize(res.cnt, normalize=DBA_NORM_TMM)
 
 	# inspecting the object: notice the FRiP values!
-	res.cnt
+	res.norm
+
+
+.. admonition:: res.norm
+   :class: dropdown, warning
+
+   .. code-block:: R
+
+	   > res.norm
+		8 Samples, 6389 sites in matrix:
+		          ID Tissue Factor Replicate   Reads FRiP
+		1 REST_chip1   HeLa   REST         1 1637778 0.10
+		2 REST_chip2   HeLa   REST         2 1991560 0.07
+		3 REST_chip3 neural   REST         1 3197782 0.05
+		4 REST_chip4 neural   REST         2 4924672 0.06
+		5 REST_chip5  HepG2   REST         1 2988915 0.05
+		6 REST_chip6  HepG2   REST         2 4812034 0.05
+		7 REST_chip7  sknsh   REST         1 2714033 0.09
+		8 REST_chip8  sknsh   REST         2 4180463 0.05
+
+
+To inspect the normalisation factors::
+
+	dba.normalize(res.norm, bRetrieve=TRUE)
+
+
+
+We will set the contrasts to test:
+
+
+.. code-block:: R
+
+	# setting the contrast
+	res.cnt2 = dba.contrast(res.cnt, categories=DBA_TISSUE, minMembers=2)
+
+	# inspecting the object: how many contrasts were set in the previous step
+	res.cnt2
+
+These are the contrasts we can test::
+
+	 res.cnt2
+	8 Samples, 6389 sites in matrix:
+	          ID Tissue Factor Replicate   Reads FRiP
+	1 REST_chip1   HeLa   REST         1 1637778 0.10
+	2 REST_chip2   HeLa   REST         2 1991560 0.07
+	3 REST_chip3 neural   REST         1 3197782 0.05
+	4 REST_chip4 neural   REST         2 4924672 0.06
+	5 REST_chip5  HepG2   REST         1 2988915 0.05
+	6 REST_chip6  HepG2   REST         2 4812034 0.05
+	7 REST_chip7  sknsh   REST         1 2714033 0.09
+	8 REST_chip8  sknsh   REST         2 4180463 0.05
+
+	Design: [~Tissue] | 6 Contrasts:
+	  Factor  Group Samples Group2 Samples2
+	1 Tissue   HeLa       2 neural        2
+	2 Tissue   HeLa       2  HepG2        2
+	3 Tissue   HeLa       2  sknsh        2
+	4 Tissue neural       2  HepG2        2
+	5 Tissue neural       2  sknsh        2
+	6 Tissue  sknsh       2  HepG2        2
+
+We can save some plots of data exploration, to copy to your local computer and view later::
 
 	# plotting the correlation of libraries based on normalised counts of reads in peaks
 	pdf("correlation_libraries_normalised.pdf")
@@ -146,17 +256,51 @@ We will now follow ``DiffBind`` example to obtain differentially bound sites, gi
 	dba.plotPCA(res.cnt,DBA_TISSUE,label=DBA_TISSUE)
 	dev.off()
 
-	# setting the contrast
-	res.cnt2 = dba.contrast(res.cnt, categories=DBA_TISSUE, minMembers=2)
 
-	# inspecting the object: how many contrasts were set in the previous step
-	res.cnt2
+
+.. admonition:: correlation_libraries_normalised.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/correlation_libraries_normalised.png
+   			:width: 600px
+   			:alt: correlation_librarires_normalised
+
+
+.. admonition:: PCA_normalised_libraries.pd
+   :class: dropdown, warning
+
+   .. image:: figures/PCA_normalised_libraries.png
+   			:width: 600px
+   			:alt: PCA
+
+
+
+
+The analysis of differential occupancy is performed by a wrapper function ``dba.analyze``. You can adjust the settings using variables from the ``DBA`` class, for details consult `DiffBind User Guide <https://bioconductor.org/packages/release/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf>`_ and `DiffBind manual <https://bioconductor.org/packages/release/bioc/manuals/DiffBind/man/DiffBind.pdf>`_ .
+
+.. code-block:: R
 
 	# performing analysis of differential binding
 	res.cnt3 = dba.analyze(res.cnt2)
 
 	# inspecting the object: which condition are most alike, which are most different, is this in line with part one of the tutorial?
 	dba.show(res.cnt3, bContrasts = T)
+
+
+The ``res.cnt3`` object::
+
+	>dba.show(res.cnt3, bContrasts = T)
+	  Factor  Group Samples Group2 Samples2 DB.DESeq2
+	1 Tissue   HeLa       2 neural        2      3107
+	2 Tissue   HeLa       2  HepG2        2       890
+	3 Tissue   HeLa       2  sknsh        2       511
+	4 Tissue neural       2  HepG2        2      2183
+	5 Tissue neural       2  sknsh        2      3158
+	6 Tissue  sknsh       2  HepG2        2       576
+
+
+
+We can save some more of many useful plots implemented in ``DiffBind``::
 
 	# correlation heatmap  using only significantly differentially bound sites
 	# choose the contrast of interest e.g. HeLa vs. neuronal (#1)
@@ -170,22 +314,99 @@ We will now follow ``DiffBind`` example to obtain differentially bound sites, gi
 	pvals <- dba.plotBox(res.cnt3, contrast=1)
 	dev.off()
 
+
+
+.. admonition:: correlation_HeLa_vs_neuronal.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/correlation_HeLa_vs_neuronal.png
+   			:width: 600px
+   			:alt: Heatmap
+
+
+
+
+
+.. admonition:: Boxplot_HeLa_vs_neuronal.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/Boxplot_HeLa_vs_neuronal.png
+   			:width: 600px
+   			:alt: Boxplot
+
+
+
+
+
+Finally, we can save the results, for HeLa vs neural cells::
+
 	# extracting differentially binding sites in GRanges
 	res.db1 = dba.report(res.cnt3, contrast=1)
 	head(res.db1)
 
+``res.db1`` contains::
+
+	GRanges object with 6 ranges and 6 metadata columns:
+	       seqnames              ranges strand |      Conc Conc_HeLa Conc_neural
+	          <Rle>           <IRanges>  <Rle> | <numeric> <numeric>   <numeric>
+	   922     chr1   55913188-55913588      * |      7.46      8.45        0.25
+	  2372     chr1 205023130-205023530      * |      7.11      8.10        0.61
+	  1018     chr1   64808799-64809199      * |      7.11      8.09        1.96
+	  2250     chr1 200466043-200466443      * |      7.21      8.20        0.77
+	  1420     chr1 108534954-108535354      * |      6.94      7.92        1.68
+	  3622     chr2   52108800-52109200      * |      5.83      6.79        1.61
+	            Fold   p-value       FDR
+	       <numeric> <numeric> <numeric>
+	   922      7.06  1.75e-10  7.09e-07
+	  2372      6.54  3.72e-10  7.09e-07
+	  1018      5.57  5.77e-10  7.09e-07
+	  2250      6.53  7.54e-10  7.09e-07
+	  1420      5.60  9.13e-10  7.09e-07
+	  3622      4.78  9.45e-10  7.09e-07
+	  -------
+	  seqinfo: 2 sequences from an unspecified genome; no seqlengths
+
+Results summary in a Venn diagram::
+
 	# plotting overlaps of sites bound by REST in different cell types
 	pdf("binding_site_overlap.pdf")
-	dba.plotVenn(res.cnt3, 1:4, label1="HeLa",label2="neuron",label3="HepG2",label4="sknsh")
+	dba.plotVenn(res.cnt3, contrast=c(1:3))
 	dev.off()
+
+
+
+.. admonition:: binding_site_overlap.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/binding_site_overlap.png
+   			:width: 600px
+   			:alt: Venn
+
+
+
+
+
+Save the session::
 
 	# finally, let's save our R session including the generated data. We will need everything in the next section
 	save.image("diffBind.RData")
 
 
+.. admonition:: relevant information from sessionInfo()
+   :class: dropdown, warning
 
 
-Functional analysis
+   .. code-block:: R
+	
+	other attached packages:
+	 [1] DiffBind_3.0.15             SummarizedExperiment_1.20.0
+	 [3] Biobase_2.50.0              MatrixGenerics_1.2.1       
+	 [5] matrixStats_0.58.0          GenomicRanges_1.42.0       
+	 [7] GenomeInfoDb_1.26.7         IRanges_2.24.1             
+	 [9] S4Vectors_0.28.1            BiocGenerics_0.36.0        
+
+
+Peak Annotation
 ====================
 
 So now we have list of differentially bound sites for comparisons of interest but we do not know much about them besides the genomic location. It is time to them in a biological context. To do so, we will use another ``Bioconductor`` package `ChIPpeakAnno <http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html>`_.
@@ -204,8 +425,12 @@ We will continue our R session. If you have logged-out or lost connection or sim
 .. code-block:: R
 
 	cd ~/chipseq/analysis/R
+	
+    module load R_packages/4.0.4
 
-	module load R_packages/3.5.0
+
+
+The remaining part of the exercise is performed in ``R``::
 
 	R
 
@@ -230,15 +455,80 @@ Like with DiffBind package there is a nice `ChIPpeakAnno tutorial <http://biocon
 	# Loading TSS Annotation For Human Sapiens (GRCh37) Obtained From BiomaRt
 	data(TSS.human.GRCh37)
 
-	# Choosing the peaks for the interesting comparison, e.g.
+	# Choosing the peaks for the comparison of interest, e.g.
 	data.peaks = dba.report(res.cnt3, contrast=1)
 	head(data.peaks)
+
+This is the content of ``data.peaks``::
+
+	GRanges object with 6 ranges and 6 metadata columns:
+	       seqnames              ranges strand |      Conc Conc_HeLa Conc_neural
+	          <Rle>           <IRanges>  <Rle> | <numeric> <numeric>   <numeric>
+	   922     chr1   55913188-55913588      * |      7.46      8.45        0.25
+	  2372     chr1 205023130-205023530      * |      7.11      8.10        0.61
+	  1018     chr1   64808799-64809199      * |      7.11      8.09        1.96
+	  2250     chr1 200466043-200466443      * |      7.21      8.20        0.77
+	  1420     chr1 108534954-108535354      * |      6.94      7.92        1.68
+	  3622     chr2   52108800-52109200      * |      5.83      6.79        1.61
+	            Fold   p-value       FDR
+	       <numeric> <numeric> <numeric>
+	   922      7.06  1.75e-10  7.09e-07
+	  2372      6.54  3.72e-10  7.09e-07
+	  1018      5.57  5.77e-10  7.09e-07
+	  2250      6.53  7.54e-10  7.09e-07
+	  1420      5.60  9.13e-10  7.09e-07
+	  3622      4.78  9.45e-10  7.09e-07
+	  -------
+	  seqinfo: 2 sequences from an unspecified genome; no seqlengths
+
+
 
 	# Annotate peaks with information on closest TSS using precompiled annotation data
 	data.peaksAnno=annotatePeakInBatch(data.peaks, AnnotationData=TSS.human.GRCh37)
 
 	# View annotated peaks: can you see the added information in comparsition to data.peaks?
-	head(data.peaksAnno)
+	head(as.data.frame(data.peaksAnno))
+
+Annotated peaks::
+
+	                      seqnames     start       end width strand Conc Conc_HeLa
+	X922.ENSG00000199831      chr1  55913188  55913588   401      * 7.46      8.45
+	X2372.ENSG00000184144     chr1 205023130 205023530   401      * 7.11      8.10
+	X1018.ENSG00000238653     chr1  64808799  64809199   401      * 7.11      8.09
+	X2250.ENSG00000230623     chr1 200466043 200466443   401      * 7.21      8.20
+	X1420.ENSG00000134215     chr1 108534954 108535354   401      * 6.94      7.92
+	X3622.ENSG00000230840     chr2  52108800  52109200   401      * 5.83      6.79
+	                      Conc_neural Fold  p.value      FDR peak         feature
+	X922.ENSG00000199831         0.25 7.06 1.75e-10 7.09e-07  922 ENSG00000199831
+	X2372.ENSG00000184144        0.61 6.54 3.72e-10 7.09e-07 2372 ENSG00000184144
+	X1018.ENSG00000238653        1.96 5.57 5.77e-10 7.09e-07 1018 ENSG00000238653
+	X2250.ENSG00000230623        0.77 6.53 7.54e-10 7.09e-07 2250 ENSG00000230623
+	X1420.ENSG00000134215        1.68 5.60 9.13e-10 7.09e-07 1420 ENSG00000134215
+	X3622.ENSG00000230840        1.61 4.78 9.45e-10 7.09e-07 3622 ENSG00000230840
+	                      start_position end_position feature_strand insideFeature
+	X922.ENSG00000199831        55842194     55842525              -      upstream
+	X2372.ENSG00000184144      205012416    205047144              +        inside
+	X1018.ENSG00000238653       64850082     64850142              -    downstream
+	X2250.ENSG00000230623      200380970    200447421              +    downstream
+	X1420.ENSG00000134215      108113783    108507858              -      upstream
+	X3622.ENSG00000230840       52152831     52152971              -    downstream
+	                      distancetoFeature shortestDistance
+	X922.ENSG00000199831             -70663            70663
+	X2372.ENSG00000184144             10714            10714
+	X1018.ENSG00000238653             41343            40883
+	X2250.ENSG00000230623             85073            18622
+	X1420.ENSG00000134215            -27096            27096
+	X3622.ENSG00000230840             44171            43631
+	                      fromOverlappingOrNearest
+	X922.ENSG00000199831           NearestLocation
+	X2372.ENSG00000184144          NearestLocation
+	X1018.ENSG00000238653          NearestLocation
+	X2250.ENSG00000230623          NearestLocation
+	X1420.ENSG00000134215          NearestLocation
+	X3622.ENSG00000230840          NearestLocation
+
+
+Save the results::
 
 	# Saving results
 	write.table(data.peaksAnno, file="peaks_HeLa_vs_neuronal.txt", sep="\t", row.names=F)
@@ -247,7 +537,152 @@ Like with DiffBind package there is a nice `ChIPpeakAnno tutorial <http://biocon
 
 Feel free to build more on the exercises. Follow the `ChIPpeakAnno tutorial <http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html#annotate-peaks>`_ for ideas.
 
-Locally, we can install few more R libraries and annotation data to inspect our peaks a more, e.g. to find enriched GO terms or REACTOME pathways. Check the :doc:`local version tutorial <lab-diffBinding-local>` for more functional analyses examples.
+
+
+Functional analysis
+====================
+
+At this point we have annotated results for comparison of REST binding in HeLa vs neural cells.
+
+In this part, we will ask which GO terms and pathways are overrepresented amongst the differentially bound sites. Below is a rudimentary example just to have an overview of functional categories present in the experiment. More focused analyses and sophisticated visualisations are available via many Bioconductor packages. We like ``clusterprofiler`` and ``enrichplot``; unfortunately presenting them is beyond the scope of this course.
+
+We are still in the same ``R`` session, let's load the necessary annotation libraries and check the distribution of peaks over genomic features.
+
+.. code-block:: R
+
+	library(org.Hs.eg.db)
+	library(reactome.db)
+	library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+
+	# Peak distribution over genomic features
+	txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+	peaks.featuresDist<-assignChromosomeRegion(data.peaksAnno, nucleotideLevel=FALSE, precedence=c("Promoters", "immediateDownstream", "fiveUTRs", "threeUTRs","Exons", "Introns"), TxDb=txdb)
+
+	pdf("peaks_featuresDistr_HeLa_vs_neuronal.pdf")
+	par(mar=c(5, 10, 4, 2) + 0.1)
+	barplot(peaks.featuresDist$percentage, las=1, horiz=T)
+	dev.off()
+
+
+.. admonition:: peaks_featuresDistr_HeLa_vs_neuronal.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/peaks_featuresDistr_HeLa_vs_neuronal.png
+   			:width: 600px
+   			:alt: Features
+
+
+To test for overrepresented GO terms:
+
+.. code-block:: R
+
+	# GO ontologies
+	peaks.go <- getEnrichedGO(data.peaksAnno, orgAnn="org.Hs.eg.db", maxP=.1, minGOterm=10, multiAdjMethod="BH", condense=TRUE)
+
+	# Preview GO ontologies results
+	head(peaks.go$bp[, 1:2])
+	head(peaks.go$mf[, 1:2])
+	head(peaks.go$cc[, 1:2])
+
+
+.. admonition:: top overrpresented GOs
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+   	> head(peaks.go$bp[, 1:2])
+		       go.id                                        go.term
+		1 GO:0000902                             cell morphogenesis
+		2 GO:0000904 cell morphogenesis involved in differentiation
+		3 GO:0006928      movement of cell or subcellular component
+		4 GO:0007275             multicellular organism development
+		5 GO:0007399                     nervous system development
+		6 GO:0007409                                   axonogenesis
+		> head(peaks.go$mf[, 1:2])
+		       go.id                                        go.term
+		1 GO:0019199 transmembrane receptor protein kinase activity
+		2 GO:0048306              calcium-dependent protein binding
+		> head(peaks.go$cc[, 1:2])
+		       go.id                                 go.term
+		1 GO:0008076 voltage-gated potassium channel complex
+		2 GO:0030054                           cell junction
+		3 GO:0030424                                    axon
+		4 GO:0030425                                dendrite
+		5 GO:0031012                    extracellular matrix
+		6 GO:0034703                  cation channel complex
+
+
+To test for overrepresented reactome pathways:
+
+.. code-block:: R
+
+
+	# REACTOME pathways
+	peaks.pathways <- getEnrichedPATH(data.peaksAnno, "org.Hs.eg.db", "reactome.db", maxP=.05)
+
+	# REACTOME pathways: preview data
+	head(peaks.pathways)
+
+	# REACTOME pathways: list all pathways
+	print(head((unique(peaks.pathways$path.term)), n=20))
+
+
+.. admonition:: overrepresented reactome pathways
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+   	> print(head((unique(peaks.pathways$path.term)), n=20))
+	 [1] "Homo sapiens: Hemostasis"                             
+	 [2] "Homo sapiens: Opioid Signalling"                      
+	 [3] "Homo sapiens: PKA-mediated phosphorylation of CREB"   
+	 [4] "Homo sapiens: Calmodulin induced events"              
+	 [5] "Homo sapiens: Ca-dependent events"                    
+	 [6] "Homo sapiens: CaM pathway"                            
+	 [7] "Homo sapiens: Neuronal System"                        
+	 [8] "Homo sapiens: Potassium Channels"                     
+	 [9] "Homo sapiens: Voltage gated Potassium channels"       
+	[10] "Homo sapiens: Tandem pore domain potassium channels"  
+	[11] "Homo sapiens: Common Pathway of Fibrin Clot Formation"
+	[12] "Homo sapiens: Extracellular matrix organization"      
+	[13] "Homo sapiens: Collagen formation"                     
+	[14] "Homo sapiens: Acyl chain remodelling of PC"           
+	[15] "Homo sapiens: Acyl chain remodelling of PE"           
+	[16] "Homo sapiens: Acyl chain remodelling of PI"           
+	[17] "Homo sapiens: Acyl chain remodelling of PG"           
+	[18] "Homo sapiens: Synthesis of PA"                        
+	[19] "Homo sapiens: Glycerophospholipid biosynthesis"       
+	[20] "Homo sapiens: Signaling by Activin"                   
+
+
+
+
+.. admonition:: relevant information from sessionInfo()
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+	   other attached packages:
+	 [1] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+	 [2] GenomicFeatures_1.42.3                 
+	 [3] reactome.db_1.74.0                     
+	 [4] org.Hs.eg.db_3.12.0                    
+	 [5] AnnotationDbi_1.52.0                   
+	 [6] ChIPpeakAnno_3.24.2                    
+	 [7] DiffBind_3.0.15                        
+	 [8] SummarizedExperiment_1.20.0            
+	 [9] Biobase_2.50.0                         
+	[10] MatrixGenerics_1.2.1                   
+	[11] matrixStats_0.58.0                     
+	[12] GenomicRanges_1.42.0                   
+	[13] GenomeInfoDb_1.26.7                    
+	[14] IRanges_2.24.1                         
+	[15] S4Vectors_0.28.1                       
+	[16] BiocGenerics_0.36.0                    
+
 
 
 
@@ -267,6 +702,9 @@ Also, there are more types of analyses one can do beyond the one presented here.
 Above all, we encourage you to keep trying to analyze your own data. Practice makes perfect :)
 
 :raw-html:`<br />`
+
+
+
 
 
 ----
