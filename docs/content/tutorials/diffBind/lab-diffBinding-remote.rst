@@ -634,7 +634,7 @@ To test for overrepresented reactome pathways:
 
    .. code-block:: R
 
-   	> print(head((unique(peaks.pathways$path.term)), n=20))
+   	> print(head(unique(peaks.pathways$path.term), n=20))
 	 [1] "Homo sapiens: Hemostasis"                             
 	 [2] "Homo sapiens: Opioid Signalling"                      
 	 [3] "Homo sapiens: PKA-mediated phosphorylation of CREB"   
