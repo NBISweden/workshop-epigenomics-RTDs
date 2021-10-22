@@ -70,9 +70,11 @@ ChIP-seq
      - 
 
 
-In addition, the following Bioconductor libraries are used in the tutorials: ``org.Hs.eg.db``, ``TxDb.Hsapiens.UCSC.hg19.knownGene``, ``TxDb.Hsapiens.UCSC.hg38.knownGene``, ``DiffBind``, ``edgeR``, ``ChIPQC ``, ````
+In addition, the following Bioconductor libraries are used in the tutorials:
 
-````,````,````,````,````,````,````,````
+* annotation: ``org.Hs.eg.db``, ``TxDb.Hsapiens.UCSC.hg19.knownGene``, ``TxDb.Hsapiens.UCSC.hg38.knownGene``,``reactome.db``,``biomaRt``
+
+* analysis:  ``DiffBind``, ``edgeR``, ``ChIPQC ``, ``ChIPpeakAnno``,``ChIPseeker``,``ReactomePA``,``clusterProfiler``
 
 
 (*) 

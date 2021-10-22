@@ -544,7 +544,7 @@ Functional analysis
 
 At this point we have annotated results for comparison of REST binding in HeLa vs neural cells.
 
-In this part, we will ask which GO terms and pathways are overrepresented amongst the differentially bound sites. Below is a rudimentary example just to have an overview of functional categories present in the experiment. More focused analyses and sophisticated visualisations are available via many Bioconductor packages. We like ``clusterprofiler`` and ``enrichplot``; unfortunately presenting them is beyond the scope of this course.
+In this part, we will ask which GO terms and pathways are overrepresented amongst the differentially bound sites. Below is a rudimentary example just to have an overview of functional categories present in the experiment. More focused analyses and sophisticated visualisations are available via many Bioconductor packages. We like ``clusterProfiler`` and ``enrichplot``; unfortunately presenting them is beyond the scope of this course.
 
 We are still in the same ``R`` session, let's load the necessary annotation libraries and check the distribution of peaks over genomic features.
 
