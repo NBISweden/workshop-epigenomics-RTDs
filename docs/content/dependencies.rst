@@ -33,7 +33,7 @@ ChIP-seq
      - processing and QC
      - both versions
    * - phantompeakqualtools
-     - 1.2 (*)
+     - 1.2 (`*`)
      - processing and QC
      - https://github.com/kundajelab/phantompeakqualtools
    * - Picard
@@ -61,11 +61,11 @@ ChIP-seq
      - peak calling
      - 
    * - epic2
-     - 0.0.52 (**)
+     - 0.0.52 (`**`)
      - broad peaks
      - https://github.com/biocore-ntnu/epic2
    * - csaw
-     - 1.24.3 (***)
+     - 1.24.3 (`***`)
      - broad peaks
      - 
 
@@ -77,7 +77,7 @@ In addition, the following Bioconductor libraries are used in the tutorials:
 * analysis:  ``DiffBind``, ``edgeR``, ``ChIPQC ``, ``ChIPpeakAnno``,``ChIPseeker``,``ReactomePA``,``clusterProfiler``
 
 
-(*) 
+(`*`) 
 You will notice that we use a conda environment for ``phantompeakqualtools``, along with two versions of of ``samtools`` loaded as modules. This is because we have encountered incompatibilities with how ``phantompeakqualtools`` saves temporary data and recent versions of ``R``, and also syntax differences between ``samtools`` versions and libraries required for processing *bam* files produced by newer ``samtools`` versions. Long sotry short, while a bit clunky, this solution works on our system.
 
 Conda environment was produced using::
@@ -87,7 +87,7 @@ Conda environment was produced using::
   conda create --prefix /path/to/your/environments/xcor -c bioconda phantompeakqualtools=1.2.1.1
 
 
-(**)
+(`**`)
 Newer versions of ``Pysam`` seem to throw errors when used with ``epic2``. We have tested the configuration below and it works on our system.
 
 Conda environment was produced using::
@@ -101,7 +101,7 @@ Conda environment was produced using::
   pip3 install epic2
 
 
-(***)
+(`***`)
 This was tested under R run from conda environment with this package installed:
 
 ``r-v8                      3.4.0             r40h4312b11_0    conda-forge``
