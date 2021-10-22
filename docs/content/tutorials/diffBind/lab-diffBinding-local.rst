@@ -8,8 +8,11 @@ ChIP-seq down-stream analysis
 ################################
 
 **Learning outcomes**
+
 - obtain differentially bound sites with ``DiffBind``
+
 - annotate differentially bound sites with nearest genes and genomic features with ``ChIPpeakAnno``
+
 - perform functional enrichment analysis to identify predominant biological themes with ``ChIPpeakAnno`` and ``reactome.db``
 
 
