@@ -65,7 +65,7 @@ ChIP-seq
      - broad peaks
      - https://github.com/biocore-ntnu/epic2
    * - csaw
-     - 1.24.3 (`***`)
+     - 1.24.3
      - broad peaks
      - 
 
@@ -101,10 +101,11 @@ Conda environment was produced using::
   pip3 install epic2
 
 
-(`***`)
-This was tested under R run from conda environment with this package installed:
+.. (`***`)
+.. This was tested under R run from conda environment with this package installed:
 
-``r-v8                      3.4.0             r40h4312b11_0    conda-forge``
+.. ``r-v8                      3.4.0             r40h4312b11_0    conda-forge``
+
 
 
 ATAC-seq
@@ -128,21 +129,22 @@ ATAC-seq
      - 
 
 
-Downstream Processing
-=======================
 
-.. list-table:: Requirements for Downstream Processing labs.
-   :widths: 25 25 25 25
-   :header-rows: 1
+.. Downstream Processing
+.. =======================
 
-   * - Software
-     - Version
-     - Lab
-     - Comment
-   * - 
-     - 
-     - 
-     - 
+.. .. list-table:: Requirements for Downstream Processing labs.
+..    :widths: 25 25 25 25
+..    :header-rows: 1
+
+..    * - Software
+..      - Version
+..      - Lab
+..      - Comment
+..    * - 
+..      - 
+..      - 
+..      - 
 
 
 
