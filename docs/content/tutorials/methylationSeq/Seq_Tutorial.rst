@@ -49,6 +49,10 @@ In this study, the methylation status of two major functionally distinct epithel
 Set Up R environment
 --------------------
 
+.. note::
+
+   If your session from the Array tutorial is still open, you can continue this exercise in that one. Otherwise set up the environment as you did this morning.
+
 This exercise has been set up to run on Uppmax, so connect to the server as described in :doc:`../setup/lab-setup`. Now, there are two options to set up the R environment. 
 
 **Option A**
@@ -69,7 +73,17 @@ Start the analysis by initiating *RStudio*... This might take a few seconds and 
 
    rstudio
 
-Next, run the R commands by copying them from this website into the Rstudio terminal and pressing *Enter*. 
+.. note::
+
+   If rstudio runs too slow, you could also decide to run the whole tutorial in the normal R terminal. Instead of ``rstudio`` do
+
+   .. code-block:: bash
+
+      R
+
+   If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC, follow the instructions on `this website <https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906>`_ (under the section "Alternate methods using OS-soecific tools").
+
+Next, run the R commands by copying them from this website into the Rstudio terminal or R terminal and pressing *Enter*. 
 
 **Option B**
 
