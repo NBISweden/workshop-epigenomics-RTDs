@@ -105,7 +105,7 @@ Start by loading the required packages.
 
 .. code-block:: r
 
-   # Set the correct library path
+   # Set the correct library path (do NOT do this if setting up the environment with option B, only option A)
    .libPaths("/sw/apps/R_packages/4.0.0/rackham")
    # Main analysis package
    library("methylKit")
