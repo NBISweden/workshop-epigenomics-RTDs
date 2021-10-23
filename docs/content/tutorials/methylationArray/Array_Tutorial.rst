@@ -404,8 +404,7 @@ Compare with the unnormalized data to visualize the effect of the normalization.
    probeTypes$Type <- rep(x = c("I", "II"), times = c(nrow(typeI), nrow(typeII)))
    # Now plot the distributions of the normalized data for sample 1
    plotBetasByType(getBeta(mSetSq)[,1], probeTypes = probeTypes, main="Normalized",)
-   # Close double plotting window
-   dev.off()
+   
 
 Does it look like the normalization brought the distributions closer to each other? Now let's see how the between-array normalization worked...
 
@@ -420,8 +419,7 @@ Does it look like the normalization brought the distributions closer to each oth
                main="Normalized", legend=FALSE)
    legend("top", legend = levels(factor(targets$Sample_Group)), 
           text.col=brewer.pal(8,"Dark2"))
-   # Close the double plotting window
-   dev.off()
+   
 
 .. hint::
    Click on Zoom above the RStudio plot panel to watch a larger version of the plotted figure.
@@ -447,6 +445,7 @@ After normalization of your data is a good time to look at the similarities and 
            col=pal[factor(targets$Sample_Source)], dim=c(1,2))
    legend("top", legend=levels(factor(targets$Sample_Source)), text.col=pal,
           bg="white", cex=0.7)
+   # Close double plotting window 
    dev.off()
 
 Examining the MDS plots for this dataset demonstrates that the largest source of variation is the difference between individuals. The higher dimensions reveal that the differences between cell types are largely captured by the third and fourth principal components. This type of information is useful in that it can inform downstream analysis. If obvious sources of unwanted variation are revealed by the MDS plots, we can include them in our statistical model to account for them. In the case of this particular dataset, we will include individual to individual variation in our statistical model.
