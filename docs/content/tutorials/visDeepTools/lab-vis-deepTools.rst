@@ -50,7 +50,7 @@ Assuming the same files structure as in the main data processing tutorial, creat
 	cd vis
 
 	cp ../../hg19/chrom.sizes.hg19 chrom.sizes.hg19
-	cp ../bam_preproc/ENCFF000PED.chr12.cov.norm1x.bedgraph ./
+	ln -s ../../data/ENCFF000PED.cov.norm1x.bedgraph
 
 
 To calculate scores per genome with ``deepTools`` `computeMatrix <http://deeptools.readthedocs.org/en/latest/content/tools/computeMatrix.html>`_ we need `bigWig <https://genome.ucsc.edu/goldenpath/help/bigWig.html>`_ file that we can obtain by converting bedgraph using ``UCSC utilities``:
@@ -60,7 +60,7 @@ To calculate scores per genome with ``deepTools`` `computeMatrix <http://deeptoo
 
 	module load ucsc-utilities/v398
 
-	bedGraphToBigWig ENCFF000PED.chr12.cov.norm1x.bedgraph chrom.sizes.hg19 hela_1.bw
+	bedGraphToBigWig ENCFF000PED.cov.norm1x.bedgraph chrom.sizes.hg19 hela_1.bw
 
 	module unload ucsc-utilities
 
@@ -75,7 +75,7 @@ We will need a ``BED`` file with positions of TSS that we can copy to the workin
 
 	cp ../../hg19/refGene_hg19_TSS_chr12_sorted_corr.bed ./
 
-	computeMatrix reference-point -S hela_rep1.bw \
+	computeMatrix reference-point -S hela_1.bw \
 	-R refGene_hg19_TSS_chr12_sorted_corr.bed -b 5000 -a 5000 \
 	--outFileName matrix.tss.dat --outFileNameMatrix matrix.tss.txt \
 	--referencePoint=TSS -p 5
@@ -90,6 +90,13 @@ We can now create a heatmap for scores associated with genomic regions, i.e. plo
 	--sortRegions descend --sortUsing mean
 
 
+.. admonition:: tss.hela_rep1.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/tss.hela_1.png
+      		:width: 200px
+
+
 
 Have a look at the ``tss.hela_rep1.pdf``. What do you think?
 
@@ -101,6 +108,15 @@ This is a very basic plot. We can add on to it, for example we can cluster genes
 	--outFileName tss.hela_rep1_k3_.pdf \
 	--sortRegions descend --sortUsing mean \
 	--kmeans 3
+
+
+.. admonition:: tss.hela_rep1_k3.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/tss.hela_rep1_k3.png
+      		:width: 200px
+
+
 
 :raw-html:`<br />`
 

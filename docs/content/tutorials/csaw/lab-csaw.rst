@@ -17,43 +17,23 @@ Requirements Local
 
 
 
-.. * ``R version > 3.4.2`` (2017-09-28)
-.. * `statmod <https://cran.r-project.org/web/packages/statmod/index.html>`_, required for ``csaw``
-.. * `gfortran <https://gcc.gnu.org/wiki/GFortranBinaries>`_, required for ``csaw``
+* ``R version 4.0.4 (2021-02-15) -- "Lost Library Book"``
 
 * ``csaw``
+
 * ``edgeR``
 
 R packages required for annotation:
 
 * ``org.Hs.eg.db``
+
 * ``TxDb.Hsapiens.UCSC.hg19.knownGene``
 
-Recommended:
+Recommended (local):
 
 * R-Studio to work in
 
 
-
-.. HINT::
-
-  To install R packages not in Bioconductor use ``install.packages`` command e.g.
-
-  .. code-block:: R
-
-    install.packages("https://cran.r-project.org/src/contrib/statmod_1.4.30.tar.gz", repo=NULL, type="source")
-
-
-  To install Bioconductor packages:
-
-  .. code-block:: R
-
-    if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-    BiocManager::install(c("csaw","edgeR","org.Hs.eg.db","TxDb.Hsapiens.UCSC.hg19.knownGene")
-
-
-  To install ``gfortran`` follow the directions on `gfortran homepage <https://gcc.gnu.org/wiki/GFortranBinaries>`_. Further dependencies may be required for successful installation.
 
 
 .. NOTE::
@@ -62,34 +42,34 @@ Recommended:
 
 
 
-Getting the data
-------------------
+.. Getting the data
+.. ------------------
 
-We will examine differences in REST binding in two cell types: SKNSH and HeLa, subset to chromosome 1. To run the tutorial locally need to download required files. Let's use the Box links for simplicity. 
+.. We will examine differences in REST binding in two cell types: SKNSH and HeLa, subset to chromosome 1. To run the tutorial locally need to download required files. Let's use the Box links for simplicity. 
 
-HeLa:
+.. HeLa:
 
-* [zip](https://stockholmuniversity.box.com/s/2o3lchp61kzxpil1y1snn4onjk4e0sjo)
-* [tar.gz](https://stockholmuniversity.box.com/s/wmx4uhgo3esuessr4f8g9kmvarm42bxz)
+.. * [zip](https://stockholmuniversity.box.com/s/2o3lchp61kzxpil1y1snn4onjk4e0sjo)
+.. * [tar.gz](https://stockholmuniversity.box.com/s/wmx4uhgo3esuessr4f8g9kmvarm42bxz)
 
-SKNSH:
+.. SKNSH:
 
-* [zip](https://stockholmuniversity.box.com/s/dkurmi5suwh3qnxnx0ysfhh5c0g2d1ti)
-* [tar.gz](https://stockholmuniversity.box.com/s/8m3rgtakx8h8rmhnwltitqccbx7h0wy3)
+.. * [zip](https://stockholmuniversity.box.com/s/dkurmi5suwh3qnxnx0ysfhh5c0g2d1ti)
+.. * [tar.gz](https://stockholmuniversity.box.com/s/8m3rgtakx8h8rmhnwltitqccbx7h0wy3)
 
 
-.. HINT::
+.. .. HINT::
   
-  You can also ``scp -r`` the files from rackham at ``/proj/g2020022/chipseq_proc/data/bam/``
+..   You can also ``scp -r`` the files from rackham at ``/proj/g2020022/chipseq_proc/data/bam/``
 
 
 
-To extract ``tar.gz`` files 
+.. To extract ``tar.gz`` files 
 
 
-.. code-block:: bash
+.. .. code-block:: bash
 
-  tar -zxvf archive_name.tar.gz
+..   tar -zxvf archive_name.tar.gz
 
 
 
@@ -114,28 +94,30 @@ Loading data and preparing the contrast to test
 =================================================
 
 
-You'll be working in ``R`` for the remaining part of the exercise. 
+You can now load the version of R for which we tested this class along with other dependencies:
 
-Remote:
+
 
 .. code-block:: bash
 
-    conda activate /sw/courses/epigenomics/software/conda/v8
-    R
+   module load R_packages/4.0.4
 
-Or locally work in RStudio.
+The remaining part of the exercise is performed in ``R``.
 
 
-Modify the paths to folders with respective data to match your local setup:
+.. .. HINT::
 
-Local:
+..   Modify the paths to folders with respective data to match your local setup:
 
-.. code-block:: R
+..   Local:
 
-  dir.sknsh = "/path/to/data/sknsh"
-  dir.hela = "/path/to/data/hela"
+..   .. code-block:: R
 
-Remote:
+..     dir.sknsh = "/path/to/data/sknsh"
+..     dir.hela = "/path/to/data/hela"
+
+
+.. Remote:
 
 .. code-block:: R
 
@@ -147,14 +129,6 @@ Remote:
   sknsh.2=file.path(dir.sknsh,"ENCFF000RAH.chr12.rmdup.sort.bam")
 
   bam.files <- c(hela.1,hela.2,sknsh.1,sknsh.2)
-
-  # provide the tutorial specific path to R libraries
-  assign(".lib.loc", "/sw/courses/epigenomics/software/R", envir = environment(.libPaths))
-
-  # verify that the tutorial-specific R library path is added
-  .libPaths()
-  [1] "/sw/courses/epigenomics/software/R"
-
 
 
 We need to provide the information about the design of the experiment using ``model.matrix`` function:
@@ -183,6 +157,7 @@ The design should look like this:
   [1] "contr.treatment"
 
 
+Let's test which peaks are differentially occupied in HeLa cells vs in sknsh cells.
 We prepare the information on contrast to be tested using ``makeContrasts`` function from package ``limma``. This is not the only way to do so, and examples are given in ``csaw`` and ``edgeR`` manuals. In this case we want to test for the differences in REST binding in HeLa vs. SKNSH cell lines:
 
 .. code-block:: R
@@ -210,7 +185,7 @@ Now we are ready to load data and create an object with counted reads:
   data <- windowCounts(bam.files, ext=100, width=10) 
 
 
-Parameters for file loading can be modified (examples in the ``csaw`` User Guide), depending on how the data was processed. Here we explicitely input the value for fragment length as we have this information from the cross correlation analysis performed earlier during :doc:`ChIP-seq data processing tutorial <../chipseqProc/lab-chipseq-processing>`. It is 100 for Hela and 95 & 115 for sknsh.
+Parameters for file loading can be modified (examples in the ``csaw`` User Guide), depending on how the data was processed. Here we explicitely input the value for fragment length as we have this information from the cross correlation analysis performed earlier during :doc:`ChIP-seq data processing tutorial <../chipseqProc/lab-chipseq-processing>`. It is 100 for Hela and 95 & 115 for sknsh. We've used 100 as it seems a reasonable averge value.
 
 
 We can inspect the resulting ``data`` object, e.g.:
@@ -262,12 +237,14 @@ Assigning reads into larger bins for normalisation:
   
   binned <- windowCounts(bam.files, bin=TRUE, width=10000)
 
+The TMM method trims away putative DB bins (i.e., those with extreme M-values) and computes normalization factors from the remainder to use in edgeR. The size of each library is scaled by the corresponding factor to obtain an effective library size for modelling.
 
 Calculating the normalisation factors using a modified TMM method:
 
 .. code-block:: R
   
   data.filt <- normFactors(binned, se.out=data.filt)
+
 
 Inspecting the normalisation factors:
 
@@ -280,6 +257,8 @@ Inspecting the normalisation factors:
 
 Detecting differentially binding (DB) sites
 ============================================
+
+This part of the procedure follows the logic developed for transcriptomics data in ``edgeR`` package. The steps are described in great detail in `csawBook <http://bioconductor.org/books/3.13/csawBook/chap-stats.html#setting-up-for-edger>`_.
 
 Detecting DB windows:
 
@@ -300,17 +279,6 @@ Detecting DB windows:
 
 
 Inspecting the results table:
-
-.. .. code-block:: R
-
-..   > head(results$table)
-..        logFC   logCPM         F       PValue
-..   1 7.239404 2.165639 17.229173 3.327018e-05
-..   2 5.244217 2.783211  9.484909 2.074540e-03
-..   3 3.023888 2.755437  4.721852 2.979352e-02
-..   4 2.050617 2.612401  2.684560 1.013412e-01
-..   5 1.827703 2.459979  2.459072 1.168638e-01
-..   6 4.336717 2.052296 14.330442 1.538194e-04
 
 
 .. code-block:: R
@@ -399,8 +367,8 @@ How many regions were detected as differentialy bound?
 
 .. code-block:: R
 
-  ..   down   up 
-  ..   201  231 
+    down   up 
+     231  201 
 
 out of
 
@@ -437,7 +405,10 @@ We can also obtain information on the best window in each cluster:
   6        22  -7.47709
 
 
-We can inspect congruency of the replicates on MDS. We subsample counts for faster calculations:
+
+We can inspect congruency of the replicates on multi-dimensional scaling (MDS) plots. 
+The distance between each pair of libraries is computed as the square root of the mean squared log-fold change across the top set of bins with the highest absolute log-fold changes.
+A small top set visualizes the most extreme differences whereas a large set visualizes overall differences.
 
 .. code-block:: R
 
@@ -446,6 +417,26 @@ We can inspect congruency of the replicates on MDS. We subsample counts for fast
   for (top in c(100, 500, 1000, 5000)) {
   plotMDS(adj.counts, main=top, col=c("blue", "blue", "red", "red"),labels=c("hela", "hela", "sknsh", "sknsh"), top=top)
   }
+
+
+Let's save this plot::
+
+  pdf("csaw-MDS.pdf")
+    par(mfrow=c(2,2))
+  adj.counts <- cpm(data.filt.calc, log=TRUE)
+  for (top in c(100, 500, 1000, 5000)) {
+  plotMDS(adj.counts, main=top, col=c("blue", "blue", "red", "red"),labels=c("hela", "hela", "sknsh", "sknsh"), top=top)
+  }
+  dev.off()
+
+
+.. admonition:: csaw-MDS.pdf
+   :class: dropdown, warning
+
+   .. image:: figures/csaw-MDS.png
+          :width: 600px
+
+
 
 
 Annotation of the results
@@ -474,11 +465,50 @@ Now we bring it all together:
   all.results <- data.frame(as.data.frame(merged$region)[,1:3], table.combined, anno)
 
 
+.. admonition::  all.results, unsorted
+   :class: dropdown, warning
+
+
+   .. code-block:: R
+
+        > head(all.results)
+      seqnames  start    end num.tests num.up.logFC num.down.logFC       PValue
+    1     chr1  10051  10360         7            0              5 2.328912e-04
+    2     chr1  29301  29410         3            0              3 6.989334e-06
+    3     chr1 100451 100560         3            0              3 1.948039e-04
+    4     chr1 151101 151310         5            0              5 4.108169e-05
+    5     chr1 246751 246860         3            0              3 6.674578e-05
+    6     chr1 408351 408560         5            0              5 1.880546e-04
+               FDR direction rep.test rep.logFC     overlap          left
+    1 0.0040397108      down        1 -7.239404 DDX11L1:+:P              
+    2 0.0004822892      down        8 -7.000913 WASH7P:-:PE WASH7P:-:4410
+    3 0.0036799249      down       13 -7.501513                          
+    4 0.0011680754      down       14 -7.121331                          
+    5 0.0017204192      down       19 -7.208420                          
+    6 0.0036207355      down       23 -8.909876                          
+                             right
+    1 DDX11L1:+:1514,WASH7P:-:4002
+    2                 WASH7P:-:414
+    3                             
+    4                             
+    5                             
+    6    
+
+
+
+
 All significant regions are in:
 
 .. code-block:: R
   
   sig=all.results[all.results$FDR<0.05,]
+
+
+How many significantly different pekas?::
+
+  > nrow(sig)
+  [1] 432
+
 
 
 To view the top of the ``all.results`` table:
@@ -511,49 +541,39 @@ To view the top of the ``all.results`` table:
   1613                                                    
 
 
-We of course discourage ranking the results by p value ;-).
+We of course discourage ranking the results by p value only ;-).
 
 Now you are ready to save the results as a table, inspect further and generate a compelling scientific hypothesis.
 You can also compare the outcome with results obtained from peak-based couting approach.
 
-One final note: In this example we have used preprocessed bam files, i.e. reads mapped to the regions of spurious high signal in ChIP-seq (i.e. the ENCODE "blacklisted regions") were removed, as were the so called **duplicated reads** - reads mapped to the same genomic positions. While filtering out the blacklisted regions is always recommended, **removal of duplicated reads is not recommended** for DB analysis, as they may represent true signal. As always, your mileage may vary, depending on the project, so exploring several options is essential for obtaining meaningful results.
+One final note: In this example we have used preprocessed bam files, i.e. reads mapped to the regions of spurious high signal in ChIP-seq (i.e. the ENCODE "blacklisted regions") were removed, as were the so called **duplicated reads** - reads mapped to the same genomic positions. While filtering out the blacklisted regions is always recommended, **removal of duplicated reads is not recommended** for DB analysis, as they may represent true signal. As always, your mileage may vary, depending on the project (library sequencing depth and complexity being the factors to watch out for in this context), so exploring several options is essential for obtaining meaningful results.
 
 
 
+.. admonition:: relevant information from sessionInfo()
+   :class: dropdown, warning
 
-.. > toLatex(sessionInfo())
-.. \begin{itemize}\raggedright
-..   \item R version 4.0.3 (2020-10-10), \verb|x86_64-conda-linux-gnu|
-..   \item Locale: \verb|LC_CTYPE=en_US.UTF-8|, \verb|LC_NUMERIC=C|, \verb|LC_TIME=en_US.UTF-8|, \verb|LC_COLLATE=en_US.UTF-8|, \verb|LC_MONETARY=en_US.UTF-8|, \verb|LC_MESSAGES=en_US.UTF-8|, \verb|LC_PAPER=en_US.UTF-8|, \verb|LC_NAME=C|, \verb|LC_ADDRESS=C|, \verb|LC_TELEPHONE=C|, \verb|LC_MEASUREMENT=en_US.UTF-8|, \verb|LC_IDENTIFICATION=C|
-..   \item Running under: \verb|CentOS Linux 7 (Core)|
-..   \item Matrix products: default
-..   \item BLAS/LAPACK: \verb|/crex/course_data/epigenomics/software/conda/v8/lib/libopenblasp-r0.3.12.so|
-..   \item Base packages: base, datasets, graphics, grDevices, methods,
-..     parallel, stats, stats4, utils
-..   \item Other packages: AnnotationDbi~1.52.0, Biobase~2.50.0,
-..     BiocGenerics~0.36.0, csaw~1.24.3, edgeR~3.32.0,
-..     GenomeInfoDb~1.26.0, GenomicFeatures~1.42.1, GenomicRanges~1.42.0,
-..     IRanges~2.24.0, limma~3.46.0, MatrixGenerics~1.2.0,
-..     matrixStats~0.57.0, org.Hs.eg.db~3.12.0, S4Vectors~0.28.0,
-..     SummarizedExperiment~1.20.0,
-..     TxDb.Hsapiens.UCSC.hg19.knownGene~3.2.2
-..   \item Loaded via a namespace (and not attached): askpass~1.1,
-..     assertthat~0.2.1, BiocFileCache~1.14.0, BiocParallel~1.24.1,
-..     biomaRt~2.46.0, Biostrings~2.58.0, bit~4.0.4, bit64~4.0.5,
-..     bitops~1.0-6, blob~1.2.1, compiler~4.0.3, crayon~1.3.4, curl~4.3,
-..     DBI~1.1.0, dbplyr~2.0.0, DelayedArray~0.16.0, digest~0.6.27,
-..     dplyr~1.0.2, ellipsis~0.3.1, generics~0.1.0,
-..     GenomeInfoDbData~1.2.4, GenomicAlignments~1.26.0, glue~1.4.2,
-..     grid~4.0.3, hms~0.5.3, httr~1.4.2, lattice~0.20-41,
-..     lifecycle~0.2.0, locfit~1.5-9.4, magrittr~2.0.1, Matrix~1.2-18,
-..     memoise~1.1.0, openssl~1.4.3, pillar~1.4.6, pkgconfig~2.0.3,
-..     prettyunits~1.1.1, progress~1.2.2, purrr~0.3.4, R6~2.5.0,
-..     rappdirs~0.3.1, Rcpp~1.0.5, RCurl~1.98-1.2, rlang~0.4.8,
-..     Rsamtools~2.6.0, RSQLite~2.2.1, rtracklayer~1.50.0, splines~4.0.3,
-..     statmod~1.4.35, stringi~1.5.3, stringr~1.4.0, tibble~3.0.4,
-..     tidyselect~1.1.0, tools~4.0.3, vctrs~0.3.5, XML~3.99-0.5,
-..     xml2~1.3.2, XVector~0.30.0, zlibbioc~1.36.0
-.. \end{itemize}
+   .. code-block:: R
+
+     other attached packages:
+     [1] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+     [2] GenomicFeatures_1.42.3                 
+     [3] org.Hs.eg.db_3.12.0                    
+     [4] AnnotationDbi_1.52.0                   
+     [5] csaw_1.24.3                            
+     [6] SummarizedExperiment_1.20.0            
+     [7] Biobase_2.50.0                         
+     [8] MatrixGenerics_1.2.1                   
+     [9] matrixStats_0.58.0                     
+     [10] GenomicRanges_1.42.0                   
+     [11] GenomeInfoDb_1.26.7                    
+     [12] IRanges_2.24.1                         
+     [13] S4Vectors_0.28.1                       
+     [14] BiocGenerics_0.36.0                    
+     [15] edgeR_3.32.1                           
+     [16] limma_3.46.0         
+
+
 
 
 
