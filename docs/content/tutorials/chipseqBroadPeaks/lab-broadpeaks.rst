@@ -629,8 +629,7 @@ To prepare the files, assuming you are in ``~/broad_peaks/results``:
    cd csaw
 
    mkdir bam
-   ln -s  /sw/courses/epigenomics/broad_peaks2021/data_sub_preproc/neuron_GM23338/* bam
-
+   ln -s  /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/* bam
 
 
 .. .. code-block:: bash
