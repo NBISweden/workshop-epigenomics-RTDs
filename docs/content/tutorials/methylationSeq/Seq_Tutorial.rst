@@ -105,6 +105,8 @@ Start by loading the required packages.
 
 .. code-block:: r
 
+   # Set the correct library path
+   .libPaths("/sw/apps/R_packages/4.0.0/rackham")
    # Main analysis package
    library("methylKit")
    # Annotation package
