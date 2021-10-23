@@ -445,8 +445,6 @@ After normalization of your data is a good time to look at the similarities and 
            col=pal[factor(targets$Sample_Source)], dim=c(1,2))
    legend("top", legend=levels(factor(targets$Sample_Source)), text.col=pal,
           bg="white", cex=0.7)
-   # Close double plotting window 
-   dev.off()
 
 Examining the MDS plots for this dataset demonstrates that the largest source of variation is the difference between individuals. The higher dimensions reveal that the differences between cell types are largely captured by the third and fourth principal components. This type of information is useful in that it can inform downstream analysis. If obvious sources of unwanted variation are revealed by the MDS plots, we can include them in our statistical model to account for them. In the case of this particular dataset, we will include individual to individual variation in our statistical model.
 
@@ -496,6 +494,7 @@ Once the data has been filtered and normalised, it is often useful to re-examine
            col=pal[factor(targets$Sample_Source)])
    legend("right", legend=levels(factor(targets$Sample_Source)), text.col=pal,
           cex=0.7, bg="white")
+   # Close double plotting window
    dev.off()
 
 Probe-Wise Differential Methylation
