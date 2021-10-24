@@ -11,7 +11,7 @@ As of this year, all of the courses administered by NBIS are transitioning to th
 
 This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/51975>`_. 
 
-For example, you will find the schedule for this week with links to the content and exercises on this website on Canvas.
+For example, on Canvas you will find the schedule for this week with links to the content and exercises on this website.
 
 We make sure that all the material on this site is up to date and always accessible.
 
