@@ -167,7 +167,7 @@ Remember the key points:
     cd ~
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project g2021025
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,singularity --project g2021025
 
 Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset! This is where you ask for help on Slack instead of suffering in silence.
 
@@ -303,7 +303,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end``
 
 Methyl-seq
 -----------
@@ -344,7 +344,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: minimal methylseq command
    :class: dropdown, note
 
-    nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
+   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10``
 
 
 Getting help
