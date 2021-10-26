@@ -6,6 +6,8 @@
 .. please place the pdfs in `slides` ( NOT slides_2020). add the filename here, the path should be ../_static/FILENAME.pdf
 
 
+
+
 =============
 Presentations
 =============
@@ -54,4 +56,4 @@ Day 5
 
 
 
-
+.. some some tst
