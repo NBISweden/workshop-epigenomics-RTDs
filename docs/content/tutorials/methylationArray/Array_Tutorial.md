@@ -53,7 +53,7 @@ MathJax.Hub.Queue(function() {
 
 Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented. 
 
-But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. The 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization (See Figure 1). In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with >90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the _de facto_ standard for methylation analyses; the data processing for both is however fairly similar.
+But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. The 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. In contrast, the Infinium II design uses only one bead type and the methylated state is determined at the single base extension step after hybridization (See Figure 1). In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with >90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the _de facto_ standard for methylation analyses; the data processing for both is however fairly similar.
 
 ![](Figures/Infinium.png) 
 *Fig. 1: (Up) Infinium I and II design.*
@@ -79,7 +79,7 @@ In this workflow, we will provide examples of the steps involved in analyzing 45
 
 ## Load Packages
 
-This exercise has been set up on Uppmax, so connect to Uppmax as described in . On Uppmax, most packages are already installed, and can be loaded into R after the _R.4.0.0_ and  _R_packages_ modules have been loaded. If you are running on Uppmax, start by loading the following modules:
+This exercise has been set up on Uppmax, so connect to Uppmax as described in . On Uppmax, most packages are already installed, and can be loaded into R after the _R.4.0.0_ and _R_packages_ modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
 ```bash
 module load R/4.0.0
@@ -107,7 +107,7 @@ library("DMRcate")
 library("stringr")
 ```
 
-Included with _minfo_ is the _IlluminaHumanMethylation450kanno.ilmn12.hg19_ package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context.
+Included with _minfo_ is the _IlluminaHumanMethylation450kanno.ilmn12.hg19_ package; it contains all the annotation information for each of the CpG probes on the 450k array. This will be useful later to determine where the differentially methylated probes (hereafter referred to as DMP) are located in a genomic context.
 
 ```r
 ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
@@ -192,7 +192,7 @@ head(getMeth(MSet)[,1:3])
 head(getUnmeth(MSet)[,1:3])
 ```
 
-A _RatioSet_ object is class designed to store Beta and/or M-values instead of the (un)methylated signals. An optional copy number matrix, CN, the sum of the methylated and unmethylated signals, can be also stored. Mapping a _MethylSet_ to a _RatioSet_ is irreversible, i.e. one cannot technically retrieve the methylated and unmethylated signals from a _RatioSet_. A _RatioSet_ can be created with the function ratioConvert. The function _mapToGenome_ applied to a _RatioSet_ object will add genomic coordinates to each probe together with some additional annotation information. The output object is a _GenomicRatioSet_ 
+An object of a class _RatioSet_ is designed to store Beta and/or M-values instead of the (un)methylated signals. An optional copy number matrix, CN, the sum of the methylated and unmethylated signals, can be also stored. Mapping a _MethylSet_ to a _RatioSet_ is irreversible, i.e. one cannot technically retrieve the methylated and unmethylated signals from a _RatioSet_. A _RatioSet_ can be created with the function ratioConvert. The function _mapToGenome_ applied to a _RatioSet_ object will add genomic coordinates to each probe together with some additional annotation information. The output object is a _GenomicRatioSet_ 
 
 ```r
 ratioSet <- ratioConvert(MSet, what = "both", keepCN = TRUE)
@@ -321,7 +321,7 @@ Input: _RGChannelSet_
 Output: _GenomicRatioSet_
 
 
-As we are comparing different blood cell types, which are globally relatively similar, we will apply the preprocessQuantile method to our data [This assumption might not be true; in an actual analysis it would be advised to try and compare different methods]. Note that after normalisation, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an iniital quality control. 
+As we are comparing different blood cell types, which are globally relatively similar, we will apply the preprocessQuantile method to our data [This assumption might not be true; in an actual analysis it would be advised to try and compare different methods]. Note that after normalization, the data is housed in a GenomicRatioSet object; automatically running the steps we did manually to do an iniital quality control. 
 
 ```r
 # normalize the data; this results in a GenomicRatioSet object
@@ -331,7 +331,7 @@ mSetSq <- preprocessQuantile(rgSet)
 Compare with the unnormalized data to visualize the effect of the normalization.
 
 ```r
-# visualise what the data looks like before and after normalisation
+# visualise what the data looks like before and after normalization
 par(mfrow=c(1,2))
 densityPlot(rgSet, sampGroups=targets$Sample_Group,main="Raw", legend=FALSE)
 legend("top", legend = levels(factor(targets$Sample_Group)), 
