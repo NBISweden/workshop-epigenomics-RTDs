@@ -178,7 +178,7 @@ The data structure can further be visualized in a dendrogram using hierarchical 
 clusterSamples(meth, dist="correlation", method="ward", plot=TRUE)
 ```
 
-Another very useful visualization is obtained by plotting the samples in a principal component space. Using this kind of PCA plot we project multidimensional data (i.e. we have as many dimensions in this data as there are CpG loci in _meth_) into 2 or 3-dimensional space while at the same time maintaining as much variation in the data as possible. Samples that are more alike will be clustered together in PC space, so by looking at this plot we can see what is the largest source of variation in data and whether there are sample swaps and/or outlier samples. _PCASamples_ is a function in _methylKit_ that will perform PCA and plot the first two principal components. What does the PCA plot of our dataset tell you? What is the biggest source of variation on the data? Does it look samples are swapped? Do there seem to be outliers among the samples?
+Another very useful visualization is obtained by plotting the samples in a principal component space. Using this kind of PCA plot we project multidimensional data (i.e. we have as many dimensions in this data as there are CpG loci in _meth_) into 2 or 3-dimensional space while at the same time maintaining as much variation in the data as possible. Samples that are more alike will be clustered together in PC space, so by looking at this plot we can see what is the largest source of variation in data and whether there are sample swaps and/or outlier samples. _PCASamples_ is a function in _methylKit_ that will perform PCA and plot the first two principal components. What does the PCA plot of our dataset tell you? What is the biggest source of variation on the data? Does it look like samples are swapped? Do there seem to be outliers among the samples?
 
 ```r
 PCASamples(meth)
@@ -216,7 +216,7 @@ Visualize the number of hyper- and hypomethylation events per chromosome, as a p
 diffMethPerChr(myDiff)
 ```
 
-After q-value calculation, we can select the differentially methylated regions/bases based on q-value and percent methylation difference cutoffs of Treatment versus control. Following bits of code selects the bases that have q-value < 0.01 and percent methylation difference larger than 25%. If you specify _type="hyper"_ or _type="hypo"_ options, you will extract the hyper-methylated or hypo-methylated regions/bases.
+After q-value calculation, we can select the differentially methylated regions/bases based on q-value and percent methylation difference cutoffs of Treatment versus control. The code below selects the bases that have q-value < 0.01 and percent methylation difference larger than 25%. If you specify _type="hyper"_ or _type="hypo"_ options, you will extract the hyper-methylated or hypo-methylated regions/bases.
 
 ```r
 # get hyper methylated bases and order by qvalue
