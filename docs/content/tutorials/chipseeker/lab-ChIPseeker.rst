@@ -4,7 +4,7 @@
 
 
 ===========================================
-ChIP-seq down-stream analysis: ChIPseeker
+ChIP-seq downstream analysis: ChIPseeker
 ===========================================
 
 
@@ -20,7 +20,7 @@ Using ``ChIPseeker`` package
 - to run and compare functional enrichment
 
 
-.. contents:: 
+.. contents::
     :local:
 
 
@@ -65,7 +65,7 @@ In an ``R`` session:
 	library(clusterProfiler)
 	library(biomaRt)
 
-	library(org.Hs.eg.db)  
+	library(org.Hs.eg.db)
 	library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 	txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
@@ -113,7 +113,7 @@ Let's use data saved in ``DiffBind.RData`` objects. From this object we can easi
 	8 REST_chip8  sknsh   REST         2 counts      5343 4180463 0.04
 
 
-Please note the number of intervals (i.e. peaks) is **5343**. This is different from the original consensus peakset which had 6389 peaks. This original data is present in object ``cnt.res2``. This is because 1046 peaks fall in the internal blacklisted regions. At the same time, the object which holds the results ``res.cnt3`` contains information which peaks are detected in which sample, and this matrix is still in the original peakset format (i.e. has 6389 rows). 
+Please note the number of intervals (i.e. peaks) is **5343**. This is different from the original consensus peakset which had 6389 peaks. This original data is present in object ``cnt.res2``. This is because 1046 peaks fall in the internal blacklisted regions. At the same time, the object which holds the results ``res.cnt3`` contains information which peaks are detected in which sample, and this matrix is still in the original peakset format (i.e. has 6389 rows).
 
 Information on the consensus peakset in ``res.cnt3``::
 
@@ -131,7 +131,7 @@ Information on the consensus peakset in ``res.cnt3``::
 	[1] 6389
 
 
-We have to do some data wrangling on this matirx to extract the rows of interest to us, i.e. rows corresponding to peaks which were NOT blacklisted. The code to do this is presented below. You may copy - paste it and you'll arrive at the correct object to continue working. If you would like to understand what's happening, you can inspect the objects created in each step using commands ``head``, ``nrow`` etc.
+We have to do some data wrangling on this matrix to extract the rows of interest to us, i.e. rows corresponding to peaks which were NOT blacklisted. The code to do this is presented below. You may copy - paste it and you'll arrive at the correct object to continue working. If you would like to understand what's happening, you can inspect the objects created in each step using commands ``head``, ``nrow`` etc.
 
 .. code-block:: R
 
@@ -155,8 +155,8 @@ We have to do some data wrangling on this matirx to extract the rows of interest
 	#examine if the numbers add up
 	table(peaks.all.no_blck.ind)
 	##	peaks.all.no_blck.ind
-	##	FALSE  TRUE 
-	##	 1046  5343 
+	##	FALSE  TRUE
+	##	 1046  5343
 
 	#subset res.cnt3$called
 	called.peaks=res.cnt3$called[peaks.all.no_blck.ind,]
@@ -213,7 +213,7 @@ We select interesting peaks and work on them. First let's check the peak locatio
 
 
 	# extracting HeLA peaks
-	peaks.HeLa_rep1 <-  peaks.consensus[called.peaks[,1]==1] # peaks called in rep 1
+	peaks.HeLa_rep1 <- peaks.consensus[called.peaks[,1]==1] # peaks called in rep 1
 	peaks.HeLa_rep2 <- peaks.consensus[called.peaks[,2]==1] # peaks called in rep 2
 
 	# adding an unified affinity scores column (re-formatting data)
@@ -282,7 +282,7 @@ Profile of ChIP peaks binding to TSS regions
 
 For calculating the profile of ChIP peaks binding to TSS regions, we need to prepare the TSS regions, which are defined as the flanking sequence of the TSS sites. Then we can align the peaks that are mapping to these regions, and generate the tagMatrix used for plotting.
 
-Here, we will select peaks present per cell type, i.e. found in two replicates. We will also create tagMatrix list to enable groups comparisons across cell lines.
+Here, we will select peaks present per cell type, i.e. found in two replicates. We will also create tagMatrix list to enable group comparisons across cell lines.
 
 .. code-block:: R
 
@@ -329,7 +329,9 @@ Here, we will select peaks present per cell type, i.e. found in two replicates. 
 Peaks Annotation
 ===================
 
-**Peak annotations is performed by ``annotatePeak`` function**. Here, we can define TSS region, by default set to -3kb to 3kb. The output of annotatePeak is ``csAnno`` object than we can convert to ``GRanges`` with ``as.GRanges()`` function or to data frame with ``as.data.frame()`` function.
+**Peak annotations is performed by annotatePeak() function**
+
+Here, we can define TSS region, by default set to -3kb to 3kb. The output of ``annotatePeak`` is ``csAnno`` object than we can convert to ``GRanges`` with ``as.GRanges()`` function or to data frame with ``as.data.frame()`` function.
 
 Similar to annotations with ``ChIPpeakAnno`` we will need ``TxDB`` object containing annotations, transcript-related features of a particular genome. We can use Bioconductor packages providing annotations for various model organisms. It may be however **good to know that one can also prepare their own TxDb object** by retrieving information from UCSC or BioMart using ``GenomicFeature`` package. Here, we will use ``TxDb.Hsapiens.UCSC.hg19.knownGene`` annotations provided by Bioconductor.
 
@@ -461,7 +463,7 @@ Let's save these plots:
             :width: 600px
 
    .. image:: figures/chipseeker-annoplots-hela-2.png
-            :width: 600px            
+            :width: 600px
 
 
 
@@ -551,7 +553,7 @@ Reactome pathway enrichment of genes defined as a) nearest feature to the peaks 
 	# a: selecting annotated peaks for functional enrichment in object
 	data.peaks_ann <- peaks.neural_ann
 
-	# a: fining enriched Reactome pathways using chromosome 1 and 2 genes as a background
+	# a: finding enriched Reactome pathways using chromosome 1 and 2 genes as a background
 	pathway.reac1 <- enrichPathway(as.data.frame(data.peaks_ann)$geneId, universe = genes.universe)
 
 	# a: previewing enriched Reactome pathways
