@@ -12,7 +12,7 @@ In this exercise we will try a few *de-novo* motif finding programs on data sets
 .. Contents
 .. =========
 
-.. contents:: 
+.. contents::
     :local:
 
 
@@ -87,7 +87,7 @@ Have a look at the file:
 	less ENCFF693MYU.bed
 
 
-It's often a good idea to just use the peaks with the strongest signal for motif finding. This is becuase a) motif finding programs have a hard time handling large inputs, and b) the peaks with the strongest signal are most likely to be true binding sites and to contain the motif of interest. Therefore, we will run motif finding on the top 500 peaks. To get the top 500 peaks, we first sort the peaks on "signalValue" in column 7 (using the ``sort`` command) and then take the first 500 peaks (using the ``head`` command):
+It's often a good idea to just use the peaks with the strongest signal for motif finding. This is because a) motif finding programs have a hard time handling large inputs, and b) the peaks with the strongest signal are most likely to be true binding sites and to contain the motif of interest. Therefore, we will run motif finding on the top 500 peaks. To get the top 500 peaks, we first sort the peaks on "signalValue" in column 7 (using the ``sort`` command) and then take the first 500 peaks (using the ``head`` command):
 
 .. code-block:: bash
 
@@ -139,7 +139,7 @@ DREME produces several output files. Take a look at the html file:
 
 .. code-block:: bash
 
-	firefox dreme_out/dreme.html 
+	firefox dreme_out/dreme.html
 
 
 You see a list of motifs represented as regular expressions and sequence logos, along with e-values and some links.
@@ -200,7 +200,7 @@ In the previous exercise an earlier version of the human genome, hg19, was used.
 	ln -s /sw/courses/epigenomics/motif_finding/hg19_chr_1_2.masked.fa* .
 
 
-Then copy one of the peak files from the previous exercise to work directory 
+Then copy one of the peak files from the previous exercise to work directory
 
 .. code-block:: bash
 
@@ -223,8 +223,8 @@ Now you are ready to repeat all steps on the new peak set: select the top 500 pe
 7. Try HOMER
 ================
 
-Finally, we will try another popular motif finding software, HOMER. Here we will look at a 
-`CTCF chipseq experiment from mouse <https://www.encodeproject.org/experiments/ENCSR000CBJ/>`_. First, download the bed file with the peaks and select the top 500 peaks:
+Finally, we will try another popular motif finding software, HOMER. Here we will look at a
+`CTCF ChIP-seq experiment from mouse <https://www.encodeproject.org/experiments/ENCSR000CBJ/>`_. First, download the bed file with the peaks and select the top 500 peaks:
 
 .. code-block:: bash
 
@@ -235,8 +235,8 @@ Finally, we will try another popular motif finding software, HOMER. Here we will
 
 Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at.
 
-Have a look at the resuling html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
- 
+Have a look at the resulting html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
+
 .. code-block:: bash
 
 	findMotifsGenome.pl mouse_CTCF_top500.bed mm10 homer_out_mouse_ctcf -size 200 -mask -preparsedDir tmp_homer/
@@ -250,4 +250,3 @@ Have a look at the resuling html file. Here you can see a list of *de-novo* moti
 
 .. Written by: Jakub Westholm
 .. rst by: Agata Smialowska
-
