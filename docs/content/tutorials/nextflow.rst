@@ -295,7 +295,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
 * ``--project g2021025``
-* ``--genome GRCh37``
+* ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
 
@@ -304,7 +304,13 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end``
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh38 --input samplesheet.csv --single_end``
+
+If things take a bit too long and you would like to see an example of the typical output, you could do another test run on a small dataset.
+
+.. code-block:: bash
+
+    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile test,singularity
 
 Methyl-seq
 -----------
