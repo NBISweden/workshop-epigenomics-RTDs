@@ -4,7 +4,7 @@
 
 
 ################################
-ChIP-seq down-stream analysis
+ChIP-seq downstream analysis
 ################################
 
 **Learning outcomes**
@@ -20,7 +20,7 @@ ChIP-seq down-stream analysis
 .. Contents
 .. =========
 
-.. contents:: 
+.. contents::
     :local:
 
 Introduction
@@ -87,7 +87,7 @@ Let's
 
 
 .. HINT::
-	
+
 	If you start from a different location, you should ``cd ~/chipseq/analysis/R``
 
 
@@ -105,7 +105,7 @@ The remaining part of the exercise is performed in ``R``.
 
 .. HINT::
 
-	We are running 
+	We are running
 	``R version 4.0.4 (2021-02-15) -- "Lost Library Book"``
 
 
@@ -178,7 +178,7 @@ Let's continue with the analysis. The wrapper function ``dba.count`` reads in da
 
 	# counting reads mapping to intervals (peaks)
 	res.cnt = dba.count(res, minOverlap=2, score=DBA_SCORE_TMM_MINUS_FULL, fragmentSize=130)
-	
+
 	# at this step the TMM normalisation is applied
 	res.norm=dba.normalize(res.cnt, normalize=DBA_NORM_TMM)
 
@@ -397,19 +397,19 @@ Save the session::
 
 
    .. code-block:: R
-	
+
 	other attached packages:
 	 [1] DiffBind_3.0.15             SummarizedExperiment_1.20.0
-	 [3] Biobase_2.50.0              MatrixGenerics_1.2.1       
-	 [5] matrixStats_0.58.0          GenomicRanges_1.42.0       
-	 [7] GenomeInfoDb_1.26.7         IRanges_2.24.1             
-	 [9] S4Vectors_0.28.1            BiocGenerics_0.36.0        
+	 [3] Biobase_2.50.0              MatrixGenerics_1.2.1
+	 [5] matrixStats_0.58.0          GenomicRanges_1.42.0
+	 [7] GenomeInfoDb_1.26.7         IRanges_2.24.1
+	 [9] S4Vectors_0.28.1            BiocGenerics_0.36.0
 
 
 Peak Annotation
 ====================
 
-So now we have list of differentially bound sites for comparisons of interest but we do not know much about them besides the genomic location. It is time to them in a biological context. To do so, we will use another ``Bioconductor`` package `ChIPpeakAnno <http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html>`_.
+So now we have list of differentially bound sites for comparisons of interest but we do not know much about them besides the genomic location. It is time to inspect them in a biological context. To do so, we will use another ``Bioconductor`` package `ChIPpeakAnno <http://bioconductor.org/packages/release/bioc/vignettes/ChIPpeakAnno/inst/doc/pipeline.html>`_.
 
 ChIPpeakAnno `"is for facilitating the downstream analysis for ChIP-seq experiments. It includes functions to find the nearest gene, exon, miRNA or custom features such as the most conserved elements and other transcription factor binding sites supplied by users, retrieve the sequences around the peak, obtain enriched Gene Ontology (GO) terms or pathways. Starting 2.0.5, new functions have been added for finding the peaks with bi-directional promoters with summary statistics (peaksNearBDP), for summarizing the occurrence of motifs in peaks (summarizePatternInPeaks) and for adding other IDs to annotated peaks or enrichedGO (addGeneIDs). Starting 3.4, permutation test has been added to determine whether there is a significant overlap between two sets of peaks. In addition, binding patterns of multiple transcription factors (TFs) or distributions of multiple epigenetic markers around genomic features could be visualized and compared easily using a side-by-side heatmap and density plot.`
 
@@ -425,7 +425,7 @@ We will continue our R session. If you have logged-out or lost connection or sim
 .. code-block:: R
 
 	cd ~/chipseq/analysis/R
-	
+
     module load R_packages/4.0.4
 
 
@@ -446,7 +446,7 @@ Like with DiffBind package there is a nice `ChIPpeakAnno tutorial <http://biocon
 .. code-block:: R
 
 	# Loading DiffBind library
-	# we will need it to extract interesting peaks for down-stream analysis
+	# we will need it to extract interesting peaks for downstream analysis
 	library(DiffBind)
 
 	# Loading ChIPpeakAnno library
@@ -635,26 +635,26 @@ To test for overrepresented reactome pathways:
    .. code-block:: R
 
    	> print(head(unique(peaks.pathways$path.term), n=20))
-	 [1] "Homo sapiens: Hemostasis"                             
-	 [2] "Homo sapiens: Opioid Signalling"                      
-	 [3] "Homo sapiens: PKA-mediated phosphorylation of CREB"   
-	 [4] "Homo sapiens: Calmodulin induced events"              
-	 [5] "Homo sapiens: Ca-dependent events"                    
-	 [6] "Homo sapiens: CaM pathway"                            
-	 [7] "Homo sapiens: Neuronal System"                        
-	 [8] "Homo sapiens: Potassium Channels"                     
-	 [9] "Homo sapiens: Voltage gated Potassium channels"       
-	[10] "Homo sapiens: Tandem pore domain potassium channels"  
+	 [1] "Homo sapiens: Hemostasis"
+	 [2] "Homo sapiens: Opioid Signalling"
+	 [3] "Homo sapiens: PKA-mediated phosphorylation of CREB"
+	 [4] "Homo sapiens: Calmodulin induced events"
+	 [5] "Homo sapiens: Ca-dependent events"
+	 [6] "Homo sapiens: CaM pathway"
+	 [7] "Homo sapiens: Neuronal System"
+	 [8] "Homo sapiens: Potassium Channels"
+	 [9] "Homo sapiens: Voltage gated Potassium channels"
+	[10] "Homo sapiens: Tandem pore domain potassium channels"
 	[11] "Homo sapiens: Common Pathway of Fibrin Clot Formation"
-	[12] "Homo sapiens: Extracellular matrix organization"      
-	[13] "Homo sapiens: Collagen formation"                     
-	[14] "Homo sapiens: Acyl chain remodelling of PC"           
-	[15] "Homo sapiens: Acyl chain remodelling of PE"           
-	[16] "Homo sapiens: Acyl chain remodelling of PI"           
-	[17] "Homo sapiens: Acyl chain remodelling of PG"           
-	[18] "Homo sapiens: Synthesis of PA"                        
-	[19] "Homo sapiens: Glycerophospholipid biosynthesis"       
-	[20] "Homo sapiens: Signaling by Activin"                   
+	[12] "Homo sapiens: Extracellular matrix organization"
+	[13] "Homo sapiens: Collagen formation"
+	[14] "Homo sapiens: Acyl chain remodelling of PC"
+	[15] "Homo sapiens: Acyl chain remodelling of PE"
+	[16] "Homo sapiens: Acyl chain remodelling of PI"
+	[17] "Homo sapiens: Acyl chain remodelling of PG"
+	[18] "Homo sapiens: Synthesis of PA"
+	[19] "Homo sapiens: Glycerophospholipid biosynthesis"
+	[20] "Homo sapiens: Signaling by Activin"
 
 
 
@@ -667,21 +667,21 @@ To test for overrepresented reactome pathways:
 
 	   other attached packages:
 	 [1] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
-	 [2] GenomicFeatures_1.42.3                 
-	 [3] reactome.db_1.74.0                     
-	 [4] org.Hs.eg.db_3.12.0                    
-	 [5] AnnotationDbi_1.52.0                   
-	 [6] ChIPpeakAnno_3.24.2                    
-	 [7] DiffBind_3.0.15                        
-	 [8] SummarizedExperiment_1.20.0            
-	 [9] Biobase_2.50.0                         
-	[10] MatrixGenerics_1.2.1                   
-	[11] matrixStats_0.58.0                     
-	[12] GenomicRanges_1.42.0                   
-	[13] GenomeInfoDb_1.26.7                    
-	[14] IRanges_2.24.1                         
-	[15] S4Vectors_0.28.1                       
-	[16] BiocGenerics_0.36.0                    
+	 [2] GenomicFeatures_1.42.3
+	 [3] reactome.db_1.74.0
+	 [4] org.Hs.eg.db_3.12.0
+	 [5] AnnotationDbi_1.52.0
+	 [6] ChIPpeakAnno_3.24.2
+	 [7] DiffBind_3.0.15
+	 [8] SummarizedExperiment_1.20.0
+	 [9] Biobase_2.50.0
+	[10] MatrixGenerics_1.2.1
+	[11] matrixStats_0.58.0
+	[12] GenomicRanges_1.42.0
+	[13] GenomeInfoDb_1.26.7
+	[14] IRanges_2.24.1
+	[15] S4Vectors_0.28.1
+	[16] BiocGenerics_0.36.0
 
 
 
@@ -689,13 +689,13 @@ To test for overrepresented reactome pathways:
 Concluding remarks and next steps
 ===================================
 
-The workflow presented in the tutorials is quite common and it includes recommended steps for analysis of ChIP-seq data. Naturally, there may be different tools or ways to preform similar tasks. New tools are being developed all the time and no single tool can do it all.
+The workflow presented in the tutorial is quite common and it includes recommended steps for analysis of ChIP-seq data. Naturally, there may be different tools or ways to perform similar tasks. New tools are being developed all the time and no single tool can do it all.
 
-In the extra labs we have prepared you can find for instance an alternative way of quality control of ChIP-seq data with R package called ``ChIPQC`` as well as alternative differential binding workflow with a packaged called ``csaw``. 
+In the extra labs we have prepared, you can find for instance an alternative way of quality control of ChIP-seq data with R package called ``ChIPQC`` as well as alternative differential binding workflow with a packaged called ``csaw``.
 
 .. Note, these labs were not extensively tested so you may need to experiment and draw from the knowledge gained in the main labs.
 
-Also, there are more types of analyses one can do beyond the one presented here. A common further analysis, for instance, includes identification of short sequence motifs enriched in regions bound by the assayed factor (peaks). We present several methods in the lab :doc:`Motif finding exercise <../motifs/lab-motifs>`
+Also, there are more types of analyses one can do beyond those presented here. A common further analysis, for instance, includes identification of short sequence motifs enriched in regions bound by the assayed factor (peaks). We present several methods in the lab :doc:`Motif finding exercise <../motifs/lab-motifs>`
 
 .. There are several tools available here and we recommend you test one or two with on the tutorial data: [Homer](http://homer.salk.edu/homer/), [GEM](http://groups.csail.mit.edu/cgs/gem/), [RSAT](http://floresta.eead.csic.es/rsat/peak-motifs_form.cgi)m [MEME](http://meme-suite.org/)
 
