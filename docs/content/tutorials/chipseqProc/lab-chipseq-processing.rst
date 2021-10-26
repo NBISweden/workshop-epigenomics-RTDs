@@ -21,7 +21,7 @@ ChIP-seq data processing tutorial
 .. Contents
 .. =========
 
-.. .. contents:: 
+.. .. contents::
 ..     :local:
 
 
@@ -67,15 +67,15 @@ We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These
      - Description
    * - 1
      - ENCSR000BMN
-     - HeLa 
-     - adenocarcinoma (*Homo sapiens*, 31 year female) 
+     - HeLa
+     - adenocarcinoma (*Homo sapiens*, 31 year female)
    * - 2
      - ENCSR000BOT
      - HepG2
      - hepatocellular carcinoma (*Homo sapiens*, 15 year male)
    * - 3
      - ENCSR000BOZ
-     - SK-N-SH 
+     - SK-N-SH
      - neuroblastoma (*Homo sapiens*, 4 year female)
    * - 4
      - ENCSR000BTV
@@ -95,47 +95,47 @@ We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These
      - Input
    * - 1
      - ENCFF000PED
-     - HeLa 
+     - HeLa
      - 1
      - ENCFF000PET
    * - 2
      - ENCFF000PEE
-     - HeLa 
+     - HeLa
      - 2
      - ENCFF000PET
    * - 3
      - ENCFF000PMG
-     - HepG2 
+     - HepG2
      - 1
      - ENCFF000POM
    * - 4
      - ENCFF000PMJ
-     - HepG2 
+     - HepG2
      - 2
      - ENCFF000PON
    * - 5
      - ENCFF000OWQ
-     - neural 
+     - neural
      - 1
      - ENCFF000OXB
    * - 6
      - ENCFF000OWM
-     - neural 
+     - neural
      - 2
      - ENCFF000OXE
    * - 7
      - ENCFF000RAG
-     - SK-N-SH 
+     - SK-N-SH
      - 1
      - ENCFF000RBT
    * - 8
      - ENCFF000RAH
-     - SK-N-SH 
+     - SK-N-SH
      - 2
      - ENCFF000RBU
 
 
-We have processed the data, starting from aligned reads in *bam* format, as follows: 
+We have processed the data, starting from aligned reads in *bam* format, as follows:
 
 * alignments were subset to only include chromosomes 1 and 2;
 
@@ -149,7 +149,7 @@ Methods
 
 Reads were mapped by ENCODE consortium to the human genome assembly version *hg19* using ``bowtie``, a short read aligner performing **ungapped global** alignment. Only reads with **one best alignment** were reported, sometimes also called "unique alignments" or "uniquely aligned reads". This type of alignment excludes reads mapping to multiple locations in the genome from any down-stream analyses.
 
-**To shorten computational time** required to run steps in this tutorial we scaled down dataset by keeping reads mapping to **chromosomes 1 and 2 only**. For the post peak-calling QC and differential occupancy part of the tutorials, peaks were called using entire data set. Note that all methods used in this exercise perform significantly better when used on complete (i.e. non-subset) data sets. Their accuracy most often scales with the number of mapped reads in each library, but so does the run time. For reference we include the key plots generated analysing the complete data set 
+**To shorten computational time** required to run steps in this tutorial we scaled down dataset by keeping reads mapping to **chromosomes 1 and 2 only**. For the post peak-calling QC and differential occupancy part of the tutorials, peaks were called using entire data set. Note that all methods used in this exercise perform significantly better when used on complete (i.e. non-subset) data sets. Their accuracy most often scales with the number of mapped reads in each library, but so does the run time. For reference we include the key plots generated analysing the complete data set
 (`Appendix`_ and drop-down windows in each section).
 
 Last but not least, we have prepared **intermediate files** in case some steps fail to work. These should allow you to progress through the analysis if you choose to skip a step or two. You will find all the files in the ``~/chipseq/results`` directory.
@@ -174,7 +174,7 @@ Copy the scripts to your home directory and execute them:
   cp /proj/g2021025/nobackup/chipseq_proc/chipseq_env.sh .
 
 
-  source chipseq_env.sh 
+  source chipseq_env.sh
   source chipseq_data.sh
 
 
@@ -358,7 +358,7 @@ To copy type from **a terminal window on your computer NOT logged in to Uppmax**
 Alignment processing
 -----------------------
 
-Now we will do some data cleaning to try to improve the libraries quality and remove unwanted signal. First, **duplicated reads are marked and removed** using ``MarkDuplicates`` tool from `Picard <http://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates>`_ . Marking as "duplicates" is based on their alignment location, not sequence. 
+Now we will do some data cleaning to try to improve the libraries quality and remove unwanted signal. First, **duplicated reads are marked and removed** using ``MarkDuplicates`` tool from `Picard <http://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates>`_ . Marking as "duplicates" is based on their alignment location, not sequence.
 
 .. Note::
 
@@ -366,7 +366,7 @@ Now we will do some data cleaning to try to improve the libraries quality and re
 
 
 .. code-block:: bash
-	
+
   cd ..
   mkdir bam_preproc
   cd bam_preproc
@@ -384,10 +384,10 @@ Check out ``dedup_metrics.txt`` for details of this step.
 
 
 
-Second, **reads mapped to ENCODE blacklisted regions** in accession `ENCFF000KJP <https://www.encodeproject.org/annotations/ENCSR636HFF/>`_ **are removed**. The DAC Blacklisted Regions aim to identify a comprehensive set of regions in the human genome that have anomalous, unstructured, high signal/read counts in next gen sequencing experiments independent of cell line and type of experiment. 
+Second, **reads mapped to ENCODE blacklisted regions** in accession `ENCFF000KJP <https://www.encodeproject.org/annotations/ENCSR636HFF/>`_ **are removed**. The DAC Blacklisted Regions aim to identify a comprehensive set of regions in the human genome that have anomalous, unstructured, high signal/read counts in next gen sequencing experiments independent of cell line and type of experiment.
 
 .. code-block:: bash
-	
+
 	module unload python
 	module load NGSUtils/0.5.9
 
@@ -409,7 +409,7 @@ Third, the processed **bam files are sorted and indexed**:
   module unload picard
   module unload NGSUtils
 
-This concludes processing of alignments to remove unwanted signal. 
+This concludes processing of alignments to remove unwanted signal.
 
 
 :raw-html:`<br />`
@@ -525,7 +525,7 @@ Now we are ready to compute the read coverages for genomic regions for the BAM f
 .. code-block:: bash
 
   # if not already loaded
-	module load deepTools/3.3.2 
+	module load deepTools/3.3.2
 
   multiBamSummary bins --bamfiles hela/ENCFF000PED.chr12.rmdup.sort.bam \
     hela/ENCFF000PEE.chr12.rmdup.sort.bam hela/ENCFF000PET.chr12.rmdup.sort.bam \
@@ -565,7 +565,7 @@ What do you think?
 
 
 
-Part II: Identification of binding sites 
+Part II: Identification of binding sites
 ==========================================
 
 Now we know so much more about the quality of our ChIP-seq data. In this section, we will
@@ -632,7 +632,7 @@ Let's run ``MACS`` now. ``MACS`` prints messages as it progresses through differ
 
   macs2 callpeak -t ENCFF000PED.preproc.bam -c ENCFF000PET.preproc.bam \
   -f BAM -g 4.9e8 -n hela_1_REST.chr12.macs2 -q 0.01 &> macs.log
-  
+
   module unload MACS
   module unload python
 
@@ -674,14 +674,14 @@ These files are in `BED <https://genome.ucsc.edu/FAQ/FAQformat.html#format1>`_ f
 We can simplify the `BED` files by keeping only the first three most relevant columns e.g.
 
 .. code-block:: bash
-	
+
 	cut -f 1-3 hela_1_REST.chr12.macs2_peaks.narrowPeak > hela_1_chr12_peaks.bed
 
 
 Peaks detected on chromosomes 1 and 2 are present in directory ``/results/peaks_bed``. These peaks were detected using complete (all chromosomes) data and therefore there may be some differences between the peaks present in the prepared file ``hela_1_peaks.bed`` compared to the peaks you have just detected. We suggest we use these pre-made peak BED files instead of the file you have just created. You can check how many peaks were detected in each library by listing number of lines in each file:
 
 .. code-block:: bash
-	
+
 	wc -l ../../results/peaks_bed/*.bed
 
 
@@ -698,7 +698,7 @@ Peaks detected on chromosomes 1 and 2 are present in directory ``/results/peaks_
       #All cell lines, complete data:
 
       wc -l ../../results/peaks_bed/*.bed
-      
+
         2252 ../../results/peaks_bed/hela_1_peaks.chr12.bed
         2344 ../../results/peaks_bed/hela_2_peaks.chr12.bed
         2663 ../../results/peaks_bed/hepg2_1_peaks.chr12.bed
@@ -776,7 +776,7 @@ This way one can compare peaks from replicates of the same condition and beyond,
    .. code-block:: bash
 
     wc -l *chr12.bed
-    
+
     1088 peaks_hela.chr12.bed
      519 peaks_hepg2.chr12.bed
      10 peaks_hepg2_hela.chr12.bed
@@ -812,7 +812,7 @@ These files are already prepared and are under ``peak_calling`` directory
 
 
 .. code-block:: bash
-	
+
   BEDS="../../results/peaks_bed"
 
   module load BEDOPS/2.4.3
@@ -829,8 +829,8 @@ These files are already prepared and are under ``peak_calling`` directory
 
    .. code-block:: bash
 
-    wc -l REST_peaks.chr12.bed 
-    
+    wc -l REST_peaks.chr12.bed
+
     17047 REST_peaks.chr12.bed
 
 
@@ -838,7 +838,7 @@ These files are already prepared and are under ``peak_calling`` directory
 For example, to identify and merge all peaks reproducible within replicates:
 
 .. code-block:: bash
-  
+
   bedtools intersect -a $BEDS/neural_1_peaks.chr12.bed -b $BEDS/neural_2_peaks.chr12.bed -f 0.50 -r \
   > peaks_neural.chr12.bed
 
@@ -857,7 +857,7 @@ For example, to identify and merge all peaks reproducible within replicates:
     .. code-block:: bash
 
       wc -l REST*
-    
+
      17047 REST_peaks.chr12.bed
       3411 REST_reproducible_peaks.chr12.bed
 
@@ -882,7 +882,7 @@ For example, to identify and merge all peaks reproducible within replicates:
 Quality control after peak calling
 -----------------------------------
 
-Having a consensus peakset we can re-run samples clustering with ``deepTools`` using only peak regions for the coverage analysis `in BED mode <https://deeptools.readthedocs.io/en/latest/content/tools/multiBamSummary.html#id9>`_. This may be informative when looking at samples similarities with clustering and heatmaps and it typically done for ChIP-seq experiments. This also gives an indications whether peaks are consistent between replicates given the signal strength in peaks regions.
+Having a consensus peakset we can re-run samples clustering with ``deepTools`` using only peak regions for the coverage analysis `in BED mode <https://deeptools.readthedocs.io/en/latest/content/tools/multiBamSummary.html#id9>`_. This may be informative when looking at samples similarities with clustering and heatmaps, and it is typically done for ChIP-seq experiments. This also gives an indication whether peaks are consistent between replicates, given the signal strength in peaks regions.
 
 
 Let's make a new directory to keep things organised and run ``deepTools`` in ``BED`` mode providing merged peakset we created:
@@ -998,7 +998,7 @@ Explore data:
 
 - go to interesting locations, i.e. REST binding peaks detected in both HeLa samples, available in ``peaks_hela.chr12.bed``
 
-- you can change the signal display mode in the tracks in the left hand side panel. Right click in the BAM file track, select from the menu ``display`` 
+- you can change the signal display mode in the tracks in the left hand side panel. Right click in the BAM file track, select from the menu ``display``
 
 - choose squishy; ``color by`` read strand and ``group by`` read strand
 
@@ -1057,7 +1057,7 @@ Summary
 
 Congratulations!
 
-Now we know how to inspect ChIP-seq data and judge quality. If the data quality is good, we can continue with downstream analysis as in next parts of this course. If not, well... may be better to repeat experiment than to waste resources and time on bad quality data.
+Now we know how to inspect and judge quality of ChIP-seq data. If the data quality is good, we can continue with downstream analysis as in the next parts of this course. If not, well... maybe consider repeating the experiment to avoid wasting resources and time on bad quality data.
 
 :raw-html:`<br />`
 :raw-html:`<br />`
