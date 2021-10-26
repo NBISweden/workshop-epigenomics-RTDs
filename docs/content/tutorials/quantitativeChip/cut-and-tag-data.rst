@@ -86,13 +86,11 @@ Let’s look more systematically at known H3K27me3 peaks. We are using a publish
 	:target: Figures/14_heatmap.png
 	:alt:
 
-These heatmaps can be generated using ``seqplots``. ``seqplots`` is an ``R`` package that can be installed
-from ``Bioconductor``. It can be run as a shiny app on a browser or from ``Rstudio``. You can check
-how to use it `in this link <https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html>`_.
 
-.. note:: 
-    Be sure to mark `custom` as genome when uploading bigWig and BED files to `seqplots`. There may be
-    some incompatibility between hg38 versions in this case.
+.. warning::
+    These plots were generated in the past using ``seqplots``. Unfortunately, this package `is now deprecated <https://bioconductor.org/packages/release/bioc/html/seqplots.html>`_. You can still
+    use older versions of R and this package, or just generate plots like this using another tool, like :code:`deepTools`. You can see more in their `documentation <https://deeptools.readthedocs.io/en/develop/>`_. And there are also examples in other tutorials, such as the MINUTE-ChIP data tutorial in this section.
+
 
 
 **Q: While showing the highest signal to noise (note the scale of the heatmap 0-1000!). Could there be a problem with CUT&Tag?**

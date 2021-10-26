@@ -158,8 +158,9 @@ Remember the key points:
 * Start with a fresh new empty directory
 * ``$NF_CORE_PIPELINES`` specifies the path where all pipelines are stored
 * Specify the pipeline with ``$NF_CORE_PIPELINES/[name]/[version]/workflow``
-* Use the uppmax configuration profile to run on UPPMAX
+* Use the ``uppmax`` configuration profile to run on UPPMAX from a login node
     - If using this, also specify an UPPMAX project with ``--project`` (two hyphens!)
+* You are running now on your own computing node, so add the ``singularity`` profile instead of the uppmax configuration. This will bypass the task scheduler and will make the pipeline run faster. For larger project, just use ``uppmax``.
 * Use the test configuration profile to run a small test 
 
 .. code-block:: bash
@@ -167,7 +168,7 @@ Remember the key points:
     cd ~
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project g2021025
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,singularity
 
 Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset! This is where you ask for help on Slack instead of suffering in silence.
 
@@ -294,7 +295,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
 * ``--project g2021025``
-* ``--genome GRCh37``
+* ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
 
@@ -303,7 +304,13 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh37 --input samplesheet.csv --single_end
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh38 --input samplesheet.csv --single_end``
+
+If things take a bit too long and you would like to see an example of the typical output, you could do another test run on a small dataset.
+
+.. code-block:: bash
+
+    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile test,singularity
 
 Methyl-seq
 -----------
@@ -341,10 +348,10 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
-.. admonition:: minimal methylseq command
-   :class: dropdown, note
+.. code-block:: minimal methylseq command
+   :class: dropdown
 
-    nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
+   nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
 
 
 Getting help
