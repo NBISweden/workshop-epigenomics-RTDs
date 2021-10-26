@@ -17,7 +17,7 @@ Background
 
 Quantitative ChIP-seq methods allow us to compare the effect of DNA-protein interactions across samples. In our lab we developed **MINUTE-ChIP**, a multiplexed quantitative ChIP-seq method. 
 
-To process the data with produce with this method, we developed Minute. Minute takes multiplexed MINUTE-ChIP FASTQ files and outputs a set of normalized, scaled bigWig files that can be directly compared across conditions.
+To process the raw data produced with this method, we developed **Minute**. Minute takes multiplexed MINUTE-ChIP FASTQ files and outputs a set of normalized, scaled bigWig files that can be directly compared across conditions.
 
 We are going to analyse H3K27m3 data from human ESCs, where we have shown that Naive cells H3K27m3 landscape looks very different when compared to Primed cells in a quantitative manner.
 
@@ -33,7 +33,7 @@ you will see H3K27m3 data output for replicate 1 of our experiments. In the **do
 What you will learn:
 
 - Apply the Minute data-processing pipeline to a set of MINUTE-ChIP fastq files.
-- Visualize differences between unscaled and scaled bigWig files, using standard tools like IGV, seqtools. 
+- Visualize differences between unscaled and scaled bigWig files, using standard tools like IGV, deepTools, R. 
 - Understand how quantitative ChIP results are different from traditional ChIP, using as example H3K27m3 data on human ESCs.
 
 
@@ -41,7 +41,7 @@ What you will learn:
 Primary analysis
 ----------------
 
-Minute runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on makefile rules. You will learn more about workflow management on the Nextflow and nf-core tutorials, but let this first part of the tutorial serve as an example of how to run a different workflow, and give you an idea of the things that need to be done before getting to the downstream analysis.
+Minute runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on Makefile rules. You will learn more about workflow management on the Nextflow and nf-core tutorials, but let this first part of the tutorial serve as an example of how to run a different workflow, and give you an idea of how a MINUTE-ChIP analysis goes end-to-end.
 
 
 Conda environment
@@ -58,18 +58,7 @@ To make sure you have all the necessary tools to run Minute, you can set up a co
   conda env create -f /proj/epi2021/nobackup/minute_chip/minute-main/environment.yml -n minute_lab 
 
 
-.. warning::
-  There seems to be a problem with recent versions of :code:`tbb`, a :code:`bowtie2` dependency. We haven’t fixed yet this in the main repo, but you can downgrade tbb to a compatible version:
-
-  .. code-block:: bash
-
-    conda activate minute_lab
-    conda install tbb=2020.2
-
-  This will ask you if you want to downgrade :code:`tbb`. Say yes.
-
-
-If you run into problems configuring this, there is a copy of a conda environment at: /proj/epi2021/nobackup/minute_chip/condaenv/minute_lab
+If you run into problems configuring this, there is a copy of a conda environment at: :code:`/proj/epi2021/nobackup/minute_chip/condaenv/minute_lab`
 It could work if you just:
 
 .. code-block:: bash
@@ -85,7 +74,7 @@ We will be using H3K27m3 data from our `publication <https://www.biorxiv.org/con
 
 Kumar, B., Navarro, C., Winblad, N., Schell, J. P., Zhao, C., Lanner, F., & Elsässer, S. J. (2021). Polycomb Repressive Complex 2 shields naïve human pluripotent cells from trophectoderm differentiation. bioRxiv.
 
-In particular, we are going to look at Naïve vs Primed cells, and as control we have EZH2-inhibitor treatment, which removes H3K27m3 from the cells, creating a baseline for technical background.
+In particular, we are going to look at Naïve vs Primed human ES cells, and as control we have EZH2-inhibitor treatment, which removes H3K27m3 from the cells, creating a baseline for technical background.
 
 There are 3 replicates for each condition. In the first part of the tutorial you will run replicate 1, and results for all replicates are available in the second part.
 
@@ -105,13 +94,14 @@ There are 3 replicates for each condition. In the first part of the tutorial you
 
 Now, this is how your file structure should look like:
 
-- fastq/ - Contains all the fastq.gz files in the table below.
-- libraries.tsv
-- groups.tsv
-- config.yaml
+- :code:`fastq/` - Contains all the fastq.gz files in the table below.
+- :code:`libraries.tsv` - Specifies how the samples are demultiplexed.
+- :code:`groups.tsv` - Specifies how the samples are scaled.
+- :code:`config.yaml` - Some extra config values. Where the references are, how long is the UMI.
 
 
-Minute needs three configuration files to run:
+Minute needs these three configuration files to run:
+
 
 :code:`config.yaml`: Contains information about reference mapping: where the fasta files and bowtie2 indexes are, and a blocklist to remove artifact-prone regions before scaling:
 
@@ -147,12 +137,29 @@ mate 1 contains a 6nt UMI followed by a 8nt barcode that identifies the sample.
   Input_Primed_EZH2i      1       .       IN-ChIP_H9_primed_EZH2i_rep1
 
 
+.. note::
+  Demultiplexing has been skipped to make the processing more lightweight. In a totally raw case use, :code:`libraries.tsv` would look like:
+
+  .. code-block::
+
+    H3K27m3_Naive   1       AATATGG       H3K27m3-ChIP
+    H3K27m3_Primed  1       CGACGCG       H3K27m3-ChIP
+
+  And the reads in `H3K27m3-ChIP_R1.fastq.gz` would start with a UMI And the barcode and be all together in the same file.
+
+  .. code-block::
+  
+    >read_1
+    NNNNNNAATATGGAGCGACGGCGAGCGAGCA....
+
+
+
 :code:`groups.tsv`: Contains *scaling* information. Reads are normalized to matching sample input read counts, and in each scaling group, the first sample is used as reference. This has two implications:
 
 1. Reference sample is normalized to 1x genome coverage.
 2. Rest of samples values are directly comparable to the reference and across themselves.
 
-Additionally, we may have some spike-in data from another reference, so Minute allows to map to different references in the same run. So :code:`groups.tsv` has also 
+Additionally, we may have some spike-in data from another reference, so Minute allows to map to different references in the same run. So :code:`groups.tsv` has also attached the name of the reference to which we are mapping.
 
 .. code-block::
 
@@ -294,34 +301,9 @@ Additionally, we may have some spike-in data from another reference, so Minute a
      - IN-ChIP_H9_primed_EZH2i_rep3_R{1,2}.fastq.gz
 
 
-Normally, we run Minute on the multiplexed data. However, our pipeline can skip that step and go directly to the mapping and scaling.
-
 
 Running Minute
 ^^^^^^^^^^^^^^ 
-
-So if you already got your files, you need to run:
-
-.. code-block:: bash
-
-  conda activate minute_lab
-
-  # Move to the directory where you copied the files
-  cd my_primary
-
-  # Run snakemake
-  snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 4
-
-
-:code:`-j` is the number of jobs/threads used by Snakemake. Depending on how many cores there are available on your node, you can raise this value.
-The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
-out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
-cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
-
-Since this takes some time to run, my recommendation is that you start running this in the background and move to the **Downstream analysis** part of
-the tutorial in the meantime. It is also recommended, same as before, that you do not use *all* the cores you reserved, so you have some processing
-power for the second part of the tutorial. For instance if you have 12 cores, put 6 here and keep the other 6 for the second part of the tutorial.
-
 
 Essentially, the steps performed by Minute are:
 
@@ -333,9 +315,52 @@ Essentially, the steps performed by Minute are:
 - Generate 1x coverage and scaled bigWig files from alignment using the calculated scaling factors using :code:`deepTools`.
 - QC at every step (:code:`fastqc`, :code:`picard` insert size metrics, duplication rates, etc) are gathered and output in the form of a :code:`MultiQC` report.
 
-.. warning::
-  When the demultiplexing step is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
-  be calculated over the whole pool. We are working on fixing reports in this case.
+Note: When the demultiplexing step is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
+be calculated over the whole pool. We are working on fixing reports in this case.
+
+
+So if you already got your files, you need to run something like
+
+.. warning:: Before running this:
+ See paragraphs below before running this, as this is a time consuming step!
+
+.. code-block:: bash
+
+  conda activate minute_lab
+
+  # Move to the directory where you copied the files
+  cd my_primary
+
+  # Run snakemake on the background, and keep doing something else
+  nohup snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+
+
+:code:`-j` is the number of jobs/threads used by Snakemake. Depending on how many cores there are available on your node, you can raise this value.
+The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
+out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
+cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
+
+Since this takes some time to run, my recommendation is that you start running this in the background and move to the **Downstream analysis** part of
+the tutorial in the meantime. It is also recommended, same as before, that you do not use *all* the cores you reserved, so you have some processing
+power for the second part of the tutorial. For instance if you have 12 cores, put 6 here and keep the other 6 for the second part of the tutorial.
+
+.. note::
+  You can run something in the background by typing :code:`&` at the end of the command. You can also keep the output to stderr and stdout by using
+  :code:`>` and :code:`2>` operators. So the :code:`snakemake` call in the previous block just allows you to do this:
+
+  .. code-block:: bash
+    
+    nohup snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+
+  `nohup` is a handy command that will make sure that the `snakemake` keeps running even if you logout or are kicked out of the session.
+
+  You can peek in the progress of the pipeline by looking at the output from time to time:
+
+  .. code-block:: bash
+
+    tail minute_pipeline.out
+
+  It is important that you do this right away, to see if the pipeline is correctly running or there is some issue with it. Otherwise, if it crashes, it will do so silently.
 
 
 .. note::
@@ -393,7 +418,6 @@ Primed vs Naïve, information that is lost in unscaled files.
 **Q: How is the global distribution of primed H3K27m3 changing upon scaling? Why do Naïve samples look the same both scaled and unscaled?**
 
 
-
 .. note::
   Make sure you select the scaled tracks together and click on *group autoscale* so all the scales match.
 
@@ -407,11 +431,17 @@ of Bivalent genes using for comparing H3K27m3 across conditions. Bivalent-marked
 and H3K4m3 (active) marks at their TSS regions. It has been thought that Naïve cells lose this H3K27m3 signal at bivalent TSSs, but it is more of a 
 scaling issue, as you will see in this tutorial!
 
+The bivalent annotation comes from:
+
+Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
+
+And it has been translated to :code:`hg38` genome using :code:`liftOver`. 
+
 
 Files
 ^^^^^ 
 
-Now you will get a copy of all the bigWig files.
+Now you can get a copy of all the bigWig files + the bivalent annotation:
 
 
 .. code-block:: bash
@@ -537,7 +567,7 @@ This will generate a :code:`10kb_bins.tab` tab-delimited file that contains mean
 look at the bin distribution using some simple :code:`ggplot` commands.
 
 .. note::
-  Since you already have run RStudio in other tutorials, you can use any approach you have used before for running R. Just note that you need to have access to this `10kb_bins.tab` you just created. You can also do it locally in your computer, if you have a Rstudio version installed, and you will not need very unusual tools.
+  Since you already have run :code:`RStudio` in other tutorials, you can use any approach you have used before for running R. Just note that you need to have access to this :code:`10kb_bins.tab` you just created. You can also do it locally in your computer, if you have a :code:`RStudio`  version installed, and you will only need :code:`ggplot2` and :code:`GenomicRanges` + :code:`rtracklayer`.
 
 
 First, import the data into a data frame:
@@ -602,13 +632,16 @@ some operations, like check which bins overlap with some annotation, and things 
 
   biv_bins <- subsetByOverlaps(gr, bivalent)
 
+  # You can use this data frame to plot only the bivalent-overlapping bins
+  biv_df <- data.frame(biv_bins)
+
 
 So we could be interested in plotting only bins that overlap with bivalent genes, and many other things.
 In this case, bins are somewhat large, so they will not represent exactly the annotations that we plotted in the previous step.
 
 The same way we generated these figures, there are a lot of things that can be done, and many questions can be addressed, for instance:
 
-- Do you think that the bin size affects this type of analysis in deeper ways? How different would these figures look if the bin size was 5kb?
+- Do you think that the bin size affects this type of analysis in deeper ways? How different would these figures look if the bin size was 5kb? Which size would you think is a good compromise without getting a difficult to handle number of data points?
 - How is the distribution of values per chromosome? Hint: look again at the tracks in the primary analysis part!
 - How do the replicates look separately? We only plotted the pooled samples.
 
