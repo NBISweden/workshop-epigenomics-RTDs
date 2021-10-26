@@ -313,25 +313,29 @@ So if you already got your files, you need to run:
   snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 4
 
 
-:code:`-j` is the number of jobs or cores used by Snakemake. Depending on how many there are available on your node, you can raise this value.
-The amount of files in this part of the tutorial is small enough to be possible to run in a local computer. For 4 out of 8 cores running on my laptop
-(intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available cores you have, since you still need
-to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
+:code:`-j` is the number of jobs/threads used by Snakemake. Depending on how many cores there are available on your node, you can raise this value.
+The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
+out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
+cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
+
+Since this takes some time to run, my recommendation is that you start running this in the background and move to the **Downstream analysis** part of
+the tutorial in the meantime. It is also recommended, same as before, that you do not use *all* the cores you reserved, so you have some processing
+power for the second part of the tutorial. For instance if you have 12 cores, put 6 here and keep the other 6 for the second part of the tutorial.
 
 
 Essentially, the steps performed by Minute are:
 
-- Demultiplex the reads and remove contaminated sequences (this is skipped in this execution).
-- Map each condition to a reference genome.
-- Deduplicate the reads.
-- Remove excluded regions (such as artifact-prone regions, repeats, etc).
+- Demultiplex the reads and remove contaminated sequences using :code:`cutadapt` (this is skipped in this execution).
+- Map each condition to a reference genome using :code:`bowtie2`.
+- Deduplicate the reads taking care of the UMIs. This is done partially by :code:`je-suite` and some native code.
+- Remove excluded regions (such as artifact-prone regions, repeats, etc) using :code:`BEDTools`.
 - Calculate scaling factors based on number of reads mapped and matching input conditions.
-- Generate 1x coverage and scaled bigWig files from alignment using the calculated scaling factors.
-- QC at every step (fastQC, Picard insert size metrics, duplication rates, etc) are gathered and output in the form of MultiQC report.
+- Generate 1x coverage and scaled bigWig files from alignment using the calculated scaling factors using :code:`deepTools`.
+- QC at every step (:code:`fastqc`, :code:`picard` insert size metrics, duplication rates, etc) are gathered and output in the form of a :code:`MultiQC` report.
 
 .. warning::
-  When the demultiplexing is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
-  be calculated over the whole pool. 
+  When the demultiplexing step is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
+  be calculated over the whole pool. We are working on fixing reports in this case.
 
 
 .. note::
@@ -353,7 +357,7 @@ After the pipeline is run, you will have the following folders:
 Scaling info
 ^^^^^^^^^^^^ 
 
-Scaling info is very relevant output, you will see the following figure under reports:
+Scaling info is very relevant output for MINUTE-ChIP, you will see the following figure under reports:
 
 
 .. image:: Figures/minute_00_scaling.png
@@ -362,12 +366,12 @@ Scaling info is very relevant output, you will see the following figure under re
 
 *Fig. 1: Global scaling for H3K27m3 replicate 1*
 
-What you see here is that Naive has around 3 times as much H3K27m3 than Primed cells, and that EZH2i treatment removes the majority of H3K27m3.
+What you see here is that Naive cells have around 3x times as much H3K27m3 than Primed cells, and that EZH2i treatment removes the majority of H3K27m3.
 
 IGV tracks
 ^^^^^^^^^^ 
 
-You can take the final/bigwig files and look at them on IGV. Here you can see IGF2 gene, where once scaled, H3K27m3 decoration seems around the same values
+You can take the final/bigwig files and look at them on IGV. Here you can see IGF2 gene, where once scaled, H3K27m3 seems around the same values
 Primed vs Naïve, information that is lost in unscaled files.
 
 
@@ -398,6 +402,12 @@ Primed vs Naïve, information that is lost in unscaled files.
 Downstream analysis
 -------------------
 
+This part of the tutorial is independent from the primary analysis. So the only thing you need are a copy of the bigWig files and an annotation
+of Bivalent genes using for comparing H3K27m3 across conditions. Bivalent-marked genes are genes that are both enriched with H3K27m3 (repressive)
+and H3K4m3 (active) marks at their TSS regions. It has been thought that Naïve cells lose this H3K27m3 signal at bivalent TSSs, but it is more of a 
+scaling issue, as you will see in this tutorial!
+
+
 Files
 ^^^^^ 
 
@@ -420,6 +430,8 @@ There should be :code:`unscaled` and :code:`scaled` bigWig files, plus a set of 
 comes from:
 
 Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
+
+And it has been translated to `hg38` genome using `liftOver`. 
 
 Additionally, some bigWig tracks are pooled. These ones are all the replicates pooled together.
 
@@ -499,7 +511,7 @@ You can check this by playing with the parameters :code:`--downstream` and :code
 .. admonition:: Explanation
    :class: dropdown, hint
 
-    What is making all the difference is the real H3K27m3 background across the genome. You see in the scaled plots that Naïve is higher across. So what happens is that the "peaks" in naïve look smaller with such background, and if there is no absolute scaling that makes it possible to compare Naïve vs Primed, Naïve looks flat, as you saw in the unscaled plot. 
+    What is making all the difference is the real H3K27m3 background across the genome. You see in the scaled plots that Naïve is higher across. So what happens is that the "peaks" in naïve look smaller with such background, and if there is no absolute scaling that makes it possible to compare Naïve vs Primed, Naïve looks flat, as you saw in the unscaled plot. An additional control to make sure this is not technical background is the EZH2i treatment, which removes pretty much all H3K27m3 genome-wide.
 
 
 
@@ -532,17 +544,72 @@ First, import the data into a data frame:
 
 .. code-block:: R
 
-  # Note it is important the :code:`comment.char` parameter, as deepTools inserts a :code:`#`, which is the default comment in R, so it will not read the header properly otherwise
+  # Note it is important the :code:`comment.char` parameter, as deepTools inserts a :code:`#`,
+  # which is the default comment in R, so it will not read the header properly otherwise
   df <- read.table("./10kb_bins.tab", header=T, sep= "\t", comment.char = "")
 
   # You can check that this has reasonable names
   colnames(df)
 
+We can make this a little more readable:
 
 
+.. code-block:: R
+
+  colnames(df) <- c(c("seqnames", "start", "end"), gsub("_pooled.hg38|.bw", "", colnames(df)[4:ncol(df)]))
+
+  colnames(df)
 
 
-**Q: How do replicates look?**
+So we can for instance check the differences scaled vs unscaled in a scatterplot:
 
+.. code-block:: R
+
+  library(ggplot2)
+
+  ggplot(df, aes(x=H3K27m3_Naive.unscaled, y=H3K27m3_Primed.unscaled)) + 
+    geom_point(alpha = 0.4) + 
+    coord_cartesian(xlim=c(0,30), ylim=c(0,30))
+    
+
+  ggplot(df, aes(x=H3K27m3_Naive.scaled, y=H3K27m3_Primed.scaled)) + 
+    geom_point(alpha = 0.4) + 
+    coord_cartesian(xlim=c(0,30), ylim=c(0,30))
+
+
+.. admonition:: Resulting figures
+   :class: dropdown, hint
+
+   .. image:: Figures/minute_06_unscaled_scatter.png
+          :width: 500px
+
+   .. image:: Figures/minute_07_scaled_scatter.png
+          :width: 500px
+
+   This is not the most striking of figures, but what you can already see is that there are a bunch of 10kb bins that look super high in Primed compared to Naïve when looking at unscaled data, and that large difference drops a lot when the datapoints are scaled. Still, there is heterogeneity, and it requires a deeper analysis to understand what's happening in detail.
+
+
+We can make a :code:`GRanges` object with these values and perform
+some operations, like check which bins overlap with some annotation, and things like this.
+
+.. code-block:: R
+
+  library(GenomicRanges)
+  library(rtracklayer)
+
+  gr <- makeGRangesFromDataFrame(df, keep.extra.columns = T)
+  bivalent <- import("./Bivalent_Court2017.hg38.bed")
+
+  biv_bins <- subsetByOverlaps(gr, bivalent)
+
+
+So we could be interested in plotting only bins that overlap with bivalent genes, and many other things.
+In this case, bins are somewhat large, so they will not represent exactly the annotations that we plotted in the previous step.
+
+The same way we generated these figures, there are a lot of things that can be done, and many questions can be addressed, for instance:
+
+- Do you think that the bin size affects this type of analysis in deeper ways? How different would these figures look if the bin size was 5kb?
+- How is the distribution of values per chromosome? Hint: look again at the tracks in the primary analysis part!
+- How do the replicates look separately? We only plotted the pooled samples.
 
 
