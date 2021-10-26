@@ -24,7 +24,7 @@ Day 2: **ChIP-seq and ATAC-seq**
 
 `ATACseq <../_static/slides-atacseqproc-as-2021.pdf>`_
 
-`Motif analysis <../_static/slides-motiffinding20202.pdf>`_
+`Motif analysis <../_static/slides-motiffinding2021.pdf>`_
 
 
 
