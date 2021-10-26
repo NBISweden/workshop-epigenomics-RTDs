@@ -3,6 +3,9 @@
     :format: html
 
 
+.. please place the pdfs in `slides` ( NOT slides_2020). add the filename here, the path should be ../_static/FILENAME.pdf
+
+
 =============
 Presentations
 =============
@@ -20,11 +23,11 @@ Day 1: **Methylation: Arrays and Bisulfite-Seq**
 Day 2: **ChIP-seq and ATAC-seq**
 
 
-`ChIPseq data processing <../_static/>`_
+`ChIPseq data processing <../_static/slides-chipseqproc-as-2021.pdf>`_
 
-`ATACseq <../_static/>`_
+`ATACseq <../_static/slides-atacseqproc-as-2021.pdf>`_
 
-`Motif analysis <../_static/>`_
+`Motif analysis <../_static/slides-motiffinding2021.pdf>`_
 
 
 
@@ -52,7 +55,3 @@ Day 5
 
 
 
-
-
-
-.. `ATACseq <../_static/slides-atacseqproc-as-2020.pdf>`_
