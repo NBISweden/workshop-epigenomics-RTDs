@@ -23,8 +23,8 @@ We are going to analyse H3K27m3 data from human ESCs, where we have shown that N
 
 This tutorial has two parts:
 
-1. **Primary analysis**: Run minute workflow on a set of raw FASTQ files.
-2. **Downstream analysis**: Perform analyses on the resulting bigWig files using usual bioinformatics tools.
+1. **Primary analysis**: Run a minute workflow on a small set of FASTQ files.
+2. **Downstream analysis**: Look at the resulting bigWig files using usual bioinformatics tools.
 
 In order to make this tutorial last a reasonable time, the **primary analysis** part is independent from the second part, as it runs only on a subset of the data you can see in the second part. During the **primary analysis**
 you will see H3K27m3 data output for replicate 1 of our experiments. In the **downstream analysis** you can look at the three replicates together.
@@ -37,10 +37,11 @@ What you will learn:
 - Understand how quantitative ChIP results are different from traditional ChIP, using as example H3K27m3 data on human ESCs.
 
 
-Setup
------
 
-Minute runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on makefile rules. 
+Primary analysis
+----------------
+
+Minute runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on makefile rules. You will learn more about workflow management on the Nextflow and nf-core tutorials, but let this first part of the tutorial serve as an example of how to run a different workflow, and give you an idea of the things that need to be done before getting to the downstream analysis.
 
 
 Conda environment
@@ -68,9 +69,14 @@ To make sure you have all the necessary tools to run Minute, you can set up a co
   This will ask you if you want to downgrade :code:`tbb`. Say yes.
 
 
+If you run into problems configuring this, there is a copy of a conda environment at: /proj/epi2021/nobackup/minute_chip/condaenv/minute_lab
+It could work if you just:
 
-Primary analysis
-----------------
+.. code-block:: bash
+
+  export CONDA_ENVS_PATH=/proj/epi2021/nobackup/minute_chip/condaenv/
+  conda activate /proj/epi2021/nobackup/minute_chip/condaenv/minute_lab
+
 
 Files
 ^^^^^ 
@@ -323,13 +329,17 @@ Essentially, the steps performed by Minute are:
 - Generate 1x coverage and scaled bigWig files from alignment using the calculated scaling factors.
 - QC at every step (fastQC, Picard insert size metrics, duplication rates, etc) are gathered and output in the form of MultiQC report.
 
+.. warning::
+  When the demultiplexing is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
+  be calculated over the whole pool. 
+
 
 .. note::
   If the pipeline crashes at some point and you want to resume where it ran:
 
   .. code-block:: bash
 
-  snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 4 --rerun-incomplete
+    snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 4 --rerun-incomplete
 
 
 After the pipeline is run, you will have the following folders:
@@ -381,7 +391,7 @@ Primed vs Naïve, information that is lost in unscaled files.
 
 
 .. note::
-  Make sure you select all your tracks and click on *group autoscale* so all the scales match.
+  Make sure you select the scaled tracks together and click on *group autoscale* so all the scales match.
 
 
 
@@ -400,8 +410,10 @@ Now you will get a copy of all the bigWig files.
   mkdir my_downstream
   cd my_downstream
 
-  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bw
-  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bed
+  mkdir bw
+
+  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bw bw/
+  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bed .
 
 
 There should be :code:`unscaled` and :code:`scaled` bigWig files, plus a set of genes marked as Bivalent: :code:`Bivalent_Court2017.hg38.bed`. This annotation
@@ -409,45 +421,128 @@ comes from:
 
 Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
 
-
 Additionally, some bigWig tracks are pooled. These ones are all the replicates pooled together.
 
 
 Looking at bivalent genes
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can look at these tracks over a BED file using ``seqplots``. ``seqplots`` is an ``R`` package that can be installed
-from ``Bioconductor``. It can be run as a shiny app on a browser or from ``Rstudio``. You can check
-how to use it `in this link <https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html>`_.
+You can look at these using `deepTools <https://deeptools.readthedocs.io/en/develop/>`_. deepTools is a suite to process sequencing data.
 
 .. note::
+  If you just ran the primary analysis before, and you have an active :code:`minute_lab` conda environment, you probably don't need to load the deepTools module anyway. Otherwise, you can do:
 
-  You can look at the bigWig files locally in your computer. These files are not so large and the processing will not be
-  so computationally demanding.
+  .. code-block:: bash
+
+    module load bioinfo-tools
+    module load deepTools
 
 
-Basically you need to open ``Rstudio``, install it:
+We can use :code:`computeMatrix scale-regions` to calculate the values we will plot afterwards.
 
-.. code-block:: R
+.. code-block:: bash
 
-  if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+  computeMatrix scale-regions --downstream 3000 --upstream 3000 \
+    -S ./bw/H3K27*pooled.hg38.scaled.bw \
+    -R Bivalent_Court2017.hg38.bed \
+    -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
 
-  BiocManager::install("seqplots")
+  computeMatrix scale-regions --downstream 3000 --upstream 3000 \
+    -S ./bw/H3K27*pooled.hg38.unscaled.bw \
+    -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz \
+    --outFileNameMatrix bivalent_values_unscaled.tab -p 8
 
-And run it:
+.. note:: 
+  This backslash `\\` means the command is not complete. So if you paste this to terminal you need to paste the whole thing. If you have problems with this, you can just paste it to a text editor and put it in one line, removing all the backslashes. For instance, here are the equivalent one liners for this:
 
-.. code-block:: R
+  .. code-block:: bash
 
-  library(seqplots)
-  seqplots()
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.unscaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz --outFileNameMatrix bivalent_values_unscaled.tab -p 8
 
-This will open a shiny app where you can load bigWig files and BED files, and plot profile plots and heatmaps.
+.. note::
+  You can adapt the :code:`-p` parameter to match the number of processors you allocated.
+
+
+Then you can generate a plot by doing:
+
+.. code-block:: bash
+  
+  plotProfile -m bivalent_mat_scaled.npz -o scaled_bivalent_profile.png --perGroup
+  plotProfile -m bivalent_mat_unscaled.npz -o unscaled_bivalent_profile.png --perGroup
+
+
+.. admonition:: Scaled vs unscaled results
+   :class: dropdown, hint
+
+   .. image:: Figures/minute_05_unscaled_bivalent_profile.png
+          :width: 500px
+
+   .. image:: Figures/minute_04_scaled_bivalent_profile.png
+          :width: 500px
+
+
+**Q: How do the scaled Naïve vs Primed differ when you move away from the gene body?**
+You can check this by playing with the parameters :code:`--downstream` and :code:`--upstream` when running `computeMatrix`.
+
+.. admonition:: Example command
+   :class: dropdown, hint
+
+     .. code-block:: bash
+
+       computeMatrix scale-regions --downstream 5000 --upstream 5000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+    
 
 
 **Q: How do the scaled vs unscaled plots differ? What do you think that means?**
 
+.. admonition:: Explanation
+   :class: dropdown, hint
+
+    What is making all the difference is the real H3K27m3 background across the genome. You see in the scaled plots that Naïve is higher across. So what happens is that the "peaks" in naïve look smaller with such background, and if there is no absolute scaling that makes it possible to compare Naïve vs Primed, Naïve looks flat, as you saw in the unscaled plot. 
+
+
+
+**Q: Is this a general effect, or is it dominated by a few loci?**
+
+Hint: You can look at this using deepTools plotHeatmap function. It will take as input the matrix you calculated with :code:`computeMatrix` and generate a heatmap.
+
+
+
+Genome-wide bin distribution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Another way of looking at the general effect of the scaling genome-wide is using deepTools :code:`multiBigwigSummary` tool to generate bin average profiles genome-wide and look at their
+distribution.
+
+
+.. code-block:: bash
+
+  multiBigwigSummary bins -b ./bw/H3K27*pooled.hg38.scaled.bw ./bw/H3K27*pooled.hg38.unscaled.bw -o 10kb_bins.npz --outRawCounts 10kb_bins.tab -bs 10000 -p 10
+
+
+This will generate a :code:`10kb_bins.tab` tab-delimited file that contains mean coverage per 10kb bin across the genome for the different bigWig files. You can import this table into :code:`R` and
+look at the bin distribution using some simple :code:`ggplot` commands.
+
+.. note::
+  Since you already have run RStudio in other tutorials, you can use any approach you have used before for running R. Just note that you need to have access to this `10kb_bins.tab` you just created. You can also do it locally in your computer, if you have a Rstudio version installed, and you will not need very unusual tools.
+
+
+First, import the data into a data frame:
+
+.. code-block:: R
+
+  # Note it is important the :code:`comment.char` parameter, as deepTools inserts a :code:`#`, which is the default comment in R, so it will not read the header properly otherwise
+  df <- read.table("./10kb_bins.tab", header=T, sep= "\t", comment.char = "")
+
+  # You can check that this has reasonable names
+  colnames(df)
+
+
+
+
+
 **Q: How do replicates look?**
 
-**Q: Is this a general effect, or is it dominated by a few loci? Hint: You can use a heatmap for this**
+
 
