@@ -177,6 +177,10 @@ Often when we find a motif, we want to see if it is similar to any motif that is
 
 Click on the rightward-pointing arrow next to the first motif (under *Submit/Download*). You can then select which tool you want to submit your motif to. Tomtom is already pre-selected, so just click on *Submit*. This takes you to the Tomtom website, where you click on *Start search*. After a short while you will see a page called *Results*. Clicking on *Tomtom HTML output* takes you to the result page. Here you can see the results of matching the motif we found (the "query motif") to Tomtom's data base.
 
+**UPDATE**
+
+The TOMTOM website seems to have changed, so the motif found by MEME is not automatically added to the web form. Instead you have to type it in yourselves. For the top motif, enter `GCC[CA][CT]CTN[GC][TC]GG` in the box under "Input query motifs". Then click "Start Search"
+
 **What is the top scoring motif? Does it look similar to the motif we found? What about other motifs further down the list?**
 
 You can also access Tomtom directly from the `web site <http://meme-suite.org/tools/tomtom>`_, or run it from the command line.
