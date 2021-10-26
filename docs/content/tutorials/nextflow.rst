@@ -158,8 +158,9 @@ Remember the key points:
 * Start with a fresh new empty directory
 * ``$NF_CORE_PIPELINES`` specifies the path where all pipelines are stored
 * Specify the pipeline with ``$NF_CORE_PIPELINES/[name]/[version]/workflow``
-* Use the uppmax configuration profile to run on UPPMAX
+* Use the ``uppmax`` configuration profile to run on UPPMAX from a login node
     - If using this, also specify an UPPMAX project with ``--project`` (two hyphens!)
+* You are running now on your own computing node, so add the ``singularity`` profile instead of the uppmax configuration. This will bypass the task scheduler and will make the pipeline run faster. For larger project, just use ``uppmax``.
 * Use the test configuration profile to run a small test 
 
 .. code-block:: bash
@@ -167,7 +168,7 @@ Remember the key points:
     cd ~
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,singularity --project g2021025
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,singularity
 
 Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset! This is where you ask for help on Slack instead of suffering in silence.
 
