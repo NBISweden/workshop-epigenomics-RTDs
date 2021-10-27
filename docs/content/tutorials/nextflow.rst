@@ -16,7 +16,7 @@ Nextflow and nf-core
 
 .. attention::
 
-    For this tutorial **DO NOT** run the ``salloc`` command! These nextflow exercises are run from the login node (so just ``ssh -Y`` to rackham). If you later today want to work on some earlier exercises you can request cores with ``salloc``.
+    For this tutorial **DO NOT** run the ``salloc`` command! These nextflow exercises are run from the login node (so just ``ssh -Y`` to rackham). If you later today want to work on some earlier exercises you can request cores with ``salloc`` after this tutorial.
 
 tmux
 -----
@@ -167,7 +167,7 @@ Remember the key points:
 * Use the ``uppmax`` configuration profile to run on UPPMAX from a login node
     - If using this, also specify an UPPMAX project with ``--project`` (two hyphens!)
 * Use the test configuration profile to run a small test 
-* By specifying the ``--reservation g2021025_28``, we make sure to only run on the reserved nodes for today. This will speed up the execution of the pipeline. This parameter should no be set after the course, since there will be no reverved set of nodes then.
+* By specifying the ``--reservation g2021025_28``, we make sure to only run on the nodes reserved for today. This should speed up the execution of the pipeline. This parameter should no be set if you run pipelines after the course, since there will be no reserved set of nodes then.
 
 .. code-block:: bash
 
