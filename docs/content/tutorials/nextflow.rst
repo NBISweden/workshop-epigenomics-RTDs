@@ -33,7 +33,7 @@ Before starting the tutorial it might be useful to introduce you to tmux. Tmux i
     tmux new -s nf_tutorial # or any other name you like
     tmux set mouse on # enable mouse support for things like scrolling and selecting text
 
-Now, anything you do in this new tmux terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
+Now, anything you do in this new tmux terminal session is "safe". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
 
 .. code-block:: bash
 
