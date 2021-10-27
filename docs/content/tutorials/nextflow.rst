@@ -38,6 +38,7 @@ Now, anything you do in this new tmux terminal session is "save". When the conne
 
     module load tmux
     tmux attach -t nf_tutorial
+    tmux set mouse on # enable mouse support for things like scrolling and selecting text
 
 To put tmux in background and keep the processes inside running, press ``Ctrl+B``, release, press ``D``. With ``tmux ls`` you can see which sessions are ongoing (can be multiple ones!) and you could connect to. To reattach to your earlier session type ``tmux attach -t nf_tutorial`` as shown above. 
 
