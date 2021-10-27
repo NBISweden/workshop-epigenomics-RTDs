@@ -31,7 +31,6 @@ Before starting the tutorial it might be useful to introduce you to tmux. Tmux i
 
     module load tmux
     tmux new -s nf_tutorial # or any other name you like
-    tmux set mouse on # enable mouse support for things like scrolling and selecting text 
 
 Now, anything you do in this new tmux terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
 
@@ -44,7 +43,7 @@ To put tmux in background and keep the processes inside running, press ``Ctrl+B`
 
 To kill a tmux session and stop any process running in it, press ``Ctrl+B``, release, press ``X`` followed by ``Y``.
 
-All of this might seem to add unnecessary hassle but tmux is extremely valuable when working on a server. Instead of having to redo a long list of computational step when the connection to a server inevitably crashes, just reconnect to the ongoing tmux session and you are back exactly where you were when the crash happened! Tmux actually can do even more useful things, so if you want to know more, have a look at this quick and easy guide to tmux.
+All of this might seem to add unnecessary hassle but tmux is extremely valuable when working on a server. Instead of having to redo a long list of computational step when the connection to a server inevitably crashes, just reconnect to the ongoing tmux session and you are back exactly where you were when the crash happened! Tmux actually can do even more useful things, so if you want to know more, have a look at this `quick and easy guide to tmux <https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/>`_.
 
 Setup: Nextflow
 ----------------
@@ -146,7 +145,7 @@ This directory also contains all necessary software for all pipelines in a folde
 
 .. note::
 
-    nf-core also comes as a Python package that is totally separate to Nextflow and is not required to run Nextflow pipelines. It does however offer some convenience functions to make your life a little easier. A description on how to install this package can be found here. This is useful if you want to run nf-core pipelines outside of UPPMAX or want to use some of the convenience functions included in the nf-core package. [not necessary for running the current exercises on UPPMAX; but the students not on UPPMAX might give this a try]
+    nf-core also comes as a Python package that is totally separate to Nextflow and is not required to run Nextflow pipelines. It does however offer some convenience functions to make your life a little easier. A description on how to install this package can be found `here <https://github.com/nf-core/tools>`_. This is useful if you want to run nf-core pipelines outside of UPPMAX or want to use some of the convenience functions included in the nf-core package. [not necessary for running the current exercises on UPPMAX; but the students not on UPPMAX might give this a try]
 
 
 Running a test workflow
@@ -301,7 +300,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
 * ``--project g2021025``
-* ``--clusterOptions '--reservation g2021025_028'`
+* ``--clusterOptions '--reservation g2021025_028'``
 * ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
@@ -345,7 +344,7 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 * ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz'``
 * ``--aligner bismark``
 * ``--project g2021025``
-* ``--clusterOptions '--reservation g2021025_028'`
+* ``--clusterOptions '--reservation g2021025_028'``
 * ``--genome mm10``
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
