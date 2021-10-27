@@ -31,6 +31,7 @@ Before starting the tutorial it might be useful to introduce you to tmux. Tmux i
 
     module load tmux
     tmux new -s nf_tutorial # or any other name you like
+    tmux set mouse on # enable mouse support for things like scrolling and selecting text
 
 Now, anything you do in this new tmux terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
 
@@ -38,7 +39,6 @@ Now, anything you do in this new tmux terminal session is "save". When the conne
 
     module load tmux
     tmux attach -t nf_tutorial
-    tmux set mouse on # enable mouse support for things like scrolling and selecting text
 
 To put tmux in background and keep the processes inside running, press ``Ctrl+B``, release, press ``D``. With ``tmux ls`` you can see which sessions are ongoing (can be multiple ones!) and you could connect to. To reattach to your earlier session type ``tmux attach -t nf_tutorial`` as shown above. 
 
@@ -350,7 +350,7 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
-.. note:: minimal methylseq command
+.. admonition:: minimal methylseq command
    :class: dropdown, note
 
    ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10 --clusterOptions '--reservation g2021025_28'``
