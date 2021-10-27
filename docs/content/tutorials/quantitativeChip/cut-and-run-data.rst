@@ -501,15 +501,24 @@ So another way to look at this is to plot the signal of every dataset in a given
 	:target: Figures/10_heatmaps_subsample.png
 	:alt:
 
-These heatmaps can be generated using ``seqplots``. ``seqplots`` is an ``R`` package that can be installed
-from ``Bioconductor``. It can be run as a shiny app on a browser or from ``Rstudio``. You can check
-how to use it `in this link <https://bioconductor.org/packages/release/bioc/vignettes/seqplots/inst/doc/SeqPlotsGUI.html>`_.
+
+.. warning::
+    These plots were generated in the past using ``seqplots``. Unfortunately, this package `is now deprecated <https://bioconductor.org/packages/release/bioc/html/seqplots.html>`_. You can still
+    use older versions of R and this package, or just generate plots like this using another tool, like :code:`deepTools`. You can see more in their `documentation <https://deeptools.readthedocs.io/en/develop/>`_. And there are also examples in other tutorials, such as the MINUTE-ChIP data tutorial in this section.
+
 
 The subset file this was created on can be copied from the `tmp` folder:
 
 .. code-block:: bash
     
     scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/Skene2017_CTCF_CnR_45s_small.bed .
+
+
+Or from your Uppmax node:
+
+.. code-block:: bash
+    
+    cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/Skene2017_CTCF_CnR_45s_small.bed . 
 
 
 **Q: how does the data compare? Note the difference in scale amongst the samples. What other features are different? Which dataset would be better to identify the CTCF binding motif?**
