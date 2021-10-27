@@ -167,7 +167,7 @@ Remember the key points:
 * Use the ``uppmax`` configuration profile to run on UPPMAX from a login node
     - If using this, also specify an UPPMAX project with ``--project`` (two hyphens!)
 * Use the test configuration profile to run a small test 
-* By specifying the ``--reservation g2021025_28``, we make sure to only run on the nodes reserved for today. This should speed up the execution of the pipeline. This parameter should no be set if you run pipelines after the course, since there will be no reserved set of nodes then.
+* By specifying the ``--reservation g2021025_28``, we make sure to only run on the nodes reserved for today. This should speed up the execution of the pipeline. This parameter should not be set if you run pipelines after the course, since there will be no reserved set of nodes then.
 
 .. code-block:: bash
 
