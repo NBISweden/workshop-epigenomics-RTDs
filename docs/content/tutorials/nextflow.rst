@@ -311,7 +311,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --clusterOptions '--reservation g2021025_28' --genome GRCh38 --input samplesheet.csv --single_end
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --clusterOptions '--reservation g2021025_28' --genome GRCh38 --input samplesheet.csv --single_end``
 
 Methyl-seq
 -----------
@@ -353,7 +353,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. note:: minimal methylseq command
    :class: dropdown, note
 
-   nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10 --clusterOptions '--reservation g2021025_28'
+   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10 --clusterOptions '--reservation g2021025_28'``
 
 Getting help
 -------------
