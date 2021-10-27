@@ -15,7 +15,7 @@ This page links to current presentations used in online sessions.
 
 Day 1: **Methylation: Arrays and Bisulfite-Seq**
 
-`Methylation Slides <../_static/Methylation_Slides>`_
+`Methylation Slides <../_static/Methylation_Slides.pdf>`_
 
 :raw-html:`<br />`
 
