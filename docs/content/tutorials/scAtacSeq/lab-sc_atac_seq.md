@@ -49,13 +49,16 @@ If you run this on some other system, you can copy the files with `scp`.
 
 Now, start `R` or `rstudio`, and run these commands to install some additional libraries. We need to install the latest version of Signac, which takes a while.
 
+If you are asked where to install packages, just select *yes* to install in the default directory.
 
 ```
-# Install bioconductor packages
+# Install the JASPAR database, as an R package
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("JASPAR2020")
+```
 
+```
 # Install latest version of Signac from GitHub
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
