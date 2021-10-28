@@ -327,7 +327,7 @@ head(enriched.motifs)
 
 # Have a look at the most enriched motifs. Do you anything particular about these motifs?
 MotifPlot(
-	object = pbmc$peaks,
+	object = pbmc,
 	motifs = head(rownames(enriched.motifs))
 )
 ```
