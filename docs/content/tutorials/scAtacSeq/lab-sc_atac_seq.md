@@ -504,6 +504,10 @@ pbmc <- RenameIdents(
 	'9' = 'pDC')
 ```
 
+![Labelled clusters](cluster_labels.png)
+
+
+
 ### Differentially accessible regions, again
 
 Now, we will once again look at differentially accessible region, this time between CD4/8 Naive cells and CD14 Mono cells. (Since we now can say what cell types these clusters represent.) We can plot the signal in this region in a couple of different ways. *Do you understand what these plots mean?*
