@@ -60,9 +60,7 @@ BiocManager::install("JASPAR2020")
 
 ```
 # Install latest version of Signac from GitHub
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("timoast/signac", ref = "develop")
+install.packages("Signac")
 ```
 
 If you want to run this exercise on your laptop, you also need to make sure that all libraries loaded below are installed, as well as all dependencies.
