@@ -53,7 +53,7 @@ Day 4: **Nextflow & nf-core**
 
 Day 5
 
-**Nextflow & nf-core**
+**Single cell methods & data integation**
 
 `Single cell methods <../_static/slides-single-cell-2021.pdf>`_
 
