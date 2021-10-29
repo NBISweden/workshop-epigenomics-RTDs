@@ -41,9 +41,9 @@ Day 3
 
 :raw-html:`<br />`
 
-Day 4
+Day 4: **Nextflow & nf-core**
 
-
+`Introduction to workflow managers <../_static/WFM_Introduction_2021.pdf>`_
 
 
 
