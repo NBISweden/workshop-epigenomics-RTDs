@@ -53,6 +53,12 @@ Day 4: **Nextflow & nf-core**
 
 Day 5
 
+**Nextflow & nf-core**
+
+`Single cell methods <../_static/slides-single-cell-2021.pdf>`_
+
+`Integration of genomics data  <../_static/slides-data-integration-2021.pdf>`_
 
 
+:raw-html:`<br />`
 
