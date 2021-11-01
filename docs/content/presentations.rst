@@ -15,7 +15,9 @@ This page links to current presentations used in online sessions.
 
 Day 1: **Methylation: Arrays and Bisulfite-Seq**
 
-`Methylation Slides <../_static/Methylation_Slides.pdf>`_
+`Methylation Introduction Slides <../_static/Methylation_Slides.pdf>`_
+
+`DNA Methylation Methods and Technologies <../_static/JN-EpigeneticsMethods_2021-10-25.pdf>`_
 
 :raw-html:`<br />`
 
