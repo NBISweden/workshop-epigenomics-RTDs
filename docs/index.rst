@@ -27,7 +27,10 @@ This workshop builds on our previous `ChIPseq data analysis workshop <https://nb
 
 Date
 ----
-25th - 29th October 2021
+
+.. 25th - 29th October 2021
+
+The next workshop will take place in the autumn 2022.
 
 :raw-html:`<br />`
 
