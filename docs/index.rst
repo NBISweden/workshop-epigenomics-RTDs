@@ -177,13 +177,6 @@ Teaching team
 
 
 
-Computational Resources
------------------------
-
-This workshop relies on HPC infrastructure `Uppmax <https://www.uppmax.uu.se/>`_ kindly provided by `SNIC <https://www.snic.se/>`_ .
-
-
-
 Contact us
 ----------
 
