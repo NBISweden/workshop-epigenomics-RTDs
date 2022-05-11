@@ -62,7 +62,7 @@ Topis covered include:
 - **ATAC-seq**: peak calling, peak independent / dependent quality metrics, differential accessibility analysis;
 - **Integrative visualisations** of epigenomics datasets;
 - Quantitative ChIP-seq;
-- **CUT&Tag / CUT&RUN** Novel methods to investigate protein-chromatin interactions;
+- **CUT&Tag / CUT&RUN**: Novel methods to investigate protein-chromatin interactions;
 - **Functional analysis**, including finding nearest genes and custom features, GO terms and Reactome pathways enrichment;
 - Basic multi-omics exploration and integration;
 - Introduction to analysis of single cell functional genomics data (**scATAC-seq**);
