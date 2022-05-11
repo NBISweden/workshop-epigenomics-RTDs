@@ -144,6 +144,11 @@ Unfortunately we are **not** able to warrant any university credits (högskolepo
    	:width: 40
 
 
+Computing Resources
+--------------------------------
+
+This course uses computing resources kindly provided by `SNIC <https://www.snic.se/>`_ via `Uppsala Multidisciplinary Center for Advanced Computational Science Uppmax <https://www.uppmax.uu.se/>`_.
+
 
 Teaching team
 -------------
@@ -162,9 +167,9 @@ Teaching team
 
 
 
-..- `Olga Dethlefsen <https://nbis.se/about/staff/olga-dethlefsen/>`_ <olga.dethlefsen@nbis.se>
+.. - `Olga Dethlefsen <https://nbis.se/about/staff/olga-dethlefsen/>`_ <olga.dethlefsen@nbis.se>
 
-..- `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
+.. - `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
 
 
 
