@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Epigenomics Workshop 2021'
-copyright = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef, Phil Ewels, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund'
-author = 'Agata Smialowska, Olga Dethlefsen, Jakub Westholm, Vincent Van Hoef, Phil Ewels, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund'
+project = 'Epigenomics Workshop 2022'
+copyright = 'Agata Smialowska, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
+author = 'Agata Smialowska, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
 
 # The full version, including alpha/beta/rc tags
 release = '1'
