@@ -16,7 +16,7 @@ Epigenomics Data Analysis: from Bulk to Single Cell
 
 Online workshop open for PhD students, postdocs, researchers and other employees within Swedish academia. This course is organised by the National Bioinformatics Infrastructure Sweden (NBIS).
 
-This workshop builds on our previous `ChIPseq data analysis workshop <https://nbisweden.github.io/workshop-archive/workshop-ChIP-seq/2018-11-07>`_ to introduce best practice bioinformatics methods for processing, analyses and integration of epigenomics data. The online teaching includes lectures, programming tutorials and interactive group sessions.
+This workshop is an introduction to best practice bioinformatics methods for processing, analyses and integration of epigenomics data. The online teaching includes lectures, programming tutorials and interactive group sessions.
 
 :raw-html:`<br />`
 
@@ -27,7 +27,7 @@ This workshop builds on our previous `ChIPseq data analysis workshop <https://nb
 
 Date
 ----
-24th - 89th October 2022
+24th - 28th October 2022
 
 :raw-html:`<br />`
 
@@ -58,15 +58,15 @@ This workshop is designed to introduce best practice bioinformatics methods for 
 Topis covered include:
 
 - Data processing and analyses for differential **DNA methylation** with Illumina EPIC arrays and Bisulfite-seq;
-- **ChIP-seq** and **ATAC-seq**: peak calling, peak independent / dependent quality metrics, differential binding and differential accessibility analysis; DNA motif enrichment;
-- **Functional analysis**, including finding nearest genes and custom features, GO terms and Reactome pathways enrichment;
+- **ChIP-seq**: peak calling, peak independent / dependent quality metrics, differential binding analysis; DNA motif enrichment;
+- **ATAC-seq**: peak calling, peak independent / dependent quality metrics, differential accessibility analysis;
 - **Integrative visualisations** of epigenomics datasets;
 - Quantitative ChIP-seq;
-- Novel methods to investigate protein-chromatin interactions;
-- RNA-seq integration for identification of targets of transcription factors;
+- **CUT&Tag / CUT&RUN** Novel methods to investigate protein-chromatin interactions;
+- **Functional analysis**, including finding nearest genes and custom features, GO terms and Reactome pathways enrichment;
 - Basic multi-omics exploration and integration;
-- Introduction to analysis of single cell functional genomics data (ATAC-seq);
-- **Nf-cores pipelines**: Methylseq, ChIP-seq, ATAC-seq
+- Introduction to analysis of single cell functional genomics data (**scATAC-seq**);
+- **Nf-core pipelines**: Methylseq, ChIP-seq, ATAC-seq
 
 :raw-html:`<br />`
 
@@ -134,7 +134,7 @@ Certificate & University credits
 
 We will issue a course certificate upon a successful course completion, assessed by active participation in all course sessions (lectures, computer practicals, group discussion etc.).
 
-Unfortunately we are **not** able to warrant any university credits (högskolepoäng). Many universities however, recognize the attendance in our courses and award 1.5 HPs, corresponding to a 40 h of studying. It is up to participants to clarify and arrange credit transfer with the relevant university department.
+Unfortunately we are **not** able to warrant any university credits (högskolepoäng). Many universities however, recognize the attendance in our workshops and award 1.5 HPs, corresponding to 40 h of studying. It is up to participants to clarify and arrange credit transfer with the relevant university department.
 
 :raw-html:`<br />`
 
@@ -150,13 +150,9 @@ Teaching team
 
 - `Agata Smialowska <https://nbis.se/about/staff/agata-smialowska/>`_ <agata.smialowska@nbis.se>
 
-- `Olga Dethlefsen <https://nbis.se/about/staff/olga-dethlefsen/>`_ <olga.dethlefsen@nbis.se>
-
 - `Jakub Orzechowski Westholm <https://nbis.se/about/staff/jakub-orzechowski-westholm/>`_ <jakub.westholm@scilifelab.se>
 
 - `Vincent van Hoef <https://nbis.se/about/staff/vincent-van-hoef>`_ <vincent.vanhoef@nbis.se>
-
-- `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
 
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
 
@@ -164,6 +160,11 @@ Teaching team
 
 - `Jessica Nordlund <https://katalog.uu.se/profile/?id=N8-1393>`_ <Jessica.Nordlund@medsci.uu.se>
 
+
+
+..- `Olga Dethlefsen <https://nbis.se/about/staff/olga-dethlefsen/>`_ <olga.dethlefsen@nbis.se>
+
+..- `Phil Ewels <https://www.kth.se/profile/phile?l=en>`_ <phil.ewels@scilifelab.se>
 
 
 
