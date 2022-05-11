@@ -194,4 +194,5 @@ Site Contents
    content/online-classroom
    content/schedule
    content/tutorials
-   content/presentations
+   
+.. content/presentations

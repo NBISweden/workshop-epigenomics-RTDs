@@ -63,10 +63,3 @@ Day 5
 
 `Integration of genomics data  <../_static/slides-data-integration-2021.pdf>`_
 
-<<<<<<< HEAD
-.. some some tst
-=======
-
-:raw-html:`<br />`
-
->>>>>>> 4a12b1d7130fcd8e37d3df03196c57431188b5ac
