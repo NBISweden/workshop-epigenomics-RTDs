@@ -13,6 +13,11 @@ Nextflow and nf-core
 .. contents:: 
     :local:
 
+
+.. attention::
+
+    For this tutorial **DO NOT** run the ``salloc`` command! These nextflow exercises are run from the login node (so just ``ssh -Y`` to rackham). If you later today want to work on some earlier exercises you can request cores with ``salloc`` after this tutorial.
+
 tmux
 -----
 
@@ -20,15 +25,15 @@ Before starting the tutorial it might be useful to introduce you to tmux. Tmux i
 
 .. attention::
 
-    Do these next steps **after** connecting to rackham and ssh-ing to your personal node as described in the setup!
+    Do these next steps **after** connecting to rackham!
 
 .. code-block:: bash
 
     module load tmux
     tmux new -s nf_tutorial # or any other name you like
-    tmux set mouse on # enable mouse support for things like scrolling and selecting text 
+    tmux set mouse on # enable mouse support for things like scrolling and selecting text
 
-Now, anything you do in this new tmux terminal session is "save". When the connection to the server crashes mid-session, just reconnect to UPPMAX and your personal node and do
+Now, anything you do in this new tmux terminal session is "safe". When the connection to the server crashes mid-session, just reconnect to UPPMAX and do
 
 .. code-block:: bash
 
@@ -39,7 +44,7 @@ To put tmux in background and keep the processes inside running, press ``Ctrl+B`
 
 To kill a tmux session and stop any process running in it, press ``Ctrl+B``, release, press ``X`` followed by ``Y``.
 
-All of this might seem to add unnecessary hassle but tmux is extremely valuable when working on a server. Instead of having to redo a long list of computational step when the connection to a server inevitably crashes, just reconnect to the ongoing tmux session and you are back exactly where you were when the crash happened! Tmux actually can do even more useful things, so if you want to know more, have a look at this quick and easy guide to tmux.
+All of this might seem to add unnecessary hassle but tmux is extremely valuable when working on a server. Instead of having to redo a long list of computational step when the connection to a server inevitably crashes, just reconnect to the ongoing tmux session and you are back exactly where you were when the crash happened! Tmux actually can do even more useful things, so if you want to know more, have a look at this `quick and easy guide to tmux <https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/>`_.
 
 Setup: Nextflow
 ----------------
@@ -92,11 +97,12 @@ Check that Nextflow works
 
 It’s always good to have a mini test to check that everything works.
 
-Make a new directory and run the Nextflow test command as follows:
+These pipelines can create large temporary files and large result files, so we will do these exercises in the project folder. Make a new directory there and run the Nextflow test command as follows:
 
 .. code-block::
 
-    cd ~ # go to your home directory
+    mkdir /proj/g2021025/nobackup/$USER # create personal folder in project directory
+    cd /proj/g2021025/nobackup/$USER
     mkdir nextflow-hello-test
     cd nextflow-hello-test
     nextflow run hello
@@ -140,7 +146,7 @@ This directory also contains all necessary software for all pipelines in a folde
 
 .. note::
 
-    nf-core also comes as a Python package that is totally separate to Nextflow and is not required to run Nextflow pipelines. It does however offer some convenience functions to make your life a little easier. A description on how to install this package can be found here. This is useful if you want to run nf-core pipelines outside of UPPMAX or want to use some of the convenience functions included in the nf-core package. [not necessary for running the current exercises on UPPMAX; but the students not on UPPMAX might give this a try]
+    nf-core also comes as a Python package that is totally separate to Nextflow and is not required to run Nextflow pipelines. It does however offer some convenience functions to make your life a little easier. A description on how to install this package can be found `here <https://github.com/nf-core/tools>`_. This is useful if you want to run nf-core pipelines outside of UPPMAX or want to use some of the convenience functions included in the nf-core package. [not necessary for running the current exercises on UPPMAX; but the students not on UPPMAX might give this a try]
 
 
 Running a test workflow
@@ -160,15 +166,15 @@ Remember the key points:
 * Specify the pipeline with ``$NF_CORE_PIPELINES/[name]/[version]/workflow``
 * Use the ``uppmax`` configuration profile to run on UPPMAX from a login node
     - If using this, also specify an UPPMAX project with ``--project`` (two hyphens!)
-* You are running now on your own computing node, so add the ``singularity`` profile instead of the uppmax configuration. This will bypass the task scheduler and will make the pipeline run faster. For larger project, just use ``uppmax``.
 * Use the test configuration profile to run a small test 
+* By specifying the ``--reservation g2021025_28``, we make sure to only run on the nodes reserved for today. This should speed up the execution of the pipeline. This parameter should not be set if you run pipelines after the course, since there will be no reserved set of nodes then.
 
 .. code-block:: bash
 
-    cd ~
+    cd /proj/g2021025/nobackup/$USER
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,singularity
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project g2021025 --clusterOptions '--reservation g2021025_28'
 
 Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset! This is where you ask for help on Slack instead of suffering in silence.
 
@@ -179,7 +185,7 @@ Even though the datasets in a test run are small, this pipeline can take a while
 Generated files
 ################
 
-The pipeline will create a bunch of files in your working directory as it goes:
+The pipeline will create a bunch of files in your directory as it goes:
 
 .. code-block:: bashrc
 
@@ -224,7 +230,7 @@ In a new fresh directory(!), try this out:
 
 .. code-block:: bash
 
-    cd ~
+    cd /proj/g2021025/nobackup/$USER
     mkdir atacseq-help
     cd atacseq-help
     nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow --help
@@ -246,7 +252,7 @@ Make a new directory for this CHiP seq analysis and link the data files to a dat
 
 .. code-block:: bash
 
-    cd ~
+    cd /proj/g2021025/nobackup/$USER
     mkdir chip_seq_analysis
     cd chip_seq_analysis
     mkdir input_files
@@ -295,6 +301,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
 * ``--project g2021025``
+* ``--clusterOptions '--reservation g2021025_28'``
 * ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
@@ -304,13 +311,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --genome GRCh38 --input samplesheet.csv --single_end``
-
-If things take a bit too long and you would like to see an example of the typical output, you could do another test run on a small dataset.
-
-.. code-block:: bash
-
-    nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile test,singularity
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project g2021025 --clusterOptions '--reservation g2021025_28' --genome GRCh38 --input samplesheet.csv --single_end``
 
 Methyl-seq
 -----------
@@ -329,7 +330,7 @@ Begin with making a fresh analysis directory in your home directory
 
 .. code-block:: bash
 
-    cd ~
+    cd /proj/g2021025/nobackup/$USER
     mkdir methylseq_analysis
     cd methylseq_analysis
 
@@ -344,15 +345,15 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 * ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz'``
 * ``--aligner bismark``
 * ``--project g2021025``
+* ``--clusterOptions '--reservation g2021025_28'``
 * ``--genome mm10``
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
-.. code-block:: minimal methylseq command
-   :class: dropdown
+.. admonition:: minimal methylseq command
+   :class: dropdown, note
 
-   nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10
-
+   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project g2021025 --genome mm10 --clusterOptions '--reservation g2021025_28'``
 
 Getting help
 -------------

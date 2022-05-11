@@ -49,17 +49,18 @@ If you run this on some other system, you can copy the files with `scp`.
 
 Now, start `R` or `rstudio`, and run these commands to install some additional libraries. We need to install the latest version of Signac, which takes a while.
 
+If you are asked where to install packages, just select *yes* to install in the default directory. If you are asked to udate any packages, say *no*, as this might take a lot of time.
 
 ```
-# Install bioconductor packages
+# Install the JASPAR database, as an R package
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("JASPAR2020")
+```
 
+```
 # Install latest version of Signac from GitHub
-if (!requireNamespace("devtools", quietly = TRUE))
-    install.packages("devtools")
-devtools::install_github("timoast/signac", ref = "develop")
+install.packages("Signac")
 ```
 
 If you want to run this exercise on your laptop, you also need to make sure that all libraries loaded below are installed, as well as all dependencies.
@@ -177,10 +178,15 @@ gc()
 
 pbmc$high.tss <- ifelse(pbmc$TSS.enrichment > 2, 'High', 'Low')
 TSSPlot(pbmc, group.by = 'high.tss') + NoLegend()
+```
 
+
+```
 pbmc$nucleosome_group <- ifelse(pbmc$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
 FragmentHistogram(object = pbmc, group.by = 'nucleosome_group')
+```
 
+```
 VlnPlot(
 	object = pbmc,
 	features = c('pct_reads_in_peaks', 'peak_region_fragments',
@@ -283,7 +289,10 @@ motif.matrix <- CreateMotifMatrix(
 )
 dim(motif.matrix)
 as.matrix(motif.matrix[1:10,1:10])
+```
 
+
+```
 # Create a new Mofif object to store the results
 motif <- CreateMotifObject(
 	data = motif.matrix,
@@ -323,17 +332,19 @@ enriched.motifs <- FindMotifs(
 	features = top.da.peak
 )
 head(enriched.motifs)
+```
 
+```
 # Have a look at the most enriched motifs. Do you anything particular about these motifs?
 MotifPlot(
-	object = pbmc$peaks,
+	object = pbmc,
 	motifs = head(rownames(enriched.motifs))
 )
 ```
 
 #### Motif activity scores
 
-We can also compute a per-cell motif activity score by running chromVAR. The motif activity score for a motif M is based on the on nr reads mapping to peaks with motif M, after normalization correction for various biases: GC content, average number of reads mapping across all cells etc. You can read more about chromVar [here](https://www.nature.com/articles/nmeth.4401) Motif activity scores allow us to visualize motif activities per cell.
+We can also compute a per-cell motif activity score by running chromVAR. The motif activity score for a motif M is based on the on number of reads mapping to peaks with motif M, after normalization correction for various biases: GC content, average number of reads mapping across all cells etc. You can read more about chromVar [here](https://www.nature.com/articles/nmeth.4401). Motif activity scores allow us to visualize motif activities per cell.
 
 It is also possible to directly test for differential activity scores between cell types, without looking at peaks with differential binding. This tends to give similar results as performing an enrichment test on differentially accessible peaks between the cell types (shown above).
 
@@ -360,6 +371,10 @@ FeaturePlot(
 	max.cutoff = 'q90',
 	pt.size = 0.1
 )
+```
+
+
+```
 
 # Look for motifs that have differential activity between clusters 0 and 1. 
 differential.activity <- FindMarkers(
@@ -407,7 +422,10 @@ pbmc <- NormalizeData(
 	scale.factor = median(pbmc$nCount_RNA)
 )
 GetAssayData(pbmc$RNA)[1:10,1:3]
+```
 
+
+```
 DefaultAssay(pbmc) <- 'RNA'
 FeaturePlot(
 	object = pbmc,
@@ -486,6 +504,10 @@ pbmc <- RenameIdents(
 	'9' = 'pDC')
 ```
 
+![Labelled clusters](cluster_labels.png)
+
+
+
 ### Differentially accessible regions, again
 
 Now, we will once again look at differentially accessible region, this time between CD4/8 Naive cells and CD14 Mono cells. (Since we now can say what cell types these clusters represent.) We can plot the signal in this region in a couple of different ways. *Do you understand what these plots mean?*
@@ -505,7 +527,9 @@ da_peaks <- FindMarkers(
 	latent.vars = 'peak_region_fragments'
 )
 head(da_peaks)
+```
 
+```
 # Plot the signal for the most differentially acessable region.
 plot1 <- VlnPlot(
 	object = pbmc,
@@ -549,7 +573,9 @@ CoveragePlot(
 	extend.downstream = 40000,
 	peaks=TRUE
 )
+```
 
+```
 TilePlot(
 	object = pbmc,
 	region = rownames(da_peaks)[1],
