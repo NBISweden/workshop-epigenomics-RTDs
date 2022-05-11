@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2021 Page!
+Welcome to Epigenomics Workshop 2022 Page!
 ==========================================================
 
 
@@ -27,7 +27,7 @@ This workshop builds on our previous `ChIPseq data analysis workshop <https://nb
 
 Date
 ----
-25th - 29th October 2021
+24th - 89th October 2022
 
 :raw-html:`<br />`
 
@@ -41,7 +41,7 @@ Application
 .. - Application is now closed
 .. - Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
 
-Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online/>`_
+.. Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online/>`_
 
 :raw-html:`<br />`
 
