@@ -41,7 +41,7 @@ Application
 .. - Application is now closed
 .. - Sign up `here <https://forms.gle/ZE6DhAY22QhzFwVs5>`_. and we will let you know when we open application for the next course.
 
-.. Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online/>`_
+Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online-2/>`_
 
 :raw-html:`<br />`
 
