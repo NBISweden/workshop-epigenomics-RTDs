@@ -1,0 +1,90 @@
+## conda requirements for all packages needed to run exercise integrating scATAC-seq and scRNA-seq data
+# install with:  mamba env create -n epigenomics2022 -f environment_scRNAseq2022.yml
+# then run: source activate epigenomics2022
+name: epigenomics2022
+
+channels:
+### MAIN CONDA CHANNELS ###
+ - conda-forge
+ - anaconda
+ - bioconda
+ - defaults
+ - r
+
+### ADDITIONAL CONDA CHANNELS ###
+ - rdonnelly
+ - psi4
+ - r_test
+ - free
+ - fastchan
+ - ccordoba12
+ - grst
+ - Eugene_T
+ - letaylor
+ - ohsu-comp-bio
+
+dependencies:
+### GENERAL LIBRARIES ###
+ - r-base=4.2.1
+
+# - rstudio
+ - wget
+ - compilers
+ - notebook
+ - jupyter_contrib_nbextensions
+ - jupyter_client=6.1.12
+ - nbconvert<6
+ - pandoc=2.16.2
+
+### R BIOCONDUCTOR PACKAGES ##
+ - bioconductor-rhdf5
+ - bioconductor-genomeinfodb
+ - bioconductor-ensdb.hsapiens.v75
+ - bioconductor-org.hs.eg.db
+ - bioconductor-tfbstools
+ - bioconductor-bsgenome.hsapiens.ucsc.hg19
+
+
+### R CRAN PACKAGES ###
+ - r-hdf5r
+ - r-devtools
+ - r-biocmanager
+ - r-signac=1.7.0
+ - r-tidyverse
+ - r-patchwork
+ - r-pheatmap
+ - r-harmony
+ - r-umap
+
+
+### PYTHON LIBRARIES ###
+ - python-annoy
+ - multicore-tsne
+ - requests
+ - python-annoy
+ - mnnpy
+ - scanpy
+ - scanorama
+ - numba
+ - llvmlite
+ - python-igraph
+ - umap-learn
+ - louvain
+ - leidenalg
+ - matplotlib-venn
+ - scrublet
+ - gseapy
+ - pybiomart
+ - squidpy
+ - morphops
+ - pip
+ - pip:
+   - gsea-api
+
+
+# Manual installation of packages that are not in conda:
+
+# Install the JASPAR database, as an R package
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+#  BiocManager::install("JASPAR2020")
