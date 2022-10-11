@@ -57,6 +57,9 @@ You can view changes locally while working on. To do so:
 conda install sphinx
 pip install sphinx-rtd-theme
 pip install recommonmark      # to support Markdown
+pip install sphinx.ext.intersphinx
+pip install sphinx_togglebutton
+pip install sphinx_copybutton
 ```
 
 Versions currently used:
@@ -90,6 +93,6 @@ The preferred format. A useful primer on syntax:
 
 ### Issues
 
-Contact Agata or Olga
+Contact Agata
 
 [git-commits]: https://chris.beams.io/posts/git-commit/
