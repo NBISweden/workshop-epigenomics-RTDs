@@ -60,7 +60,7 @@ This involves few steps. Briefly,
 
 * accepting the User Agreement;
 
-* becoming a member in the project ( **g2021025**);
+* becoming a member in both the storage project ( **SNIC 2022/23-333**) and the compute project ( **SNIC 2022/22-634**);
 
 * applying for an account at Uppmax.
 
