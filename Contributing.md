@@ -93,6 +93,6 @@ The preferred format. A useful primer on syntax:
 
 ### Issues
 
-Contact Agata or Olga
+Contact Agata
 
 [git-commits]: https://chris.beams.io/posts/git-commit/
