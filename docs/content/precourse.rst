@@ -71,7 +71,7 @@ This involves few steps. Briefly,
 
 	* Cluster name: rackham
 
-	* Project ID:  **g2021025**
+	* Project ID:  **SNIC 2022/23-333** and **SNIC 2022/22-634**
 
 
 
@@ -80,8 +80,7 @@ Request membership in the course project (for those already having Uppmax accoun
 
 * log in to SUPR;
 
-* under Projects: Requesting Membership in Projects, request membership in ***g2021025***
-
+* under Projects: Requesting Membership in Projects, request membership in **SNIC 2022/23-333** and **SNIC 2022/22-634**
 
 
 Check configuration (everyone)
