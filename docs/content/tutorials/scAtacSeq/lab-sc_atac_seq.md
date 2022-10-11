@@ -28,52 +28,78 @@
 
 ## Setting up
 
-This exercise has been tested on Uppmax, using `R 4.0.0`. On Uppmax, most packages are already installed, and can be loaded into R after the `R_packages` module has been loaded. If you are running on Uppmax, start by loading the following modules:
+This exercise will be run on Uppmax, indside a [singularity](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html) container. This is like setting up a new computer in your Uppmax session, with it's own file system and installed software. Running analysis inside a container has several advantages. Every time we start a container, we allways have exactly the same proggrams and libraries installed. This makes the analysis stable (as long as the container is not changed we can be sure that the programs will run as expected) and reproducible (we always get exactly the same results). To learn more about containers, please see the course [Tools for Reproducible Research](https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/).
 
+To run RStudio inside a singularity container, follow the steps below.
 
-```
-module load bioinfo-tools
-module load R/4.0.0
-module load R_packages/4.0.0
-module load RStudio
-module load samtools
-```
-
-The data files needed for this exercise are in the following Uppmax directory `/sw/courses/epigenomics/sc_atac_seq`. If you are working on Uppmax you can create soft links from your working directory to these files:
+1. Start an interactive session on a node.
+2. Create a new dircectory for the exercise, and go there
 
 ```
-ln -s /sw/courses/epigenomics/sc_atac_seq/* .
+mkdir sc_lab
+cd sc_lab
 ```
 
-If you run this on some other system, you can copy the files with `scp`.
-
-Now, start `R` or `rstudio`, and run these commands to install some additional libraries. We need to install the latest version of Signac, which takes a while.
-
-If you are asked where to install packages, just select *yes* to install in the default directory. If you are asked to udate any packages, say *no*, as this might take a lot of time.
+3. Make sure we start with a fresh session, with the nessecary directories:
 
 ```
-# Install the JASPAR database, as an R package
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("JASPAR2020")
+rm -r var
+rm -r tmp
+rm -r data
+rm -r R
+rm -r .config
+mkdir -p data
+mkdir -p tmp
+mkdir -p data
+mkdir -p var/lib
+mkdir -p var/run
 ```
 
+4. Set some variables needed for singularity
+
 ```
-# Install latest version of Signac from GitHub
-install.packages("Signac")
+export SINGULARITYENV_USER=$USER
+export SINGULARITYENV_PASSWORD=dummypwd
 ```
 
-If you want to run this exercise on your laptop, you also need to make sure that all libraries loaded below are installed, as well as all dependencies.
+5. Now we can start Rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
 
-![George Seurat](Seurat-Gravelines-Annonciade.jpg)
+```
+singularity exec   \
+  --bind $(pwd):/home/rstudio  \
+  --bind $(pwd):$HOME   \
+  --bind="/sw/courses/epigenomics/sc_atac_seq:$HOME/data"  \
+  --bind="var:/var"  \
+  --bind="tmp:/tmp"  \
+  /sw/courses/epigenomics/sc_atac_seq/epigenomics2022.sif  \
+  rserver --www-port 8787 --www-address=127.0.0.1
+```
+
+6. Now R and Rstudio are running, but we still need to connect to them. For this, we open another Uppmax tab, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
+
+```
+ssh -Y <node with interative session>
+firefox &
+```
+
+When firefox starts, go to the URL `http://localhost:8787`.
+
+If everything has worked, you should now see Rstudio, and can start the exercise.
+
+
 
 ## Analysis of single cell ATAC-seq data
-[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
+[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
 
+![George Seurat](Seurat-Gravelines-Annonciade.jpg)
+<span class="caption">George Seurat, 1859-1891.</span>
+
 ![Paul Signac](Paul_signac,_la_barca_a_vela_verde,_1904,_01.jpg)
+<span class="caption">Paul Signac, 1863-1935.</span>
+
 
 ```
 library(Signac)
@@ -104,7 +130,7 @@ The PBMC data set contains ATAC-seq data on 74836 regions in 9277 cells. The cor
 
 Here we create a `ChromatinAssay` object from the count matrix (and a link to the fragment file). This object stores the genomic regions, count data, and also possibly gene annotations and information on sequence motifs. There are many ways to interact with a `ChromatinAssay` object, see [this] (https://satijalab.org/signac/articles/data_structures.html) vignette.
 
-We then create a `Seurat` object from the `ChromatinAssay`, together with meta data about cells and gene annotations. 
+We then create a `Seurat` object from the `ChromatinAssay`, together with meta data about cells and gene annotations.
 
 ```
 counts <- Read10X_h5(filename = "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5")
@@ -147,7 +173,7 @@ pbmc[['peaks']]
 granges(pbmc)
 ```
 
-### Quality control 
+### Quality control
 
 The next step is to do some quality control (QC) on the ATAC-seq data. There are several qualtiy measures to consider:
 
@@ -238,16 +264,16 @@ DepthCor(pbmc)
 Now we can cluster the cells to find groups that belong to the same cell types. It is possible to plot the results from the SVD, but these often are not informative. Instead, we use the UMAP algorithm, which shows a better separation between the cell types. If you are interested, the paper describing UMAP can be found [here](https://arxiv.org/abs/1802.03426)
 
 ```{r seurat_umap}
-pbmc <- RunUMAP(object = pbmc, reduction = 'lsi', dims = 2:30)
-pbmc <- FindNeighbors(object = pbmc, reduction = 'lsi', dims = 2:30)
-pbmc <- FindClusters(object = pbmc, verbose = FALSE, algorithm = 3)
+pbmc <- RunUMAP(object = pbmc, reduction = 'lsi', dims = 2:34)
+pbmc <- FindNeighbors(object = pbmc, reduction = 'lsi', dims = 2:34, k.param=13)
+pbmc <- FindClusters(object = pbmc, verbose = FALSE)
 
-p1 <- DimPlot(object = pbmc, label = TRUE, dims = c(2, 3), reduction = "lsi") + 
-	NoLegend()  + 
+p1 <- DimPlot(object = pbmc, label = TRUE, dims = c(2, 3), reduction = "lsi") +
+	NoLegend()  +
 	ggtitle('SVD')
 
-p2 <- DimPlot(object = pbmc, label = TRUE) + 
-	NoLegend() + 
+p2 <- DimPlot(object = pbmc, label = TRUE) +
+	NoLegend() +
 	ggtitle('UMAP')
 
 p1 | p2
@@ -376,7 +402,7 @@ FeaturePlot(
 
 ```
 
-# Look for motifs that have differential activity between clusters 0 and 1. 
+# Look for motifs that have differential activity between clusters 0 and 1.
 differential.activity <- FindMarkers(
 	object = pbmc,
 	ident.1 = '0',
@@ -404,7 +430,7 @@ In this section we will compare the scATAC-seq data to scRNA-seq data from a sim
 
 ### Gene activity matrix
 
-Gene activity scores capture how much open chromatin there is in the promoter regions of each gene (by defualt 2000bp upstream). The assumption here is that open chromatin is a proxy for gene expression. Gene activity scores are represented as a matrix, with one row per gene and one column per cell. This makes the gene activitiy scores directly compatible with single cell RNA-seq data. 
+Gene activity scores capture how much open chromatin there is in the promoter regions of each gene (by defualt 2000bp upstream). The assumption here is that open chromatin is a proxy for gene expression. Gene activity scores are represented as a matrix, with one row per gene and one column per cell. This makes the gene activitiy scores directly compatible with single cell RNA-seq data.
 
 Calculating the gene activity scores takes around 10 minutes for 2000 cells and all genes.
 
@@ -484,8 +510,8 @@ plot2 <- DimPlot(
 	repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
 
 plot3 <- DimPlot(
-  object = pbmc, 
-  label = TRUE, 
+  object = pbmc,
+  label = TRUE,
   repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
 
 plot1 | plot2 | plot3
@@ -498,10 +524,11 @@ pbmc <- RenameIdents(
 	'3' = 'CD14 Mono',
 	'4' = 'CD8 Effector',
 	'5' = 'pre-B/pro-B',
-	'6' = 'NK dim',
-	'7' = 'CD16 Mono',
-	'8' = 'DC',
-	'9' = 'pDC')
+	'6' = 'NK dim/bright',
+	'7' = 'Double neg. T',
+	'8' = 'CD16 Mono',
+	'9' = 'DC',
+  '10' = 'pDC')
 ```
 
 ![Labelled clusters](cluster_labels.png)
@@ -584,4 +611,3 @@ TilePlot(
 	extend.downstream = 40000
 )
 ```
-
