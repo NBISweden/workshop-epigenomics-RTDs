@@ -32,15 +32,14 @@ This exercise will be run on Uppmax, indside a [singularity](https://docs.sylabs
 
 To run RStudio inside a singularity container, follow the steps below.
 
-1. Start an interactive session on a node.
-2. Create a new dircectory for the exercise, and go there
+First, start an interactive session on a node. Then, reate a new dircectory for the exercise, and go there
 
 ```
 mkdir sc_lab
 cd sc_lab
 ```
 
-3. Make sure we start with a fresh session, with the nessecary directories:
+Next, make sure we start with a fresh session, with the nessecary directories, and set some variables needed for singularity
 
 ```
 rm -r var
@@ -53,16 +52,12 @@ mkdir -p tmp
 mkdir -p data
 mkdir -p var/lib
 mkdir -p var/run
-```
 
-4. Set some variables needed for singularity
-
-```
 export SINGULARITYENV_USER=$USER
 export SINGULARITYENV_PASSWORD=dummypwd
 ```
 
-5. Now we can start Rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
+Now we can start Rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
 
 ```
 singularity exec   \
@@ -75,7 +70,7 @@ singularity exec   \
   rserver --www-port 8787 --www-address=127.0.0.1
 ```
 
-6. Now R and Rstudio are running, but we still need to connect to them. For this, we open another Uppmax tab, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
+R and Rstudio are now running, but we still need to connect to them. For this, we open another Uppmax tab, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
 
 ```
 ssh -Y <node with interative session>
