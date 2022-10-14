@@ -6,6 +6,8 @@
 Setting-up
 ===============
 
+.. contents::
+    :local:
 
 
 Before we start tutorial, we need to set up our work environment. In particular, we need to:
