@@ -4,7 +4,7 @@ Tutorials
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Setup <tutorials/setup/lab-setup.rst>
    DNA Methylation <tutorials/methylation_tutorials.rst>
