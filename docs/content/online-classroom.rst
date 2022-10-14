@@ -7,13 +7,13 @@ Online classroom
 General info
 -------------
 
-As of this year, all of the courses administered by NBIS are transitioning to the learning platform Canvas. So is the Epigenomics Data Analysis workshop. 
+All of the courses administered by NBIS are delivered on a learning platform Canvas.
 
-This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/51975>`_. 
+This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/70626>`_. 
 
-For example, on Canvas you will find the schedule for this week with links to the content and exercises on this website.
+The schedule for this week is located on Canvas, with links to the content and exercises on this website.
 
-We make sure that all the material on this site is up to date and always accessible.
+We make sure that all the material on this site is up to date and **always** accessible.
 
 During the course we will create a page on *readthedocs* where you can access the presentations.
 
@@ -37,7 +37,7 @@ Most interactions and talks will be happening on Zoom (Zoom link: TBD). For this
   - Extra 4
   - Extra 5
 
-This year we also have a Slack workspace. You should have already gotten an invitation via email to access this (let us know if not!). To keep things a bit in order, we have a general channel and day-specific channels. The general channel can be used for - surprise - more general questions or discussions (setting up the computer, tips and tricks, favorite recipes, ...); while any issues or questions related to specific days can be taken in the appropriate channel. Please try to answer questions in a "thread" to avoid cluttering up the channel!
+We also have a Slack workspace. You should have already gotten an invitation via email to access this (let us know if not!). To keep things somewhat ordered, we have a general channel and day-specific channels. The general channel can be used for more general questions or discussions; while any issues or questions related to specific days can be taken in the appropriate channel. Please try to answer questions in a "thread" to avoid cluttering up the channel! You will have access to this Slack channel after the course, but please bear in mind that the messages have a lifespan of 30 days, after which time they are deleted by Slack.
 
 Where should you be and when?
 -----------------------------
