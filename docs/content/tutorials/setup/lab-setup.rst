@@ -36,15 +36,15 @@ We have booked half a node on Rackham per course participant. To run the tutoria
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
-	salloc -A g2021025 -t 08:00:00 -p core -n 10 --no-shell --reservation=g2021025_X
+	salloc -A snic2022-22-634 -t 08:00:00 -p core -n 10 --no-shell --reservation=snic2022-22-634_X
 
 
 .. HINT::
 
-	Replace X with the date of the day of the workshop. So, 25 for day one, 26 for day, 27 for day 3 and so on. This gives you access to 10 cores for eight hours or until 17:00, whichever comes first.
+	Replace X with the date of the day of the workshop. So, 24 for day one, 25 for day, 26 for day 3 and so on. This gives you access to 10 cores for eight hours or until 17:00, whichever comes first.
 
 
-Please make sure you do it only **ONCE**, as by repeating this command you will use up resources reserved for others.
+Please make sure you do it only **ONCE** per day, as by repeating this command you will use up resources reserved for others.
 
 Check which node you were assigned
 
