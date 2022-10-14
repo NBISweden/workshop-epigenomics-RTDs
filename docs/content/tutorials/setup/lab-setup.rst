@@ -19,8 +19,8 @@ Before we start tutorial, we need to set up our work environment. In particular,
 :raw-html:`<br />`
 
 
-.. contents:: Contents
-    :local:
+.. .. contents:: Contents
+..    :local:
 
 
 :raw-html:`<br />`
