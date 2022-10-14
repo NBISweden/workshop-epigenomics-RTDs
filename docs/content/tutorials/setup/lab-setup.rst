@@ -6,8 +6,6 @@
 Setting-up
 ===============
 
-.. contents::
-    :local:
 
 
 Before we start tutorial, we need to set up our work environment. In particular, we need to:
@@ -17,6 +15,12 @@ Before we start tutorial, we need to set up our work environment. In particular,
 2. `access files prepared for the tutorial <Directory structure>`_ and keep folder structures organised
 3. `learn how to read commands and use module system on Uppmax <Commands and modules>`_
 4. if you work without access to Uppmax: `check the dependencies <Software Dependencies>`_
+
+:raw-html:`<br />`
+
+.. contents::
+    :local:
+
 
 :raw-html:`<br />`
 
