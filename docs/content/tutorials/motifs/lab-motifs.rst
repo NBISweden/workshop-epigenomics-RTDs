@@ -12,7 +12,7 @@ In this exercise we will try a few *de-novo* motif finding programs on data sets
 .. Contents
 .. =========
 
-.. contents:: 
+.. contents::
     :local:
 
 
@@ -30,14 +30,6 @@ Load the modules we will use in the exercise:
 	module load BEDTools
 	module load HOMER
 
-We will also use programs from the MEME suite. This is available on Uppmax as a module, but currently there are some problems with that version. Instead, we install MEME ourselves, with conda. We set up a conda environment with MEME installed, and activate it.
-
-.. code-block:: bash
-
-	module load conda
-	conda create -n motif_lab -c bioconda meme
-	conda activate motif_lab
-
 Create a working directory where you will do the exercise, and go there. For example:
 
 .. code-block:: bash
@@ -46,7 +38,7 @@ Create a working directory where you will do the exercise, and go there. For exa
 	cd motif_lab
 
 
-Note that the programs used in this exercise produce html output. You view these directly on Uppmax, although this is a bit slow. Otherwise you can copy the files to you local computer, and open them there.
+Note that the programs used in this exercise produce html output. You view these directly on Uppmax, though this is a bit slow. Otherwise you can copy the files to you local computer, and open them there.
 
 
 1. Download CTCF data
@@ -66,7 +58,7 @@ First, we will look at a ChIP-seq experiment using an antibody against *CTCF*. *
    			:alt: CTCF motif
 
 
-We will use `this data set <https://www.encodeproject.org/experiments/ENCSR572DUJ/>`_, from ENCODE. This page shows information about this particular experiment, along the experimental protocols and analysis pipelines used. Scroll down a bit and select the tab "File details". Now you will see a list of file available for download. We will use the bed files with "pseudoreplicated idr thresholded peaks". Download this file:
+We will use `this data set <https://www.encodeproject.org/experiments/ENCSR572DUJ/>`_, from ENCODE. This page shows information about this particular experiment, along the experimental protocols and analysis pipelines used. Scroll down a bit and select the tab "File details". Now you will see a list of files available for download. We will use the bed files with "pseudoreplicated idr thresholded peaks". Download this file:
 
 .. code-block:: bash
 
@@ -118,7 +110,7 @@ We will now use ``bedTools`` to extract the genome sequence for the 500 peaks:
 	bedtools getfasta -fo CTCF_top500_peak_seq.fa -fi hg38.masked.fa -bed ENCFF693MY_top500.bed
 
 
-You can see the documentation for the program you just used `getfasta <https://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html>`_. Now, have a look at the fasta file produced:
+You can see the documentation for the program you just used `here <https://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html>`_. Now, have a look at the fasta file produced:
 
 .. code-block:: bash
 
@@ -128,66 +120,109 @@ You can see the documentation for the program you just used `getfasta <https://b
 4. Use the MEME suite for motif finding
 ==========================================
 
-First we try DREME, which is a fast program that looks for regular expressions (documentation `DREME <http://meme-suite.org/doc/dreme-tutorial.html>`_). This takes around 5 minutes to run:
+We will now run some programs from the MEME suite. These is available on Uppmax though the ``MEMEsuite`` module, but currently there are some problems with this installation. Instead, we will run the programs inside a container. For more information on containers, we refer to the course `Tools for reproducible research <https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/>`_.
+
+
+
+
+First we try DREME, which is a fast program that looks for regular expressions (documentation `DREME <http://meme-suite.org/doc/dreme-tutorial.html>`_). This takes a few minutes to run:
+
 
 .. code-block:: bash
 
-	dreme -p CTCF_top500_peak_seq.fa -oc dreme_out
+  singularity exec \
+    /sw/courses/epigenomics/motif_finding/meme.sif \
+    dreme -p CTCF_top500_peak_seq.fa -oc dreme_out
+
+
 
 
 DREME produces several output files. Take a look at the html file:
 
 .. code-block:: bash
 
-	firefox dreme_out/dreme.html 
+	firefox dreme_out/dreme.html
 
 
 You see a list of motifs represented as regular expressions and sequence logos, along with e-values and some links.
 
 
-Next, we will try MEME-ChIP. This is a wrapper that runs several programs, including DREME, MEME, and Centrimo. It takes bit longer to run, around 10 minutes:
+Next, we will try MEME-ChIP. This is a wrapper that runs several programs, including MEME, Spamo and Centrimo. It takes bit longer to run, around 10 minutes:
 
 .. code-block:: bash
 
-	meme-chip -oc meme_chip_out CTCF_top500_peak_seq.fa
+  singularity exec \
+    /sw/courses/epigenomics/motif_finding/meme.sif \
+    meme-chip -oc meme_chip_out CTCF_top500_peak_seq.fa
 
 
-This produces several output files. The file ``meme_chip_out/dreme_out/dreme.html`` is basically the same file as we saw in the previous step. There is also an output file from MEME, a different motif finding program:
+This produces several output files. The file ``meme_chip_out/meme-chip.html`` is a good starting point to look at the results. Open this file in a web browser:
 
 .. code-block:: bash
 
-	firefox meme_chip_out/meme_out/meme.html
+	firefox meme_chip_out/meme-chip.html
 
 
 Here you can see all motifs found by MEME, with e-values etc.
 
 
-**What can you learn from all this output? Do the programs find the expected motif? Do they find other motifs? Where are the motifs located in the peaks?**
+**What can you learn from all this output? Did MEME find the expected motif? Did it find other motifs? Where are the motifs located in the peaks? How are the motifs located with respect to each other?**
 
 
 5. What are the motifs we have found?
 ========================================
 
-Often when we find a motif, we want to see if it is similar to any motif that is already known. One tool to do this is called Tomtom, and is part of the same suite of programs as MEME etc. MEME and DREME actually have convenient functions to directly look up motifs with Tomtom. To try this, open the MEME output again.
+Often when we find a motif, we want to see if it is similar to any motif that is already known. One tool to do this is called Tomtom, and is part of the same suite of programs as MEME etc. To try this, open the MEME-chip output again.
+
+There used to be a simple interface where motifs found be MEME could directly be exported to Tomtom, but this doesn't work well. Instead we will upload the motifs manually. To do this go to the Tomtom `web interface <http://meme-suite.org/tools/tomtom>`_.
+
+For the top motif, paste the following count matrix in the box under "Input query motifs". Then click "Start Search".
 
 .. code-block:: bash
 
-	firefox meme_chip_out/meme_out/meme.html
+  11  142  293   23
+   4  305    3  157
+  16    4  416   33
+  21  416    9   23
+   1  465    1    2
+ 166  284   12    8
+   0  306    1  163
+   1  468    0    1
+  10   21   12  427
+ 135   33  251   51
+   4  110  345   11
+  24  111   10  325
+   1    1  466    2
+   6   16  425   23
+  67  288   24   90
 
+For the second motif, use the following count matrix:
 
-Click on the rightward-pointing arrow next to the first motif (under *Submit/Download*). You can then select which tool you want to submit your motif to. Tomtom is already pre-selected, so just click on *Submit*. This takes you to the Tomtom website, where you click on *Start search*. After a short while you will see a page called *Results*. Clicking on *Tomtom HTML output* takes you to the result page. Here you can see the results of matching the motif we found (the "query motif") to Tomtom's data base.
+.. code-block:: bash
 
-**UPDATE**
+  20   17   21   35
+   9   17   52   15
+  20   23   25   25
+  20    0   63   10
+   0    7   74   12
+  46   25    3   19
+  88    1    0    4
+   2   74    0   17
+   0    4    0   89
+   0    0   93    0
+   0   93    0    0
+  80    1   12    0
+   2   14   69    8
+   4   55   34    0
+  11   56    8   17
 
-The TOMTOM website seems to have changed, so the motif found by MEME is not automatically added to the web form. Instead you have to type it in yourselves. For the top motif, enter `GCC[CA][CT]CTN[GC][TC]GG` in the box under "Input query motifs". Then click "Start Search"
 
 **What is the top scoring motif? Does it look similar to the motif we found? What about other motifs further down the list?**
 
-You can also access Tomtom directly from the `web site <http://meme-suite.org/tools/tomtom>`_, or run it from the command line.
 
 
 
-6. Try a data set from the previous execise
+6. Try a data set from the previous exercise
 ===============================================
 
 
@@ -200,7 +235,7 @@ In the previous exercise an earlier version of the human genome, hg19, was used.
 	ln -s /sw/courses/epigenomics/motif_finding/hg19_chr_1_2.masked.fa* .
 
 
-Then copy one of the peak files from the previous exercise to work directory 
+Then copy one of the peak files from the previous exercise to work directory
 
 .. code-block:: bash
 
@@ -211,10 +246,16 @@ Now you are ready to repeat all steps on the new peak set: select the top 500 pe
 
 .. code-block:: bash
 
-	sort -k 7,7nr rest_peaks.chr12.bed | head -n 500 > rest_top500.bed
-	bedtools getfasta -fo rest_top500_peak_seq.fa -fi hg19_chr_1_2.masked.fa -bed rest_top500.bed
-	dreme -p rest_top500_peak_seq.fa -oc dreme_out_rest
-	meme-chip -oc meme_chip_out_rest rest_top500_peak_seq.fa
+  sort -k 7,7nr rest_peaks.chr12.bed | head -n 500 > rest_top500.bed
+  bedtools getfasta -fo rest_top500_peak_seq.fa -fi hg19_chr_1_2.masked.fa -bed rest_top500.bed
+
+  singularity exec \
+    /sw/courses/epigenomics/motif_finding/meme.sif \
+    dreme -p rest_top500_peak_seq.fa -oc dreme_out_rest
+
+  singularity exec \
+    /sw/courses/epigenomics/motif_finding/meme.sif \
+    meme-chip -oc meme_chip_out_rest rest_top500_peak_seq.fa
 
 
 **What do the programs find? Do DREME and MEME find similar motifs? Do these look like the known REST site? Do the motifs you found resemble any known motifs in Tomtom's data base?**
@@ -223,7 +264,7 @@ Now you are ready to repeat all steps on the new peak set: select the top 500 pe
 7. Try HOMER
 ================
 
-Finally, we will try another popular motif finding software, HOMER. Here we will look at a 
+Finally, we will try another popular motif finding software, HOMER. Here we will look at a
 `CTCF chipseq experiment from mouse <https://www.encodeproject.org/experiments/ENCSR000CBJ/>`_. First, download the bed file with the peaks and select the top 500 peaks:
 
 .. code-block:: bash
@@ -236,7 +277,7 @@ Finally, we will try another popular motif finding software, HOMER. Here we will
 Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at.
 
 Have a look at the resuling html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
- 
+
 .. code-block:: bash
 
 	findMotifsGenome.pl mouse_CTCF_top500.bed mm10 homer_out_mouse_ctcf -size 200 -mask -preparsedDir tmp_homer/
@@ -250,4 +291,3 @@ Have a look at the resuling html file. Here you can see a list of *de-novo* moti
 
 .. Written by: Jakub Westholm
 .. rst by: Agata Smialowska
-
