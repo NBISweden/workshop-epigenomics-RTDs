@@ -276,7 +276,7 @@ Finally, we will try another popular motif finding software, HOMER. Here we will
 
 Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at. This can take a while to run, around 20-30 minutes.
 
-Have a look at the resuling html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
+Have a look at the resulting html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
 
 .. code-block:: bash
 
@@ -284,7 +284,7 @@ Have a look at the resuling html file. Here you can see a list of *de-novo* moti
 	firefox homer_out_mouse_ctcf/homerResults.html
 
 
-**What does HOMER find? is this output easy to interpret?**
+**What does HOMER find? Is this output easy to interpret?**
 
 
 .. ----
