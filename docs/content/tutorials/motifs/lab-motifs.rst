@@ -274,7 +274,7 @@ Finally, we will try another popular motif finding software, HOMER. Here we will
 	sort -k 7,7nr ENCFF311HPG.bed | head -n 500 > mouse_CTCF_top500.bed
 
 
-Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at.
+Then run HOMER on the top 500 peaks. Note that HOMER comes with a number of pre-formatted genomes, so you just give it the coordinates of the peaks and tell it which genome you are looking at. This also takes around 10 minutes.
 
 Have a look at the resuling html file. Here you can see a list of *de-novo* motifs found and which known motifs these are similar to. The program also scans the peaks for all known motifs, and indicates which motifs are enriched on the peak region. Klick on *Known Motif Enrichment Results* to see the results.
 
