@@ -101,6 +101,29 @@ Have a look at ``ENCFF045OAB.chr14.proc.fraglen.pdf``, and answer
           :width: 300px
 
 
+View the resulting histogram of insert sizes ``SRR891268_insert_size_histogram.pdf``. Generating this important QC plot is only possible for PE libraries. Could you guess what the peaks at approximately 50bp, 200bp, 400bp and 600bp correspond to?
+
+To give some context compare to plots on Figure 2. 
+
+
+.. list-table:: Figure 2. Examples of insert size distribution for ATAC-seq experiments.
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - Naked DNA
+     - Failed ATAC-seq
+     - Noisy ATAC-seq
+     - Successful ATAC-seq
+   * - .. image:: figures/Screenshot_sizeDistribution_Naked.png
+   			:width: 200px
+     - .. image:: figures/Screenshot_sizeDistribution_Failed.png
+   			:width: 200px
+     - .. image:: figures/Screenshot_sizeDistribution_Failed2.png
+   			:width: 200px
+     - .. image:: figures/Screenshot_sizeDistribution_Good.png
+   			:width: 200px
+
+
 
 
 
