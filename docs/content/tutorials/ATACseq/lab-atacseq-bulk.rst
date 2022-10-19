@@ -22,188 +22,59 @@ ATAC-seq (Assay for Transposase-Accessible Chromatin with high-throughput sequen
 
 
 
-
-The sample processing workflow is similar to that of ChIP-seq. There are some small changes, however, and we'll discuss them here.
-
-First of all, the sample should be sequenced using the paired end (PE) protocol. Single end sequencing for ATAC-seq is strongly discouraged, for reasons mentioned below.
-
-
 .. contents:: 
     :local:
 
+
+This tutorial is a continuation of :doc:`Data preprocessing <data-preproc>`, :doc:`General QC <data-qc1>`, and :doc:`ATACseq specifc QC <data-qc-atac>`. 
 
 
 Data
 ======
 
-In this tutorial we will use data from the study of Buenrostro et al. 2013, the first paper on the ATAC-seq method. The data is from a human cell line of purified CD4+ T cells. The original dataset had 2 x 200 million reads and would be too big to process in a training session, so the original dataset was downsampled to 200,000 randomly selected reads. Additionally, about 200,000 reads pairs that will map to chromosome 22 were included to have a good profile on this chromosome, similar (although downsampled) to what you might get with a typical ATAC-seq sample.
+
+We will use the same data as before: **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in natural killer (NK) cells without and with stimulation from the `ENCODE <www.encodeproject.org>`_ project.
+
+Natural killer (NK) cells are innate immune cells that show strong cytolytic function against physiologically stressed cells such as tumor cells and virus-infected cells. NK cells express several activating and inhibitory receptors that recognize the altered expression of proteins on target cells and control the cytolytic function. To read more about NK cells please refer to `Paul and Lal <https://doi.org/10.3389/fimmu.2017.01124>`_ . The interleukin cocktail used to stimulate NK cells induces proliferation and activation (`Lauwerys et al <https://doi.org/10.1006/cyto.1999.0501>`_ ).
+
+ENCODE sample accession numbers are listed in Table 1.
 
 
-
-Prior to aligning reads to the reference genome, the reads must be properly trimmed off adapters - because we will allow "dovetailing" (with the mates seemingly extending "past" each other) of read pairs during alignment:
-
-.. code-block:: bash
-	
-	<--------------------Mate 1-----------------------
-	AGCTTCAACATCGAATACGCCGCAGGCCCCTTCGCCCTATTCTTCATAGC
-	  CTTCAACATCGAATACGCCGCAGGCCCCTTCGCCCTATTCTTCATAGCCT
-	  ----------------------Mate 2--------------------->
-
-
-Read alignment can be performed using any aligner which performs global i.e. end-to-end alignment, such as ``bwa-mem``, ``bowtie``, ``bowtie2`` (newer versions). In this tutorial we used ``bowtie2`` for read mapping, for details see the header of bam file. We start from the bam file which contains subset reads aligned to ``hg38`` assembly.
-
-
-
-.. admonition:: How to check bam header?
-   :class: dropdown, warning
-
-
-   .. code-block:: bash
-
-   	#load samtools
-   	module load bioinfo-tools
-   	module load samtools/1.8
-
-   	#view header only
-   	samtools view -H name.bam
-
-
-Alignment Processing and QC
-============================
-
-First, you need to link the bam file in your working directory. This file has been filtered off alignments with low quality score and contains only properly paired read pairs. You can refer to `bowtie2 manual <http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#paired-sam-output>`_ for details. The file is also sorted and inexed.
-
-
-.. code-block:: bash
-	
-	mkdir -p ~/atacseq/bam
-	cd ~/atacseq/bam
-
-	ln -s /proj/g2021025/nobackup/atacseq/data/SRR891268_hg38.bowtie2.q30.sorted.bam .
-	ln -s /proj/g2021025/nobackup/atacseq/data/SRR891268_hg38.bowtie2.q30.sorted.bam.bai .
-
-
-
-First, we would like to know how many fragments mapped to ``chrM``, as reads derived from mitochondrial DNA represent noise in ATAC-seq datasets and can substantially inflate the background level in peak identification.
-
-The output is TAB-delimited with each line consisting of reference sequence name, sequence length, number of mapped read-segments and number of unmapped read-segments.
-
-.. code-block:: bash
-
-	module load bioinfo-tools
-	module load samtools/1.8
-
-	samtools idxstats SRR891268_hg38.bowtie2.q30.sorted.bam >SRR891268.idxstats.txt
-
-	#total fragments
-	awk '{sum += $3} END {print sum}' SRR891268.idxstats.txt
-
-	#chrM fragments
-	awk '$1 ~ /chrM/ {print $3}' SRR891268.idxstats.txt
-
-	> 165586/437490
-	[1] 0.3784909
-
-You can see that almost 40% of the fragments mapped to mitochondrial DNA. This is often the case in ATAC-seq experiments (depending on the sample preparation protocol, it is possible to remove these fragments from the library prior to sequencing) and should be taken into account when planning the experiment. We remove these reads in the next step.
-
-The alignment processing steps are similar to :doc:`ChIP-seq data processing <../chipseqProc/lab-chipseq-processing>`. In this example we do not filter out reads mapping to blaclisted regions (found in Encode accession ``ENCFF356LFX``), this step may be necessary, depending on the dataset. 
-
-
-.. code-block:: bash
-
-	samtools view -h SRR891268_hg38.bowtie2.q30.sorted.bam | awk '($3 != "chrM")' | samtools view -Shbo SRR891268_hg38.bowtie2.q30.sorted.noM.bam -
-
-	samtools index SRR891268_hg38.bowtie2.q30.sorted.noM.bam
-
-	samtools stats SRR891268_hg38.bowtie2.q30.sorted.noM.bam >SRR891268.stats.txt
-
-
-The last command collects statistics from BAM files and outputs in a text format. To see the summary:
-
-.. code-block:: bash
-
-	grep ^SN SRR891268.stats.txt | cut -f 2-
-
-	# the interesting part
-	insert size average:    231.6
-	insert size standard deviation: 188.8
-
-
-
-.. admonition:: parsing BAM statistics
-   :class: dropdown, warning
-
-   .. code-block:: bash
-
-		(base) [agata@rackham3 bam]$ grep ^SN SRR891268.stats.txt | cut -f 2-
-		raw total sequences:	271904
-		filtered sequences:	0
-		sequences:	271904
-		is sorted:	1
-		1st fragments:	135952
-		last fragments:	135952
-		reads mapped:	271904
-		reads mapped and paired:	271904	# paired-end technology bit set + both mates mapped
-		reads unmapped:	0
-		reads properly paired:	271904	# proper-pair bit set
-		reads paired:	271904	# paired-end technology bit set
-		reads duplicated:	0	# PCR or optical duplicate bit set
-		reads MQ0:	0	# mapped and MQ=0
-		reads QC failed:	0
-		non-primary alignments:	0
-		total length:	13222531	# ignores clipping
-		bases mapped:	13222531	# ignores clipping
-		bases mapped (cigar):	13222531	# more accurate
-		bases trimmed:	0
-		bases duplicated:	0
-		mismatches:	25158	# from NM fields
-		error rate:	1.902661e-03	# mismatches / bases mapped (cigar)
-		average length:	48
-		maximum length:	50
-		average quality:	38.3
-		insert size average:	231.6
-		insert size standard deviation:	188.8
-		inward oriented pairs:	118009
-		outward oriented pairs:	1287
-		pairs with other orientation:	0
-		pairs on different chromosomes:	0
-
-
-
-
-You will remove duplicated reads (which likely are PCR duplicates) and collect detailed insert size metrics.
-
-.. code-block:: bash
-
-	module load picard/2.23.4
-
-	java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates -I SRR891268_hg38.bowtie2.q30.sorted.noM.bam -O SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam -M dedup_metrics.txt -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
-
-
-	java -Xmx64G -jar $PICARD_HOME/picard.jar CollectInsertSizeMetrics -I SRR891268_hg38.bowtie2.q30.sorted.noM.rmdup.bam -O SRR891268_insert_size_metrics.txt -H SRR891268_insert_size_histogram.pdf -M 0.5
-
-
-View the resulting histogram of insert sizes ``SRR891268_insert_size_histogram.pdf``. Generating this important QC plot is only possible for PE libraries. Could you guess what the peaks at approximately 50bp, 200bp, 400bp and 600bp correspond to?
-
-To give some context compare to plots on Figure 2. 
-
-
-.. list-table:: Figure 2. Examples of insert size distribution for ATAC-seq experiments.
-   :widths: 25 25 25 25
+.. list-table:: Table 1. ENCODE accession numbers for data set used in this tutorial.
+   :widths: 10 25 25 50
    :header-rows: 1
 
-   * - Naked DNA
-     - Failed ATAC-seq
-     - Noisy ATAC-seq
-     - Successful ATAC-seq
-   * - .. image:: figures/Screenshot_sizeDistribution_Naked.png
-   			:width: 200px
-     - .. image:: figures/Screenshot_sizeDistribution_Failed.png
-   			:width: 200px
-     - .. image:: figures/Screenshot_sizeDistribution_Failed2.png
-   			:width: 200px
-     - .. image:: figures/Screenshot_sizeDistribution_Good.png
-   			:width: 200px
+   * - No
+     - Accession
+     - Cell type
+     - Description
+   * - 1
+     - ENCFF398QLV
+     - Homo sapiens natural killer cell female adult
+     - untreated
+   * - 2
+     - ENCFF363HBZ
+     - Homo sapiens natural killer cell female adult
+     - untreated
+   * - 3
+     - ENCFF045OAB
+     - Homo sapiens natural killer cell female adult
+     - Interleukin-18, Interleukin-12-alpha, Interleukin-12-beta, Interleukin-15
+   * - 4
+     - ENCFF828ZPN
+     - Homo sapiens natural killer cell female adult
+     - Interleukin-18, Interleukin-12-alpha, Interleukin-12-beta, Interleukin-15
+
+
+We have processed the data, starting from reads aligned to **hg38** reference assembly using **bowtie2**. The alignments were obtained from ENCODE in *bam* format and further processed:
+
+* alignments were subset to include chromosome 14 and 1% of reads mapped to chromosomes 1 to 6 and chrM.
+
+This allows you to see a realistic coverage of one selected chromosome and collect QC metrics while allowing shorter computing times. Non-subset ATAC-seq data contains 100 - 200 M PE reads, too many to conveniently process during a workshop.
+
+In this workshop, we have filtered and quality-controlled the data (parts :doc:`Data preprocessing <data-preproc>`, :doc:`General QC <data-qc1>`, and :doc:`ATACseq specifc QC <data-qc-atac>`).
+
+
 
 
 Peak Calling
