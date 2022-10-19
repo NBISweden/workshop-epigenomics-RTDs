@@ -1,3 +1,8 @@
+.. below role allows to use the html syntax, for example :raw-html:`<br />`
+.. role:: raw-html(raw)
+    :format: html
+
+
 =========
 ATAC-seq
 =========
@@ -15,6 +20,7 @@ ATAC-seq can been used to
 
 * infer nucleosome positioning (in the TSS region).
 
+:raw-html:`<br />`
 
 .. list-table:: Figure 1. Overview of ATAC-seq (Buenrostro et al., 2015).
    :widths: 60
@@ -24,7 +30,7 @@ ATAC-seq can been used to
    			:width: 400px
 
 
-
+:raw-html:`<br />`
 
 The tutorials in this section cover the steps oulined on Figure 2.
 
@@ -37,6 +43,7 @@ The tutorials in this section cover the steps oulined on Figure 2.
    			:width: 400px
 
 
+:raw-html:`<br />`
 
 These are tutorials for analysis and peak-dependent QC of ATAC-seq data:
 
