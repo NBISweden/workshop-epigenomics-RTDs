@@ -40,7 +40,7 @@ The aim of this part of the data analysis workflow is to collect ATAC-seq specif
 
 * presence of signal in nuclesome-free regions (NFR) and mononucleosome fractions;
 
-* enrichment of signal in transcription start site (TSS) regions
+* enrichment of signal in transcription start site (TSS) regions.
 
 
 :raw-html:`<br />`
