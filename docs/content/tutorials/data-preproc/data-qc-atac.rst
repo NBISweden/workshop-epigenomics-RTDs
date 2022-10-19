@@ -10,7 +10,7 @@ Quality Control for ATAC-seq
 ===============================
 
 
-This tutorial is a continuatin of :doc:`General QC <data-qc1>`.
+This tutorial is a continuation of :doc:`General QC <data-qc1>`.
 
 
 
