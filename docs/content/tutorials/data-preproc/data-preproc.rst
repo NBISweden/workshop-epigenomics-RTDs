@@ -140,8 +140,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp $COURSE_DIR/atacseq_proc/atacseq_data.sh .
-  cp $COURSE_DIR/atacseq_proc/atacseq_env.sh .
+  cp /proj/epi2022/atacseq_proc/atacseq_data.sh .
+  cp /proj/epi2022/atacseq_proc/atacseq_env.sh .
 
 
   source atacseq_env.sh 
@@ -285,8 +285,11 @@ Finally, we can remove duplicated alignments.
 
 	module load picard/2.23.4
 
-	java -Xmx63G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam -O ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam -M ENCFF045OAB.dedup_metrics -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
+	java -Xmx63G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam \
+	 -O ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam -M ENCFF045OAB.dedup_metrics \
+	 -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
 
+	samtools index ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam
 
 Resulting file ``ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` containes preprocessed alignments we can use in the analysis.
 
@@ -303,7 +306,6 @@ Key information from ``ENCFF045OAB.dedup_metrics``::
 	READ_PAIRS_EXAMINED 1544973
 	READ_PAIR_DUPLICATES 105752
 	PERCENT_DUPLICATION 0.068449
-
 
 Good news, low duplication level in this library, we can proceed with further :doc:`QC <data-qc1>` and :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
 

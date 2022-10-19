@@ -47,7 +47,6 @@ The aim of this part of the data analysis workflow is to perform general signal 
 * replicate congruency.
 
 
-
 :raw-html:`<br />`
 
 
@@ -63,7 +62,7 @@ Cumulative Enrichment
 Cumulative enrichment is obtained by sampling indexed BAM files and plotting a profile of cumulative read coverages for each sample. All reads overlapping a window (bin) of the specified length are counted; these counts are sorted and the cumulative sum is finally plotted.
 
 
-To compute cumulative enrichment for processed bam files in our ATAC-seq data set (assuming we are in drectory ``analysis``):
+To compute cumulative enrichment for processed bam files in our ATAC-seq data set (assuming we are in drectory ``analysis``, so if you have followed the previous tutorial, you should move one directory level up ``cd ../analysis``):
 
 
 .. code-block:: bash
@@ -71,12 +70,12 @@ To compute cumulative enrichment for processed bam files in our ATAC-seq data se
 	mkdir deepTools
 	cd deepTools
 
-	#link necessary files to avoind long paths in commands
-	ln -s ../../data/proc/* .
+	#link necessary files to avoid long paths in commands
+	ln -s ../../data_proc/* .
 
 	module load deepTools/3.3.2
 
-	plotFingerprint --bamfiles ENCFF363HBZ.chr14.bam ENCFF398QLV.chr14.bam ENCFF045OAB.chr14.bam ENCFF828ZPN.chr14.bam \
+	plotFingerprint --bamfiles ENCFF363HBZ.chr14.proc.bam ENCFF398QLV.chr14.proc.bam ENCFF045OAB.chr14.proc.bam ENCFF828ZPN.chr14.proc.bam \
 	 --binSize=1000 --plotFile NKcellsATAC_chr14.fingerprint.pdf \
 	 --labels ENCFF363HBZ ENCFF398QLV ENCFF045OAB ENCFF828ZPN -p 8 &> fingerprint.log
 
@@ -107,11 +106,12 @@ In this method the genome is divided into bins of specified size (``--binSize`` 
 
 We chose to compute pairwise Spearman correlation coefficients for this step, as they are based on ranks of each bin rather than signal values.
 
+In this part we use bam files filtered previously, to save time.
 
 
 .. code-block:: bash
 
-	multiBamSummary bins --bamfiles ENCFF363HBZ.chr14.bam ENCFF398QLV.chr14.bam ENCFF045OAB.chr14.bam ENCFF828ZPN.chr14.bam \
+	multiBamSummary bins --bamfiles ENCFF363HBZ.chr14.proc.bam ENCFF398QLV.chr14.proc.bam ENCFF045OAB.chr14.proc.bam ENCFF828ZPN.chr14.proc.bam \
 	 --labels ENCFF363HBZ ENCFF398QLV ENCFF045OAB ENCFF828ZPN \
 	 --outFileName multiBamArray_NKcellsATAC_chr14.npz --binSize 5000 -p 8 &> multiBamSummary.log
 
