@@ -271,7 +271,7 @@ Figure 3 depicts large genomic region. In general Genrich detects less peaks (sh
 
 
 
-So which method to choose? You can test them all, we selected 4 (which produced some spurious peaks) and 5 (which we found had most support in read coverage in regions we inspected) for this tutorial.
+So which method to choose? You can test them all, we selected 4 (which we found had most support in read coverage in regions we inspected) and 5 (which produced some spurious peaks) for this tutorial.
 
 
 .. code-block:: bash
