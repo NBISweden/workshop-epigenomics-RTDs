@@ -72,8 +72,9 @@ To compute fragment length distribution for processed bam file in our ATAC-seq d
 	mkdir QC
 	cd QC
 
-	ln -s ../../processedData/* .
-
+	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam  .
+	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai  .
+	
 	module load picard/2.23.4
 
 	java -Xmx63G -jar $PICARD_HOME/picard.jar CollectInsertSizeMetrics \
@@ -420,5 +421,5 @@ And plot it:
           :width: 300px
 
 
-After the elaborate QC performed in this tutorial and in :doc:`general QC <data-qc1>`, we can now move to ATAC-seq data :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
+After the QC performed in this tutorial and in :doc:`general QC <data-qc1>`, we can now move to ATAC-seq data :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
 
