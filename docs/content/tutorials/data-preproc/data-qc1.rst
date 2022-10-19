@@ -10,7 +10,7 @@ Quality Control for Functional Genomics
 ==========================================
 
 
-This tutorial is a continuatin of :doc:`Data preprocessing <data-preproc>`.
+This tutorial is a continuation of :doc:`Data preprocessing <data-preproc>`.
 
 
 
