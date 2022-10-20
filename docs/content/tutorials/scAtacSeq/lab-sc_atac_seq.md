@@ -28,7 +28,7 @@
 
 ## Setting up
 
-This exercise will be run on Uppmax, inside a [singularity](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html) container. This is like setting up a new computer inside your Uppmax session, with it's own file system and installed software. Running analysis inside a container has several advantages. Every time we start a container, we allways have exactly the same programs and libraries installed. This makes the analysis stable (as long as the container is not changed we can be sure that the programs will run as expected) and reproducible (we always get exactly the same results). To learn more about containers, please see the course [Tools for Reproducible Research](https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/).
+This exercise will be run on Uppmax, inside a [singularity](https://apptainer.org) container. This is like setting up a new computer inside your Uppmax session, with it's own file system and installed software. Running analysis inside a container has several advantages. Every time we start a container, we allways have exactly the same programs and libraries installed. This makes the analysis stable (as long as the container is not changed we can be sure that the programs will run as expected) and reproducible (we always get exactly the same results). To learn more about containers, please see the course [Tools for Reproducible Research](https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/).
 
 To run RStudio inside a singularity container, follow the steps below.
 
