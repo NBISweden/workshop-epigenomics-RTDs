@@ -11,4 +11,3 @@ These are tutorials for data integration.
 
    scATAC-seq analysis and integraion with scRNA-seq data <scAtacSeq/lab-sc_atac_seq.md>
    Genomic overlaps <genomeOverlap/lab-genomicGoverlaps.md>
-   BONUS EXERCISE: Unsupervised data integration <unsupervised_data_integration/lab-unsupervised_data_integration.md>
