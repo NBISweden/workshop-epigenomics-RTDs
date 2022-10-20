@@ -19,7 +19,7 @@ This exercise is mostly run in a web browser, so it’s easiest to run it on you
 .. Contents
 .. =========
 
-.. contents:: 
+.. contents::
     :local:
 
 
@@ -34,15 +34,15 @@ To explore this data repostioty, go to the `ENCODE project website <https://www.
 
 You can select subsets of the results from the panel on the left. Select *Experiment* to only see experiments. **How many results do you see now? Are all these ChIP-seq experiments?**
 
-Now, let’s make a finer selection: Select only released experiments (from *Experiment Status*), and then only experiments using the GRCh38 genome. **How many experiments do we have now?**
+Now, let’s make a finer selection: Select only released experiments (from *Quality*), and then only experiments on human material. **How many experiments do we have now?**
 
-Perhaps we are only interested in data from the brain. Under *Organ*, click on *See more*, and the select *brain*. **How many experiments do we have now?**
+Perhaps we are only interested in data from the brain. Under *Organ*, select *brain*. **How many experiments do we have now?**
 
 You can see a list of all experiments to the right. Click on the first one, and open the page in a new browser window or tab. This will take you to a page describing this experiment, and what protocols and analysis pipelines were used. If you scroll down and select the tab *File details* you will se a list of all files that are available for download.
 
 **Do you know what these files are?** Try downloading some if you want to. But since some of these files are large, remember to remove them when you are done looking at them.
 
-Now have seen how to find and download a single ChIP-seq data set. If we instead want to download all H3K27me3 data from the human brain mapped to the GRCh38 genome, go back to the ENCODE search page, where you had selected the relevant experiments. Then click the button *Download*. This will download a file to your computer.
+Now have seen how to find and download a single ChIP-seq data set. If we instead want to download all H3K27me3 data from the human brain mapped to the human genome, go back to the ENCODE search page, where you had selected the relevant experiments. Then click the button *Download*. This will download a file to your computer.
 
 Open this file. It contains URLs to all data files for the selected experiments. If we want to download e.g. only the bed files with peaks that are stable in both replicates of each experiment, we need to do some extra steps.
 
@@ -50,21 +50,21 @@ First, we download the meta data table. The URL is the first line in the file yo
 
 .. code-block:: bash
 
-	wget "https://www.encodeproject.org/metadata/searchTerm=H3K27me3&type=Experiment&status=released&assembly=GRCh38&organ_slims=brain/metadata.tsv"
+	wget "https://www.encodeproject.org/metadata/?status=released&biosample_ontology.organ_slims=brain&replicates.library.biosample.donor.organism.scientific_name=Homo+sapiens&searchTerm=H3K27me3&type=Experiment&files.analyses.status=released&files.preferred_default=true" -O meta_data.tsv
 
 
 You can open this file, e.g. in excel to have a look. We want to select all lines corresponding to bed files with stable/replicated peaks, using the GRCh38 genome, and save these in a new file ``metadata_peak_files.tsv``:
 
 .. code-block:: bash
 
-	grep bed.gz metadata.tsv | grep "stable\|replicated" | grep GRCh38 > metadata_peak_files.tsv
+	grep bed.gz meta_data.tsv | grep "stable\|replicated" | grep GRCh38 > meta_data_peak_files.tsv
 
 
-From this file we can now get the URLs, which are in column 37:
+From this file we can now get the URLs, which are in column 48:
 
 .. code-block:: bash
 
-	cut -d$'\t' -f37 metadata_peak_files.tsv > metadata_peak_files_urls.txt
+	cut -d$'\t' -f48 meta_data_peak_files.tsv > meta_data_peak_files_urls.txt
 
 
 Finally, we can now download all these files:
@@ -85,7 +85,6 @@ There are several ways to download data from the Roadmap Epigenomics web site. B
 
 `Roadmap Epigenomics <https://www.ncbi.nlm.nih.gov/geo/roadmap/epigenomics/>`_
 
-`EdaccData Release9 <http://genboree.org/EdaccData/Release-9/>`_
 
 
 
