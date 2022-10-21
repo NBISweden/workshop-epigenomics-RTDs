@@ -18,6 +18,8 @@ This tutorial is a continuation of :doc:`General QC <data-qc1>`.
 
 - understand and interpret quality control metrics specific to ATAC-seq data
 
+- work interactively with ATAC-seq signal using Integrative Genome Viewer
+
 
 :raw-html:`<br />`
 
@@ -46,6 +48,11 @@ The aim of this part of the data analysis workflow is to collect ATAC-seq specif
 :raw-html:`<br />`
 
 
+.. Important::
+
+	We assume that the environment and directory structure has been already set in :doc:`Data preprocessing <data-preproc>`.
+
+
 Fragment Length Distribution
 ================================
 
@@ -72,8 +79,8 @@ To compute fragment length distribution for processed bam file in our ATAC-seq d
 	mkdir QC
 	cd QC
 
-	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam  .
-	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai  .
+	ln -s ../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam  .
+	ln -s ../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai  .
 	
 	module load picard/2.23.4
 
@@ -337,6 +344,7 @@ When done, we save the object for later use:
 Finally, we have prepared the data for **plotting the signal in NFR and mononuclesome fraction** and calculating **signal distribution at TSS**.
 
 
+
 Signal in NFR and Mononucleosome Fractions
 ==============================================
 
@@ -433,6 +441,7 @@ And plot it:
 		abline(v=seq(0, 100, by=10)+1, lty=2, col="gray")
 	dev.off()
 
+:raw-html:`<br />`
 
 * What are the differences in the signal profile in these two fractions? Why do we observe them?
 
@@ -442,6 +451,77 @@ And plot it:
 
    .. image:: figures/TSSprofile_splitbam.png
           :width: 300px
+
+
+
+Signal Visualisation Using IGV
+=================================
+
+In this part we will look more closely at our data, which is a good practice, as data summaries can be at times misleading. In principle we could look at the data on Uppmax using installed tools but it is much easier to work with genome browser locally. 
+If you have not done this before the course, install Interactive Genome Browser `IGV <https://www.broadinstitute.org/igv/>`_.
+
+
+We would like to visualise processed alignments (bam and corresponding bai) at several loci with strong signal. We can also view the bam files split into nucleosome-free, mono- di- and tri- nucleosome fractions. *Data has been mapped to hg38*.
+
+We will need the following files:
+
+* ``atacseq/analysis/processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` and ``bai``
+
+* ``atacseq/analysis/QC/splitBam/NucleosomeFree.bam`` and ``bai``
+
+* ``atacseq/analysis/QC/splitBam/mononucleosome.bam`` and ``bai``
+
+* ``atacseq/analysis/QC/splitBam/dinucleosome.bam`` and ``bai``
+
+* ``atacseq/analysis/QC/splitBam/trinucleosome.bam`` and ``bai``
+
+
+:raw-html:`<br />`
+
+You will have to zoom in to view the alignments and coverage tracks.
+
+Change the default viewing settings in IGV by ``shift-clicking`` onto a track name (left panel):
+
+**bam** tracks:
+
+* alignment view to ``Squished``
+
+* colour alignments to ``insert size and pair orientation``
+
+**coverage** tracks:
+
+* pay attention to track scale; it is set to ``Auto``; the tracks won't show at the same scale, you can harmonise the scale if you want to see the differences in signal height
+
+
+:raw-html:`<br />`
+
+You can move long the chromosome 14 and you will spot locations with high signal density.
+
+Examples:
+
+* ``chr14:61,513,568-61,543,546``
+
+* ``chr14:90,365,635-90,395,613``
+
+* ``chr14:92,508,638-92,538,616``
+
+* ``chr14:93,095,621-93,125,599``
+
+
+:raw-html:`<br />`
+
+An example is shown on the Figure below (we can skip discussing the peak intervals for now).
+
+.. image:: figures/igv_qc_split1.png
+   			:width: 600px
+
+
+*Bonus question*
+
+* Why does the NFR track show unusually high fraction of discordant alignments (labeled green)?
+
+
+
 
 
 After the QC performed in this tutorial and in :doc:`general QC <data-qc1>`, we can now move to ATAC-seq data :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
