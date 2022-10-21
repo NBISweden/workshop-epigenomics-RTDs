@@ -2,9 +2,6 @@
 .. role:: raw-html(raw)
     :format: html
 
-.. modified from
-.. https://training.galaxyproject.org/topics/epigenetics/tutorials/atac-seq/tutorial.html
-
 ============
 ATAC-seq
 ============
@@ -390,6 +387,70 @@ How many peaks actually overlap?
 Fraction of Reads in Peaks
 -----------------------------
 
+**Fraction of Reads in Peaks (FRiP)** is one of key QC metrics of ATAC-seq data. According to `ENCODE ATACseq data standards <https://www.encodeproject.org/atac-seq/#standards>`_ acceptable FRiP is >0.2. This value of course depends on the peak calling protocol, and as we have seen in the previous section, the results may vary ...a lot. However, it is worth to keep in mind that any samples which show different value for this (and other) metric may be problematic in the analysis.
+
+To calculate FRiP we need alignment file (bam) and peak file (narrowPeak, bed).
+
+Assuming we are in ``peaks``:
+
+
+.. code-block:: bash
+	
+	mkdir frip
+	cd frip
+
+We will use a tool called ``featureCounts`` from package ``Subread``. This tool accepts genomic intervals in formats ``gtf/gff`` and ``saf``. Let's convert ``narrow/ broadPeak`` to ``saf``:
+
+.. code-block:: bash
+
+	ln -s ../macs/ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="macsBroadPeak_"++nr;  print peakid,$1,$2,$3,"."}' ENCFF045OAB.chr14.macs.broad_peaks.broadPeak > ENCFF045OAB.chr14.macs.broad.saf
+
+
+.. admonition:: ENCFF045OAB.chr14.macs.broad.saf
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+		macsBroadPeak_1	chr14	18674027	18674550	.
+		macsBroadPeak_2	chr14	19096644	19097148	.
+		macsBroadPeak_3	chr14	19098500	19098851	.
+		macsBroadPeak_4	chr14	19105557	19105809	.
+		macsBroadPeak_5	chr14	19161076	19162012	.
+		macsBroadPeak_6	chr14	19172873	19173211	.
+
+We can now summarise reads:
+
+.. code-block:: bash
+
+	ln -s ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam
+
+	module load subread/2.0.0
+	featureCounts -p -F SAF -a ENCFF045OAB.chr14.macs.broad.saf --fracOverlap 0.2 -o ENCFF045OAB.peaks_macs_broad.counts ENCFF045OAB.chr14.proc_rh.nsort.bam
+
+
+This command has produced reads summarised within each peak (which we won't use) and a summary file ``ENCFF045OAB.peaks_macs_broad.counts.summary`` which contains values we are interested in::
+
+	Status	ENCFF045OAB.chr14.proc_rh.nsort.bam
+	Assigned	409482
+	Unassigned_Unmapped	0
+	Unassigned_Read_Type	0
+	Unassigned_Singleton	0
+	Unassigned_MappingQuality	0
+	Unassigned_Chimera	0
+	Unassigned_FragmentLength	0
+	Unassigned_Duplicate	0
+	Unassigned_MultiMapping	0
+	Unassigned_Secondary	0
+	Unassigned_NonSplit	0
+	Unassigned_NoFeatures	1247672
+	Unassigned_Overlapping_Length	6742
+	Unassigned_Ambiguity	1
+
+``409482/(1247672+6742+1)`` = 0.33 
+
+33% alignments and as ``featureCounts`` reported in the output to the screen (STDOUT) 24.6% reads fall within peaks, and this is FRiP for sample ENCFF045OAB.
 
 
 
@@ -398,9 +459,88 @@ Fraction of Reads in Peaks
 Consensus Peaks
 ===================
 
+As our experiment has been replicated, we can select the peaks which were detected in both replicates. This removes non-reproducible peaks in regions of low coverage and other artifacts.
+
+In this section we will work on peaks detected earlier using son-subset data.
+
+First we link necessary files:
+
+.. code-block:: bash
+
+	mkdir consensus
+	cd consensus
+
+	ln -s ../../../results/peaks/ENCFF045OAB.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF363HBZ.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF398QLV.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF828ZPN.macs.broad_peaks.broadPeak
+
+To recap, ENCFF398QLV and ENCFF363HBZ are untreated and ENCFF045OAB and ENCFF828ZPN are stimulated NK cells.
+
+
+Let's select peaks which overlap at their 50% length in both replicates (assumind we are in ``peaks``):
+
+
+.. code-block:: bash
+
+	module load BEDTools/2.25.0
+
+	bedtools intersect -a ENCFF398QLV.macs.broad_peaks.broadPeak -b ENCFF363HBZ.macs.broad_peaks.broadPeak  -f 0.50 -r >nk_peaks.bed
+	bedtools intersect -a ENCFF045OAB.macs.broad_peaks.broadPeak -b ENCFF828ZPN.macs.broad_peaks.broadPeak  -f 0.50 -r >nk_stim_peaks.bed
+
+
+How many peaks?
+
+.. code-block:: bash
+
+	wc -l *Peak
+	   51425 ENCFF045OAB.macs.broad_peaks.broadPeak
+	   54258 ENCFF363HBZ.macs.broad_peaks.broadPeak
+	   54691 ENCFF398QLV.macs.broad_peaks.broadPeak
+	   72067 ENCFF828ZPN.macs.broad_peaks.broadPeak
+
+How many overlap?
+
+.. code-block:: bash
+
+	wc -l *bed
+	  47156 nk_peaks.bed
+	  36606 nk_stim_peaks.bed
+
+
 
 Merged Peaks
 ===================
+
+We can now merge the consensus peaks into peak sets used for downstream analyses.
+
+
+.. code-block:: bash
+
+	module load BEDOPS/2.4.39
+
+	bedops -m nk_peaks.bed nk_stim_peaks.bed > nk_merged_peaks.bed
+
+
+How many?::
+	
+	55108 nk_merged_peaks.bed
+
+The format of ``nk_merged_peaks.bed`` is very simple, 3-field BED file. Let's add peaks ids and convert it to ``saf``:
+
+.. code-block:: bash
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="nk_merged_macsBroadPeak_"++nr;  print peakid,$1,$2,$3,"."}' nk_merged_peaks.bed > nk_merged_peaks.saf
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="nk_merged_macsBroadPeak_"++nr;  print $1,$2,$3,peakid,"0","."}' nk_merged_peaks.bed > nk_merged_peaksid.bed
+
+
+These files can now be used in peak annotation and in comparative analyses, for example differential accessibility analysis.
+
+
+We can now follow with downstream analyses: :doc:`Peak Annotation <../atac-chip-downstream/lab-PeakAnnot>`, :doc:`Differential Accessibility <../atac-chip-downstream/lab-DifAcces>` and :doc:`TF footprinting <lab-atac-TFfootprnt>`.
+
+
 
 
 :raw-html:`<br />`
