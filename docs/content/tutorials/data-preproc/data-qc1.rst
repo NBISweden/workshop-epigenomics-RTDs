@@ -50,6 +50,10 @@ The aim of this part of the data analysis workflow is to perform general signal 
 :raw-html:`<br />`
 
 
+.. Important::
+
+	We assume that the environment and directory structure has been already set in :doc:`Data preprocessing <data-preproc>`.
+
 
 
 
@@ -62,7 +66,7 @@ Cumulative Enrichment
 Cumulative enrichment is obtained by sampling indexed BAM files and plotting a profile of cumulative read coverages for each sample. All reads overlapping a window (bin) of the specified length are counted; these counts are sorted and the cumulative sum is finally plotted.
 
 
-To compute cumulative enrichment for processed bam files in our ATAC-seq data set (assuming we are in drectory ``analysis``, so if you have followed the previous tutorial, you should move one directory level up ``cd ../analysis``):
+To compute cumulative enrichment for processed bam files in our ATAC-seq data set (assuming we are in drectory ``analysis``, so if you have followed the previous tutorial, you should move one directory level up ``cd ..``). Here we use files preprocessed earlier:
 
 
 .. code-block:: bash

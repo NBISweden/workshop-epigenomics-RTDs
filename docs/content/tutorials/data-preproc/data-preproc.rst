@@ -148,20 +148,21 @@ Copy the scripts to your home directory and execute them:
   source atacseq_data.sh
 
 
-You should see a directory named ``atacseq``:
+You should see a newly created directory named ``atacseq``. Everything you need for completing the ATAC-seq tutorials is located there. When you enter ``atacseq`` you'll see several other directories. ``results`` contains precomputed results of (most of) the steps, so you can continue in case something goes wrong along the way. You can enter ``analysis``; this is where we'll be working today.
 
 .. code-block:: bash
 
-  ls .
-  cd ./atacseq
+	cd atacseq
+  	ls .
+  	cd analysis
 
 
 
 Read Mapping Statistics
 =========================
 
-
-To start with, we can inspect the statistics of the unprocessed data. We will be working in directory ``processedData``:
+As stated above, we use data which has already been mapped to a reference.
+To start with, we can inspect the statistics of these unprocessed data. We will be working in directory ``processedData``:
 
 
 .. code-block:: bash
@@ -172,8 +173,8 @@ To start with, we can inspect the statistics of the unprocessed data. We will be
 	module load bioinfo-tools
 	module load samtools/1.8
 
-	samtools idxstats ../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.idxstats
-	samtools stats ../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.stats
+	samtools idxstats ../../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.idxstats
+	samtools stats ../../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.stats
 
 
 One of the characteristics of the ATAC-seq signal is the presence of reads mapped to organelles. These reads may constitute even 40% of the library, depending on the library preparation method. Mt contents be used to flag failed libraries early on. 
@@ -244,7 +245,7 @@ First, we remove alignments within the blacklisted regions:
 
 	module load NGSUtils/0.5.9
 
-	bamutils filter ../data/ENCFF045OAB.chr14.bam ENCFF045OAB.chr14.blacklist_filt.bam -excludebed ../annot/ENCFF356LFX.bed nostrand
+	bamutils filter ../../data/ENCFF045OAB.chr14.bam ENCFF045OAB.chr14.blacklist_filt.bam -excludebed ../../annot/ENCFF356LFX.bed nostrand
 
 
 The output::
