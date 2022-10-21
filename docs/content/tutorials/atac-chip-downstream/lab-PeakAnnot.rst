@@ -13,9 +13,13 @@ Peak Annotation
 
 Using ``ChIPseeker`` package
 
-- to profile ChIP signal by genomics location and by ChIP binding to TSS regions
+- to profile ATAC-seq signal by genomics location and by proximity to TSS regions
 
-- to annotate peaks, visualise and compare annotations
+.. - to profile ChIP signal by genomics location and by ChIP binding to TSS regions
+
+- to annotate peaks with the nearest gene
+
+..- to annotate peaks, visualise and compare annotations
 
 - to run and compare functional enrichment
 
