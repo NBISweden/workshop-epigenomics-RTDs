@@ -281,30 +281,27 @@ Having obtained annotations to nearest genes, we can perform **functional enrich
 In this tutorial we use the merged consensus peaks set. This analysis can also be performed on results of differential accessibility / occupancy.
 
 
-Let's first annotate the peaks with Reactome. We will only work with genes on chr1 and chr2, for speed resons:
+Let's first annotate the peaks with Reactome. 
+
+
+Reactome pathway enrichment of genes defined as the nearest feature to the peaks:
 
 .. code-block:: R
 
+	#finding enriched Reactome pathways using chromosome 1 and 2 genes as a background
+	pathway.reac <- enrichPathway(as.data.frame(annot_peaks)$geneId)
 
-
-Reactome pathway enrichment of genes defined as a) nearest feature to the peaks and b) allowing for many-to-many mapping:
-
-.. code-block:: R
-
-	# a: finding enriched Reactome pathways using chromosome 1 and 2 genes as a background
-	pathway.reac1 <- enrichPathway(as.data.frame(annot_peaks)$geneId)
-
-	# a: previewing enriched Reactome pathways
-	head(pathway.reac1)
+	#previewing enriched Reactome pathways
+	head(pathway.reac)
 
 
 This is the result (we skip column 8, as it is very broad - contains the gene IDs in set)::
 
-	> colnames(as.data.frame(pathway.reac1))
+	> colnames(as.data.frame(pathway.reac))
 	[1] "ID"          "Description" "GeneRatio"   "BgRatio"     "pvalue"     
 	[6] "p.adjust"    "qvalue"      "geneID"      "Count"      
 
-	> pathway.reac1[1:10,c(1:7,9)]
+	> pathway.reac[1:10,c(1:7,9)]
 	                         ID                    Description GeneRatio   BgRatio
 	R-HSA-9012999 R-HSA-9012999               RHO GTPase cycle  407/8448 443/10856
 	R-HSA-9013149 R-HSA-9013149              RAC1 GTPase cycle  176/8448 185/10856
