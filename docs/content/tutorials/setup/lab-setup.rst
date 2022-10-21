@@ -29,6 +29,8 @@ Before we start tutorial, we need to set up our work environment. In particular,
 Using computational resources
 ==========================================================
 
+ALTERNATIVE A
+
 We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and run ``salloc`` command:
 
 .. code-block:: bash
@@ -58,7 +60,7 @@ And connect to your node with
 
 If you lose connection to the server during a tutorial, please connect again to Rackham and do ``ssh -Y <nodename>`` again. You will reconnect to your set of cores.
 
-ALTERNATIVE
+ALTERNATIVE B
 
 We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and request an interactive session. Remember to replace <username> with your own id.
 
