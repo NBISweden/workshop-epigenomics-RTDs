@@ -45,10 +45,16 @@ The tutorials in this section cover the steps oulined on Figure 2.
 
 :raw-html:`<br />`
 
-These are tutorials for analysis and peak-dependent QC of ATAC-seq data:
+These are tutorials for analysis an QC of ATAC-seq data:
 
 .. toctree::
    :maxdepth: 1
 
-   ATACseq: peak detection <ATACseq/lab-atacseq-bulk.rst>
+   Quality Control for ATAC-seq <data-preproc/data-qc-atac.rst>
+   ATACseq: Peak Detection <ATACseq/lab-atacseq-bulk.rst>
+   Transcription Factor Footprinting <ATACseq/lab-atac-TFfootprnt.rst>
+   Differential Accessibility in ATAC-seq data <atac-chip-downstream/lab-DifAcces.rst>
+   Peak Annotation <atac-chip-downstream/lab-PeakAnnot.rst>
 
+
+Tutorials for processing the results after identification of occupancy regions (i.e. peaks or broad domains) can be found in :doc:`Downstream Processing <./downstream_tutorials.rst>` .
