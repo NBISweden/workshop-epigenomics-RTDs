@@ -36,8 +36,7 @@ These are tutorials for quality control and processing of ChIP-seq data:
 
    Quality Control for ChIP-seq <data-preproc/data-qc-chip.rst>
    ChIPseq: narrow peak detection <chipseq/lab-chipseq-narrow.rst>
-   ChIPseq: broad peaks detection <chipseqBroadPeaks/chipseqBroadPeaks.rst>
+   ChIPseq: broad peaks detection <chipseqBroadPeaks/lab-broadpeaks.rst>
    Peak Annotation <atac-chip-downstream/lab-PeakAnnot.rst>
-
 
 Tutorials for processing the results after identification of occupancy regions (i.e. peaks or broad domains) can be found in :doc:`Downstream Processing <./downstream_tutorials>` .
