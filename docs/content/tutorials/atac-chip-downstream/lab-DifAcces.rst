@@ -24,7 +24,7 @@ Peak Annotation
 Introduction
 =============
 
-In this tutorial we use an R / Bioconductor packages ``EDAseq`` and ``edgeR`` to perform normalisation and analysis of differential accessibility im ATAC-seq data.
+In this tutorial we use an R / Bioconductor packages ``EDAseq`` and ``edgeR`` to perform normalisation and analysis of differential accessibility in ATAC-seq data.
 
 
 
