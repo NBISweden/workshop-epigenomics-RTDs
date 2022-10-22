@@ -13,9 +13,13 @@ Peak Annotation
 
 Using ``ChIPseeker`` package
 
-- to profile ChIP signal by genomics location and by ChIP binding to TSS regions
+- to profile ATAC-seq signal by genomics location and by proximity to TSS regions
 
-- to annotate peaks, visualise and compare annotations
+.. - to profile ChIP signal by genomics location and by ChIP binding to TSS regions
+
+- to annotate peaks with the nearest gene
+
+.. - to annotate peaks, visualise and compare annotations
 
 - to run and compare functional enrichment
 
@@ -52,7 +56,7 @@ Setting-up
 
 You can continue working in the ``analysis/peaks/consensus`` directory. 
 
-We need access to file ``nk_merged_peaksid.bed`` and some libraries, whcih are preinstalled. We access them via:
+We need access to file ``nk_merged_peaksid.bed`` and annotation libraries, whcih are preinstalled. We access them via:
 
 .. code-block:: bash
 
@@ -84,8 +88,8 @@ We begin by loading necessary libraries:
 
 
 
-Peaks coverage plot
-========================
+Peaks Coverage Plot
+=====================
 
 After peak calling one may want to visualise distribution of peaks locations over the whole genome. Function ``covplot`` calculates coverage of peaks regions over chromosomes.
 

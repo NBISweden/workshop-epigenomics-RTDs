@@ -16,7 +16,7 @@ This tutorial is a continuation of :doc:`General QC <data-qc1>`.
 
 **Learning outcomes**
 
-- understand and interpret quality control metrics specific to ATAC-seq data
+- be able to assess quality of the ATAC-seq libraries with a range of quality metrics
 
 - work interactively with ATAC-seq signal using Integrative Genome Viewer
 
