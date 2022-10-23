@@ -292,3 +292,7 @@ image source: *https://doi.org/10.1038/s41467-020-18035-1* (Figure 1.)
 
 .. spearman correlation of binding score (scoring by pwm) and signal in sliding windows
 
+
+
+.. For transcription factor footprint analysis, pwmScore, plotFootprints and factorFootprints are implemented in ATACseqQC. It makes use of genomic sequences as BSgenome objects, available for various reference genomes, which can be efficiently accessed by methods in the BSgenome package [29], and of the position frequency matrices (PFMs) of binding motifs of transcription factors from the Jaspar database in the MotifDb package [30]. The footprint analysis also leverages the matchPWM function in the BSgenome package [29, 31] to search potential binding sites for a given DNA-binding protein, represent the matched genomic coordinates as GenomicRanges objects, and plot the motif as a sequence logo using the motifStack package [32]. The factorFootprints function first uses the matchPWM function to predict the binding sites with an input position weight matrix (PWM) for a DNA-binding protein. Next, it calculates and plots the average cutting rates for those binding sites and 100-bp flanking sequences.
+

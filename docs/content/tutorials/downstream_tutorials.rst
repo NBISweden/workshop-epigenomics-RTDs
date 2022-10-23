@@ -27,9 +27,9 @@ These are tutorials for downstream processing of ChIP-seq and ATAC-seq data.
    :maxdepth: 1
 
    Peak Annotation <atac-chip-downstream/lab-PeakAnnot.rst>
-   Identification of sequence motifs <motifs/lab-motifs.rst>
+   Identification of Sequence Motifs <motifs/lab-motifs.rst>
    Differential Accessibility in ATAC-seq data <atac-chip-downstream/lab-DifAcces.rst>
-
+   Signal Visualisation in Functional Genomics <visualisation/lab-visualisation.rst>
 
 
 .. ADD VISULALISATION
