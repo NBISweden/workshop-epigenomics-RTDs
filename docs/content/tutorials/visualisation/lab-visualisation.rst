@@ -49,7 +49,7 @@ Signal visualisation with deepTools
 
 in relation to annotated features.
 
-One such kind of features relevant for TFs are transcription start sites (TSS). In this exercise we use ChIP-seq data from :doc:`ChIPseq lab <../chipseq/lab-chipseq-narrow>`. The data we are going to plot is from one replicate of ChIP-seq experiment investigating binding of REST transcriptional represssor in HeLa cells.
+One such kind of features relevant for TFs are transcription start sites (TSS). In this exercise we use ChIP-seq data from :doc:`ChIPseq lab <../chipseqProc/lab-chipseq-processing>`. The data we are going to plot is from one replicate of ChIP-seq experiment investigating binding of REST transcriptional represssor in HeLa cells.
 and annotations for chromosomes 1 and 2. To do so we will:
 
 * produce coverage track in ``bedgraph`` format;
