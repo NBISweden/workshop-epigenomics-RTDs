@@ -15,8 +15,6 @@ Detection of broad peaks from ChIP-seq data
 
 
 
-.. Contents
-.. =========
 
 .. contents:: Contents
     :depth: 1

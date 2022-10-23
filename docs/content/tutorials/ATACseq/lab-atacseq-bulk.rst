@@ -21,8 +21,12 @@ ATAC-seq (Assay for Transposase-Accessible Chromatin with high-throughput sequen
 :raw-html:`<br />`
 
 
-.. contents:: 
+
+.. contents:: Contents
+    :depth: 1
     :local:
+
+
 
 
 This tutorial is a continuation of :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`, and :doc:`ATACseq specifc QC <../data-preproc/data-qc-atac>`. 
@@ -539,6 +543,9 @@ These files can now be used in peak annotation and in comparative analyses, for 
 
 
 We can now follow with downstream analyses: :doc:`Peak Annotation <../atac-chip-downstream/lab-PeakAnnot>`, :doc:`Differential Accessibility <../atac-chip-downstream/lab-DifAcces>` and :doc:`TF footprinting <lab-atac-TFfootprnt>`.
+
+
+:raw-html:`<br />`
 
 
 
