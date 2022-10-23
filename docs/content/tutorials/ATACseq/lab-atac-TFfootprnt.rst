@@ -29,8 +29,12 @@ Transcription Factor Footprinting
 
 
 
-.. contents:: 
+
+.. contents:: Contents
+    :depth: 1
     :local:
+
+
 
 
 :raw-html:`<br />`

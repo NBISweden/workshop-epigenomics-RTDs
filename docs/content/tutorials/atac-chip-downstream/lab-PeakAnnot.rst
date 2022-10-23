@@ -24,8 +24,12 @@ Using ``ChIPseeker`` package
 - to run and compare functional enrichment
 
 
-.. contents:: 
+
+.. contents:: Contents
+    :depth: 1
     :local:
+
+
 
 
 

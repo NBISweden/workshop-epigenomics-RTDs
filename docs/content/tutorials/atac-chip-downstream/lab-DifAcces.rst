@@ -17,8 +17,11 @@ Peak Annotation
 - to detect differentially accessible regions using ``edgeR``
 
 
-.. contents:: 
+
+.. contents:: Contents
+    :depth: 1
     :local:
+
 
 
 Introduction
