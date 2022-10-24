@@ -134,7 +134,7 @@ To inspect peak coverage along the chromosomes:
 
 .. code-block:: R
 
-	covplot(peaks.gr, chrs=c("chr14, "chr15"))
+	covplot(peaks.gr, chrs=c("chr14", "chr15"))
 
 	#to save the image to file
 	pdf("PeakCoverage.pdf")
@@ -163,7 +163,7 @@ To annotate peaks with closest genomic features:
 
 .. code-block:: R
 
-	bed.annot <- annotatePeak(peaks.gr, tssRegion=c(-3000, 3000),TxDb=txdb, annoDb="org.Hs.eg.db")
+	bed.annot = annotatePeak(peaks.gr, tssRegion=c(-3000, 3000),TxDb=txdb, annoDb="org.Hs.eg.db")
 
 
 Let's inspect the results::
