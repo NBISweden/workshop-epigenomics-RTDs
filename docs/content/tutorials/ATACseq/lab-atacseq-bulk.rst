@@ -452,9 +452,9 @@ This command has produced reads summarised within each peak (which we won't use)
 	Unassigned_Overlapping_Length	6742
 	Unassigned_Ambiguity	1
 
-``409482/(1247672+6742+1)`` = 0.33 
+``409482/(1247672+6742+1+409482) = 0.246 (i.e. 24.6%)``
 
-33% alignments and as ``featureCounts`` reported in the output to the screen (STDOUT) 24.6% reads fall within peaks, and this is FRiP for sample ENCFF045OAB.
+`featureCounts`` reported in the output to the screen (STDOUT) that  24.6% reads fall within peaks, and this is FRiP for sample ENCFF045OAB.
 
 
 
@@ -482,7 +482,7 @@ First we link necessary files:
 To recap, ENCFF398QLV and ENCFF363HBZ are untreated and ENCFF045OAB and ENCFF828ZPN are stimulated NK cells.
 
 
-Let's select peaks which overlap at their 50% length in both replicates (assumind we are in ``peaks``):
+Let's select peaks which overlap at their 50% length in both replicates (assumind we are in ``consensus``):
 
 
 .. code-block:: bash
