@@ -88,7 +88,7 @@ Assuming we start at ``analysis``:
 	module load R_packages/4.1.1
 
 
-..Hint::
+.. Hint::
 
 	Please check first that file ``shifted.bam`` exists in this location: ``ls ../QC/splitBam/shifted.bam``. If it does, the output of this command is the path; if it does not you get "file does not exist". Depending on the directory structure, you may need to link the file like this::
 	
