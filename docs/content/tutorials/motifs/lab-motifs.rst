@@ -220,48 +220,7 @@ For the second motif, use the following count matrix:
 **What is the top scoring motif? Does it look similar to the motif we found? What about other motifs further down the list?**
 
 
-
-
-6. Try a data set from the previous exercise
-===============================================
-
-
-In the previous exercise you analyzed *REST* ChIP-seq data. The DNA specificity of this transcription factor is `known <http://jaspar.genereg.net/search?q=rest>`_, so it's interesting to see if we are able to recover the same (or a similar) motif.
-
-In the previous exercise an earlier version of the human genome, hg19, was used. Also, only peaks on chromosomes 1 and 2 were considered. We have prepared a file with repeat-masked hg19 sequence from chromosomes 1 and 2. Create a soft link to this file in you work directory
-
-.. code-block:: bash
-
-	ln -s /sw/courses/epigenomics/motif_finding/hg19_chr_1_2.masked.fa* .
-
-
-Then copy one of the peak files from the previous exercise to work directory
-
-.. code-block:: bash
-
-	cp /sw/courses/epigenomics/motif_finding/hela_1_peaks.chr12.bed rest_peaks.chr12.bed
-
-
-Now you are ready to repeat all steps on the new peak set: select the top 500 peaks, get repeat masked genome sequence for these peaks and run motif finding.
-
-.. code-block:: bash
-
-  sort -k 7,7nr rest_peaks.chr12.bed | head -n 500 > rest_top500.bed
-  bedtools getfasta -fo rest_top500_peak_seq.fa -fi hg19_chr_1_2.masked.fa -bed rest_top500.bed
-
-  singularity exec \
-    /sw/courses/epigenomics/motif_finding/meme.sif \
-    dreme -p rest_top500_peak_seq.fa -oc dreme_out_rest
-
-  singularity exec \
-    /sw/courses/epigenomics/motif_finding/meme.sif \
-    meme-chip -oc meme_chip_out_rest rest_top500_peak_seq.fa
-
-
-**What do the programs find? Do DREME and MEME find similar motifs? Do these look like the known REST site? Do the motifs you found resemble any known motifs in Tomtom's data base?**
-
-
-7. Try HOMER
+6. Try HOMER
 ================
 
 Finally, we will try another popular motif finding software, HOMER. Here we will look at a
