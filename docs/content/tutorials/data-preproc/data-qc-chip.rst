@@ -12,7 +12,10 @@ Quality Control for ChIP-seq
 
 **Learning outcomes**
 
-- understand and apply standard processing methods used in functional genomics on an example of ATAC-seq data
+- be able to assess quality of the ChIP-seq libraries with a range of quality metrics
+
+- work interactively with ChIP-seq signal using Integrative Genome Viewer
+
 
 
 :raw-html:`<br />`

@@ -15,10 +15,9 @@ Detection of broad peaks from ChIP-seq data
 
 
 
-.. Contents
-.. =========
 
-.. contents:: 
+.. contents:: Contents
+    :depth: 1
     :local:
 
 
@@ -128,9 +127,9 @@ Cross-correlation and related metrics
 ----------------------------------------
 
 The files discussed in this section can be accessed at 
-``/proj/g2021025/nobackup/broad_peaks/results/qc``
+``/proj/epi2022/broad_peaks/results/qc``
 
-These metrics have been developed with application to TF ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
+These metrics have been developed with application to point source (i.e. TF) ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
 
 Already from these plots alone it is evident that the data has some quality issues. At this point you should be able to identify them.
 
@@ -194,8 +193,8 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
   mkdir -p analysis/macs3
   cd analysis/macs3
 
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
   module load bioinfo-tools #if needed
   module load MACS/3.0.0a6
@@ -303,7 +302,7 @@ How many peaks were identified in replicate 1?
 .. HINT::
 
 	You can also copy the results from
-	``/proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338``
+	``/proj/epi2022/broad_peaks/results/macs3/neuroGM23338``
 
 This is a preliminary peak list, and in case of broad domains, it often needs some processing or filtering.
 
@@ -315,8 +314,8 @@ Let's select the detected domains reproducible in both replicates. First, let's 
   
     mkdir peaks
     cd peaks
-    ln -s /proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
-    ln -s /proj/g2021025/nobackup/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
+    ln -s /proj/epi2022/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
+    ln -s /proj/epi2022/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
 
     #make bed
     cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
@@ -359,7 +358,7 @@ Required files are:
 .. HINT::
 
 	You can access the bam and bai files from
-	``/proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338``
+	``/proj/epi2022/broad_peaks/data/neuron_GM23338``
 
 
 
@@ -461,10 +460,10 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
   mkdir ../../epic2
   cd ../../epic2
 
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
 
 
   conda activate /sw/courses/epigenomics/software/conda/epic_2b
@@ -621,7 +620,7 @@ Requirements Remote (Uppmax)
 
 The software is configured, i.e. the correct R version is loaded via the module system and required libraries are preinstalled.
 
-To prepare the files, assuming you are in ``~/broad_peaks/results``:
+To prepare the files, assuming you are in ``~/broad_peaks/analysis``:
 
 .. code-block:: bash
   
@@ -629,7 +628,7 @@ To prepare the files, assuming you are in ``~/broad_peaks/results``:
    cd csaw
 
    mkdir bam
-   ln -s  /proj/g2021025/nobackup/broad_peaks/data/neuron_GM23338/* bam
+   ln -s  /proj/epi2022/broad_peaks/data/neuron_GM23338/* bam
 
 
 .. .. code-block:: bash
@@ -687,9 +686,7 @@ Read in the data:
 
 .. code-block:: R
 
-
 	library(csaw)
-
 
   pe.param <- readParam(max.frag=400, pe="both")
 	data <- windowCounts(bam.files, width=100, param=pe.param) 
@@ -809,10 +806,10 @@ Detection of DB (differentially bound) windows (in our case, the occupancy sites
 
 .. code-block:: R
 
-	data.filt.calc <- asDGEList(data.filt)
-	data.filt.calc <- estimateDisp(data.filt.calc, design)
-	fit <- glmQLFit(data.filt.calc, design, robust=TRUE)
-	results <- glmQLFTest(fit, contrast=contrast)
+  data.filt.calc <- asDGEList(data.filt)
+  data.filt.calc <- estimateDisp(data.filt.calc, design)
+  fit <- glmQLFit(data.filt.calc, design, robust=TRUE)
+  results <- glmQLFTest(fit, contrast=contrast)
 
 
 
@@ -820,7 +817,7 @@ You can inspect the raw results:
 
 .. code-block:: R
 
-	head(results$table)
+  head(results$table)
      logFC    logCPM        F       PValue
   1 4.397419 0.1113531 39.71585 1.054723e-07
   2 3.957880 0.1781093 36.54985 2.550295e-07
@@ -866,11 +863,11 @@ How many regions are up (i.e. enriched in chip compared to input)?
 
 .. code-block:: R
 
-	is.sig.region <- table.combined$FDR <= 0.1
-	table(table.combined$direction[is.sig.region])
-
-     up 
-   8116
+  is.sig.region <- table.combined$FDR <= 0.1
+  table(table.combined$direction[is.sig.region])
+  
+    up 
+    8116
 
 
 Does this make sense? How does it compare to results obtained from MACS and epic2 runs?

@@ -69,7 +69,7 @@ These are tutorials for data pre-processing and quality control used in function
    Data Preprocessing for Functional Genomics <data-preproc/data-preproc.rst>
    Quality Control for Functional Genomics <data-preproc/data-qc1.rst>
    Quality Control for ATAC-seq <data-preproc/data-qc-atac.rst>
-   Quality Control for ChIP-seq <data-preproc/data-qc-chip.rst>
+   Quality Control for ChIP-seq <chipseqProc/lab-chipseq-processing.rst>
 
 
 :raw-html:`<br />`

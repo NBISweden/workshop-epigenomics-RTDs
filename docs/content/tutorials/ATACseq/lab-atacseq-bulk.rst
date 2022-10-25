@@ -2,9 +2,6 @@
 .. role:: raw-html(raw)
     :format: html
 
-.. modified from
-.. https://training.galaxyproject.org/topics/epigenetics/tutorials/atac-seq/tutorial.html
-
 ============
 ATAC-seq
 ============
@@ -24,13 +21,22 @@ ATAC-seq (Assay for Transposase-Accessible Chromatin with high-throughput sequen
 :raw-html:`<br />`
 
 
-.. contents:: 
+
+.. contents:: Contents
+    :depth: 1
     :local:
+
+
 
 
 This tutorial is a continuation of :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`, and :doc:`ATACseq specifc QC <../data-preproc/data-qc-atac>`. 
 
 :raw-html:`<br />`
+
+.. Important::
+
+	We assume that the environment and directory structure has been already set in :doc:`Data preprocessing <../data-preproc/data-preproc>`.
+
 
 
 Data
@@ -143,8 +149,8 @@ We need to link necessary files first.
 	cd genrich
 
 	# we link the pre-processed bam file
-	ln -s ../../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam ENCFF045OAB.chr14.proc.bam
-	ln -s ../../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai ENCFF045OAB.chr14.proc.bam.bai
+	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam ENCFF045OAB.chr14.proc.bam
+	ln -s ../../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai ENCFF045OAB.chr14.proc.bam.bai
 
 
 .. Hint ::
@@ -171,7 +177,7 @@ Genrich requires bam files to be name-sorted rather than the default coordinate-
 	samtools view -h ENCFF045OAB.chr14.proc.bam chr14 | grep -P "@HD|@PG|chr14" | samtools view -Shbo ENCFF045OAB.chr14.proc_rh.bam
 
 
-	# sort the bam file by read name (required by generich)
+	# sort the bam file by read name (required by Genrich)
 	samtools sort -n -o ENCFF045OAB.chr14.proc_rh.nsort.bam -T sort.tmp  ENCFF045OAB.chr14.proc_rh.bam
 
 
@@ -205,29 +211,37 @@ How many peaks were detected?
 .. admonition:: ENCFF045OAB.chr14.genrich.narrowPeak
    :class: dropdown, warning
 
+	You can inspect file contents:
 
    .. code-block:: bash
 
 		head ENCFF045OAB.chr14.genrich.narrowPeak
+		chr14	18332340	18333050	peak_0	490	.	347.820770	3.316712	-1	372
+		chr14	18583390	18584153	peak_1	1000	.	1267.254150	6.908389	-1	474
+		chr14	19061839	19062647	peak_2	732	.	591.112671	4.484559	-1	472
+		chr14	19337360	19337831	peak_3	1000	.	517.304626	4.484559	-1	373
+		chr14	19488517	19489231	peak_4	393	.	280.354828	2.916375	-1	210
+		chr14	20216750	20217291	peak_5	1000	.	625.121826	4.537151	-1	441
+
 
 
 
 MACS2
 -----
 
-MACS2 is widely used for peak calling in ATAC-seq, as evidenced by literature and many data processing pipelines. Several different peak calling protocols / commands have been encountered in various sources:
+MACS2 is widely used for peak calling in ATAC-seq, as evidenced by literature and many data processing pipelines. Several different peak calling protocols / commands have been encountered in various sources (and more combinations of parameters exist):
 
-1. macs narrow peak (default for ``callpeak``), ``--nomodel``, shifted reads using PE reads as SE (bed file);
+1. macs narrow peak (default for ``callpeak``), ``--nomodel``, shifted reads using PE reads as SE (BED file);
 
-2. macs narrow peak, ``--nomodel``, shifted reads, using PE reads (bedpe file);
+2. macs narrow peak, ``--nomodel``, shifted reads, using PE reads (BEDPE file);
 
-3. macs narrow peak, ``--nomodel``, using PE reads (bedpe file); ``shift`` and ``extsize`` similar to Genrich;
+3. macs narrow peak, ``--nomodel``, using PE reads (BEDPE file); ``shift`` and ``extsize`` similar to Genrich;
 
-4. macs broad peak, using PE reads (bampe file) as in nf-core;
+4. macs broad peak, using PE reads (BAMPE file) as in nf-core;
 
-5. macs narrow peak, ``--nomodel``,  using PE reads as SE (bam file) as in Encode, ``shift`` and ``extsize`` similar to Genrich;
+5. macs narrow peak, ``--nomodel``,  using PE reads as SE (BAM file) as in Encode, ``shift`` and ``extsize`` similar to Genrich;
 
-6. macs narrow peak, unshifted reads in bampe file
+6. macs narrow peak, unshifted reads in BAMPE file
 
 7. macs broad peak, BAM (PE reads used as SE reads)
 
@@ -271,8 +285,7 @@ Figure 3 depicts large genomic region. In general Genrich detects less peaks (sh
 
 
 
-So which method to choose? You can test them all, we selected 4 (which produced some spurious peaks) and 5 (which we found had most support in read coverage in regions we inspected) for this tutorial.
-
+So which method to choose? You can test them all, for this tutorial we selected 4 and 5, which we found had most support in read coverage in regions we inspected yet still produced some spurious peaks. We'll call the results ``broad`` and ``narrow``, respectively. We use ``-g 107043718`` for peak calling because this is the length of chr14, which is the only one included in the bam file.
 
 .. code-block:: bash
 
@@ -281,13 +294,15 @@ So which method to choose? You can test them all, we selected 4 (which produced 
 
 	module load MACS/2.2.6
 
-	macs2 callpeak -t ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam -n ENCFF045OAB.chr14.macs.broad_peaks --broad -f BAMPE -g 107043718 -q 0.1 --nomodel  --keep-dup all
+	macs2 callpeak -t ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam \
+	-n ENCFF045OAB.chr14.macs.broad --broad -f BAMPE \
+	-g 107043718 -q 0.1 --nomodel  --keep-dup all
 
-	macs2 callpeak -t ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam -n ENCFF045OAB.chr14.macs.shift-75.extsize150_peaks -f BAM -g 107043718 -q 0.05 --nomodel --shift -75 --extsize 150 --call-summits --keep-dup all
+	macs2 callpeak -t ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam \
+	-n ENCFF045OAB.chr14.macs.narrow -f BAM \
+	-g 107043718 -q 0.05 --nomodel --shift -75 --extsize 150 \
+	--call-summits --keep-dup all
 
-
-
-We chose genome size ``-g 107043718`` - because it is the length of chromosome 14, which is the only one included in the bam file.
 
 
 .. Please note that we selected ``--extsize 100``  to match the behaviour of Genrich. Normally ``--extsize 200`` would be selected. ``--shift`` needs to be minus half of the size of ``--extsize`` to be centered on the 5’, so normally -100. ``--shift -100 --extsize 200`` will amplify the cutting sites' enrichment from ATAC-seq data. So in the end, the peak is where Tn5 transposase likes to attack.
@@ -314,12 +329,13 @@ How many peaks were detected?
 .. code-block:: bash
 	
 	wc -l *Peak
-	   2428 ENCFF045OAB.chr14.macs.shift-75.extsize150_peaks.narrowPeak
-	   2011 ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
+	 2011 ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
+  	 2428 ENCFF045OAB.chr14.macs.narrow_peaks.narrowPeak
+ 
 
 
+Quite similar number of peaks for both methods, and double than what Genrich has detected.
 
-Quite similar number of peaks, and double than what Genrich has detected.
 
 
 .. admonition:: ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
@@ -328,6 +344,25 @@ Quite similar number of peaks, and double than what Genrich has detected.
    .. code-block:: bash
 
 		head ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
+		chr14	18674026	18674550	ENCFF045OAB.chr14.macs.broad_peak_1	21	.	3.15137	4.25082	2.12270
+		chr14	19096643	19097148	ENCFF045OAB.chr14.macs.broad_peak_2	31	.	3.61047	5.39085	3.19165
+		chr14	19098499	19098851	ENCFF045OAB.chr14.macs.broad_peak_3	16	.	2.95556	3.77788	1.68306
+		chr14	19105556	19105809	ENCFF045OAB.chr14.macs.broad_peak_4	27	.	3.42266	4.93515	2.76765
+		chr14	19161075	19162012	ENCFF045OAB.chr14.macs.broad_peak_5	24	.	3.29408	4.58492	2.42759
+		chr14	19172872	19173211	ENCFF045OAB.chr14.macs.broad_peak_6	22	.	3.19527	4.34825	2.20892
+
+
+.. admonition:: ENCFF045OAB.chr14.macs.narrow_peaks.narrowPeak
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+		head ENCFF045OAB.chr14.macs.narrow_peaks.narrowPeak
+		chr14	19372856	19373058	ENCFF045OAB.chr14.macs.narrow_peak_1	17	.	3.18021	3.90652	1.78714	160
+		chr14	19374426	19374806	ENCFF045OAB.chr14.macs.narrow_peak_2	65	.	5.27241	8.87504	6.51449	120
+		chr14	19388860	19389063	ENCFF045OAB.chr14.macs.narrow_peak_3	62	.	4.76858	8.64439	6.29014	89
+		chr14	19889924	19890074	ENCFF045OAB.chr14.macs.narrow_peak_4	49	.	4.67007	7.24319	4.93076	131
+		chr14	20093651	20093822	ENCFF045OAB.chr14.macs.narrow_peak_5	25	.	3.59236	4.74566	2.54154	91
 
 
 
@@ -341,18 +376,179 @@ How many peaks actually overlap?
 	
 	cd ..
 
+	module load BEDTools/2.25.0
+
 	bedtools intersect -a macs/ENCFF045OAB.chr14.macs.broad_peaks.broadPeak  -b genrich/ENCFF045OAB.chr14.genrich.narrowPeak  -f 0.50 -r >peaks_overlap.macs_broad.genrich.bed
 
 
-	bedtools intersect -a macs/ENCFF045OAB.chr14.macs.shift-75.extsize150_peaks.narrowPeak -b genrich/ENCFF045OAB.chr14.genrich.narrowPeak  -f 0.50 -r >peaks_overlap.macs_narrow.genrich.bed
+	bedtools intersect -a macs/ENCFF045OAB.chr14.macs.narrow_peaks.narrowPeak -b genrich/ENCFF045OAB.chr14.genrich.narrowPeak  -f 0.50 -r >peaks_overlap.macs_narrow.genrich.bed
 
-	wc -l peaks_common.bed 
-	747 peaks_overlap.macs_broad.genrich.bed
-	2327 peaks_overlap.macs_narrow.genrich.bed
+	wc -l *bed
+	   747 peaks_overlap.macs_broad.genrich.bed
+ 	 1613 peaks_overlap.macs_narrow.genrich.bed
+
+
+Fraction of Reads in Peaks
+-----------------------------
+
+**Fraction of Reads in Peaks (FRiP)** is one of key QC metrics of ATAC-seq data. According to `ENCODE ATACseq data standards <https://www.encodeproject.org/atac-seq/#standards>`_ acceptable FRiP is >0.2. This value of course depends on the peak calling protocol, and as we have seen in the previous section, the results may vary ...a lot. However, it is worth to keep in mind that any samples which show different value for this (and other) metric may be problematic in the analysis.
+
+To calculate FRiP we need alignment file (bam) and peak file (narrowPeak, bed).
+
+Assuming we are in ``peaks``:
+
+
+.. code-block:: bash
+	
+	mkdir frip
+	cd frip
+
+We will use a tool called ``featureCounts`` from package ``Subread``. This tool accepts genomic intervals in formats ``gtf/gff`` and ``saf``. Let's convert ``narrow/ broadPeak`` to ``saf``:
+
+.. code-block:: bash
+
+	ln -s ../macs/ENCFF045OAB.chr14.macs.broad_peaks.broadPeak
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="macsBroadPeak_"++nr;  print peakid,$1,$2,$3,"."}' ENCFF045OAB.chr14.macs.broad_peaks.broadPeak > ENCFF045OAB.chr14.macs.broad.saf
+
+
+.. admonition:: ENCFF045OAB.chr14.macs.broad.saf
+   :class: dropdown, warning
+
+   .. code-block:: bash
+
+		macsBroadPeak_1	chr14	18674027	18674550	.
+		macsBroadPeak_2	chr14	19096644	19097148	.
+		macsBroadPeak_3	chr14	19098500	19098851	.
+		macsBroadPeak_4	chr14	19105557	19105809	.
+		macsBroadPeak_5	chr14	19161076	19162012	.
+		macsBroadPeak_6	chr14	19172873	19173211	.
+
+We can now summarise reads:
+
+.. code-block:: bash
+
+	ln -s ../genrich/ENCFF045OAB.chr14.proc_rh.nsort.bam
+
+	module load subread/2.0.0
+	featureCounts -p -F SAF -a ENCFF045OAB.chr14.macs.broad.saf --fracOverlap 0.2 -o ENCFF045OAB.peaks_macs_broad.counts ENCFF045OAB.chr14.proc_rh.nsort.bam
+
+
+This command has produced reads summarised within each peak (which we won't use) and a summary file ``ENCFF045OAB.peaks_macs_broad.counts.summary`` which contains values we are interested in::
+
+	Status	ENCFF045OAB.chr14.proc_rh.nsort.bam
+	Assigned	409482
+	Unassigned_Unmapped	0
+	Unassigned_Read_Type	0
+	Unassigned_Singleton	0
+	Unassigned_MappingQuality	0
+	Unassigned_Chimera	0
+	Unassigned_FragmentLength	0
+	Unassigned_Duplicate	0
+	Unassigned_MultiMapping	0
+	Unassigned_Secondary	0
+	Unassigned_NonSplit	0
+	Unassigned_NoFeatures	1247672
+	Unassigned_Overlapping_Length	6742
+	Unassigned_Ambiguity	1
+
+``409482/(1247672+6742+1+409482) = 0.246 (i.e. 24.6%)``
+
+`featureCounts`` reported in the output to the screen (STDOUT) that  24.6% reads fall within peaks, and this is FRiP for sample ENCFF045OAB.
 
 
 
 :raw-html:`<br />`
+
+Consensus Peaks
+===================
+
+As our experiment has been replicated, we can select the peaks which were detected in both replicates. This removes non-reproducible peaks in regions of low coverage and other artifacts.
+
+In this section we will work on peaks detected earlier using son-subset data.
+
+First we link necessary files:
+
+.. code-block:: bash
+
+	mkdir consensus
+	cd consensus
+
+	ln -s ../../../results/peaks/ENCFF045OAB.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF363HBZ.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF398QLV.macs.broad_peaks.broadPeak
+	ln -s ../../../results/peaks/ENCFF828ZPN.macs.broad_peaks.broadPeak
+
+To recap, ENCFF398QLV and ENCFF363HBZ are untreated and ENCFF045OAB and ENCFF828ZPN are stimulated NK cells.
+
+
+Let's select peaks which overlap at their 50% length in both replicates (assumind we are in ``consensus``):
+
+
+.. code-block:: bash
+
+	module load BEDTools/2.25.0
+
+	bedtools intersect -a ENCFF398QLV.macs.broad_peaks.broadPeak -b ENCFF363HBZ.macs.broad_peaks.broadPeak  -f 0.50 -r >nk_peaks.bed
+	bedtools intersect -a ENCFF045OAB.macs.broad_peaks.broadPeak -b ENCFF828ZPN.macs.broad_peaks.broadPeak  -f 0.50 -r >nk_stim_peaks.bed
+
+
+How many peaks?
+
+.. code-block:: bash
+
+	wc -l *Peak
+	   51425 ENCFF045OAB.macs.broad_peaks.broadPeak
+	   54258 ENCFF363HBZ.macs.broad_peaks.broadPeak
+	   54691 ENCFF398QLV.macs.broad_peaks.broadPeak
+	   72067 ENCFF828ZPN.macs.broad_peaks.broadPeak
+
+How many overlap?
+
+.. code-block:: bash
+
+	wc -l *bed
+	  47156 nk_peaks.bed
+	  36606 nk_stim_peaks.bed
+
+
+
+Merged Peaks
+===================
+
+We can now merge the consensus peaks into peak sets used for downstream analyses.
+
+
+.. code-block:: bash
+
+	module load BEDOPS/2.4.39
+
+	bedops -m nk_peaks.bed nk_stim_peaks.bed > nk_merged_peaks.bed
+
+
+How many?::
+	
+	55108 nk_merged_peaks.bed
+
+The format of ``nk_merged_peaks.bed`` is very simple, 3-field BED file. Let's add peaks ids and convert it to ``saf``:
+
+.. code-block:: bash
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="nk_merged_macsBroadPeak_"++nr;  print peakid,$1,$2,$3,"."}' nk_merged_peaks.bed > nk_merged_peaks.saf
+
+	awk -F $'\t' 'BEGIN {OFS = FS}{ $2=$2+1; peakid="nk_merged_macsBroadPeak_"++nr;  print $1,$2,$3,peakid,"0","."}' nk_merged_peaks.bed > nk_merged_peaksid.bed
+
+
+These files can now be used in peak annotation and in comparative analyses, for example differential accessibility analysis.
+
+
+We can now follow with downstream analyses: :doc:`Peak Annotation <../atac-chip-downstream/lab-PeakAnnot>`, :doc:`Differential Accessibility <../atac-chip-downstream/lab-DifAcces>` and :doc:`TF footprinting <lab-atac-TFfootprnt>`.
+
+
+:raw-html:`<br />`
+
+
+
 
 :raw-html:`<br />`
 
