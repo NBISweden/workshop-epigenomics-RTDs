@@ -17,14 +17,20 @@ Background
 
 Quantitative ChIP-seq methods allow us to compare the effect of DNA-protein interactions across samples. In our lab we developed **MINUTE-ChIP**, a multiplexed quantitative ChIP-seq method. 
 
-To process the raw data produced with this method, we developed **Minute**. Minute takes multiplexed MINUTE-ChIP FASTQ files and outputs a set of normalized, scaled bigWig files that can be directly compared across conditions.
+To process the raw data produced with this method, we developed :code:`minute`. :code:`minute` takes multiplexed MINUTE-ChIP FASTQ files and outputs a set of normalized, scaled bigWig files that can be directly compared across conditions.
 
-We are going to analyse H3K27m3 data from human ESCs, where we have shown that Naive cells H3K27m3 landscape looks very different when compared to Primed cells in a quantitative manner.
+If you want to know more about the :code:`minute` pipeline workflow , you can check out our `biorXiv preprint <https://www.biorxiv.org/content/10.1101/2022.03.14.484318v1>`_ [1]_.
+
 
 This tutorial has two parts:
 
 1. **Primary analysis**: Run a minute workflow on a small set of FASTQ files.
 2. **Downstream analysis**: Look at the resulting bigWig files using usual bioinformatics tools.
+
+
+We are going to analyse H3K27m3 data from human ESCs, where we have shown that Naive cells' H3K27m3 landscape looks very different when compared to Primed cells in a quantitative manner. This dataset comes from our `recent publication <https://www.nature.com/articles/s41556-022-00916-w>`_ [2]_.
+
+
 
 In order to make this tutorial last a reasonable time, the **primary analysis** part is independent from the second part, as it runs only on a subset of the data you can see in the second part. During the **primary analysis**
 you will see H3K27m3 data output for replicate 1 of our experiments. In the **downstream analysis** you can look at the three replicates together.
@@ -32,7 +38,7 @@ you will see H3K27m3 data output for replicate 1 of our experiments. In the **do
 
 What you will learn:
 
-- Apply the Minute data-processing pipeline to a set of MINUTE-ChIP fastq files.
+- Apply the :code:`minute` data-processing pipeline to a set of MINUTE-ChIP fastq files.
 - Visualize differences between unscaled and scaled bigWig files, using standard tools like IGV, deepTools, R. 
 - Understand how quantitative ChIP results are different from traditional ChIP, using as example H3K27m3 data on human ESCs.
 
@@ -41,13 +47,13 @@ What you will learn:
 Primary analysis
 ----------------
 
-Minute runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on Makefile rules. You will learn more about workflow management on the Nextflow and nf-core tutorials, but let this first part of the tutorial serve as an example of how to run a different workflow, and give you an idea of how a MINUTE-ChIP analysis goes end-to-end.
+:code:`minute` runs on `Snakemake <https://snakemake.readthedocs.io/en/stable>`_, a workflow management system that is based on python and inspired on Makefile rules. You will learn more about workflow management on the Nextflow and nf-core tutorials, but let this first part of the tutorial serve as an example of how to run a different workflow, and give you an idea of how a MINUTE-ChIP analysis goes end-to-end.
 
 
 Conda environment
 ^^^^^^^^^^^^^^^^^
 
-To make sure you have all the necessary tools to run Minute, you can set up a conda environment using a :code:`environment.yml` specification file:
+To make sure you have all the necessary tools to run :code:`minute`, you can set up a conda environment using a :code:`environment.yml` specification file:
 
 
 .. code-block:: bash
@@ -55,26 +61,38 @@ To make sure you have all the necessary tools to run Minute, you can set up a co
   module load bioinfo-tools
   module load conda
 
-  conda env create -f /proj/epi2021/nobackup/minute_chip/minute-main/environment.yml -n minute_lab 
+  conda env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab 
 
 
-If you run into problems configuring this, there is a copy of a conda environment at: :code:`/proj/epi2021/nobackup/minute_chip/condaenv/minute_lab`
-It could work if you just:
+.. admonition:: Speed up the process using mamba
+
+   Sometimes :code:`conda` takes long time resolving dependencies on larger environment. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster
+   on the resolution. However, you might still experience some waiting time!
+
+   If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
+
+  .. code-block:: bash
+
+    module load bioinfo-tools
+    module load conda
+
+    mamba env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab
+
+
+If you run into problems configuring this, there is a copy of this conda environment at: :code:`/proj/epi2022/minute_chip/condaenv/minute_lab`
+It should work if you just:
 
 .. code-block:: bash
 
-  export CONDA_ENVS_PATH=/proj/epi2021/nobackup/minute_chip/condaenv/
-  conda activate /proj/epi2021/nobackup/minute_chip/condaenv/minute_lab
+  export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
+  conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
 
 
 Files
 ^^^^^ 
 
-We will be using H3K27m3 data from our `publication <https://www.biorxiv.org/content/10.1101/2021.08.21.457215v1>`_:
-
-Kumar, B., Navarro, C., Winblad, N., Schell, J. P., Zhao, C., Lanner, F., & Elsässer, S. J. (2021). Polycomb Repressive Complex 2 shields naïve human pluripotent cells from trophectoderm differentiation. bioRxiv.
-
-In particular, we are going to look at Naïve vs Primed human ES cells, and as control we have EZH2-inhibitor treatment, which removes H3K27m3 from the cells, creating a baseline for technical background.
+We are going to look at Naïve vs Primed human ES cells, and as control we have EZH2-inhibitor treatment,
+which removes H3K27m3 from the cells, creating a baseline for technical background.
 
 There are 3 replicates for each condition. In the first part of the tutorial you will run replicate 1, and results for all replicates are available in the second part.
 
@@ -86,13 +104,13 @@ There are 3 replicates for each condition. In the first part of the tutorial you
   cd my_primary/fastq
 
   # Create symlinks to our fastq files
-  for i in /proj/epi2021/nobackup/minute_chip/primary/*.fastq.gz; do ln -s ${i}; done
+  for i in /proj/epi2022/minute_chip/primary/*.fastq.gz; do ln -s ${i}; done
   cd ..
-  cp /proj/epi2021/nobackup/minute_chip/primary/*.tsv
-  cp /proj/epi2021/nobackup/minute_chip/primary/*.yaml
+  cp /proj/epi2022/minute_chip/primary/*.tsv
+  cp /proj/epi2022/minute_chip/primary/*.yaml
 
 
-Now, this is how your file structure should look like:
+Now, this is how your directory structure should look like:
 
 - :code:`fastq/` - Contains all the fastq.gz files in the table below.
 - :code:`libraries.tsv` - Specifies how the samples are demultiplexed.
@@ -100,7 +118,11 @@ Now, this is how your file structure should look like:
 - :code:`config.yaml` - Some extra config values. Where the references are, how long is the UMI.
 
 
-Minute needs these three configuration files to run:
+
+Configuration
+********************
+
+:code:`minute` needs these three configuration files to run:
 
 
 :code:`config.yaml`: Contains information about reference mapping: where the fasta files and bowtie2 indexes are, and a blocklist to remove artifact-prone regions before scaling:
@@ -111,10 +133,10 @@ Minute needs these three configuration files to run:
     hg38:  # Arbitrary name for this reference. This is also used in output file names.
       # Path to a reference FASTA file (may be gzip-compressed).
       # A matching Bowtie2 index must exist in the same location.
-      fasta: "/proj/epi2021/nobackup/minute_chip/reference/hg38.fa"
+      fasta: "/proj/epi2022/minute_chip/reference/hg38.fa"
 
       # Path to a BED file with regions to exclude
-      exclude: "/proj/epi2021/nobackup/minute_chip/reference/hg38.blocklist.bed"
+      exclude: "/proj/epi2022/minute_chip/reference/hg38.blocklist.bed"
 
   # Length of the 5' UMI
   umi_length: 6
@@ -183,129 +205,56 @@ Additionally, we may have some spike-in data from another reference, so Minute a
      - Untreated
      - 1
      - H3K27m3-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Naive
-     - Untreated
-     - 2
-     - H3K27m3-ChIP_H9_naive_rep2_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Naive
-     - Untreated
-     - 3
-     - H3K27m3-ChIP_H9_naive_rep3_R{1,2}.fastq.gz
+   
    * - H3K27m3
      - Naive
      - EZH2i
      - 1
      - H3K27m3-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Naive
-     - EZH2i
-     - 2
-     - H3K27m3-ChIP_H9_naive_EZH2i_rep2_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Naive
-     - EZH2i
-     - 3
-     - H3K27m3-ChIP_H9_naive_EZH2i_rep3_R{1,2}.fastq.gz
+   
    * - H3K27m3
      - Naive
      - Untreated
      - 1
      - H3K27m3-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Primed
-     - Untreated
-     - 2
-     - H3K27m3-ChIP_H9_primed_rep2_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Primed
-     - Untreated
-     - 3
-     - H3K27m3-ChIP_H9_primed_rep3_R{1,2}.fastq.gz
+   
    * - H3K27m3
      - Primed
      - EZH2i
      - 1
      - H3K27m3-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Primed
-     - EZH2i
-     - 2
-     - H3K27m3-ChIP_H9_primed_EZH2i_rep2_R{1,2}.fastq.gz
-   * - H3K27m3
-     - Primed
-     - EZH2i
-     - 3
-     - H3K27m3-ChIP_H9_primed_EZH2i_rep3_R{1,2}.fastq.gz
 
    * - Input
      - Naive
      - Untreated
      - 1
      - IN-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
-   * - Input
-     - Naive
-     - Untreated
-     - 2
-     - IN-ChIP_H9_naive_rep2_R{1,2}.fastq.gz
-   * - Input
-     - Naive
-     - Untreated
-     - 3
-     - IN-ChIP_H9_naive_rep3_R{1,2}.fastq.gz
+  
    * - Input
      - Naive
      - EZH2i
      - 1
      - IN-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
-   * - Input
-     - Naive
-     - EZH2i
-     - 2
-     - IN-ChIP_H9_naive_EZH2i_rep2_R{1,2}.fastq.gz
-   * - Input
-     - Naive
-     - EZH2i
-     - 3
-     - IN-ChIP_H9_naive_EZH2i_rep3_R{1,2}.fastq.gz
+   
    * - Input
      - Primed
      - Untreated
      - 1
      - IN-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
-   * - Input
-     - Primed
-     - Untreated
-     - 2
-     - IN-ChIP_H9_primed_rep2_R{1,2}.fastq.gz
-   * - Input
-     - Primed
-     - Untreated
-     - 3
-     - IN-ChIP_H9_primed_rep3_R{1,2}.fastq.gz
+   
    * - Input
      - Primed
      - EZH2i
      - 1
      - IN-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
-   * - Input
-     - Primed
-     - EZH2i
-     - 2
-     - IN-ChIP_H9_primed_EZH2i_rep2_R{1,2}.fastq.gz
-   * - Input
-     - Primed
-     - EZH2i
-     - 3
-     - IN-ChIP_H9_primed_EZH2i_rep3_R{1,2}.fastq.gz
+  
 
 
 
 Running Minute
 ^^^^^^^^^^^^^^ 
 
-Essentially, the steps performed by Minute are:
+Essentially, the steps performed by :code:`minute` are:
 
 - Demultiplex the reads and remove contaminated sequences using :code:`cutadapt` (this is skipped in this execution).
 - Map each condition to a reference genome using :code:`bowtie2`.
@@ -315,14 +264,16 @@ Essentially, the steps performed by Minute are:
 - Generate 1x coverage and scaled bigWig files from alignment using the calculated scaling factors using :code:`deepTools`.
 - QC at every step (:code:`fastqc`, :code:`picard` insert size metrics, duplication rates, etc) are gathered and output in the form of a :code:`MultiQC` report.
 
-Note: When the demultiplexing step is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
+**Note**: When the demultiplexing step is skipped, FastQC metrics are off, because they are calculated over a library size that it is very small, when they should
 be calculated over the whole pool. We are working on fixing reports in this case.
 
 
-So if you already got your files, you need to run something like
-
-.. warning:: Before running this:
+.. warning:: 
  See paragraphs below before running this, as this is a time consuming step!
+
+
+If you already got your files, you need to run something like
+
 
 .. code-block:: bash
 
@@ -332,10 +283,10 @@ So if you already got your files, you need to run something like
   cd my_primary
 
   # Run snakemake on the background, and keep doing something else
-  nohup snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+  nohup snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
 
 
-:code:`-j` is the number of jobs/threads used by Snakemake. Depending on how many cores there are available on your node, you can raise this value.
+:code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores there are available on your node, you can raise this value.
 The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
 out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
 cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
@@ -350,7 +301,7 @@ power for the second part of the tutorial. For instance if you have 12 cores, pu
 
   .. code-block:: bash
     
-    nohup snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+    nohup snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
 
   `nohup` is a handy command that will make sure that the `snakemake` keeps running even if you logout or are kicked out of the session.
 
@@ -368,7 +319,7 @@ power for the second part of the tutorial. For instance if you have 12 cores, pu
 
   .. code-block:: bash
 
-    snakemake -p /proj/epi2021/nobackup/minute_chip/minute-main/Snakefile -j 4 --rerun-incomplete
+    snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 4 --rerun-incomplete
 
 
 After the pipeline is run, you will have the following folders:
@@ -431,12 +382,6 @@ of Bivalent genes using for comparing H3K27m3 across conditions. Bivalent-marked
 and H3K4m3 (active) marks at their TSS regions. It has been thought that Naïve cells lose this H3K27m3 signal at bivalent TSSs, but it is more of a 
 scaling issue, as you will see in this tutorial!
 
-The bivalent annotation comes from:
-
-Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
-
-And it has been translated to :code:`hg38` genome using :code:`liftOver`. 
-
 
 Files
 ^^^^^ 
@@ -452,8 +397,8 @@ Now you can get a copy of all the bigWig files + the bivalent annotation:
 
   mkdir bw
 
-  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bw bw/
-  cp /proj/epi2021/nobackup/minute_chip/downstream/*.bed .
+  cp /proj/epi2022/minute_chip/downstream/*.bw bw/
+  cp /proj/epi2022/minute_chip/downstream/*.bed .
 
 
 There should be :code:`unscaled` and :code:`scaled` bigWig files, plus a set of genes marked as Bivalent: :code:`Bivalent_Court2017.hg38.bed`. This annotation
@@ -461,7 +406,7 @@ comes from:
 
 Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
 
-And it has been translated to `hg38` genome using `liftOver`. 
+And it has been translated to :code:`hg38` genome using :code:`liftOver`. 
 
 Additionally, some bigWig tracks are pooled. These ones are all the replicates pooled together.
 
@@ -643,6 +588,12 @@ The same way we generated these figures, there are a lot of things that can be d
 
 - Do you think that the bin size affects this type of analysis in deeper ways? How different would these figures look if the bin size was 5kb? Which size would you think is a good compromise without getting a difficult to handle number of data points?
 - How is the distribution of values per chromosome? Hint: look again at the tracks in the primary analysis part!
-- How do the replicates look separately? We only plotted the pooled samples.
 
+
+
+References
+^^^^^^^^^^^^^^^^
+
+.. [1] Navarro, C., Martin, M., & Elsässer, S. J. (2022). minute: A MINUTE-ChIP data analysis workflow. BioRxiv.
+.. [2] Kumar, B., Navarro, C., Winblad, N., Schell, J. P., Zhao, C., Weltner, J., Baqué-Vidal, L., Salazar Mantero, A., Petropoulos, S., Lanner, F., & Elsässer, S. J. (2022). Polycomb Repressive Complex 2 shields naïve human pluripotent cells from trophectoderm differentiation. Nature Cell Biology, 1-13.
 
