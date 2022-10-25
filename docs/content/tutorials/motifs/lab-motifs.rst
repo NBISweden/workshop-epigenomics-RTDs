@@ -120,7 +120,7 @@ You can see the documentation for the program you just used `here <https://bedto
 4. Use the MEME suite for motif finding
 ==========================================
 
-We will now run some programs from the MEME suite. These is available on Uppmax though the ``MEMEsuite`` module, but currently there are some problems with this installation. Instead, we will run the programs inside a container. For more information on containers, we refer to the course `Tools for reproducible research <https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/>`_.
+We will now run some programs from the MEME suite. These are available on Uppmax though the ``MEMEsuite`` module, but currently there are some problems with this installation. Instead, we will run the programs inside a container. For more information on containers, we refer to the course `Tools for reproducible research <https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/>`_.
 
 
 
