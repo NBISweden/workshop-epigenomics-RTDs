@@ -350,7 +350,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: minimal methylseq command
    :class: dropdown, note
 
-   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project snic2022-22-634 --genome mm10
+   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project snic2022-22-634 --genome mm10``
 
 Getting help
 -------------
