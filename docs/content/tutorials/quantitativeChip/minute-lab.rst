@@ -115,7 +115,7 @@ Now, this is how your directory structure should look like:
 - :code:`fastq/` - Contains all the fastq.gz files in the table below.
 - :code:`libraries.tsv` - Specifies how the samples are demultiplexed.
 - :code:`groups.tsv` - Specifies how the samples are scaled.
-- :code:`config.yaml` - Some extra config values. Where the references are, how long is the UMI.
+- :code:`minute.yaml` - Some extra config values. Where the references are, how long is the UMI.
 
 
 
@@ -125,7 +125,7 @@ Configuration
 :code:`minute` needs these three configuration files to run:
 
 
-:code:`config.yaml`: Contains information about reference mapping: where the fasta files and bowtie2 indexes are, and a blocklist to remove artifact-prone regions before scaling:
+:code:`minute.yaml`: Contains information about reference mapping: where the fasta files and bowtie2 indexes are, and a blocklist to remove artifact-prone regions before scaling:
 
 .. code-block:: yaml
 
