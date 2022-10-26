@@ -48,14 +48,28 @@ The setting-up is the same as for the :doc:`data processing <../chipseqProc/lab-
 
 If you have not logged out from Uppmax: skip this part.
 
+.. If you have logged out: log back in, open interactive session, and run ``chipseq_env.sh`` script. Note to use correct reservation name.
+
+.. .. code-block:: bash
+
+..	ssh -Y <username>@rackham.uppmax.uu.se
+..	interactive -A g2020022 -p core -n 4 --reservation=g2020022_2
+..	source ~/chipseq_env.sh
+
+
 If you have logged out: log back in, open interactive session, and run ``chipseq_env.sh`` script. Note to use correct reservation name.
+
+If you followed the ChIP-seq Data Processing QC and Peak Calling lab, you can read on. 
+
+If you haven't, starting in your home directory, you need to copy data:
 
 .. code-block:: bash
 
-	ssh -Y <username>@rackham.uppmax.uu.se
-	interactive -A g2020022 -p core -n 4 --reservation=g2020022_2
-	source ~/chipseq_env.sh
+	cp /proj/epi2022/chipseq/chipseq_data.sh .
+	cp /proj/epi2022/chipseq/chipseq_env.sh .
 
+	source chipseq_env.sh
+	source chipseq_data.sh
 
 
 
