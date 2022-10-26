@@ -87,6 +87,15 @@ It should work if you just:
   export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
   conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
 
+After activating the environment for the first time, you need to install the :code:`minute` package
+in it. You can do this by:
+
+.. code-block:: bash
+
+  cd /proj/epi2022/minute_chip/minute/
+  pip install .
+
+
 
 Files
 ^^^^^ 
@@ -106,8 +115,8 @@ There are 3 replicates for each condition. In the first part of the tutorial you
   # Create symlinks to our fastq files
   for i in /proj/epi2022/minute_chip/primary/*.fastq.gz; do ln -s ${i}; done
   cd ..
-  cp /proj/epi2022/minute_chip/primary/*.tsv
-  cp /proj/epi2022/minute_chip/primary/*.yaml
+  cp /proj/epi2022/minute_chip/primary/*.tsv .
+  cp /proj/epi2022/minute_chip/primary/*.yaml .
 
 
 Now, this is how your directory structure should look like:
