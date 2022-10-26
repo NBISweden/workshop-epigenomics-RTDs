@@ -164,8 +164,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /proj/g2021025/nobackup/chipseq_proc/chipseq_data.sh .
-  cp /proj/g2021025/nobackup/chipseq_proc/chipseq_env.sh .
+  cp /proj/epi2022/chipseq/scripts/chipseq_data.sh .
+  cp /proj/epi2022/chipseq/scripts/chipseq_env.sh .
 
 
   source chipseq_env.sh 
@@ -352,6 +352,8 @@ To copy type from **a terminal window on your computer NOT logged in to Uppmax**
 Alignment processing
 -----------------------
 
+*This part may be skipped, as it follows the same workflow as given in Data Preprocessing for Functional Genomics"
+
 Now we will do some data cleaning to try to improve the libraries quality and remove unwanted signal. First, **duplicated reads are marked and removed** using ``MarkDuplicates`` tool from `Picard <http://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates>`_ . Marking as "duplicates" is based on their alignment location, not sequence. 
 
 .. Note::
@@ -445,6 +447,9 @@ To compute cumulative enrichment for HeLa REST ChIP and the corresponding input 
 
 .. code-block:: bash
 
+  ln -s ../../data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam ENCFF000PED.chr12.rmdup.filt.sort.bam
+  ln -s ../../data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam.bai ENCFF000PED.chr12.rmdup.filt.sort.bam.bai
+
   plotFingerprint --bamfiles ENCFF000PED.chr12.rmdup.filt.sort.bam  \
     ../../data/bam/hela/ENCFF000PEE.chr12.rmdup.sort.bam \
     ../../data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
@@ -506,10 +511,10 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir hepg2
 	mkdir sknsh
 	mkdir neural
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
+ 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
+ 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
+ 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
+ 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
 
 
 
@@ -595,9 +600,9 @@ To avoid long paths in the command line let's create links to BAM files with ChI
   mkdir peak_calling
   cd peak_calling
 
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2022/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
   ./ENCFF000PED.preproc.bam
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2022/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
   ./ENCFF000PET.preproc.bam
 
 Before we run ``MACS`` we need to **look at parameters** as there are several of them affecting peak calling as well as reporting the results. It is important to understand them to be able to modify the command to the needs of your data set.
@@ -892,10 +897,10 @@ in ``chipseq/analysis/``
   mkdir hepg2
   mkdir sknsh
   mkdir neural
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
-  ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
+  ln -s /proj/epi2022/chipseq/data/bam/hela/* ./hela
+  ln -s /proj/epi2022/chipseq/data/bam/hepg2/* ./hepg2
+  ln -s /proj/epi2022/chipseq/data/bam/sknsh/* ./sknsh
+  ln -s /proj/epi2022/chipseq/data/bam/neural/* ./neural
 
   ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
