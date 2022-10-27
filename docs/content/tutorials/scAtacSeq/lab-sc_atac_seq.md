@@ -70,7 +70,7 @@ singularity exec   \
   rserver --www-port 8787 --www-address=127.0.0.1
 ```
 
-R and Rstudio are now running, but we still need to connect to them. For this, we open another Uppmax tab, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
+R and Rstudio are now running, but we still need to connect to them. For this, we open **another Uppmax tab**, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
 
 ```
 ssh -Y <node with interative session>
@@ -82,6 +82,24 @@ When firefox starts, go to the URL `http://localhost:8787`.
 If everything has worked, you should now see Rstudio, and can start the exercise.
 
 
+### Backup method for setting up
+
+If you have problems getting the singularity setup to work, there is a backup plan. We can also use the module system on Uppmax. This usually works for most people, but can sometimes fail, depending on other programs and libraries you might have installed previously. In an interactive session, do:
+
+
+```
+mkdir sc_lab
+cd sc_lab
+ln -s /sw/courses/epigenomics/sc_atac_seq/* .
+
+
+module purge
+module load bioinfo-tools
+module load R_packages/4.1.1
+module load RStudio
+
+rstudio &
+```
 
 ## Analysis of single cell ATAC-seq data
 
@@ -421,7 +439,7 @@ MotifPlot(
 
 ## Integrate with scRNA-seq data
 
-In this section we will compare the scATAC-seq data to scRNA-seq data from a similar starting material (although not from exatcly the same cells). Since it is easier to figure out which cell types clusters correspond to in scRNA-seq data, we will then use the scRNA-seq data to annotate the clusters in the scATAC-seq data.
+In this section we will compare the scATAC-seq data to scRNA-seq data from a similar starting material (although not from exatcly the same cells). Since it is easier to figure out which cell types clusters correspond to in scRNA-seq data, we will then use the scRNA-seq data to annotate the clusters in the scATAC-seq data. (Note that if you have multiomics data, with RNA-seq and ATAC-seq from the same cells, you don't need to take the extra detour to gene activity scores, but can use the RNA-seq data directly to annotate cell types.)
 
 ### Gene activity matrix
 
