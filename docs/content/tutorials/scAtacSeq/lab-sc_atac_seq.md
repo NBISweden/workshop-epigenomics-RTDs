@@ -57,7 +57,7 @@ export SINGULARITYENV_USER=$USER
 export SINGULARITYENV_PASSWORD=dummypwd
 ```
 
-Now we can start Rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
+Now we can start rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
 
 ```
 singularity exec   \
@@ -86,7 +86,7 @@ If everything has worked, you should now see Rstudio, and can start the exercise
 
 ### Backup method for setting up
 
-If you have problems getting the singularity setup to work, there is a backup plan. We can also use the module system on Uppmax. This usually works for most people, but can sometimes fail, depending on what other programs and libraries you might have installed previously. In an interactive session, do:
+If you have problems getting the singularity setup to work, there is a backup plan. We can also use the module system on Uppmax to run the exercise. This works for most people, but can sometimes fail, depending on what other programs and libraries you might have installed previously. In an interactive session, do:
 
 
 ```
@@ -109,11 +109,9 @@ rstudio &
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
 
-![George Seurat](Seurat-Gravelines-Annonciade.jpg)
-<span class="caption">George Seurat, 1859-1891.</span>
+![George Seurat, 1859-1891](Seurat-Gravelines-Annonciade.jpg)
 
-![Paul Signac](Paul_signac,_la_barca_a_vela_verde,_1904,_01.jpg)
-<span class="caption">Paul Signac, 1863-1935.</span>
+![Paul Signac, 1863-1935](Paul_signac,_la_barca_a_vela_verde,_1904,_01.jpg)
 
 
 ```
@@ -139,11 +137,11 @@ The ATAC-seq data, consists of four files, that are created with CellRanger.
 
 - A fragment file, with information on all sequenced fragments (where it maps to the genome, which cell barcode is associated and how many PCR duplicates were found)
 
-- An index file connected to the fragment file. This is like an index file for a bam file, to make it possible to quickly find fragments for a certain genomic region, with having to search the entire file.
+- An index file connected to the fragment file. This is like an index file for a bam file, to make it possible to quickly find fragments for a certain genomic region, without having to search the entire file.
 
 The PBMC data set contains ATAC-seq data on 74836 regions in 9277 cells. The corresponding RNA-seq data covers 19089 genes in 9432 cells. To make the commands in this exercise run a bit faster, we will only analyze a set of 2000 (randomly selected) cells. If you have the time and interest, you can analyze the full data set, but commenting out the corresponding line of code.
 
-Here we create a `ChromatinAssay` object from the count matrix (and a link to the fragment file). This object stores the genomic regions, count data, and also possibly gene annotations and information on sequence motifs. There are many ways to interact with a `ChromatinAssay` object, see [this](https://satijalab.org/signac/articles/data_structures.html) vignette.
+Here we create a `ChromatinAssay` object from the count matrix (and a link to the fragment file). This object stores the genomic regions, count data, and also possibly gene annotations and information on sequence motifs. There are many ways to interact with a `ChromatinAssay` object, see [this](https://stuartlab.org/signac/articles/data_structures.html) vignette.
 
 We then create a `Seurat` object from the `ChromatinAssay`, together with meta data about cells and gene annotations.
 
@@ -194,7 +192,7 @@ The next step is to do some quality control (QC) on the ATAC-seq data. There are
 
 - **Fragment sizes**, determined from paired-end sequencing data. For each cell we can quantify the fragment sizes by calculaing the ratio of nucleosome size fragments (147-294 nucleotides) to nucleosome-free fragments (<147 nucleotides). Open chromatin correseponds to short DNA fragmens, so we want to remove cells with to few short DNA fragments, coming from open open chromatin.
 
-- **Enrichment at transcription start sites (TSS).** Since chromatin is ofter open around TSS, we expect there to be an enrichment of framgents around these sites. This is quantified by collecting all fragments mapping around TSS to form an aggregate distribution, and comparing the highest level of fragments to the level of fragments 1000bp up and downstream of the TSS.
+- **Enrichment at transcription start sites (TSS).** Since chromatin is often open around TSS, we expect there to be an enrichment of framgents around these sites. This is quantified by collecting all fragments mapping around TSS to form an aggregate distribution, and comparing the highest level of fragments to the level of fragments 1000bp up and downstream of the TSS.
 
 - **Number of fragments in peaks**. This represents the complexity and sequencing depth for each cell. Too many reads might indicate artefacts, such as several cells sharing a barcode.
 
@@ -260,7 +258,7 @@ pbmc
 
 **Normalization:** Signac performs term frequency-inverse document frequency (TF-IDF) normalization. This is a two-step normalization procedure, often used in natural language processing, that both normalizes across cells to correct for differences in sequencing depth, and across peaks to give higher values to more rare peaks.
 
-**Feature selection:** To reduce noise, we sometimes only use some features (i.e. peaks) when we cluster cells. Often this is the peaks with the strongest signal, i.e. most reasd, or the ones present in most cells. Here, we will use all peaks, but you can play around with this yourself. Try setting min.cutoff to ‘q75’ to use the top 25% peaks).
+**Feature selection:** To reduce noise, we sometimes only use some features (i.e. peaks) when we cluster cells. Often this is the peaks with the strongest signal, i.e. most reads, or the ones present in most cells. Here, we will use all peaks, but you can play around with this yourself. Try setting min.cutoff to ‘q75’ to use the top 25% peaks).
 
 **Dimension reduction:** We next run singular value decomposition (SVD) on the normalized data matrix, using the features (peaks) selected above. This returns a reduced dimension representation of the matrix, similar to the output of PCA.
 
@@ -310,7 +308,7 @@ We can also analyze motif occurence in the peaks, to see how this varies between
 
 #### Identifying enriched motifs
 
-First we will look at motifs that are enriched in set of peaks, e.g. in peaks that show differential accessibility between two cell types. *Do you notice anything particular about these motifs?*
+First we will look at motifs that are enriched in a set of peaks, e.g. in peaks that show differential accessibility between two cell types. *Do you notice anything particular about these motifs?*
 
 
 
@@ -441,7 +439,7 @@ MotifPlot(
 
 ## Integrate with scRNA-seq data
 
-In this section we will compare the scATAC-seq data to scRNA-seq data from a similar starting material (although not from exatcly the same cells). Since it is easier to figure out which cell types clusters correspond to in scRNA-seq data, we will then use the scRNA-seq data to annotate the clusters in the scATAC-seq data. (Note that if you have multiomics data, with RNA-seq and ATAC-seq from the same cells, you don't need to take the extra detour to gene activity scores, but can use the RNA-seq data directly to annotate cell types.)
+In this section we will compare the scATAC-seq data to scRNA-seq data from a similar starting material (although not from exatcly the same cells). Since it is easier to figure out which cell types clusters correspond to in scRNA-seq data, we will then use the scRNA-seq data to annotate the clusters in the scATAC-seq data. (Note that if you have multiomics data, with RNA-seq and ATAC-seq from the same cells, you don't need to take the extra detour to gene activity scores, but can use instead your RNA-seq data to annotate cell types.)
 
 ### Gene activity matrix
 
@@ -486,7 +484,7 @@ Having computed the gene activity scores, we are now ready to combine the ATAC-s
 
 We start by finding anchors, i.e. paris of cells, one from ATAC-seq and one from RNA-seq. This is done by first projecting bort ATAC-seq and RNA-seq data into the same space, and then find pairs of cells one from ATAC-seq and the other from RNA-seq that are mutual nearest neighbors (MNNs). These are further filtered and the reliable pairs are the used as anchors.
 
-These anchors can then be used to project the ATAC-seq data onto the RNA-seq data and find the cell type annotation of the nearby cells. This was annotations from the RNA-seq data can be transferred to the ATAC-seq data. This is sometimes referred to as **label transfer**
+These anchors can then be used to project the ATAC-seq data onto the RNA-seq data and find the cell type annotation of the nearby cells. This way annotations from the RNA-seq data can be transferred to the ATAC-seq data. This is sometimes referred to as **label transfer**
 
 *How well do you think this worked? Can you see if some cells types are missing or merged?*
 
@@ -552,7 +550,7 @@ pbmc <- RenameIdents(
 
 ### Differentially accessible regions, again
 
-Now, we will once again look at differentially accessible region, this time between CD4/8 Naive cells and CD14 Mono cells. (Since we now can say what cell types these clusters represent.) We can plot the signal in this region in a couple of different ways. *Do you understand what these plots mean?*
+Now, we will once again look at differentially accessible region, this time between *CD4/8 Naive* cells and *CD14 Mono* cells (since we now can say what cell types these clusters represent.) We can plot the signal in this region in a couple of different ways. *Do you understand what these plots mean?*
 
 
 ```{r seurat_diff_peaks}
