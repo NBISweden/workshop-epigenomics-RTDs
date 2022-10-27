@@ -70,7 +70,7 @@ singularity exec   \
   rserver --www-port 8787 --www-address=127.0.0.1
 ```
 
-If you don't see any output after typing this command, it means that rserver is running and all is well. But you might also get an error message, saying something like `[rserver] ERROR system error 98 (Address already in use)`. This means that port `8787` is already taken, likely by one of your course mates running this lab on the same node. In that case you can try again, but with port `8788` instead of `8787`. If that one is taken, try 8789.
+If you don't see any output after typing this command, it means that rserver is running and all is well. But you might also get an error message, saying something like `[rserver] ERROR system error 98 (Address already in use)`. This means that port `8787` is already taken, likely by one of your course mates running this lab on the same node. In that case you can try again, but with port `8788` instead of `8787`. If that one is taken, try `8789`.
 
 Once we got rserver to run r and rstudio, we still need to connect to them. For this, we open **another Uppmax terminal**, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
 
