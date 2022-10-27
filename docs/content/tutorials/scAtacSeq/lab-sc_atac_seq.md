@@ -70,7 +70,7 @@ singularity exec   \
   rserver --www-port 8787 --www-address=127.0.0.1
 ```
 
-R and Rstudio are now running, but we still need to connect to them. For this, we open **another Uppmax tab**, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
+R and Rstudio are now running, but we still need to connect to them. For this, we open **another Uppmax terminal**, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
 
 ```
 ssh -Y <node with interative session>
