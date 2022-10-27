@@ -141,16 +141,16 @@ The ATAC-seq data, consists of four files, that are created with CellRanger.
 
 The PBMC data set contains ATAC-seq data on 74836 regions in 9277 cells. The corresponding RNA-seq data covers 19089 genes in 9432 cells. To make the commands in this exercise run a bit faster, we will only analyze a set of 2000 (randomly selected) cells. If you have the time and interest, you can analyze the full data set, but commenting out the corresponding line of code.
 
-Here we create a `ChromatinAssay` object from the count matrix (and a link to the fragment file). This object stores the genomic regions, count data, and also possibly gene annotations and information on sequence motifs. There are many ways to interact with a `ChromatinAssay` object, see [this] (https://satijalab.org/signac/articles/data_structures.html) vignette.
+Here we create a `ChromatinAssay` object from the count matrix (and a link to the fragment file). This object stores the genomic regions, count data, and also possibly gene annotations and information on sequence motifs. There are many ways to interact with a `ChromatinAssay` object, see [this](https://satijalab.org/signac/articles/data_structures.html) vignette.
 
 We then create a `Seurat` object from the `ChromatinAssay`, together with meta data about cells and gene annotations.
 
 ```
-counts <- Read10X_h5(filename = "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5")
+counts <- Read10X_h5(filename = "data/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5")
 counts <- counts[, sample(ncol(counts), 2000)] # Only use 2000 cells, to make commands run faster.
 
 metadata <- read.csv(
-	file = "atac_v1_pbmc_10k_singlecell.csv",
+	file = "data/atac_v1_pbmc_10k_singlecell.csv",
 	header = TRUE,
 	row.names = 1
 )
@@ -159,7 +159,7 @@ chrom_assay <- CreateChromatinAssay(
 	counts = counts,
 	sep = c(":", "-"),
 	genome = 'hg19',
-	fragments = 'atac_v1_pbmc_10k_fragments.tsv.gz',
+	fragments = 'data/atac_v1_pbmc_10k_fragments.tsv.gz',
 	min.cells = 10,
 	min.features = 200
 )
@@ -490,7 +490,7 @@ These anchors can then be used to project the ATAC-seq data onto the RNA-seq dat
 
 ```
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("pbmc_10k_v3.rds")
+pbmc_rna <- readRDS("data/pbmc_10k_v3.rds")
 
 # Find anchors
 transfer.anchors <- FindTransferAnchors(
