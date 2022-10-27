@@ -79,14 +79,6 @@ To make sure you have all the necessary tools to run :code:`minute`, you can set
     mamba env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab
 
 
-If you run into problems configuring this, there is a copy of this conda environment at: :code:`/proj/epi2022/minute_chip/condaenv/minute_lab`
-It should work if you just:
-
-.. code-block:: bash
-
-  export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
-  conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
-
 After activating the environment for the first time, you need to install the :code:`minute` package
 in it. You can do this by:
 
@@ -95,6 +87,14 @@ in it. You can do this by:
   cd /proj/epi2022/minute_chip/minute/
   pip install .
 
+
+If you run into problems configuring this, there is a copy of this conda environment at: :code:`/proj/epi2022/minute_chip/condaenv/minute_lab`
+It should work if you just:
+
+.. code-block:: bash
+
+  export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
+  conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
 
 
 Files
@@ -292,7 +292,7 @@ If you already got your files, you need to run something like
   cd my_primary
 
   # Run snakemake on the background, and keep doing something else
-  nohup snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+  nohup snakemake -p -s /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
 
 
 :code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores there are available on your node, you can raise this value.
