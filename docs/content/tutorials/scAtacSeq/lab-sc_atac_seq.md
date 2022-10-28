@@ -90,8 +90,8 @@ If you have problems getting the singularity setup to work, there is a backup pl
 
 
 ```
-mkdir sc_lab
-cd sc_lab
+mkdir -p sc_lab/data
+cd sc_lab/data
 ln -s /sw/courses/epigenomics/sc_atac_seq/* .
 
 
