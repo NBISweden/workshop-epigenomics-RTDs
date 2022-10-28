@@ -79,7 +79,7 @@ ssh -Y <node with interative session>
 firefox &
 ```
 
-When firefox starts, go to the URL `http://localhost:8787`. (You can ignore any warnings that are printed after starting firefox.)
+When firefox starts, go to the URL `http://localhost:8787` (or whatever port you were using for rserver). (You can ignore any warnings that are printed after starting firefox.)
 
 If everything has worked, you should now see Rstudio, and can start the exercise.
 
