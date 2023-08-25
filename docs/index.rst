@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2032!
+Welcome to Epigenomics Workshop 2023!
 ==========================================================
 
 
