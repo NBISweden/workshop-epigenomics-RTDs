@@ -61,13 +61,24 @@ pip install sphinx.ext.intersphinx
 pip install sphinx_togglebutton
 pip install sphinx_copybutton
 ```
+Or via environment:
+
+```bash
+conda create -n sphinx7 python=3.11 pip sphinx=7.2.4 sphinx_rtd_theme=1.3.0 docutils sphinx-togglebutton sphinx-copybutton pygments
+```
 
 Versions currently used:
 
 ```tsv
-sphinx                    3.2.1
-sphinx-rtd-theme          0.5.0
+sphinx                    7.2.4
+sphinx-rtd-theme          1.3.0
+sphinx-copybutton         0.5.2
+sphinx-togglebutton       0.3.2
+pygments                  2.16.1
+docutils                  0.18.1
 ```
+
+
 
 ### Build the local html
 
