@@ -147,7 +147,7 @@ Unfortunately we are **not** able to warrant any university credits (högskolepo
 Computing Resources
 --------------------------------
 
-This workshop relies on HPC infrastructure kindly provided by `SNIC <https://www.snic.se/>`_ via `Uppsala Multidisciplinary Center for Advanced Computational Science Uppmax <https://www.uppmax.uu.se/>`_.
+This workshop relies on HPC infrastructure kindly provided by `NAISS <https://www.naiss.se/>`_ via `Uppsala Multidisciplinary Center for Advanced Computational Science Uppmax <https://www.uppmax.uu.se/>`_.
 
 
 Teaching team
