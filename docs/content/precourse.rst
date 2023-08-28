@@ -126,9 +126,14 @@ Computer skills
 
 * `Unix <http://www.ee.surrey.ac.uk/Teaching/Unix/>`_: especially the first three chapters.
 
-* DataCamp free `R tutorial <https://learn.datacamp.com/courses/free-introduction-to-r>`_. A nice self learn tutorial to ``R``, introducing many central concepts to ``R``.
+* DataCamp free `Introduction to R <https://www.datacamp.com/blog/all-about-r>`_. 
 
 * `A short introduction to R <https://cran.r-project.org/doc/contrib/Torfs+Brauer-Short-R-Intro.pdf>`_. A very short introduction to using ``R``.
+
+* How to install and use RStudio from `Data Camp RStudio Tutorial <https://www.datacamp.com/tutorial/r-studio-tutorial>`_.
+
+.. A nice self learn tutorial to ``R``, introducing many central concepts to ``R``.
+
 
 ChIP-seq
 ----------
