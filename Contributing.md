@@ -63,7 +63,7 @@ pip install sphinx_copybutton
 Or via environment:
 
 ```bash
-conda create -n sphinx7 python=3.11 pip sphinx=7.2.4 sphinx_rtd_theme=1.3.0 docutils sphinx-togglebutton sphinx-copybutton pygments
+conda create -n sphinx7 -c conda-forge python=3.11 pip sphinx=7.2.4 sphinx_rtd_theme=1.3.0 docutils sphinx-togglebutton sphinx-copybutton pygments recommonmark 
 ```
 
 Versions currently used:
