@@ -40,6 +40,7 @@ To be able to follow exercises we ask you to
 
 - install `Integrative Genomics Viewer <https://software.broadinstitute.org/software/igv/>`_ on your laptop.
 
+- install the `ThinLinc <https://www.cendio.com/thinlinc/download/>`_ client to easily access uppmax.
 
 Uppmax
 ------
@@ -116,6 +117,8 @@ To install, follow the instructions on the `IGV website <https://software.broadi
 
 Further optional preparations
 ==============================
+
+It might be useful to set up two factor authorization for UPPMAX. This will be necessary to acces the webversion of ThinLinc at https://rackham-gui.uppmax.uu.se and makes it easier to connect from abroad. The instructions to set up 2FA can be found here: https://www.uppmax.uu.se/support/user-guides/setting-up-two-factor-authentication/.    
 
 For those of you wanting to start ahead and/or brush up on various skills before the course.
 
