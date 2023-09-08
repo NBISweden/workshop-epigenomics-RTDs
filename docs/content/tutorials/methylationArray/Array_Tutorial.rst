@@ -191,6 +191,10 @@ It might be useful to change the names of the samples into something a little mo
 
 .. note::
 
+   You might get an error related to something called a cacheKey. This is a known bug in Rstudio and will not stop the execution of the code. If you want to remove the annoying message click on :code: `Session -> Restart R`. All objects in the workspace and the loaded libraries should be preserved after restarting R.
+
+.. note::
+
    If you prefer to run this tutorial locally, you can also download the dataset to your personal computer. To do this, navigate to the folder on your own conputer where you want to deposit the data and execute :code:`scp -r <username>@rackham.uppmax.uu.se:/sw/courses/epigenomics/DNAmethylation/array_data .`. Then you can point the :code:`dataDirectory` to this local directory. Of course, you will also have to install all packages locally!
 
 A Note on Class Structure
