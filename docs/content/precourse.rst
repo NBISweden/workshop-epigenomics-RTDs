@@ -71,7 +71,7 @@ This involves few steps. Briefly,
 
 	* Cluster name: rackham
 
-	* Project ID:  **SNIC 2022/23-333** and **SNIC 2022/22-634**
+	* Project ID:  **NAISS 2023/22-673** and **NAISS 2023/23-349**
 
 
 
