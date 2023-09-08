@@ -80,7 +80,7 @@ Request membership in the course project (for those already having Uppmax accoun
 
 * log in to SUPR;
 
-* under Projects: Requesting Membership in Projects, request membership in **SNIC 2022/23-333** and **SNIC 2022/22-634**
+* under Projects: Requesting Membership in Projects, request membership in **NAISS 2023/22-673** and **NAISS 2023/23-349**
 
 
 Check configuration (everyone)
