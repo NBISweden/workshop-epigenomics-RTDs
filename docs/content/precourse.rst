@@ -56,11 +56,11 @@ Create user account & request membership in the course project (for those new to
 
 This involves few steps. Briefly,
 
-* registering at `SUPR <https://supr.snic.se/>`_;
+* registering at `SUPR <https://supr.naiss.se/>`_;
 
 * accepting the User Agreement;
 
-* becoming a member in both the storage project ( **SNIC 2022/23-333**) and the compute project ( **SNIC 2022/22-634**);
+* becoming a member in both the storage project ( **NAISS 2023/23-349**) and the compute project ( **NAISS 2023/22-673**);
 
 * applying for an account at Uppmax.
 
