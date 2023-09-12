@@ -24,22 +24,13 @@ So we will look at a comparison of CUT&RUN and different ChIP datasets to unders
 	:target: Figures/00_CTCF.png
 	:alt:
 
-*Fig. 1: Features of CTCF-binding sites in the genome*
+*Fig. 1*: Features of `CTCF binding sites in the genome <https://doi.org/10.1038/nrg3663>`_ [1]_.
+
 
 Datasets
 ==========
 
-The datasets used correspond to two publications: 
-
-Skene PJ, Henikoff S. An efficient targeted nuclease strategy for high-resolution mapping of DNA binding sites. Elife 2017.
-https://elifesciences.org/articles/21856
-
-Pugacheva, Elena M., et al. CTCF mediates chromatin looping via N-terminal domain-dependent cohesin retention. Proceedings of the National Academy of Sciences 117.4 (2020).
-https://www.pnas.org/content/117/4/2020
-
-They can be found on GEO (GSE84474 and GSE137216). See below a table with the samples included in this example:
-
-In Skene and Henikoff, they compare CUT&Run to their own ChIP (special optimized native ChIP for CTCF they say).
+The datasets used correspond to two publications, Skene and Henikoff [2]_ and Pugacheva et al. [3]_. They can be found on GEO (GSE84474 and GSE137216). See below a table with the samples included in this example:
 
 .. list-table:: Table 1. Files in Skene et al. 2017 used in this exercise.
    :widths: 25 40
@@ -65,7 +56,8 @@ In Skene and Henikoff, they compare CUT&Run to their own ChIP (special optimized
      - NBIS_Skene2017_K562_CTCF_CnR_9m        
 
 
-In Pugacheva et. all, they perform a crosslinking ChIP for CTCF. They’ve been using different antibodies just to be sure that they are ChIPing the right thing.
+
+In Skene and Henikoff, they compare CUT&Run to their own ChIP (special optimized native ChIP for CTCF they say). In Pugacheva et. all, they perform a crosslinking ChIP for CTCF. They’ve been using different antibodies just to be sure that they are ChIPing the right thing.
 
 .. list-table:: Table 2. Files in Pugacheva et al. 2020 used in this exercise.
    :widths: 25 40
@@ -94,7 +86,7 @@ Data preprocessing
 Primary analysis of the initial FASTQ files was performed beforehand. Reads were mapped with ``bowtie2`` with default parameters. Resulting BAM files were deduplicated using Picard and blacklisted regions were removed. Peak files were generated using ``MACS2`` using very standard parameters: ``--qval cutoff 0.01``. In this case no replicates were used to call the peaks. BigWig files were generated with ``deepTools`` to 1x coverage. Resulting files are available under ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR``
 
 .. attention::
-   You can download bigWig and peak annotations. Most of what we are going to do can be done locally on aregular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.
+   You can download bigWig and peak annotations. Most of what we are going to do can be done locally on a regular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.
 
 When running things on Uppmax, copy the files to your home directory:
 
@@ -277,7 +269,8 @@ The ``.npz`` matrix is then used by ``deepTools`` to produce other plots. For ou
     plotCorrelation --corData ./bins_table.npz \
         --plotFile ./correlation_spearman_all.png \
         --whatToPlot heatmap \
-        --corMethod spearman
+        --corMethod spearman \
+        --plotNumbers
 
 This will generate a correlation plot based on genome-wide 5kb bins.
 
@@ -354,7 +347,7 @@ The resulting plot should look like:
 
 **Q: What do you think it means in terms of quality of experiments?**
 **Do you see different groups of samples? Go to IGV and browse through the tracks.**
-**How do each of these groups look? Fingerprint supports the difference CUT&RUN authors argue - That it has less background.**
+**How does each group look? Fingerprint supports the difference CUT&RUN authors argue - That it has less background.**
 
 Clearly, the CUT&Run data scores better by QC compared to the CTCF ChIP presented in this paper. But how about comparing to the Pugacheva CTCF ChIP datasets?
 
@@ -383,21 +376,21 @@ Peak calling
 Peaks were called with MACS2 using standard parameters.
 
 .. attention::
-    This is a step that could be better fine tuned to each experimental setting. 
+    This is a step that could be better fine-tuned to specific experimental settings. 
 
-Again, it is usually a good idea to inspect visually the files, so you can have a feeling on whether the peaks were correctly called and how the samples look like.
+Again, it is usually a good idea to visually inspect the tracks, so you can have a feeling on whether the peaks were correctly called and how the samples look like.
 
 
 .. image:: Figures/05_IGV_peaks.png
 	:target: Figures/05_IGV_peaks.png
 	:alt:
 
-**Q: Given the QC you did above, does the peak calling confirm the quality differences amongst the samples? Does a higher signal/noise allows to identify more peaks? Call peaks more confidently?**
+**Q: Given the QC you did above, does the peak calling confirm the quality differences amongst the samples? Does a higher signal/noise ratio allow to identify more peaks? Are peaks more confidently called?**
 
 Number of peaks per sample
 --------------------------
 
-A simple ``wc`` count per peak file allows you to quickly check how many peaks you got:
+A simple ``wc`` count allows you to quickly check how many peaks you got:
 
 .. code-block:: bash
 
@@ -420,21 +413,24 @@ A simple ``wc`` count per peak file allows you to quickly check how many peaks y
 Peaks overlap using intervene
 ------------------------------
 
-``intervene`` is an easy to use tool to look for overlaps between BED files. It relies on ``bedtools``, but saves some work when looking at different sets of files. You can install it using ``pip`` as they `explain <https://intervene.readthedocs.io/en/latest/install.html>`_.
+``intervene`` is an easy-to-use tool to look for overlaps between BED files. It relies on ``bedtools``, but it saves some work when looking at different sets of files. You can install it using ``pip`` as they `explain <https://intervene.readthedocs.io/en/latest/install.html>`_.
 
 .. attention::
-    There is no ``intervene`` module on Uppmax. If you want to run it there, you can probably install it using your usual ``conda`` environment or `pyenv`. See how to set ``pyenv`` `here <https://www.uppmax.uu.se/support/user-guides/python-modules-guide/>`_.
+    There is no ``intervene`` module on Uppmax. If you want to run it there, you can activate a conda environment that is precomputed: ``conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/intervene``. Otherwise you can download the peaks files to your local computer and install intervene there, if you prefer.
 
 You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
 
 .. code-block::
     
-    # Back to your local laptop copy of the peaks and bw
     cd cnr_chip
+    mkdir peaks
+    cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/peaks/*.narrowPeak peaks/
+
+    conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/intervene
 
     intervene venn --in ./peaks/NBIS_Pugacheva2020_K562_ChIP_CTCF_Mono*.narrowPeak
 
-This will output a ``Intervene_results`` folder with a pdf file:
+This will output a ``intervene_results`` folder with a pdf file:
 
 .. image:: Figures/06_venn_1.png
 	:target: Figures/06_venn_1.png
@@ -458,18 +454,18 @@ will generate a plot like this in ``./pairwise_results/``.
 
 Very different numbers of peaks! 
 
-**Q: How do you think the number of peaks relate to the fingerprint? (the ones with the most accentuated fingerprint are the ones showing larger amounts of peaks, however the difference is not such for some of the CnR samples. Why can that be?**
+**Q: How do you think the number of peaks relates to the fingerprint? (the ones with the most accentuated fingerprint are the ones showing larger amounts of peaks, however the difference is not such for some of the CnR samples. Why can that be?**
 
-This has actually been noted in the CnR paper. They say that too scarce background read coverage can throw off traditional peak callers, thus they develop their own peak caller for CnR data.
+This has actually been noted in the CnR paper. They say that too scarce background read coverage can throw off traditional peak callers, thus they develop their own peak caller for CnR data. 
+
 
 **Q: Now that you have peaks, think about what you could do with the peak information. How to make sense of the peaks? Would you use the dataset with the most or the least peaks for downstream analysis?**
 
 .. note::
-    ``MACS`` doesn’t just give peaks, it also assigns a score. High/confident peaks have high score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be extremely good.
+    ``MACS`` doesn’t just give peaks, it also assigns a score. High/confident peaks have high score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be better.
 
 Comparison between methods
 ==========================
-
 
 As an example, we are going to look at one peak set representative for each method: CnR_45s, CTCF_ChIP_medMN from Skene 2017 and ChIP_MonoC from Pugacheva 2020.
 
@@ -480,7 +476,7 @@ We can look at the overlap between them in a venn diagram:
 	:alt:
 
 
-There are quite some differences  between approaches, and one of the peak sets is very small compared to the others.
+There are quite some differences between approaches, and one of the peak sets is very small compared to the others.
 
 .. note::
     These venn diagrams are not size proportional. Automatically drawing size-proportional set intersections is a complex problem. `eulerr` is an `R package <https://cran.r-project.org/web/packages/eulerr/vignettes/introduction.html>`_ that does a really nice job at approximating this. However it’s only for drawing, not for computing the actual intersections.
@@ -489,7 +485,7 @@ There are quite some differences  between approaches, and one of the peak sets i
 Heatmaps
 =========
 
-The fact that there are loci marked as peak in one dataset that do not appear in another does not mean that there is no signal there. It could not be called as peak due to lack of statistical power, the signal being weaker or a combination of other factors. Remember the example in the slides - some peaks don’t make the calling threshold, but still represent sites of enrichment:
+The fact that there are loci marked as peak in one dataset that do not appear in another does not mean that there is no signal there. It could be that a peak is not called due to lack of statistical power, the signal being weaker or a combination of other factors. Remember the example in the slides - some peaks don’t make the threshold, but still show enrichment:
 
 .. image:: Figures/09_peak_example.png
 	:target: Figures/09_peak_example.png
@@ -524,8 +520,16 @@ Or from your Uppmax node:
 **Q: how does the data compare? Note the difference in scale amongst the samples. What other features are different? Which dataset would be better to identify the CTCF binding motif?**
 
 .. note::
-    In the Skene paper, the make a biological interpretation regarding the difference in peaks seen in native ChIP and CUT&Run. They call the peaks uniquely present in CUT&Run “indirect binding sites” because they infer that those peaks are not directly bound by CTCF. The tagging of sites potentially in intact nuclei works through space, thus tagging not only the loci that is bound by CTCF, but also those regions that are nearby in space (Hi-C contacts). So it is important to note that CUT&Run may report ‘indirect’ or ‘shadow’ peaks that do not represent bona fide binding sites. For CTCF in principle the distinction should be easy since the ‘shadow’ peaks should not have CTCF binding motif.
+    In Skene and Henikoff paper, the authors make a biological interpretation regarding the difference in peaks seen in native ChIP and CUT&Run. They call the peaks uniquely present in CUT&Run “indirect binding sites” because they infer that those peaks are not directly bound by CTCF. The tagging of sites potentially in intact nuclei works through space, thus tagging not only the loci that are bound by CTCF, but also those regions that are nearby in space (Hi-C contacts). So it is important to note that CUT&Run may report ‘indirect’ or ‘shadow’ peaks that do not represent bona fide binding sites. For CTCF in principle the distinction should be easy since the ‘shadow’ peaks should **not have CTCF binding motif**.
 
 .. image:: Figures/11_cut_run.png
 	:target: Figures/11_cut_run.png
 	:alt:
+
+
+References
+===============
+
+.. [1] Ong, CT., Corces, V. CTCF: an architectural protein bridging genome topology and function. Nat Rev Genet 15, 234–246 (2014).
+.. [2] Skene PJ, Henikoff S. An efficient targeted nuclease strategy for high-resolution mapping of DNA binding sites. Elife 2017.
+.. [3] Pugacheva, Elena M., et al. CTCF mediates chromatin looping via N-terminal domain-dependent cohesin retention. Proceedings of the National Academy of Sciences 117.4 (2020).
