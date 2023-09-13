@@ -74,7 +74,7 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 Wednesday (20 September 2023)
 --------------------------------
 
-**New methods and quantitative ChIP-seq**
+**New methods and quantitative ChIP-seq** (Simon Elsässer and Carmen Navarro Luzón)
 
 **09:00 - 10:00** Recap previous day *(online session)*
 
