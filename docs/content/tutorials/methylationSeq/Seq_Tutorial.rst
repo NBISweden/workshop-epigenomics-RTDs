@@ -119,7 +119,10 @@ Start by loading the required packages.
 
 .. code-block:: r
 
-   # Set the correct library path (do NOT do this if setting up the environment with option B, only option A)
+   # Set the correct library path.
+   # Do NOT do this if setting up the environment with option B, only option A
+   # If you accidently do run the following line with option B, you can do *Session -> Restart R*
+   # and run again without this line.
    .libPaths("/sw/apps/R_packages/4.0.0/rackham")
    # Main analysis package
    library("methylKit")
@@ -264,6 +267,9 @@ We can further remove known C -> T mutations. These locations should be removed 
    # select CpGs that do not overlap with mutations
    meth <- meth[!as(meth,"GRanges") %over% mut, ]
 
+.. note::
+
+   In this example only 2 SNP are removed. If you would like to remove more SNPs, you will have to create an adequate GRanges object. A full description of this is a bit out of the scope of this workshop but one way to do this is by utilizing the `GenomicRanges <https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html>`_ R package. In addition, you will need to download a list of SNPs (for example from Ensembl or dbSNP).
 
 Data Structure/Outlier Detection
 --------------------------------

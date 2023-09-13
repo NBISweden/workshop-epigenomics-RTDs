@@ -29,9 +29,8 @@ Before we start tutorial, we need to set up our work environment. In particular,
 Using computational resources
 ==========================================================
 
-ALTERNATIVE A
 
-We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and run ``salloc`` command:
+We have booked 5 cores on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and run ``interactive`` command:
 
 .. code-block:: bash
 
@@ -39,12 +38,14 @@ We have booked half a node on Rackham per course participant. To run the tutoria
 	interactive -A naiss2023-22-673 -p core -n 5 -t 08:00:00
 
 
-
 .. HINT::
 
 	..Replace X with the date of the day of the workshop. So, 24 for day one, 25 for day, 26 for day 3 and so on. 
 
 	This command gives you access to 5 cores for eight hours or until 17:00, whichever comes first.
+
+
+..Replace X with the date of the day of the workshop. So, 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access to 6 cores for eight hours or until 17:00, whichever comes first.
 
 
 Please make sure you do it only **ONCE** per day, as by repeating this command you will use up resources reserved for others.
