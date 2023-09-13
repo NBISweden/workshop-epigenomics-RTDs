@@ -31,7 +31,7 @@ Using computational resources
 
 ALTERNATIVE A
 
-We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and run ``salloc`` command:
+We have booked 6 cores on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and run ``salloc`` command:
 
 .. code-block:: bash
 
@@ -62,7 +62,7 @@ If you lose connection to the server during a tutorial, please connect again to 
 
 ALTERNATIVE B
 
-We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and request an interactive session. Remember to replace <username> with your own id.
+We have booked 6 cores on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and request an interactive session. Remember to replace <username> with your own id.
 
 .. code-block:: bash
 
