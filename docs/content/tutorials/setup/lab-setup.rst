@@ -41,7 +41,7 @@ We have booked 6 cores on Rackham per course participant. To run the tutorial in
 
 .. HINT::
 
-	Replace X with the date of the day of the workshop. So, 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access to 10 cores for eight hours or until 17:00, whichever comes first.
+	Replace X with the date of the day of the workshop. So, 1 for day one, 2 for day, 3 for day 3 and so on. This gives you access to 6 cores for eight hours or until 17:00, whichever comes first.
 
 
 Please make sure you do it only **ONCE** per day, as by repeating this command you will use up resources reserved for others.
