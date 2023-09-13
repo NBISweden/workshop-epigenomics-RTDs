@@ -13,7 +13,7 @@ Data Preprocessing for Functional Genomics
 
 **Learning outcomes**
 
-- understand and apply standard processing methods used in functional genomics on an example of ATAC-seq data
+- apply standard processing methods used in functional genomics on an example of ATAC-seq data
 
 - become accustomed to work on Rackham cluster
 
@@ -41,7 +41,7 @@ The aim of this part of the data analysis workflow is to remove alignments which
 
 * alignments to organelles (mitchondria);
 
-* alignments "blacklisted regions": regions of unusually high signal in many functional genomics experiments, described in `Amemiya et al <https://doi.org/10.1038/s41598-019-45839-z>`_;
+* alignments within "blacklisted regions": regions of unusually high signal in many functional genomics experiments, described in `Amemiya et al <https://doi.org/10.1038/s41598-019-45839-z>`_;
 
 * low quality alignments;
 
@@ -68,7 +68,7 @@ Data
 
 We will work with **ATAC-seq** data in this tutorial, however the same principles apply to other functional genomics data types. In particular, **ChIP-seq data** used in this workshop has been processed using similar workflow.
 
-We will use data that come from `ENCODE <www.encodeproject.org>`_ project. These are **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in natural killer (NK) cells without and with stimulation.
+We will use data that come from `ENCODE <www.encodeproject.org>`_ consortium. These are **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in natural killer (NK) cells prior to and upon stimulation.
 
 Natural killer (NK) cells are innate immune cells that show strong cytolytic function against physiologically stressed cells such as tumor cells and virus-infected cells. NK cells express several activating and inhibitory receptors that recognize the altered expression of proteins on target cells and control the cytolytic function. To read more about NK cells please refer to `Paul and Lal <https://doi.org/10.3389/fimmu.2017.01124>`_ . The interleukin cocktail used to stimulate NK cells induces proliferation and activation (`Lauwerys et al <https://doi.org/10.1006/cyto.1999.0501>`_ ).
 
@@ -140,8 +140,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /proj/epi2022/atacseq_proc/atacseq_data.sh .
-  cp /proj/epi2022/atacseq_proc/atacseq_env.sh .
+  cp /proj/epi2023/atacseq_proc/atacseq_data.sh .
+  cp /proj/epi2023/atacseq_proc/atacseq_env.sh .
 
 
   source atacseq_env.sh 
@@ -286,13 +286,13 @@ Finally, we can remove duplicated alignments.
 
 	module load picard/2.23.4
 
-	java -Xmx63G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam \
+	java -Xmx31G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam \
 	 -O ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam -M ENCFF045OAB.dedup_metrics \
 	 -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
 
 	samtools index ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam
 
-Resulting file ``ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` containes preprocessed alignments we can use in the analysis.
+Resulting file ``ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` containes preprocessed alignments we can use in the analysis and visualisations.
 
 
 While we are at it, we can inspect the duplication status of the library. This is another early QC step we perform, and it informs us of library complexity.
@@ -307,6 +307,13 @@ Key information from ``ENCFF045OAB.dedup_metrics``::
 	READ_PAIRS_EXAMINED 1544973
 	READ_PAIR_DUPLICATES 105752
 	PERCENT_DUPLICATION 0.068449
+
+
+.. admonition:: Inspecting file contents.
+   :class: dropdown, warning
+
+   head ENCFF045OAB.dedup_metrics
+
 
 Good news, low duplication level in this library, we can proceed with further :doc:`QC <data-qc1>` and :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
 

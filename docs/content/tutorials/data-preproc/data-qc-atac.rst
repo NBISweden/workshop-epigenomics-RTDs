@@ -16,9 +16,9 @@ This tutorial is a continuation of :doc:`General QC <data-qc1>`.
 
 **Learning outcomes**
 
-- be able to assess quality of the ATAC-seq libraries with a range of quality metrics
+- assess quality of the ATAC-seq libraries with a range of quality metrics
 
-- work interactively with ATAC-seq signal using Integrative Genome Viewer
+- work interactively with ATAC-seq signal using Integrative Genome Viewer (IGV)
 
 
 :raw-html:`<br />`
@@ -58,7 +58,7 @@ Fragment Length Distribution
 
 In ATAC-seq experiments, tagmentation of Tn5 transposases produces signature size pattern of fragments derived from nucleosome-free regions (NFR), mononucleosome, dinucleosome, trinucleosome and longer oligonucleosome from open chromatin regions (Figure below, adapted from `Li et al <https://doi.org/10.1186/s13059-019-1642-2>`_ ).
 
-Please note the pre-filtered BAM files need to be used to get an unbiased distribution of insert fragment size in the ATAC-seq library.
+Please note the pre-processed BAM files need to be used to get an unbiased distribution of insert fragment size in the ATAC-seq library.
 
 
 
@@ -108,7 +108,8 @@ Have a look at ``ENCFF045OAB.chr14.proc.fraglen.pdf``, and answer
           :width: 300px
 
 
-View the resulting histogram of insert sizes ``SRR891268_insert_size_histogram.pdf``. Generating this important QC plot is only possible for PE libraries. Could you guess what the peaks at approximately 50bp, 200bp, 400bp and 600bp correspond to?
+Generating this key QC plot is only possible for **PE libraries**. Can you tell what the peaks at approximately 50bp, 200bp, 400bp and 600bp correspond to?
+
 
 To give some context compare to plots on Figure 2. 
 
@@ -132,6 +133,7 @@ To give some context compare to plots on Figure 2.
 
 
 
+:raw-html:`<br />`
 
 
 Data Preparation for Probing Signal at TSS
@@ -145,7 +147,9 @@ We will be working in ``R`` in this section. First, we load the required version
 	module load R_packages/4.1.1
 
 
-We activate R console upon typing ``R`` in the terminal.
+We activate R console upon typing ``R`` in the terminal. 
+
+It is possible to use a more sophisticated graphical interface to R, however, some steps in this tutorial can be time consuming, therefore simple amy be better in this case.
 
 
 We begin by loading necessary libraries:
@@ -213,7 +217,7 @@ The output::
 	$PCRbottleneckCoefficient_2
 	[1] 479746
 
-Most of these values are meaningless at this point, as we have already processed the bam file.
+Most of these values are meaningless at this point, as we have already processed the bam file (i.e. removed duplicated fragments etc.) To compare the statistics for the unprocessed file, please see below.
 
 
 .. admonition:: Summary statistics for unprocessed ENCFF045OAB.chr14 data
@@ -264,7 +268,7 @@ We create a directory where the processed bam files will be saved:
 
 .. code-block:: R
 
-	## files will be output into outPath
+	## files will be saved into outPath respective to the working directory
 	outPath <- "splitBam"
 	dir.create(outPath)
 
@@ -317,7 +321,7 @@ Shifted reads that do not fit into any of the above bins can be discarded.
 
 Splitting reads is a time-consuming step because we are using random forest to classify the fragments based on fragment length and GC content.
 
-By default, we assign the top 10% of short reads (reads below 100_bp) as nucleosome-free regions and the top 10% of intermediate length reads as (reads between 180 and 247 bp) mononucleosome. This serves as the training set to classify the rest of the fragments using random forest.
+By default, we assign the top 10% of short reads (reads below 100_bp) as nucleosome-free regions and the top 10% of intermediate length reads as (reads between 180 and 247 bp) mononucleosome. This serves as the training set to classify the rest of the fragments.
 
 We need genomic locations of TSS:
 
@@ -343,6 +347,7 @@ When done, we save the object for later use:
 
 Finally, we have prepared the data for **plotting the signal in NFR and mononuclesome fraction** and calculating **signal distribution at TSS**.
 
+:raw-html:`<br />`
 
 
 Signal in NFR and Mononucleosome Fractions
@@ -407,6 +412,7 @@ We can now save the heatmap:
 
 
 
+:raw-html:`<br />`
 
 
 
@@ -453,15 +459,23 @@ And plot it:
           :width: 300px
 
 
+.. Note::
+
+	To finish working in ``R`` type ``q()``. Do not save workspace image - in this case, to save space.
+
+:raw-html:`<br />`
+
+
 
 Signal Visualisation Using IGV
 =================================
 
-In this part we will look more closely at our data, which is a good practice, as data summaries can be at times misleading. In principle we could look at the data on Uppmax using installed tools but it is much easier to work with genome browser locally. 
+In this part we will look more closely at our data, which is a good practice, as data summaries can be at times misleading. In principle we could look at the data on Uppmax using installed tools but it is much easier (and glitch-free) to work with genome browser locally. 
 If you have not done this before the course, install Interactive Genome Browser `IGV <https://www.broadinstitute.org/igv/>`_.
 
 
-We would like to visualise processed alignments (bam and corresponding bai) at several loci with strong signal. We can also view the bam files split into nucleosome-free, mono- di- and tri- nucleosome fractions. *Data has been mapped to hg38*.
+We would like to visualise processed alignments (bam and corresponding bai) at several loci with strong signal. We can also view the bam files split into nucleosome-free, mono- di- and tri- nucleosome fractions. *Data has been mapped to hg38, so choose the appropriate reference*.
+
 
 We will need the following files:
 
@@ -474,6 +488,36 @@ We will need the following files:
 * ``atacseq/analysis/QC/splitBam/dinucleosome.bam`` and ``bai``
 
 * ``atacseq/analysis/QC/splitBam/trinucleosome.bam`` and ``bai``
+
+:raw-html:`<br />`
+
+
+.. admonition:: Copying files from Rackham
+   :class: dropdown, warning
+
+   To copy files from Rackham you need to know the path to the file on Rackham  (i.e. the remote side). Type in the terminal::
+
+   	pwd
+
+   This gives you the path to the working directory, e.g::
+
+   	$pwd
+
+   	/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools
+
+   To copy file ``NKcellsATAC_chr14.fingerprint.pdf`` to *current directory*, type in the **local** terminal::
+
+   	scp <username>@rackham.uppmax.uu.se:/path/to/file .
+
+   E.g.::
+
+   scp agata@rackham.uppmax.uu.se:/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools/NKcellsATAC_chr14.fingerprint.pdf .
+
+   **when connecting from abroad**
+
+   You need to login in another session to be able to copy files, as 2FA does not work with ``scp``. This mock-login serves only to refresh your credentials and results in a few minutes of grace time, during which each session from the same host is accepted without the need to provide 2FA. This time window is sufficient for copying files.
+
+
 
 
 :raw-html:`<br />`
@@ -510,7 +554,7 @@ Examples:
 
 :raw-html:`<br />`
 
-An example is shown on the Figure below (we can skip discussing the peak intervals for now).
+An example is shown on the Figure below (this figure includes also detected peak intervals - we will discuss them in detail in the following sections).
 
 .. image:: figures/igv_qc_split1.png
    			:width: 600px
