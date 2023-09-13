@@ -32,7 +32,7 @@ Introduction
 
 Data in any high-throughput sequencing experiment rarely represents "pure signal" due to technical and biological reasons. Data pre-processing is a practice of removal of data fraction which does not reflect the biological signal we are seeking to analyse, but rather it is a reminiscence of biases often present in this type of experiments. This is done to enhance performance and avoid analytic artifacts.
 
-In parallel to the processing and analysis, the data should be subject to quality control at practially every step of the workflow. This is to ensure the biases are correctly removed and that the data quality supports the analytic findings.
+In parallel to the processing and analysis, the data should be subject to quality control at several steps of the workflow. This is to ensure the biases are correctly removed and that the data quality supports the analytic findings.
 
 
 The workflow for data analysis in a functional genomics experiment can de depicted as on the concept map below.
@@ -45,7 +45,7 @@ The workflow for data analysis in a functional genomics experiment can de depict
 :raw-html:`<br />`
 
 
-Data from functional genomics experiments based on high-throughput sequencing usually share similar bias profile, hence the pre-processing and quality control is very similar for many types of data sets. In this course we work on ATAC-seq and ChIP-seq data, so the tutorials are focused on these types of experiments. Data type specific methods are indicated as such where appropriate.
+Data from functional genomics experiments based on high-throughput sequencing usually share similar bias profile, hence the pre-processing and quality control is very similar for many types of data sets. In this course we work on **ATAC-seq** and **ChIP-seq** data, so the tutorials are focused on these types of experiments. Data type specific methods are indicated as such where appropriate.
 
 
 

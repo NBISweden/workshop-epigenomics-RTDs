@@ -36,12 +36,15 @@ We have booked half a node on Rackham per course participant. To run the tutoria
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
-	salloc -A snic2022-22-634 -t 08:00:00 -p core -n 10 --no-shell --reservation=snic2022-22-634_X
+	interactive -A naiss2023-22-673 -p core -n 5 -t 08:00:00
+
 
 
 .. HINT::
 
-	Replace X with the date of the day of the workshop. So, 24 for day one, 25 for day, 26 for day 3 and so on. This gives you access to 10 cores for eight hours or until 17:00, whichever comes first.
+	..Replace X with the date of the day of the workshop. So, 24 for day one, 25 for day, 26 for day 3 and so on. 
+
+	This command gives you access to 5 cores for eight hours or until 17:00, whichever comes first.
 
 
 Please make sure you do it only **ONCE** per day, as by repeating this command you will use up resources reserved for others.
@@ -60,14 +63,15 @@ And connect to your node with
 
 If you lose connection to the server during a tutorial, please connect again to Rackham and do ``ssh -Y <nodename>`` again. You will reconnect to your set of cores.
 
-ALTERNATIVE B
 
-We have booked half a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and request an interactive session. Remember to replace <username> with your own id.
+.. ALTERNATIVE B
 
-.. code-block:: bash
+.. We have booked a quarter of a node on Rackham per course participant. To run the tutorial in the interactive mode log on to Rackham and request an interactive session. Remember to replace <username> with your own id.
 
-	ssh -Y <username>@rackham.uppmax.uu.se
-	interactive -A snic2022-22-634 -t 08:00:00 -p core -n 10
+.. .. code-block:: bash
+
+.. 	ssh -Y <username>@rackham.uppmax.uu.se
+.. 	interactive -A snic2022-22-634 -t 08:00:00 -p core -n 10
 
 
 Directory structure
