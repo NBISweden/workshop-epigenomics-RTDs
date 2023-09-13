@@ -76,7 +76,7 @@ You will notice that you will load and unload modules practically before and aft
 
 .. HINT::
 
-	The commands in this tutorial contain paths as we set them up in the above steps. If you change file locations, you will need to adjust pathways to match these changes when running commands.
+	The commands in this tutorial contain paths as we set them up in the setup steps for each tutorial. If you change file locations, you will need to adjust paths to match these changes when running commands.
 
 
 
