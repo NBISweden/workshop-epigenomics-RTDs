@@ -13,7 +13,7 @@ Tutorials
    ChIPseq <tutorials/chipseq_tutorials.rst>
    Downstream Analyses <tutorials/downstream_tutorials.rst>
    Advanced ChIP methods <tutorials/quantitative_chip_tutorials.rst>
-   Nextflow & nf-core<tutorials/nextflow.md>
+   Nextflow & nf-core<tutorials/nextflow.rst>
    Data Integration<tutorials/data_integration_tutorials.rst>
    Experimental Design and Data Considerations<tutorials/expdesign_data.rst>
 
