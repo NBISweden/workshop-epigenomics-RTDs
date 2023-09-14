@@ -9,7 +9,7 @@ General info
 
 All of the courses administered by NBIS are delivered on a learning platform Canvas.
 
-This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/70626>`_. 
+This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/84539>`_. 
 
 The schedule for this week is located on Canvas, with links to the content and exercises on this website.
 
