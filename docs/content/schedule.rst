@@ -105,7 +105,7 @@ Thursday (21 September 2023)
 
 **10:00 - 10:15** break *(offline)*
 
-**10:15 - 12:00** :doc:`nf-core exercises <./tutorials/nextflow>` *(online support)*
+**10:15 - 12:00** :doc:`nf-core exercises <./tutorials/nextflow.rst>` *(online support)*
 
 **12:00 - 13:00** lunch *(offline)*
 
