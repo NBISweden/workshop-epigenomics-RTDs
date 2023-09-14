@@ -2,19 +2,22 @@
 
 ## Learning outcomes
 
-- Have a basic understaing of the steps for quality control, normalization, dimensionality reduction, clustering and visualization of single cell ATAC-seq data
+- Being able to run the basic the steps for quality control, normalization, dimensionality reduction, clustering and visualization of single cell ATAC-seq data
 
-- Have a basic understanding of the steps to combine single cell ATAC-seq data with RNA-seq data, to better infer cell types.
+- Being able to combine single cell ATAC-seq data with RNA-seq data, to better infer cell types.
+
+- Being able to run the basic the steps for quality control, normalization, dimensionality reduction, clustering and visualization of single cell multio-omics (RNA-seq + ATAC-seq) data
 
 
 **Table of contents**
 
   * [Setting up](#setting-up)
+    + [Backup method for setting up](#backup-method-for-setting-up)
   * [Analysis of single cell ATAC-seq data](#analysis-of-single-cell-atac-seq-data)
     + [Loading scATAC-seq data](#loading-scatac-seq-data)
     + [Quality control](#quality-control)
     + [Normalization and intial dimensionality reduction.](#normalization-and-intial-dimensionality-reduction)
-  * [Clustering and further dimensionality reduction](#clustering-and-further-dimensionality-reduction)
+    + [Clustering and further dimensionality reduction](#clustering-and-further-dimensionality-reduction)
     + [Motif analysis](#motif-analysis)
       - [Identifying enriched motifs](#identifying-enriched-motifs)
       - [Motif activity scores](#motif-activity-scores)
@@ -24,76 +27,19 @@
     + [Differentially accessible regions, again](#differentially-accessible-regions--again)
     + [Annotating regions](#annotating-regions)
     + [Visualization](#visualization)
+  * [Analysis of multi-omics data](#analysis-of-multi-omics-data)
 
 
 ## Setting up
 
-This exercise will be run on Uppmax, inside a [singularity](https://apptainer.org) container. This is like setting up a new computer inside your Uppmax session, with it's own file system and installed software. Running analysis inside a container has several advantages. Every time we start a container, we allways have exactly the same programs and libraries installed. This makes the analysis stable (as long as the container is not changed we can be sure that the programs will run as expected) and reproducible (we always get exactly the same results). To learn more about containers, please see the course [Tools for Reproducible Research](https://nbis-reproducible-research.readthedocs.io/en/course_2104/singularity/).
-
-To run RStudio inside a singularity container, follow the steps below.
-
-First, start an interactive session on a node. Then, reate a new dircectory for the exercise, and go there
+The easiest way to run this exercise, which we highly recommend, is on Uppmax. Do do this, start an interactive session like you have done for the previous days, and then do
 
 ```
-mkdir sc_lab
-cd sc_lab
-```
+cd <some directory where you work with this course>
 
-Next, make sure we start with a fresh session, with the nessecary directories, and set some variables needed for singularity
-
-```
-rm -r var
-rm -r tmp
-rm -r data
-rm -r R
-rm -r .config
-mkdir -p data
-mkdir -p tmp
-mkdir -p data
-mkdir -p var/lib
-mkdir -p var/run
-
-export SINGULARITYENV_USER=$USER
-export SINGULARITYENV_PASSWORD=dummypwd
-```
-
-Now we can start rserver, which will run inside a singularity container. Here, R will have access to the libraries we need for the lab, as well as the data.
-
-```
-singularity exec   \
-  --bind $(pwd):/home/rstudio  \
-  --bind $(pwd):$HOME   \
-  --bind="/sw/courses/epigenomics/sc_atac_seq:$HOME/data"  \
-  --bind="var:/var"  \
-  --bind="tmp:/tmp"  \
-  /sw/courses/epigenomics/sc_atac_seq/epigenomics2022.sif  \
-  rserver --www-port 8787 --www-address=127.0.0.1
-```
-
-If you don't see any output after typing this command, it means that rserver is running and all is well. But you might also get an error message, saying something like `[rserver] ERROR system error 98 (Address already in use)`. This means that port `8787` is already taken, likely by one of your course mates running this lab on the same node. In that case you can try again, but with port `8788` instead of `8787`. If that one is taken, try `8789`.
-
-Once we got rserver to run r and rstudio, we still need to connect to them. For this, we open **another Uppmax terminal**, and log in to the same node we are using for the interactive session. On this node we will start a web browser, and connect to Rstudio.
-
-```
-ssh -Y <node with interative session>
-firefox &
-```
-
-When firefox starts, go to the URL `http://localhost:8787` (or whatever port you were using for rserver). (You can ignore any warnings that are printed after starting firefox.)
-
-If everything has worked, you should now see Rstudio, and can start the exercise.
-
-
-### Backup method for setting up
-
-If you have problems getting the singularity setup to work, there is a backup plan. We can also use the module system on Uppmax to run the exercise. This works for most people, but can sometimes fail, depending on what other programs and libraries you might have installed previously. In an interactive session, do:
-
-
-```
 mkdir -p sc_lab/data
 cd sc_lab/data
 ln -s /sw/courses/epigenomics/sc_atac_seq/* .
-
 
 module purge
 module load bioinfo-tools
@@ -102,6 +48,72 @@ module load RStudio
 
 rstudio &
 ```
+
+Now you should be ready to go!
+
+
+### Backup method for setting up
+
+If this doesn't work for some reason (e.g. if you don't have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that is also works on Linux and Windows. Also note that R uses around 8Gb RMA running the commands in the exercise.
+
+First, set up the directory where you will work
+
+
+```
+cd <some directory where you work with this course>
+
+mkdir -p sc_lab/data
+cd sc_lab/data
+```
+
+Install mamba, following the instructions [here](https://mamba.readthedocs.io/en/latest/micromamba-installation.html). Then, set up the environment using the commands below. This takes approximately one hour, depending on your network connection:
+
+```
+# download environment_epigenomics2023.yaml
+curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yml > environment_epigenomics2023.yml
+
+mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
+```
+ 
+NOTE: The commands above don't work with new Macs with the new Apple chips (M1, M2 etc.). If you have a Mac from 2021 or later, instead run:
+
+```
+# download environment_epigenomics2023.yaml
+curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yml > environment_epigenomics2023.yml
+
+curl https://raw.githubusercontent.com/fasterius/dotfiles/main/scripts/intel-conda-env.sh > intel-conda-env.sh
+
+chmod a+x intel-conda-env.sh
+
+./intel-conda-env.sh mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
+```
+
+Next download the data needed for the exercise (5.4 Gb, make sure you delete the files when you no longer need them):
+
+```
+# download data for exercise
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz.tbi
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_singlecell.csv
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_10k_v3.rds
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
+```
+
+Finally, activate the environment and start Rstudio. If everything has worked, Rstudio should show up on your screen.
+
+```
+mamba activate environment_epigenomics2023
+open -na Rstudio
+```
+
+If everything has worked, you should now see Rstudio, and can start the exercise.
+
 
 ## Analysis of single cell ATAC-seq data
 
@@ -119,17 +131,22 @@ library(Signac)
 library(Seurat)
 library(GenomeInfoDb)
 library(EnsDb.Hsapiens.v75)
-library(ggplot2)
 library(patchwork)
 library(JASPAR2020)
 library(TFBSTools)
 library(BSgenome.Hsapiens.UCSC.hg19)
+library(BSgenome.Mmusculus.UCSC.mm10)
+library(EnsDb.Mmusculus.v79)
+library(tidyverse)
+library(pheatmap)
+library(scRNAseq)
+library(SingleR)
 set.seed(1234)
 ```
 
 ### Loading scATAC-seq data
 
-The ATAC-seq data, consists of four files, that are created with CellRanger.
+The ATAC-seq data consists of four files, that are created with CellRanger.
 
 - A count file. The rows are regions (peaks) and the colums are cells. Each entry *i,j* is the number of reads mapping to region *i* in cell *j*.
 
@@ -624,3 +641,229 @@ TilePlot(
 	extend.downstream = 40000
 )
 ```
+
+
+## Analysis of multi-omics data
+
+Recently single cell multi-omics methods that run several assays on the same cells have become available. One such method is [Chromium Single Cell Multiome from 10X genomics](https://www.10xgenomics.com/products/single-cell-multiome-atac-plus-gene-expression), which simultaneously measures gene expression (RNA-seq) and chromatin accessibility (ATAC-seq) in the same nuclei. This makes it possible to identift cell types and states based on both gene expression and accessibility. It also makes it easy to use external gene expression data to annotate your cells, and at the same time study the chromatin accessibility in the cells. In this exercise, we will look at a public data set downloaded from 10X genomics, from [embyomic mouse brain](https://www.10xgenomics.com/resources/datasets/fresh-embryonic-e-18-mouse-brain-5-k-1-standard-2-0-0). You will load both the RNA-seq and ATAC-seq data into the same seurat object and do some simple pre-processing like in for the ATAC-seq data above. Then you will run joint clustering and visuaization of the of the combined data set, and finally use the gene expression measurements together with a public data set to annotate the cells.
+
+Before you start, save the seurat object from previous analysis, and then remove all R objects to free up memory.
+
+```
+save(pbmc, file="pbmc.Rda")
+rm(list = ls())
+gc()
+```
+
+Now, read the count tables for the mouse brain data into R. Both these are in the same file, while the meta data is in a separate file.
+
+```
+inputdata_10x <- Read10X_h5("e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5")
+rna_counts <- inputdata_10x$`Gene Expression`
+mt_index <- grepl("^mt-", rownames(rna_counts))
+atac_counts <- inputdata_10x$Peaks
+rm(inputdata_10x)
+
+# Only use 1000 cells, to make commands run faster, and use less memory
+cell_sample <- sample(ncol(rna_counts), 1000) 
+atac_counts <- atac_counts[, cell_sample] 
+rna_counts <- rna_counts[, cell_sample]
+
+metadata <- read.csv(
+  file = "e18_mouse_brain_fresh_5k_per_barcode_metrics.csv",
+  header = TRUE,
+  row.names = 1
+)
+```
+
+We start by creating a `Seurat` object with the RNA-seq data.
+
+```
+seurat_multi <- CreateSeuratObject(counts = rna_counts, meta.data = metadata)
+```
+
+Then we create a `ChromatinAssay` object from the ATAC-seq data, as we did for the ATAC-seq data above. We add the `ChromatinAssay` to the `Seurat` object with the RNA-seq data. Now the same `Seurat` object hold two assays, one for each data type. *Can you see what these assays are called? Can you see how many peaks and expressed genes we have in our data?*
+
+```
+# Extract gene annotations from EnsDb
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Mmusculus.v79)
+seqlevelsStyle(annotations) <- 'UCSC'
+genome(annotations) <- "mm10"
+
+# Load RNA data
+seurat_multi <- CreateSeuratObject(counts = rna_counts, meta.data = metadata)
+
+
+# Load ATAC-seq data
+chrom_assay <- CreateChromatinAssay(
+  counts = atac_counts,
+  sep = c(":", "-"),
+  genome = 'mm10',
+  fragments = 'e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz',
+  min.cells = 10,
+  min.features = 1
+)
+
+
+seurat_multi[["ATAC"]] <- chrom_assay
+
+DefaultAssay(seurat_multi) <- "ATAC"
+
+# Add the gene information to the object
+Annotation(seurat_multi) <- annotations
+
+# Inspect the object we have created
+seurat_multi
+granges(seurat_multi)
+```
+
+Next, we calculate quality measures to filter out low quality cells. This step takes around 10 minutes. It's similar to what was done fot the ATAC-seq data above, but now we have quality measures both from RNA-seq and ATAC-seq. *How many cells are left after filtering?*
+
+```
+# Compute nucleosome signal score per cell
+seurat_multi <- NucleosomeSignal(object = seurat_multi)
+
+# Compute TSS enrichment score per cell
+seurat_multi <- TSSEnrichment(object = seurat_multi, fast = FALSE)
+
+# Add blacklist ratio and fraction of reads in peaks
+seurat_multi$pct_reads_in_peaks <- seurat_multi$atac_peak_region_fragments / seurat_multi$atac_fragments * 100
+
+# Plots
+VlnPlot(
+  object = seurat_multi,
+  features = c('gex_mapped_reads', 'nFeature_RNA', 'nCount_ATAC', 
+               'nFeature_ATAC', 'pct_reads_in_peaks', 'atac_peak_region_fragments',
+               'TSS.enrichment', 'nucleosome_signal'),
+  pt.size = 0.1,
+  ncol = 4
+)
+
+seurat_multi <- subset(
+  x = seurat_multi,
+  subset = atac_peak_region_fragments > 2000 &
+    atac_peak_region_fragments < 20000 &
+    pct_reads_in_peaks > 15 &
+    nucleosome_signal < 4 &
+    TSS.enrichment > 2 &
+    nFeature_RNA > 1000 &
+    nFeature_RNA < 5000
+)
+seurat_multi
+```
+
+Normalization is done on the ATAC-seq and RNA-seq data separately. ATAC-seq data are normalized similar to the example above, while RNA-seq data are normalized using the default seurat methods.
+
+```
+# Normalize ATAC-seq data
+seurat_multi <- RunTFIDF(seurat_multi)
+seurat_multi <- FindTopFeatures(seurat_multi, min.cutoff = 'q5')
+seurat_multi <- RunSVD(seurat_multi, reduction.name = "ATAC_lsi",)
+
+# Normalize RNA-seq data
+DefaultAssay(seurat_multi) <- "RNA"
+seurat_multi <- NormalizeData(seurat_multi, normalization.method = "LogNormalize")
+seurat_multi <- FindVariableFeatures(seurat_multi, selection.method = "vst", nfeatures = 2000)
+seurat_multi <- ScaleData(seurat_multi)
+seurat_multi <- RunPCA(seurat_multi)
+```
+
+Let's visualize the data. First we look at RNA-seq and ATAC-seq data separately. *Do you think RNA-seq and ATAC-seq give similar clusterings of the cells?* 
+
+```
+# Cluster and visualize RNA-seq
+DefaultAssay(seurat_multi) <- "RNA"
+seurat_multi <- FindNeighbors(seurat_multi, reduction = "pca", dims = 1:30)
+seurat_multi <- FindClusters(seurat_multi, resolution = 0.5)
+seurat_multi <- RunUMAP(seurat_multi, dims = 1:30)
+DimPlot(seurat_multi, label = T, label.size = 4, repel = TRUE)
+
+
+# Cluster and visualize ATAC-seq
+DefaultAssay(seurat_multi) <- "ATAC"
+seurat_multi <- FindNeighbors(seurat_multi, reduction = "ATAC_lsi", dims = 2:30)
+seurat_multi <- FindClusters(seurat_multi, resolution = 0.5)
+seurat_multi <- RunUMAP(seurat_multi, dims = 2:30)
+DimPlot(seurat_multi, label = T, label.size = 4, repel = TRUE)
+
+
+# Which clusters from RNA- and ATAC-seq overlap?
+table(seurat_multi$RNA_snn_res.0.5, seurat_multi$ATAC_snn_res.0.5)
+pheatmap(table(seurat_multi$RNA_snn_res.0.5, seurat_multi$ATAC_snn_res.0.5))
+```
+
+Then we analyze the combined data.
+
+```
+# Analyze combined data set, with Weighted Nearest Neighbor method
+seurat_multi <- FindMultiModalNeighbors(seurat_multi, reduction.list = list("pca", "ATAC_lsi"), 
+                                        dims.list = list(1:30, 2:30), k.nn = 30, snn.graph.name = "wsnn_cc",
+                                        knn.graph.name = "wknn_cc", weighted.nn.name = "weighted.nn_cc")
+seurat_multi <- RunUMAP(seurat_multi, nn.name = "weighted.nn_cc", reduction.name = "wnn_cc_umap",
+                        reduction.key = "wnnccUMAP_")
+seurat_multi <- FindClusters(seurat_multi, graph.name = "wsnn_cc", algorithm = 3,
+                             verbose = F) 
+DimPlot(seurat_multi, reduction = "wnn_cc_umap", label = T, label.size = 4, repel = TRUE)
+```
+
+Let's continue with the clusters based on both RNA- and ATAC-seq data. For each of these clusters, we can check if there are genes that are exclusively expressed in that cluster (or at least at much higher levels than in other clusters). These can be used as marker genes, to get an indication of what cell types the clusters contain. Note that when we use multi-omics data we can use the RNA-seq directly to quantify gene expression, without having to approximate it with gene activite scores like we did in the ATAC-seq example. Using the code below, we find the markers for each cluster and plot the most significant ones.
+
+```
+# Cell type markers
+DefaultAssay(seurat_multi) <- "RNA"
+cluster_markers <- FindAllMarkers(seurat_multi, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+
+cluster_markers %>%
+  group_by(cluster) %>%
+  top_n(n = 10, wt = avg_log2FC) -> top10
+DoHeatmap(seurat_multi, features = top10$gene) + NoLegend()
+```
+
+A more systematic approach than just looking a cluster specific genes, is to compare our the cells in our data set to a reference data set with cell type annotations. There are many methods available for this. In this exercise we will use [SingleR](https://www.nature.com/articles/s41590-018-0276-y). Single R basically correlates the cells in a data set to annotated cell types in a reference data set, using only variable genes.
+
+For annotating the cells we will use an annotated data set on mouse brains from [Zeisel et al. (2015)](https://www.science.org/doi/10.1126/science.aaa1934).  We load and preprocess the data set, making sure to pre-process it in exactly the same way as our data. (Note that this data set is from postnatal mice, so it's not ideal for annotating cells from embryos like we have in our data. But here we just use it as an illustration.)
+
+```
+# Load and normalize Zeisel et al. (2015) dataset: https://www.science.org/doi/10.1126/science.aaa1934
+zeisel_sce <- ZeiselBrainData()
+seurat_zeisel <- CreateSeuratObject(counts = assay(zeisel_sce))
+seurat_zeisel <- NormalizeData(seurat_zeisel, normalization.method = "LogNormalize")
+seurat_zeisel <- FindVariableFeatures(seurat_zeisel, selection.method = "vst", nfeatures = 2000)
+seurat_zeisel <- ScaleData(seurat_zeisel)
+seurat_zeisel <- RunPCA(seurat_zeisel)
+```
+
+Then we are ready to run the actual cell annotation. This method procudes a score for each cell in our data set and each cell type in the reference set, indiciting how similar the cell is to the cell type in the reference data.  *Which cell types seem to be represented in our data? Do different clusters of cells seem to contain different cell types?*
+
+```
+# Cell type annotation with singleR
+cell_type_pred <- SingleR(test=as.matrix(GetAssayData(object = seurat_multi, slot = "data")), 
+                          ref=as.matrix(GetAssayData(object = seurat_zeisel, slot = "data")), 
+                          labels=zeisel_sce$level1class,
+                          sd.thresh = 0.5,
+                          de.method="wilcox")
+
+# See how many cell could be annotated, and how did not pass the confidence threshold
+table(Label=cell_type_pred$labels,
+      Lost=is.na(cell_type_pred$pruned.labels))
+
+# Plot scores for each cell and cell type
+plotScoreHeatmap(cell_type_pred)
+
+# Overlaps between clusters and cell types
+tab <- table(cluster=seurat_multi$seurat_clusters, label=cell_type_pred$labels) 
+pheatmap::pheatmap(log10(tab+10))
+
+# Plot the UMAP based on RNA and ATAC, labelled with the cell types
+seurat_multi$cell_annot <- cell_type_pred$labels
+DimPlot(seurat_multi, reduction = "wnn_cc_umap", group.by = "cell_annot", label = TRUE, label.size = 3, repel = TRUE)
+```
+
+After the cell types have been annotated, there is a lot of additional analysis that can be done on the multi-omics data. Some questions that can be investigated are:
+
+- Which promoters and enhancers become active in different cell types and conditions?
+- Can we see if any transcription factor binding sites are active in different cell types and conditions?
+- Are some genes primed for expression, e.g. the promoters show an open chromatin state, but the gene is not expressed yet?
+- ..
+
+Congratulations! You have now reached the end of this exercise, and hopefully you know more about how to analyze single cell ATAC-seq nad multi-omics data than when you started.
