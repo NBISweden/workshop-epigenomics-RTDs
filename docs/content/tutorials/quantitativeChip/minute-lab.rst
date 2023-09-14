@@ -53,7 +53,8 @@ Primary analysis
 Conda environment
 ^^^^^^^^^^^^^^^^^
 
-To make sure you have all the necessary tools to run :code:`minute`, you can set up a conda environment using a :code:`environment.yml` specification file:
+To make sure you have all the necessary tools to run :code:`minute`, you can use a conda environment. There is a pre-made version of this environment on: 
+:code:`/sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute` so you can just:
 
 
 .. code-block:: bash
@@ -61,13 +62,23 @@ To make sure you have all the necessary tools to run :code:`minute`, you can set
   module load bioinfo-tools
   module load conda
 
-  conda env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab 
+  conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
+
+
+If you want to make a fresh install, you can make a new conda environment and install minute in it:
+
+
+.. code-block:: bash
+
+  module load bioinfo-tools
+  module load conda
+
+  conda create -n minute minute
 
 
 .. admonition:: Speed up the process using mamba
 
-   Sometimes :code:`conda` takes long time resolving dependencies on larger environment. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster
-   on the resolution. However, you might still experience some waiting time!
+   Sometimes :code:`conda` takes long time resolving dependencies on large environments. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster on the package dependency resolution. However, you might still experience some waiting time!
 
    If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
 
@@ -76,25 +87,7 @@ To make sure you have all the necessary tools to run :code:`minute`, you can set
     module load bioinfo-tools
     module load conda
 
-    mamba env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab
-
-
-After activating the environment for the first time, you need to install the :code:`minute` package
-in it. You can do this by:
-
-.. code-block:: bash
-
-  cd /proj/epi2022/minute_chip/minute/
-  pip install .
-
-
-If you run into problems configuring this, there is a copy of this conda environment at: :code:`/proj/epi2022/minute_chip/condaenv/minute_lab`
-It should work if you just:
-
-.. code-block:: bash
-
-  export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
-  conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
+    mamba create -n minute minute
 
 
 Files
@@ -152,6 +145,10 @@ Configuration
 
   # Fragment length (insert size)
   fragment_size: 150
+
+  # Max barcode errors allowed
+  max_barcode_errors: 1
+
 
 :code:`libraries.tsv`: Contains information about the demultiplexing. In our case, the barcodes are skipped because we have the already demultiplexed FASTQ files. The raw FASTQ
 mate 1 contains a 6nt UMI followed by a 8nt barcode that identifies the sample.
@@ -286,13 +283,13 @@ If you already got your files, you need to run something like
 
 .. code-block:: bash
 
-  conda activate minute_lab
+  conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
 
   # Move to the directory where you copied the files
   cd my_primary
 
   # Run snakemake on the background, and keep doing something else
-  nohup snakemake -p -s /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+  nohup snakemake -p -s /sw/courses/epigenomics/quantitative_chip_simon/minute/src/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
 
 
 :code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores there are available on your node, you can raise this value.
