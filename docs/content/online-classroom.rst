@@ -50,11 +50,11 @@ Where should you be and when?
 
 **Exercises**
 
-* choose and do whatever works best for you (anything goes basically)
+* You will be moved or move yourself to a smaller breakout room.
+* Once there, choose and do whatever works best for you
 
-  - Main room on Zoom to stay connected
-  - Quiet room on Zoom to stay connected but work in peace
-  - Team room: stay with your team
+  - Stay with your team in the team room (preferred option)
+  - Move to the Quiet room on Zoom to stay connected but work in peace
   - join another team if your team members choose a quiet room or prefer to disconnect
   - you've found a classmate and want to discuss more directly: use Extra (1-5) rooms
   - offline; it is OK to disconnect during exercises
