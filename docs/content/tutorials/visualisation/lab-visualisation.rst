@@ -72,10 +72,10 @@ Assuming we are in the home directory:
 	mkdir deepTools
 	cd deepTools
 
-	ln -s /proj/epi2022/vis/deepTools/chrom.sizes.hg19 
-	ln -s /proj/epi2022/vis/deepTools/refGene_hg19_TSS_chr12_sorted_corr.bed
-	ln -s /proj/epi2022/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam
-	ln -s /proj/epi2022/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam.bai
+	ln -s /proj/epi2023/vis/deepTools/chrom.sizes.hg19 
+	ln -s /proj/epi2023/vis/deepTools/refGene_hg19_TSS_chr12_sorted_corr.bed
+	ln -s /proj/epi2023/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam
+	ln -s /proj/epi2023/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam.bai
 
 
 Normalised coverage tracks
@@ -114,8 +114,8 @@ We can convert it to another format ``bigWig``:
 	
 	If these above steps did not work, you can link the precomputed coverage tracks::
 
-		ln -s /proj/epi2022/vis/deepTools/ENCFF000PET.cov.norm1x.bedgraph
-		ln -s /proj/epi2022/vis/deepTools/hela_1.bw
+		ln -s /proj/epi2023/vis/deepTools/ENCFF000PET.cov.norm1x.bedgraph
+		ln -s /proj/epi2023/vis/deepTools/hela_1.bw
 
 
 
@@ -194,22 +194,22 @@ Let's link the necessary files and produce coverage tracks (assuming we are in `
 	mkdir pyGT
 	cd pyGT
 
-	ln -s /proj/epi2022/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
-	ln -s /proj/epi2022/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
+	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
+	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
 
-	ln -s /proj/epi2022/vis/pyGT/nk_genrich.bed
-	ln -s /proj/epi2022/vis/pyGT/nk_stim_genrich.bed
-	ln -s /proj/epi2022/vis/pyGT/nk_macs_broad.bed
-	ln -s /proj/epi2022/vis/pyGT/nk_stim_macs_broad.bed
-	ln -s /proj/epi2022/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2022/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
-	ln -s /proj/epi2022/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2022/vis/pyGT/ENCFF398QLV.genrich.narrowPeak
+	ln -s /proj/epi2023/vis/pyGT/nk_genrich.bed
+	ln -s /proj/epi2023/vis/pyGT/nk_stim_genrich.bed
+	ln -s /proj/epi2023/vis/pyGT/nk_macs_broad.bed
+	ln -s /proj/epi2023/vis/pyGT/nk_stim_macs_broad.bed
+	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
+	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
+	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
+	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.genrich.narrowPeak
 
-	ln -s /proj/epi2022/vis/pyGT/hg38.refGene.gtf
+	ln -s /proj/epi2023/vis/pyGT/hg38.refGene.gtf
 
-	cp /proj/epi2022/vis/pyGT/tracks1.ini .
-	cp /proj/epi2022/vis/pyGT/tracks2.ini .
+	cp /proj/epi2023/vis/pyGT/tracks1.ini .
+	cp /proj/epi2023/vis/pyGT/tracks2.ini .
 
 
 .. Hint::
@@ -232,10 +232,10 @@ Let's link the necessary files and produce coverage tracks (assuming we are in `
 
    You can create tracks using other settings, combining bin size and smoothing settings. You will need::
 
-		ln -s /proj/epi2022/vis/pyGT/ENCFF045OAB.chr14.proc.bam
-		ln -s /proj/epi2022/vis/pyGT/ENCFF045OAB.chr14.proc.bam.bai
-		ln -s /proj/epi2022/vis/pyGT/ENCFF398QLV.chr14.proc.bam
-		ln -s /proj/epi2022/vis/pyGT/ENCFF398QLV.chr14.proc.bam.bai
+		ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.chr14.proc.bam
+		ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.chr14.proc.bam.bai
+		ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.chr14.proc.bam
+		ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.chr14.proc.bam.bai
 
 
 
@@ -338,7 +338,7 @@ This file is available as ``tracks1.ini``.
 .. code-block:: bash
 	
 	module load conda/latest
-	conda activate /proj/epi2022/vis/conda/pygenometracks
+	conda activate /proj/epi2023/vis/conda/pygenometracks
 
 
 Let's plot one of the regions we have viewed in the ATAC-seq peak detection part ``chr14:93,095,621-93,125,599``
