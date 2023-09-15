@@ -121,7 +121,10 @@ After setting up Rstudio with by either option A or B start by loading the set o
 
 .. code-block:: r
 
-   # Set the correct library path (do NOT do this if setting up the environment with option B, only option A)
+   # Set the correct library path.
+   # Do NOT do this if setting up the environment with option B, only option A
+   # If you accidently do run the following line with option B, you can do *Session -> Restart R*
+   # and run again without this line.
    .libPaths("/sw/apps/R_packages/4.0.0/rackham")
    # load packages required for analysis
    library("limma")
