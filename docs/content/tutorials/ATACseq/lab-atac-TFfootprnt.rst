@@ -97,6 +97,7 @@ Assuming we start at ``analysis``:
 		ln -s ../../results/QC/splitBam/shifted.bam
 		ln -s ../../results/QC/splitBam/shifted.bam.bai
 
+
 We activate R console upon typing ``R`` in the terminal.
 
 :raw-html:`<br />`

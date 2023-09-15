@@ -23,7 +23,7 @@ ChIP-seq data processing tutorial
     :depth: 1
     :local:
 
-**Please note this tutorial is partially redundant with the tutorials for :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`. ChIP-seq specific steps will be marked throughout the text.** 
+**Please note this tutorial is partially redundant with the tutorials for** :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`. **ChIP-seq specific steps will be marked throughout the text.** 
 
 
 
