@@ -338,7 +338,7 @@ This file is available as ``tracks1.ini``.
 .. code-block:: bash
 	
 	module load conda/latest
-	conda activate /proj/epi2023/vis/conda/pygenometracks
+	conda activate /sw/courses/epigenomics/software/conda/pygenometracks
 
 
 Let's plot one of the regions we have viewed in the ATAC-seq peak detection part ``chr14:93,095,621-93,125,599``
