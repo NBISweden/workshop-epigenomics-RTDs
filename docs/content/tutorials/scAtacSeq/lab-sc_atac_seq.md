@@ -40,6 +40,7 @@ cd <some directory where you work with this course>
 mkdir -p sc_lab/data
 cd sc_lab/data
 ln -s /sw/courses/epigenomics/sc_atac_seq/* .
+cd ..
 
 module purge
 module load bioinfo-tools
@@ -54,7 +55,7 @@ Now you should be ready to go!
 
 ### Backup method for setting up
 
-If this doesn't work for some reason (e.g. if you don't have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that is also works on Linux and Windows. Also note that R uses around 8Gb RMA running the commands in the exercise.
+If this doesn't work for some reason (e.g. if you don't have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that is also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
 
 First, set up the directory where you will work
 
@@ -69,7 +70,6 @@ cd sc_lab/data
 Install mamba, following the instructions [here](https://mamba.readthedocs.io/en/latest/micromamba-installation.html). Then, set up the environment using the commands below. This takes approximately one hour, depending on your network connection:
 
 ```
-# download environment_epigenomics2023.yaml
 curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yml > environment_epigenomics2023.yml
 
 mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
@@ -78,7 +78,6 @@ mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.y
 NOTE: The commands above don't work with new Macs with the new Apple chips (M1, M2 etc.). If you have a Mac from 2021 or later, instead run:
 
 ```
-# download environment_epigenomics2023.yaml
 curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yml > environment_epigenomics2023.yml
 
 curl https://raw.githubusercontent.com/fasterius/dotfiles/main/scripts/intel-conda-env.sh > intel-conda-env.sh
@@ -103,6 +102,7 @@ curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_10k_v3.rd
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
+cd ..
 ```
 
 Finally, activate the environment and start Rstudio. If everything has worked, Rstudio should show up on your screen.
@@ -117,7 +117,7 @@ If everything has worked, you should now see Rstudio, and can start the exercise
 
 ## Analysis of single cell ATAC-seq data
 
-[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://satijalab.org/signac/articles/pbmc_vignette.html) and [this](https://satijalab.org/signac/articles/motif_vignette.html) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
+[Seurat](https://satijalab.org/seurat/) is the most widley used tool to analyze scRNA-seq data. Recently, this R package has been extended to support chromatin data, e.g. ATAC. This extension package is called [Signac](https://satijalab.org/signac/index.html). Seurat makes it possbile to integrate data from different technologies. Here, we will look at how Seurat and Signac can be used to integrate scATAC-seq and scRNA-seq data. This exercise is based on [this](https://stuartlab.org/signac/articles/pbmc_vignette), [this](https://satijalab.org/seurat/articles/atacseq_integration_vignette) and [this](https://stuartlab.org/signac/articles/motif_vignette) tutorial, using data on human peripheral blood mononuclear cells (PBMCs) provided by 10x Genomics. We will use data that have already been pre-processed using CellRanger. The starting point is a count matrix, with the number of reads in each peak in each cell, along with some meta data.
 
 We start by loading the required packages: Seurat, Signac, some annotation packages and some packages for plotting.
 
@@ -658,7 +658,7 @@ gc()
 Now, read the count tables for the mouse brain data into R. Both these are in the same file, while the meta data is in a separate file.
 
 ```
-inputdata_10x <- Read10X_h5("e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5")
+inputdata_10x <- Read10X_h5("data/e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5")
 rna_counts <- inputdata_10x$`Gene Expression`
 mt_index <- grepl("^mt-", rownames(rna_counts))
 atac_counts <- inputdata_10x$Peaks
@@ -670,7 +670,7 @@ atac_counts <- atac_counts[, cell_sample]
 rna_counts <- rna_counts[, cell_sample]
 
 metadata <- read.csv(
-  file = "e18_mouse_brain_fresh_5k_per_barcode_metrics.csv",
+  file = "data/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv",
   header = TRUE,
   row.names = 1
 )
@@ -699,7 +699,7 @@ chrom_assay <- CreateChromatinAssay(
   counts = atac_counts,
   sep = c(":", "-"),
   genome = 'mm10',
-  fragments = 'e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz',
+  fragments = 'data/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz',
   min.cells = 10,
   min.features = 1
 )
@@ -824,7 +824,7 @@ A more systematic approach than just looking a cluster specific genes, is to com
 For annotating the cells we will use an annotated data set on mouse brains from [Zeisel et al. (2015)](https://www.science.org/doi/10.1126/science.aaa1934).  We load and preprocess the data set, making sure to pre-process it in exactly the same way as our data. (Note that this data set is from postnatal mice, so it's not ideal for annotating cells from embryos like we have in our data. But here we just use it as an illustration.)
 
 ```
-# Load and normalize Zeisel et al. (2015) dataset: https://www.science.org/doi/10.1126/science.aaa1934
+# Load and normalize Zeisel et al. (2015) dataset
 zeisel_sce <- ZeiselBrainData()
 seurat_zeisel <- CreateSeuratObject(counts = assay(zeisel_sce))
 seurat_zeisel <- NormalizeData(seurat_zeisel, normalization.method = "LogNormalize")
