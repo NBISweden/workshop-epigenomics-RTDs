@@ -34,7 +34,7 @@ These are tutorials for quality control and processing of ChIP-seq data:
 .. toctree::
    :maxdepth: 1
 
-   ChIPseq: narrow peak detection <chipseqProc/lab-chipseq-processing.rst>
+   ChIPseq: data processing, QC and narrow peak detection <chipseqProc/lab-chipseq-processing.rst>
    ChIPseq: broad peaks detection <chipseqBroadPeaks/lab-broadpeaks.rst>
    Peak Annotation <atac-chip-downstream/lab-PeakAnnot.rst>
    Detection of differential occupancy in ChIP-seq data using DiffBind <diffBind/lab-diffBinding.rst>
