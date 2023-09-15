@@ -309,7 +309,7 @@ p2 <- DimPlot(object = pbmc, label = TRUE) +
 p1 | p2
 ```
 
-![Dimension reduction](dimension_reduction.png)
+![Dimension reduction](umap.png)
 
 
 This might be a good time to save your data, so you don't have to re-run all your analysis if you have problems with Uppmax or the network. To load the data later, type `load(file="pbmc.Rda")`.
@@ -450,7 +450,7 @@ MotifPlot(
 )
 ```
 
-![Motif activity](motif_activity.png)
+![Motif activity](motif_plot.png)
 
 
 
@@ -492,7 +492,7 @@ FeaturePlot(
 )
 ```
 
-![Gene activity](gene_activity.png)
+![Gene activity](gene_activity_scores.png)
 
 
 ### Label transfer
@@ -501,7 +501,7 @@ Having computed the gene activity scores, we are now ready to combine the ATAC-s
 
 We start by finding anchors, i.e. paris of cells, one from ATAC-seq and one from RNA-seq. This is done by first projecting bort ATAC-seq and RNA-seq data into the same space, and then find pairs of cells one from ATAC-seq and the other from RNA-seq that are mutual nearest neighbors (MNNs). These are further filtered and the reliable pairs are the used as anchors.
 
-These anchors can then be used to project the ATAC-seq data onto the RNA-seq data and find the cell type annotation of the nearby cells. This way annotations from the RNA-seq data can be transferred to the ATAC-seq data. This is sometimes referred to as **label transfer**
+These anchors can then be used to project the ATAC-seq data onto the RNA-seq data and find the cell type annotation of the nearby cells. This way annotations from the RNA-seq data can be transferred to the ATAC-seq data. This is sometimes referred to as **label transfer**.
 
 *How well do you think this worked? Can you see if some cells types are missing or merged?*
 
@@ -561,7 +561,7 @@ pbmc <- RenameIdents(
   '10' = 'pDC')
 ```
 
-![Labelled clusters](cluster_labels.png)
+![Labelled clusters](label_transfer.png)
 
 
 
@@ -806,6 +806,8 @@ seurat_multi <- FindClusters(seurat_multi, graph.name = "wsnn_cc", algorithm = 3
 DimPlot(seurat_multi, reduction = "wnn_cc_umap", label = T, label.size = 4, repel = TRUE)
 ```
 
+![Umap multi-omics](umap_multi.png)
+
 Let's continue with the clusters based on both RNA- and ATAC-seq data. For each of these clusters, we can check if there are genes that are exclusively expressed in that cluster (or at least at much higher levels than in other clusters). These can be used as marker genes, to get an indication of what cell types the clusters contain. Note that when we use multi-omics data we can use the RNA-seq directly to quantify gene expression, without having to approximate it with gene activite scores like we did in the ATAC-seq example. Using the code below, we find the markers for each cluster and plot the most significant ones.
 
 ```
@@ -818,6 +820,9 @@ cluster_markers %>%
   top_n(n = 10, wt = avg_log2FC) -> top10
 DoHeatmap(seurat_multi, features = top10$gene) + NoLegend()
 ```
+
+![Marker gene expression](marker_genes.png)
+
 
 A more systematic approach than just looking a cluster specific genes, is to compare our the cells in our data set to a reference data set with cell type annotations. There are many methods available for this. In this exercise we will use [SingleR](https://www.nature.com/articles/s41590-018-0276-y). Single R basically correlates the cells in a data set to annotated cell types in a reference data set, using only variable genes.
 
