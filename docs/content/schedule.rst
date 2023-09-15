@@ -93,6 +93,8 @@ and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(onl
 
 **16:00 - 17:00** Daily challenge 
 
+:raw-html:`<br />`
+
 
 Thursday (21 September 2023)
 --------------------------------
@@ -116,6 +118,8 @@ Thursday (21 September 2023)
 **16:00 - 17:00** Daily challenge 
 
 
+:raw-html:`<br />`
+
 
 Friday (22 September 2023)
 --------------------------------
@@ -132,7 +136,7 @@ Friday (22 September 2023)
 
 **12:00 - 13:00** lunch (offline)
 
-13.00 - 14.00 Inspirational talk: The role of PRC2-mediated gene silencing for maintenance of differentiated dopaminergic and serotonergic neuronal identity and function in healthy aging and disease. (Johan Holmberg)
+**13.00 - 14.00** Inspirational talk: The role of PRC2-mediated gene silencing for maintenance of differentiated dopaminergic and serotonergic neuronal identity and function in healthy aging and disease. (Johan Holmberg)
 
 **14.00 - 14.05** Introduction to exercises *(online session)*
 
