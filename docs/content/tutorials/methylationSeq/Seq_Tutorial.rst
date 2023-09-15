@@ -260,9 +260,9 @@ We can further remove known C -> T mutations. These locations should be removed 
 .. code-block:: r
 
    # give the locations of 2 example SNPs
-   mut <- GRanges(seqnames=c("chr21","chr21"),
-            ranges=IRanges(start=c(9853296, 9853326),
-                           end=c( 9853296,9853326)))
+   mut <- GRanges(seqnames=c("chr1","chr18"),
+            ranges=IRanges(start=c(3020690, 9853326),
+                           end=c(3020690,9853326)))
 
    # select CpGs that do not overlap with mutations
    meth <- meth[!as(meth,"GRanges") %over% mut, ]
