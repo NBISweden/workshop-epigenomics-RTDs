@@ -11,9 +11,9 @@ ChIP-seq data processing tutorial
 
 **Learning outcomes**
 
-- understand and apply standard data processing of the ChIP-seq libraries
+- apply standard data processing of the ChIP-seq libraries
 
-- be able to assess quality of the ChIP-seq libraries with a range of quality metrics
+- assess quality of the ChIP-seq libraries with a range of quality metrics
 
 - work interactively with ChIP-seq signal using Integrative Genome Viewer
 
@@ -23,6 +23,7 @@ ChIP-seq data processing tutorial
     :depth: 1
     :local:
 
+**Please note this tutorial is partially redundant with the tutorials for :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`. ChIP-seq specific steps will be marked throughout the text.** 
 
 
 
@@ -164,8 +165,8 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /proj/epi2022/chipseq/scripts/chipseq_data.sh .
-  cp /proj/epi2022/chipseq/scripts/chipseq_env.sh .
+  cp /proj/epi2023/chipseq/scripts/chipseq_data.sh .
+  cp /proj/epi2023/chipseq/scripts/chipseq_env.sh .
 
 
   source chipseq_env.sh 
@@ -202,6 +203,8 @@ Part I: Quality control and alignment processing
 
 Strand Cross Correlation
 -------------------------
+
+**ChIP-seq specific**
 
 Strand cross-correlation is based on the fact that a high-quality ChIP-seq experiment produces significant clustering of enriched DNA sequence tags at locations bound by the protein of interest. Density of the sequence tags mapped to forward and reverse strands is centered around the binding site.
 
