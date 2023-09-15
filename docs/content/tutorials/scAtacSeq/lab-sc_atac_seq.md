@@ -12,24 +12,24 @@
 **Table of contents**
 
 - [Integrating scATAC-seq and scRNA-seq data](#integrating-scatac-seq-and-scrna-seq-data)
-	- [Learning outcomes](#learning-outcomes)
-	- [Setting up](#setting-up)
-		- [Backup method for setting up](#backup-method-for-setting-up)
-	- [Analysis of single cell ATAC-seq data](#analysis-of-single-cell-atac-seq-data)
-		- [Loading scATAC-seq data](#loading-scatac-seq-data)
-		- [Quality control](#quality-control)
-		- [Normalization and intial dimensionality reduction](#normalization-and-intial-dimensionality-reduction)
-		- [Clustering and further dimensionality reduction](#clustering-and-further-dimensionality-reduction)
-		- [Motif analysis](#motif-analysis)
-			- [Identifying enriched motifs](#identifying-enriched-motifs)
-			- [Motif activity scores](#motif-activity-scores)
-	- [Integrate with scRNA-seq data](#integrate-with-scrna-seq-data)
-		- [Gene activity matrix](#gene-activity-matrix)
-		- [Label transfer](#label-transfer)
-		- [Differentially accessible regions, again](#differentially-accessible-regions-again)
-		- [Annotating regions](#annotating-regions)
-		- [Visualization](#visualization)
-	- [Analysis of multi-omics data](#analysis-of-multi-omics-data)
+  - [Learning outcomes](#learning-outcomes)
+  - [Setting up](#setting-up)
+    - [Backup method for setting up](#backup-method-for-setting-up)
+  - [Analysis of single cell ATAC-seq data](#analysis-of-single-cell-atac-seq-data)
+    - [Loading scATAC-seq data](#loading-scatac-seq-data)
+    - [Quality control](#quality-control)
+    - [Normalization and initial dimensionality reduction](#normalization-and-initial-dimensionality-reduction)
+    - [Clustering and further dimensionality reduction](#clustering-and-further-dimensionality-reduction)
+    - [Motif analysis](#motif-analysis)
+      - [Identifying enriched motifs](#identifying-enriched-motifs)
+      - [Motif activity scores](#motif-activity-scores)
+  - [Integrate with scRNA-seq data](#integrate-with-scrna-seq-data)
+    - [Gene activity matrix](#gene-activity-matrix)
+    - [Label transfer](#label-transfer)
+    - [Differentially accessible regions, again](#differentially-accessible-regions-again)
+    - [Annotating regions](#annotating-regions)
+    - [Visualization](#visualization)
+  - [Analysis of multi-omics data](#analysis-of-multi-omics-data)
 
 
 ## Setting up
@@ -169,24 +169,24 @@ counts <- Read10X_h5(filename = "data/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h
 counts <- counts[, sample(ncol(counts), 2000)] # Only use 2000 cells, to make commands run faster.
 
 metadata <- read.csv(
-	file = "data/atac_v1_pbmc_10k_singlecell.csv",
-	header = TRUE,
-	row.names = 1
+    file = "data/atac_v1_pbmc_10k_singlecell.csv",
+    header = TRUE,
+    row.names = 1
 )
 
 chrom_assay <- CreateChromatinAssay(
-	counts = counts,
-	sep = c(":", "-"),
-	genome = 'hg19',
-	fragments = 'data/atac_v1_pbmc_10k_fragments.tsv.gz',
-	min.cells = 10,
-	min.features = 200
+    counts = counts,
+    sep = c(":", "-"),
+    genome = 'hg19',
+    fragments = 'data/atac_v1_pbmc_10k_fragments.tsv.gz',
+    min.cells = 10,
+    min.features = 200
 )
 
 pbmc <- CreateSeuratObject(
-	counts = chrom_assay,
-	assay = "peaks",
-	meta.data = metadata
+    counts = chrom_assay,
+    assay = "peaks",
+    meta.data = metadata
 )
 
 # Extract gene annotations from EnsDb
@@ -246,11 +246,11 @@ FragmentHistogram(object = pbmc, group.by = 'nucleosome_group')
 
 ```R
 VlnPlot(
-	object = pbmc,
-	features = c('pct_reads_in_peaks', 'peak_region_fragments',
-				 'TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal'),
-	pt.size = 0.1,
-	ncol = 3
+    object = pbmc,
+    features = c('pct_reads_in_peaks', 'peak_region_fragments',
+                 'TSS.enrichment', 'blacklist_ratio', 'nucleosome_signal'),
+    pt.size = 0.1,
+    ncol = 3
 )
 ```
 
@@ -261,19 +261,19 @@ After calculating the qualtiy statistics, we apply (some rather arbitrary) cutof
 
 ```R
 pbmc <- subset(
-	x = pbmc,
-	subset = peak_region_fragments > 3000 &
-		peak_region_fragments < 20000 &
-		pct_reads_in_peaks > 15 &
-		blacklist_ratio < 0.05 &
-		nucleosome_signal < 4 &
-		TSS.enrichment > 2
+    x = pbmc,
+    subset = peak_region_fragments > 3000 &
+             peak_region_fragments < 20000 &
+             pct_reads_in_peaks > 15 &
+             blacklist_ratio < 0.05 &
+             nucleosome_signal < 4 &
+             TSS.enrichment > 2
 )
 pbmc
 ```
 
 
-### Normalization and intial dimensionality reduction
+### Normalization and initial dimensionality reduction
 
 **Normalization:** `Signac` performs term frequency-inverse document frequency (TF-IDF) normalization. This is a two-step normalization procedure, often used in natural language processing, that both normalizes across cells to correct for differences in sequencing depth, and across peaks to give higher values to more rare peaks.
 
@@ -301,12 +301,12 @@ pbmc <- FindNeighbors(object = pbmc, reduction = 'lsi', dims = 2:34, k.param=13)
 pbmc <- FindClusters(object = pbmc, verbose = FALSE)
 
 p1 <- DimPlot(object = pbmc, label = TRUE, dims = c(2, 3), reduction = "lsi") +
-	NoLegend()  +
-	ggtitle('SVD')
+    NoLegend()  +
+    ggtitle('SVD')
 
 p2 <- DimPlot(object = pbmc, label = TRUE) +
-	NoLegend() +
-	ggtitle('UMAP')
+    NoLegend() +
+    ggtitle('UMAP')
 
 p1 | p2
 ```
@@ -334,16 +334,16 @@ First, we will look at motifs that are enriched in a set of peaks, *e.g.* in pea
 ```R
 # Get a list of motif position frequency matrices from the JASPAR database
 pfm <- getMatrixSet(
-	x = JASPAR2020,
-	opts = list(species = "Homo sapiens", all_versions = FALSE)
+    x = JASPAR2020,
+    opts = list(species = "Homo sapiens", all_versions = FALSE)
 )
 
 # Scan the DNA sequence of each peak for the presence of each motif
 motif.matrix <- CreateMotifMatrix(
-	features = granges(pbmc$peaks),
-	pwm = pfm,
-	genome = 'hg19',
-	use.counts = FALSE
+    features = granges(pbmc$peaks),
+    pwm = pfm,
+    genome = 'hg19',
+    use.counts = FALSE
 )
 dim(motif.matrix)
 as.matrix(motif.matrix[1:10,1:10])
@@ -353,16 +353,16 @@ as.matrix(motif.matrix[1:10,1:10])
 ```R
 # Create a new Mofif object to store the results
 motif <- CreateMotifObject(
-	data = motif.matrix,
-	pwm = pfm
+    data = motif.matrix,
+    pwm = pfm
 )
 
 # Add the Motif object to the assay
 pbmc <- SetAssayData(
-	object = pbmc,
-	assay = 'peaks',
-	slot = 'motifs',
-	new.data = motif
+    object = pbmc,
+    assay = 'peaks',
+    slot = 'motifs',
+    new.data = motif
 )
 pbmc$peaks@motifs
 
@@ -372,13 +372,13 @@ pbmc$peaks <- RegionStats(object = pbmc$peaks, genome = BSgenome.Hsapiens.UCSC.h
 
 # Find differentially accessible peaks in cluster 0 compared to cluster 1
 da_peaks <- FindMarkers(
-	object = pbmc,
-	ident.1 = "0",
-	ident.2 = "1",
-	only.pos = TRUE,
-	min.pct = 0.2,
-	test.use = 'LR',
-	latent.vars = 'peak_region_fragments'
+    object = pbmc,
+    ident.1 = "0",
+    ident.2 = "1",
+    only.pos = TRUE,
+    min.pct = 0.2,
+    test.use = 'LR',
+    latent.vars = 'peak_region_fragments'
 )
 
 # Get the top differentially accessible peaks, with lowest p-values
@@ -386,8 +386,8 @@ top.da.peak <- rownames(da_peaks[da_peaks$p_val < 1e-20, ])
 
 # Find motifs enriched in these top differentially accessible peaks
 enriched.motifs <- FindMotifs(
-	object = pbmc,
-	features = top.da.peak
+    object = pbmc,
+    features = top.da.peak
 )
 head(enriched.motifs)
 ```
@@ -395,8 +395,8 @@ head(enriched.motifs)
 ```R
 # Have a look at the most enriched motifs. Do you anything particular about these motifs?
 MotifPlot(
-	object = pbmc,
-	motifs = head(rownames(enriched.motifs))
+    object = pbmc,
+    motifs = head(rownames(enriched.motifs))
 )
 ```
 
@@ -411,9 +411,9 @@ This takes a while to run (around 5 minutes on Uppmax).
 ```R
 # Use chromVAR to calculate the motif activities of all motifs in all cells.
 pbmc <- RunChromVAR(
-	object = pbmc,
-	genome = BSgenome.Hsapiens.UCSC.hg19,
-	verbose = TRUE
+    object = pbmc,
+    genome = BSgenome.Hsapiens.UCSC.hg19,
+    verbose = TRUE
 )
 
 # Look at results
@@ -423,11 +423,11 @@ GetAssayData(pbmc$chromvar)[1:10,1:3]
 # Have a look at the activitiy of the FOS motif, which has id MA0476.1
 DefaultAssay(pbmc) <- 'chromvar'
 FeaturePlot(
-	object = pbmc,
-	features = "MA0476.1",
-	min.cutoff = 'q10',
-	max.cutoff = 'q90',
-	pt.size = 0.1
+    object = pbmc,
+    features = "MA0476.1",
+    min.cutoff = 'q10',
+    max.cutoff = 'q90',
+    pt.size = 0.1
 )
 ```
 
@@ -435,19 +435,19 @@ FeaturePlot(
 ```R
 # Look for motifs that have differential activity between clusters 0 and 1.
 differential.activity <- FindMarkers(
-	object = pbmc,
-	ident.1 = '0',
-	ident.2 = '1',
-	only.pos = TRUE,
-	test.use = 'LR',
-	min.pct = 0.2,
-	latent.vars = 'nCount_peaks'
+    object = pbmc,
+    ident.1 = '0',
+    ident.2 = '1',
+    only.pos = TRUE,
+    test.use = 'LR',
+    min.pct = 0.2,
+    latent.vars = 'nCount_peaks'
 )
 
 MotifPlot(
-  object = pbmc,
-  motifs = head(rownames(differential.activity)),
-  assay = 'peaks'
+    object = pbmc,
+    motifs = head(rownames(differential.activity)),
+    assay = 'peaks'
 )
 ```
 
@@ -473,10 +473,10 @@ gene.activities <- GeneActivity(pbmc)
 # Add the gene activity matrix to the Seurat object as a new assay and normalize it
 pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
 pbmc <- NormalizeData(
-	object = pbmc,
-	assay = 'RNA',
-	normalization.method = 'LogNormalize',
-	scale.factor = median(pbmc$nCount_RNA)
+    object = pbmc,
+    assay = 'RNA',
+    normalization.method = 'LogNormalize',
+    scale.factor = median(pbmc$nCount_RNA)
 )
 GetAssayData(pbmc$RNA)[1:10,1:3]
 ```
@@ -485,11 +485,11 @@ GetAssayData(pbmc$RNA)[1:10,1:3]
 ```R
 DefaultAssay(pbmc) <- 'RNA'
 FeaturePlot(
-	object = pbmc,
-	features = c('MS4A1', 'CD3D', 'LEF1', 'NKG7', 'TREM1', 'LYZ'),
-	pt.size = 0.1,
-	max.cutoff = 'q95',
-	ncol = 3
+    object = pbmc,
+    features = c('MS4A1', 'CD3D', 'LEF1', 'NKG7', 'TREM1', 'LYZ'),
+    pt.size = 0.1,
+    max.cutoff = 'q95',
+    ncol = 3
 )
 ```
 
@@ -512,16 +512,16 @@ pbmc_rna <- readRDS("data/pbmc_10k_v3.rds")
 
 # Find anchors
 transfer.anchors <- FindTransferAnchors(
-	reference = pbmc_rna,
-	query = pbmc,
-	reduction = 'cca'
+    reference = pbmc_rna,
+    query = pbmc,
+    reduction = 'cca'
 )
 
 predicted.labels <- TransferData(
-	anchorset = transfer.anchors,
-	refdata = pbmc_rna$celltype,
-	weight.reduction = pbmc[['lsi']],
-	dims = 2:30
+    anchorset = transfer.anchors,
+    refdata = pbmc_rna$celltype,
+    weight.reduction = pbmc[['lsi']],
+    dims = 2:30
 )
 
 pbmc <- AddMetaData(object = pbmc, metadata = predicted.labels)
@@ -529,37 +529,38 @@ gc()
 
 
 plot1 <- DimPlot(
-	object = pbmc_rna,
-	group.by = 'celltype',
-	label = TRUE,
-	repel = TRUE) + NoLegend() + ggtitle('scRNA-seq')
+    object = pbmc_rna,
+    group.by = 'celltype',
+    label = TRUE,
+    repel = TRUE) + NoLegend() + ggtitle('scRNA-seq')
 
 plot2 <- DimPlot(
-	object = pbmc,
-	group.by = 'predicted.id',
-	label = TRUE,
-	repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
+    object = pbmc,
+    group.by = 'predicted.id',
+    label = TRUE,
+    repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
 
 plot3 <- DimPlot(
-  object = pbmc,
-  label = TRUE,
-  repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
+    object = pbmc,
+    label = TRUE,
+    repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
 
 plot1 | plot2 | plot3
 
 pbmc <- RenameIdents(
-	object = pbmc,
-	'0' = 'CD14 Mono',
-	'1' = 'CD4/8 Naive',
-	'2' = 'CD4 Memory (DN T)',
-	'3' = 'CD14 Mono',
-	'4' = 'CD8 Effector',
-	'5' = 'pre-B/pro-B',
-	'6' = 'NK dim/bright',
-	'7' = 'Double neg. T',
-	'8' = 'CD16 Mono',
-	'9' = 'DC',
-  '10' = 'pDC')
+    object = pbmc,
+    '0' = 'CD14 Mono',
+    '1' = 'CD4/8 Naive',
+    '2' = 'CD4 Memory (DN T)',
+    '3' = 'CD14 Mono',
+    '4' = 'CD8 Effector',
+    '5' = 'pre-B/pro-B',
+    '6' = 'NK dim/bright',
+    '7' = 'Double neg. T',
+    '8' = 'CD16 Mono',
+    '9' = 'DC',
+    '10' = 'pDC'
+)
 ```
 
 ![Labelled clusters](label_transfer.png)
@@ -577,12 +578,12 @@ DefaultAssay(pbmc) <- 'peaks'
 
 # Find differentially acessible regions
 da_peaks <- FindMarkers(
-	object = pbmc,
-	ident.1 = "CD4/8 Naive",
-	ident.2 = "CD14 Mono",
-	min.pct = 0.2,
-	test.use = 'LR',
-	latent.vars = 'peak_region_fragments'
+    object = pbmc,
+    ident.1 = "CD4/8 Naive",
+    ident.2 = "CD14 Mono",
+    min.pct = 0.2,
+    test.use = 'LR',
+    latent.vars = 'peak_region_fragments'
 )
 head(da_peaks)
 ```
@@ -590,16 +591,16 @@ head(da_peaks)
 ```R
 # Plot the signal for the most differentially acessable region.
 plot1 <- VlnPlot(
-	object = pbmc,
-	features = rownames(da_peaks)[1],
-	pt.size = 0.1,
-	idents = c("CD4/8 Naive","CD14 Mono")
+    object = pbmc,
+    features = rownames(da_peaks)[1],
+    pt.size = 0.1,
+    idents = c("CD4/8 Naive","CD14 Mono")
 )
 
 plot2 <- FeaturePlot(
-	object = pbmc,
-	features = rownames(da_peaks)[1],
-	pt.size = 0.1
+    object = pbmc,
+    features = rownames(da_peaks)[1],
+    pt.size = 0.1
 )
 
 plot1 | plot2
@@ -626,21 +627,21 @@ It is often informative to plot the ATAC-seq signal for a particular genomic reg
 
 ```R
 CoveragePlot(
-	object = pbmc,
-	region = rownames(da_peaks)[1],
-	extend.upstream = 40000,
-	extend.downstream = 40000,
-	peaks=TRUE
+    object = pbmc,
+    region = rownames(da_peaks)[1],
+    extend.upstream = 40000,
+    extend.downstream = 40000,
+    peaks=TRUE
 )
 ```
 
 ```R
 TilePlot(
-	object = pbmc,
-	region = rownames(da_peaks)[1],
-	idents = c('CD14 Mono', 'CD4/8 Naive'),
-	extend.upstream = 40000,
-	extend.downstream = 40000
+    object = pbmc,
+    region = rownames(da_peaks)[1],
+    idents = c('CD14 Mono', 'CD4/8 Naive'),
+    extend.upstream = 40000,
+    extend.downstream = 40000
 )
 ```
 
@@ -672,9 +673,9 @@ atac_counts <- atac_counts[, cell_sample]
 rna_counts <- rna_counts[, cell_sample]
 
 metadata <- read.csv(
-  file = "data/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv",
-  header = TRUE,
-  row.names = 1
+    file = "data/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv",
+    header = TRUE,
+    row.names = 1
 )
 ```
 
@@ -698,12 +699,12 @@ seurat_multi <- CreateSeuratObject(counts = rna_counts, meta.data = metadata)
 
 # Load ATAC-seq data
 chrom_assay <- CreateChromatinAssay(
-  counts = atac_counts,
-  sep = c(":", "-"),
-  genome = 'mm10',
-  fragments = 'data/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz',
-  min.cells = 10,
-  min.features = 1
+    counts = atac_counts,
+    sep = c(":", "-"),
+    genome = 'mm10',
+    fragments = 'data/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz',
+    min.cells = 10,
+    min.features = 1
 )
 
 
@@ -733,23 +734,23 @@ seurat_multi$pct_reads_in_peaks <- seurat_multi$atac_peak_region_fragments / seu
 
 # Plots
 VlnPlot(
-  object = seurat_multi,
-  features = c('gex_mapped_reads', 'nFeature_RNA', 'nCount_ATAC', 
-               'nFeature_ATAC', 'pct_reads_in_peaks', 'atac_peak_region_fragments',
-               'TSS.enrichment', 'nucleosome_signal'),
-  pt.size = 0.1,
-  ncol = 4
+    object = seurat_multi,
+    features = c('gex_mapped_reads', 'nFeature_RNA', 'nCount_ATAC', 
+                 'nFeature_ATAC', 'pct_reads_in_peaks', 'atac_peak_region_fragments',
+                 'TSS.enrichment', 'nucleosome_signal'),
+    pt.size = 0.1,
+    ncol = 4
 )
 
 seurat_multi <- subset(
-  x = seurat_multi,
-  subset = atac_peak_region_fragments > 2000 &
-    atac_peak_region_fragments < 20000 &
-    pct_reads_in_peaks > 15 &
-    nucleosome_signal < 4 &
-    TSS.enrichment > 2 &
-    nFeature_RNA > 1000 &
-    nFeature_RNA < 5000
+    x = seurat_multi,
+    subset = atac_peak_region_fragments > 2000 &
+             atac_peak_region_fragments < 20000 &
+             pct_reads_in_peaks > 15 &
+             nucleosome_signal < 4 &
+             TSS.enrichment > 2 &
+             nFeature_RNA > 1000 &
+             nFeature_RNA < 5000
 )
 seurat_multi
 ```

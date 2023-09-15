@@ -8,15 +8,15 @@
 
 ### Table of contents
 - [Genomic overlaps](#genomic-overlaps)
-	- [Learning outcomes](#learning-outcomes)
-		- [Table of contents](#table-of-contents)
-	- [Setting up](#setting-up)
-	- [Introduction to genomic ranges](#introduction-to-genomic-ranges)
-		- [Operations on a single GRanges object](#operations-on-a-single-granges-object)
-		- [Comparing GRanges](#comparing-granges)
-	- [Statistical significance of overlaps](#statistical-significance-of-overlaps)
-	- [Example with insulator elements](#example-with-insulator-elements)
-		- [Different sampling methods](#different-sampling-methods)
+  - [Learning outcomes](#learning-outcomes)
+    - [Table of contents](#table-of-contents)
+  - [Setting up](#setting-up)
+  - [Introduction to genomic ranges](#introduction-to-genomic-ranges)
+    - [Operations on a single GRanges object](#operations-on-a-single-granges-object)
+    - [Comparing GRanges](#comparing-granges)
+  - [Statistical significance of overlaps](#statistical-significance-of-overlaps)
+  - [Example with insulator elements](#example-with-insulator-elements)
+    - [Different sampling methods](#different-sampling-methods)
 
 ## Setting up
 
@@ -221,17 +221,17 @@ ctcf.1 <- import.gff3("ctcf.gff3")
 
 allDataSets <- list(insv.2.6=insv.2.6,
                     insv.6.12=insv.6.12,
-		    beaf32=beaf32,
-		    cp190=cp190,
-		    ctcf.1=ctcf.1)
+                    beaf32=beaf32,
+                    cp190=cp190,
+                    ctcf.1=ctcf.1)
 
 # These data sets are from different studies, and on different formats. 
 # We have to make sure that they are all on the same format, so that all chromosome names match.
 lapply(allDataSets, seqlevelsStyle)
 
 for(i in 1:length(allDataSets)){
-	seqlevelsStyle(allDataSets[[i]])<-"UCSC"
-	allDataSets[[i]] <- filterChromosomes(allDataSets[[i]], organism = "dm3")
+    seqlevelsStyle(allDataSets[[i]])<-"UCSC"
+    allDataSets[[i]] <- filterChromosomes(allDataSets[[i]], organism = "dm3")
 }
 
 lapply(allDataSets, seqlevelsStyle)
@@ -246,9 +246,9 @@ overlapFraction <- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets)
 rownames(overlapFraction) <- names(allDataSets)
 colnames(overlapFraction) <- names(allDataSets)
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		overlapFraction[i,j] <-	numOverlaps(A=allDataSets[[i]], B=allDataSets[[j]])/length(allDataSets[[i]])
-	}
+    for(j in 1:length(allDataSets)){
+        overlapFraction[i,j] <-	numOverlaps(A=allDataSets[[i]], B=allDataSets[[j]])/length(allDataSets[[i]])
+    }
 }
 round(overlapFraction,2)
 
@@ -273,9 +273,9 @@ overlapFraction <- matrix(NA, nrow=length(allDataSets), ncol=length(allDataSets)
 rownames(overlapFraction) <- names(allDataSets)
 colnames(overlapFraction) <- names(allDataSets)
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		overlapFraction[i,j] <-	numOverlaps(A=allDataSets[[i]], B=allDataSets[[j]])/length(allDataSets[[i]])
-	}
+    for(j in 1:length(allDataSets)){
+        overlapFraction[i,j] <-	numOverlaps(A=allDataSets[[i]], B=allDataSets[[j]])/length(allDataSets[[i]])
+    }
 }
 round(overlapFraction,2)
 
@@ -300,29 +300,29 @@ colnames(overlapZ) <- names(allDataSets)
 nTimes <- 50
 
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		if(i<j){
-			permRes <- overlapPermTest(A=allDataSets[[i]],
-			                           B=allDataSets[[j]], 
-						               ntimes=nTimes, 
-						               alternative="greater", 
-						               genome=getGenome(dm3), 
-						               mc.set.seed=FALSE, 
-						               verbose=FALSE)
-			overlapP[i,j] <- permRes$numOverlaps$pval
-			overlapZ[i,j] <- permRes$numOverlaps$zscore
-		}
-	}
+    for(j in 1:length(allDataSets)){
+        if(i<j){
+            permRes <- overlapPermTest(A=allDataSets[[i]],
+                                       B=allDataSets[[j]], 
+                                       ntimes=nTimes, 
+                                       alternative="greater", 
+                                       genome=getGenome(dm3), 
+                                       mc.set.seed=FALSE, 
+                                       verbose=FALSE)
+            overlapP[i,j] <- permRes$numOverlaps$pval
+            overlapZ[i,j] <- permRes$numOverlaps$zscore
+        }
+    }
 }
 
 # Fill in the missing values.
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		if(i>j){
-			overlapP[i,j] <- overlapP[j,i]
-			overlapZ[i,j] <- overlapZ[j,i]
-		}
-	}
+    for(j in 1:length(allDataSets)){
+        if(i>j){
+            overlapP[i,j] <- overlapP[j,i]
+            overlapZ[i,j] <- overlapZ[j,i]
+        }
+    }
 }
 diag(overlapP) <- 0
 diag(overlapZ) <- NA
@@ -367,29 +367,29 @@ colnames(overlapZ) <- names(allDataSets)
 nTimes <- 500
 
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		if(i<j){
-			permRes <- permTest(A=allDataSets[[i]], 
-			                    B=allDataSets[[j]], 
-					            ntimes=nTimes,
-					            randomize.function=resampleRegions, 
-					            universe=us,
-					            alternative="greater", evaluate.function=numOverlaps,
-					            count.once=TRUE, mc.set.seed=FALSE, mc.cores=4)
-			overlapP[i,j] <- permRes$numOverlaps$pval
-			overlapZ[i,j] <- permRes$numOverlaps$zscore
-		}
-	}
+    for(j in 1:length(allDataSets)){
+        if(i<j){
+            permRes <- permTest(A=allDataSets[[i]], 
+                                B=allDataSets[[j]], 
+                                ntimes=nTimes,
+                                randomize.function=resampleRegions, 
+                                universe=us,
+                                alternative="greater", evaluate.function=numOverlaps,
+                                count.once=TRUE, mc.set.seed=FALSE, mc.cores=4)
+            overlapP[i,j] <- permRes$numOverlaps$pval
+            overlapZ[i,j] <- permRes$numOverlaps$zscore
+        }
+    }
 }
 
 # Fill in the missing values.
 for(i in 1:length(allDataSets)){
-	for(j in 1:length(allDataSets)){
-		if(i>j){
-			overlapP[i,j] <- overlapP[j,i]
-			overlapZ[i,j] <- overlapZ[j,i]
-		}
-	}
+    for(j in 1:length(allDataSets)){
+        if(i>j){
+            overlapP[i,j] <- overlapP[j,i]
+            overlapZ[i,j] <- overlapZ[j,i]
+        }
+    }
 }
 diag(overlapP) <- 0
 diag(overlapZ) <- NA
