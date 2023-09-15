@@ -149,7 +149,7 @@ We will be working in ``R`` in this section. First, we load the required version
 
 We activate R console upon typing ``R`` in the terminal. 
 
-It is possible to use a more sophisticated graphical interface to R, however, some steps in this tutorial can be time consuming, therefore simple amy be better in this case.
+It is possible to use a more sophisticated graphical interface to R, however, some steps in this tutorial can be time consuming, therefore using a simple terminal interface, while not very conveninet, may be more efficient in this case.
 
 
 We begin by loading necessary libraries:
