@@ -11,6 +11,7 @@ Detection of broad peaks from ChIP-seq data
 **Learning outcomes**
 
 - be able to assess the quality of ChIP-seq data for factors with broad occupancy pattern
+
 - be able to detect regions of enrichment for factors with broad occupancy pattern
 
 
@@ -127,9 +128,9 @@ Cross-correlation and related metrics
 ----------------------------------------
 
 The files discussed in this section can be accessed at 
-``/proj/epi2022/broad_peaks/results/qc``
+``/proj/epi2023/broad_peaks/results/qc``
 
-These metrics have been developed with application to point source (i.e. TF) ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point-source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
+These metrics have been developed with application to point source (i.e. TFs and narrow histone modifications) ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
 
 Already from these plots alone it is evident that the data has some quality issues. At this point you should be able to identify them.
 
@@ -144,7 +145,6 @@ Already from these plots alone it is evident that the data has some quality issu
    			:width: 300px
      - .. image:: figures/ENCFF956GLJ-xcor.png
    			:width: 300px
-
 
 
 The cross correlation profile of factors with broad occupancy patterns is not going to be as sharp as for TFs, and the values of NSC and RSC tend to be lower, which does not mean that the ChIP failed. In fact, the developers of the tool do not recommend using the same NSC / RSC values as quality cutoffs for broad marks. However, input samples should not display signs of enrichment, as is the case here.
@@ -178,7 +178,7 @@ You can see that even though the cross correlation metrics don't look great, a s
 Broad peak calling using MACS
 ===============================
 
-MACS: Model-based Analysis for ChIP-Seq is one of the leading peak calling algorithms. It has been excellent for detection of point-source peaks. However, until the recent version 3, it somewhat underperformed when used for detection of broad signal. Fortunatley, version 3, which is still under active development and hasn't been officially released, seems to fix issues with calling broad peaks. We will use this new version in this tutorial.
+MACS: Model-based Analysis for ChIP-Seq is one of the leading peak calling algorithms. We will use MACS version 3, which is still under active development and hasn't been officially released.
 
 
 
@@ -193,8 +193,8 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
   mkdir -p analysis/macs3
   cd analysis/macs3
 
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
   module load bioinfo-tools #if needed
   module load MACS/3.0.0a6
@@ -208,8 +208,7 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
 
 The main difference here, in comparison to detecting narrow peaks, is using the options ``--broad --broad-cutoff 0.1``. With the option ``--broad`` on, MACS will try to composite broad regions in BED12 (gene-model-like format) by putting nearby highly enriched regions into a broad region with loose cutoff. The broad region is controlled by another cutoff through ``--broad-cutoff``. If ``-p`` is set, this is a p-value cutoff, otherwise, it's a q-value (FDR) cutoff.
 
-Because we use PE data, there is no need to build a model to estimate fragment length (similar to cross correlation) necessary for extending the SE reads. We know precisely how long each fragment is because its both ends are sequenced and mapped to the reference.
-
+Because we use PE data, there is no need to build a model to estimate fragment length (similar to cross correlation) necessary for extending the SE reads. We know precisely how long each fragment is because its both ends are sequenced and mapped to the reference. Estimating fragment length from cross-correlation of broad domain ChIP data is problematic and sometimes may result in incorrect values.
 
 
 
@@ -302,7 +301,7 @@ How many peaks were identified in replicate 1?
 .. HINT::
 
 	You can also copy the results from
-	``/proj/epi2022/broad_peaks/results/macs3/neuroGM23338``
+	``/proj/epi2023/broad_peaks/results/macs3/neuroGM23338``
 
 This is a preliminary peak list, and in case of broad domains, it often needs some processing or filtering.
 
@@ -314,8 +313,8 @@ Let's select the detected domains reproducible in both replicates. First, let's 
   
     mkdir peaks
     cd peaks
-    ln -s /proj/epi2022/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
-    ln -s /proj/epi2022/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
+    ln -s /proj/epi2023/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
+    ln -s /proj/epi2023/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
 
     #make bed
     cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
@@ -330,6 +329,7 @@ Let's select the detected domains reproducible in both replicates. First, let's 
    .. code-block:: bash
 
       #intersect bed files
+      module load bioinfo-tools #if needed
       module load BEDTools/2.29.2
       bedtools intersect -a neuroGM23338_macs3_rep1_peaks.bed -b neuroGM23338_macs3_rep2_peaks.bed -f 0.50 -r > peaks_macs3_neuroGM23338.chr12.bed
 
@@ -358,7 +358,7 @@ Required files are:
 .. HINT::
 
 	You can access the bam and bai files from
-	``/proj/epi2022/broad_peaks/data/neuron_GM23338``
+	``/proj/epi2023/broad_peaks/data/neuron_GM23338``
 
 
 
@@ -395,7 +395,7 @@ Below you see IGV visualisations of the following regions (top two peaks and one
   chr1:234,592,216-234,617,526
   chr1:777,176-783,503
 
-IGV settings for this visualiation: Group alignments (by read strand); Colour alignments (by read strand); Squished.
+IGV settings for this visualiation (right click on the left hand side panel with track names): Group alignments (by read strand); Colour alignments (by read strand); Squished.
 
 Regions detected by ``MACS3`` are the topmost purple track, two bam files are ChIP and input (with their pileups calculated by IGV), and the bottom panel are gene models and, finally the regions reproducible between both replicates in green.
 
@@ -460,10 +460,10 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
   mkdir ../../epic2
   cd ../../epic2
 
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2022/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
 
 
   conda activate /sw/courses/epigenomics/software/conda/epic_2b
@@ -475,7 +475,7 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
     --guess-bampe --output neuroGM23338_epic2_rep1_peaks
 
 
-The result looks like this::
+The result is a coordinate sorted text file::
 
   head neuroGM23338_epic2_rep1_peaks
   #Chromosome Start End PValue  Score Strand  ChIPCount InputCount  FDR log2FoldChange
@@ -568,7 +568,7 @@ How about the overlap between different methods?
       1629 peaks_epic2macs3_neuroGM23338.chr12.bed
 
 
-You can visualise the peaks as for MACS. Below are some of the locations as before, with peaks detected by both epic2 and MACS marked in orange.
+You can visualise the peaks as for MACS in the earlier section. Below are plots of some of the locations as in the MACS, with peaks detected by both epic2 and MACS marked in orange.
 
 
 .. list-table:: Figure 4. Results of peak calling in H3K79me2 ChIP-seq in GM23338-derived neuron cells (ENCODE). Comparison of MACS3 and epic2. Tracks from the top: peaks in rep1, ChIP, input, gene models, reproducible peaks (MACS3), peaks detected by epic2 and MACS3 (orange)
@@ -605,9 +605,14 @@ You can now deactivate the conda environment you've been working in::
 Alternative approach: window-based enrichment analysis (csaw)
 ===============================================================
 
-This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks and use of PE data. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
+.. This workflow is similar to the one using ``csaw`` designed for TF peaks. The differences pertain to analysis of signal from diffuse marks and use of PE data. Please check the :doc:`csaw tutorial <../csaw/lab-csaw>` for setup and more detailed comments on each step.
 
 .. You will use data from the same dataset, however, the files were processed in a different manner: the alignments were not filtered to remove duplictate reads nor the reads mapping to the ENCODE blacklisted regions. To reduce the computational burden, the bam files were subset to contain alignments to ``chr1``.
+
+
+This is an alternative workflow for detection of differential binding / occupancy in ChIP-seq data. In this mode, in contrast to working with reads counted within peaks detected in a peak calling step (as in the earlier example with ``DiffBind``), this approach uses a **sliding window** to count reads across the genome. Each window is then tested for significant differences between libraries from different conditions, using the methods in the ``edgeR`` package. This package also offers an FDR control strategy more appropriate for ChIP-seq experiments than simple BH adjustment.
+``csaw`` can also be used to detect peaks - if the sample to compare to is input.
+
 
 .. NOTE::
   
@@ -628,7 +633,7 @@ To prepare the files, assuming you are in ``~/broad_peaks/analysis``:
    cd csaw
 
    mkdir bam
-   ln -s  /proj/epi2022/broad_peaks/data/neuron_GM23338/* bam
+   ln -s  /proj/epi2023/broad_peaks/data/neuron_GM23338/* bam
 
 
 .. .. code-block:: bash
@@ -686,10 +691,10 @@ Read in the data:
 
 .. code-block:: R
 
-	library(csaw)
+  library(csaw)
 
   pe.param <- readParam(max.frag=400, pe="both")
-	data <- windowCounts(bam.files, width=100, param=pe.param) 
+  data <- windowCounts(bam.files, width=100, param=pe.param) 
 
 
 
@@ -697,7 +702,7 @@ ChIP experiments with paired-end sequencing are accomodated by setting ``pe="bot
 ``param`` object supplied to ``windowCounts``. Read extension is not required as the genomic interval
 spanned by the originating fragment is explicitly defined as that between the 5′positions of
 the paired reads. By default, only proper pairs are used in which the two paired reads are
-on the same chromosome, face inward and are no more than ``max.frag`` apart. 
+on the same chromosome, face inward and are no more than ``max.frag`` apart (we use the default value 500, which is suitable for most libraries). 
 ``width`` specifies the width of the window when counting the fragments.
 
 How many valid windows do we have?::
@@ -794,10 +799,10 @@ To normalise the data for different library sizes you need to calculate normalis
 
 .. code-block:: R
 
-	binned <- windowCounts(bam.files, bin=TRUE, width=10000, param=pe.param)
-	data.filt <- normFactors(binned, se.out=data.filt)
+  binned <- windowCounts(bam.files, bin=TRUE, width=10000, param=pe.param)
+  data.filt <- normFactors(binned, se.out=data.filt)
 
-	data.filt$norm.factors
+  data.filt$norm.factors
   ## [1] 0.6094691 0.6654708 1.5651132 1.5753374
 
 
@@ -839,7 +844,7 @@ Short inspection of the results:
 
 .. code-block:: R
 
-	head(table.combined)
+  head(table.combined)
 
   DataFrame with 6 rows and 8 columns
     num.tests num.up.logFC num.down.logFC      PValue         FDR   direction
@@ -872,7 +877,7 @@ How many regions are up (i.e. enriched in chip compared to input)?
 
 Does this make sense? How does it compare to results obtained from MACS and epic2 runs?
 
-You can now annotate the results as in the csaw TF exercise:
+You can now annotate the results:
 
 .. code-block:: R
 
