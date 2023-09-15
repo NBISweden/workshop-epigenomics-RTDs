@@ -90,13 +90,12 @@ Assuming we start at ``analysis``:
 
 .. Hint::
 
-	Please check first that file ``shifted.bam`` exists in this location: ``ls ../QC/splitBam/shifted.bam``. If it does, the output of this command is the path; if it does not you get "file does not exist". Depending on the directory structure, you may need to link the file like this:
+	Please check first that file ``shifted.bam`` exists in this location: ``ls ../QC/splitBam/shifted.bam``. If it does, the output of this command is the path; if it does not you get "file does not exist". You can link the file prepared earlier:
 
 	.. code-block:: bash
 
-		ln -s ../../QC/splitBam/shifted.bam .
-		ln -s ../../QC/splitBam/shifted.bam.bai .
-
+		ln -s ../../results/QC/splitBam/shifted.bam
+		ln -s ../../results/QC/splitBam/shifted.bam.bai
 
 We activate R console upon typing ``R`` in the terminal.
 
@@ -127,7 +126,7 @@ We load data from shifted bam file:
 	seqlev <- "chr14"
 
 
-Let's first check signatures for a general TF **CTCF**. This is its motif as position weight matrix (PWM):
+Let's first check signatures for a general TF **CTCF**. This is its motif as position weight matrix (PWM), which consists of frequencies of each base at each motif position:
 
 .. code-block:: R
 
@@ -135,6 +134,24 @@ Let's first check signatures for a general TF **CTCF**. This is its motif as pos
 	CTCF <- query(MotifDb, c("CTCF"))
 	CTCF <- as.list(CTCF)
 	print(CTCF[[1]], digits=2)
+
+.. admonition:: CTCF PWM
+   :class: dropdown, warning
+
+   CTCF PWM::
+
+	       1    2    3     4     5     6     7     8     9    10    11    12    13
+	A 0.10 0.16 0.30 0.072 0.012 0.786 0.024 0.122 0.914 0.012 0.376 0.022 0.028
+	C 0.36 0.21 0.10 0.826 0.966 0.024 0.620 0.494 0.010 0.008 0.010 0.022 0.002
+	G 0.12 0.41 0.44 0.050 0.012 0.108 0.336 0.056 0.048 0.976 0.602 0.606 0.962
+	T 0.42 0.22 0.16 0.052 0.010 0.082 0.020 0.328 0.028 0.004 0.012 0.350 0.008
+	     14    15    16    17   18   19
+	A 0.024 0.096 0.424 0.086 0.12 0.34
+	C 0.016 0.818 0.024 0.532 0.35 0.26
+	G 0.880 0.038 0.522 0.326 0.12 0.32
+	T 0.080 0.048 0.030 0.056 0.41 0.08
+
+
 
 We now summarise the signal in the vicinity of CTCF motifs (100 bps up- and down-stream):
 
