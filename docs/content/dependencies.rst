@@ -78,7 +78,7 @@ In addition, the following Bioconductor libraries are used in the tutorials:
 
 
 (`*`) 
-You will notice that we use a conda environment for ``phantompeakqualtools``, along with two versions of of ``samtools`` loaded as modules. This is because we have encountered incompatibilities with how ``phantompeakqualtools`` saves temporary data and recent versions of ``R``, and also syntax differences between ``samtools`` versions and libraries required for processing *bam* files produced by newer ``samtools`` versions. Long sotry short, while a bit clunky, this solution works on our system.
+You will notice that we use a conda environment for ``phantompeakqualtools``, along with two versions of of ``samtools`` loaded as modules. This is because we have encountered incompatibilities with how ``phantompeakqualtools`` saves temporary data and recent versions of ``R``, and also syntax differences between ``samtools`` versions and libraries required for processing *bam* files produced by newer ``samtools`` versions. Long story short, while a bit clunky, this solution works on our system.
 
 Conda environment was produced using::
 
