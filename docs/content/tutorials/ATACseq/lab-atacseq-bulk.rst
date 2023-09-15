@@ -100,7 +100,7 @@ To find regions corresponding to potential open chromatin, we want to identify A
 
 The tools which are currently used are `Genrich <https://github.com/jsh58/Genrich>`_ , `MACS2 <https://github.com/taoliu/MACS>`_ and `MACS3 <https://github.com/macs3-project/MACS>`_. 
 
-* **Genrich** has a mode dedicated to ATAC-Seq; however, Generich is still not published;
+* **Genrich** has a mode dedicated to ATAC-Seq (in which it creates intervals centered on transposase cut sites); however, Generich is still not published;
 
 * **MACS2** is widely used so lots of help is available online; however it is designed for ChIP-seq rather than ATAC-seq;
 
@@ -139,15 +139,15 @@ When Tn5 cuts an accessible chromatin locus it inserts adapters separated by 9bp
 
 If we use the ATAC-seq peaks for **differential accessibility**, and especially if we detect the peaks in the "broad" mode, then shifting does not play any role: the "peaks" are hundreds of bps long, reads are summarised to these peaks / domains allowing a partial overlap, so 9 basepairs of difference has a neglibile effect. 
 
-However, when we plan to use the data for any **nucleosome-centric analysis** (positioning at TSS or TF footprinting), shifting the reads allows to center the signal in peaks around the nucleosomes and not directly on the nucleosome. Typically, applications used for these analyses perform the read shifting, so we do not need to preprocess the input bam files.
+However, when we plan to use the data for any **nucleosome-centric analysis** (positioning at TSS or TF footprinting), shifting the reads allows to center the signal in peaks flanking the nucleosomes and not directly on the nucleosome. Typically, applications used for these analyses perform the read shifting, so we do not need to preprocess the input bam files.
 
-If we only assess the coverage of the (shifted or not) start sites of the reads, the data would be too sparse and it would be impossible to call peaks. Thus, we will extend the start sites of the reads by 100bp (50 bp in each direction) to assess coverage. This is performed automatically by Genrich, and using command line options ``extsize`` and ``shift`` in MACS2 (in the default ``BAM`` mode).
+.. If we only assess the coverage of the (shifted or not) start sites of the reads, the data would be too sparse and it would be impossible to call peaks. Thus, to find peaks *flanking* the NFR (rather than centered on it) we need to extend the start sites of the reads by 100bp (50 bp in each direction) to assess coverage. This is performed automatically by Genrich, and using command line options ``extsize`` and ``shift`` in MACS2 (in the default ``BAM`` mode; they do not work in paired-end dedicated modes). However, using MACS2/3 in mode dedicated to SE data, while processing PE data is **not recommended** (see below).
 
 
 :raw-html:`<br />`
 
 
-**More on peak calling** and **which parameters to choose**. Historically, ATAC-seq data have been analysed by software developed for ChIP-seq, even though the two assays have different signal structure. The peak caller most widely used was MACS2 (as evidenced by number of citations), with a wide range of parameters. The discussion on why not all these parameter choices are optimal can be found in  `Gaspar 2018 <https://www.biorxiv.org/content/10.1101/496521v1.full>`_. In this exercise you will see MACS2/3 ``callpeak`` algorithm used in three different settings, and compare the results to a novel method developed specifically for ATAC-seq `hmmratac <https://academic.oup.com/nar/article/47/16/e91/5519166>`_
+**More on peak calling** and **which parameters to choose**. Historically, ATAC-seq data have been analysed by software developed for ChIP-seq, even though the two assays have different signal structure. The peak caller most widely used has been MACS2 (as evidenced by number of citations), with a wide range of parameters. The discussion on why not all these parameter choices are optimal can be found in  `Gaspar 2018 <https://www.biorxiv.org/content/10.1101/496521v1.full>`_. In this exercise you will see MACS2/3 ``callpeak`` algorithm used in three different settings, and compare the results to a novel method developed specifically for ATAC-seq `hmmratac <https://academic.oup.com/nar/article/47/16/e91/5519166>`_
 
 
 .. To summarise, we encourage to take advantage of all data in its PE form, and whenever possible use ATAC-seq dedicated tools.
@@ -266,6 +266,10 @@ We can now process the remaining replicate:
 
 	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t ENCFF828ZPN.chr14.proc_rh.nsort.bam -o ENCFF828ZPN.chr14.genrich.narrowPeak
 
+
+Genrich can also call peaks for multiple replicates collectively. First, it analyzes the replicates separately, with p-values calculated for each. At each genomic position, the multiple replicates' p-values are then combined by Fisher's method. The combined p-values are converted to q-values, and peaks are output.
+
+
 And use the joint replicate peak calling mode:
 
 .. code-block:: bash
@@ -289,7 +293,7 @@ MACS
 -----
 
 As mentioned in the introduction, MACS has been used with a variety of parametr choices to detect peaks in ATAC-seq data.
-You can encounter various combinations of read input modes (BAM, BAMPE, BED and BEDPE; BED / BAM used also for PE data), and peak calling modes (default "narrow" and optional "broad"). In this tutorial we would like to demonstrate differences these settings make on the final result. We will begin by using two algorithms from the newest version of **MACS3**: the original ``callpeak`` and ATAC-seq specific ``hmmratac``. In the next part we will visualise resulting peaks and compare them to peaks detected using MACS2, as implemented in the ENCODE and nf-core ATAC-seq pipelines.
+You can encounter various combinations of read input modes (BAM, BAMPE, BED and BEDPE; BED / BAM designaed for SE data used also for PE data), and peak calling modes (default "narrow" and optional "broad"). Some protocols shift reads (setting options ``extsize`` and ``shift``). In this tutorial we would like to demonstrate differences these settings make on the final result. We will begin by using two algorithms from the newest version of **MACS3**: the original ``callpeak`` and ATAC-seq specific ``hmmratac``. In the next part we will visualise resulting peaks and compare them to peaks detected using MACS2, as implemented in the ENCODE and nf-core ATAC-seq pipelines.
 
 
 MACS3
@@ -410,8 +414,6 @@ You can copy the tracks to your local system and load them to IGV, alongside the
 .. code-block:: bash
 
 	cd ..
-	mkdir for_vis
-	cd for_vis
 
 	cp genrich/*Peak for_vis/
 	cp macs2/*Peak for_vis/
@@ -421,6 +423,15 @@ You can copy the tracks to your local system and load them to IGV, alongside the
 
 You can now copy the directory ``for_vis`` using ``scp -r`` to your local system.
 
+
+.. admonition:: Peaks called uding different methods.
+   :class: dropdown, warning
+
+   If you got lost in the peak calling madness, you can copy the directories with the results prepared earlier. Assuming you are in ``peaks``::
+
+   	cp -r ../../results/peaks/macs3 .
+   	cp -r ../../results/peaks/genrich .
+   	cp -r ../../results/peaks/macs2 .
 
 
 When **on your local system**, load the tracks to IGV (the reference is *hg38*). Several candidate locations illustrating the differences in results::
@@ -514,6 +525,19 @@ Peak Overlap
 ================
 
 
+.. admonition:: Peaks called uding different methods.
+   :class: dropdown, warning
+
+   If you got lost in the peak calling madness, you can copy the directories with the results prepared earlier. Assuming you are in ``peaks``::
+
+   	cp -r ../../results/peaks/macs3 .
+   	cp -r ../../results/peaks/genrich .
+   	cp -r ../../results/peaks/macs2 .
+
+
+:raw-html:`<br />`
+
+
 Comparing results of MACS and Genrich
 ----------------------------------------
 
@@ -526,13 +550,14 @@ How many peaks overlap between replicates? How many overlap between different me
 This results in peaks which overlap in 50% of their length, which we can consider reproducible.
 
 
+Assuming you are in ``peaks`` (you may have to ``cd ..``)
 
 .. code-block:: bash
 	
-	mkdir -p ../overlaps
-	cd ../overlaps
+	mkdir overlaps
+	cd overlaps
 
-	module load BEDTools/2.25.2
+	module load BEDTools/2.25.0
 
 	bedtools intersect -a ../macs3/ENCFF045OAB.macs3.default.summits.bampe_peaks.narrowPeak  -b ../macs3/ENCFF828ZPN.macs3.default.summits.bampe_peaks.narrowPeak  -f 0.50 -r >peaks_overlap.nk_stim.macs3.bed
 
@@ -547,13 +572,14 @@ This results in peaks which overlap in 50% of their length, which we can conside
 
 
 
+
 Consensus Peaks
 -----------------------
 
 
 As our experiment has been replicated, we can select the peaks which were detected in both replicates of each condition. This removes non-reproducible peaks in regions of low coverage and other artifacts.
 
-In this section we will work on peaks detected earlier using son-subset data.
+In this section we will work on peaks detected earlier using non-subset data.
 
 First we link necessary files:
 
@@ -562,10 +588,10 @@ First we link necessary files:
 	mkdir consensus
 	cd consensus
 
-	ln -s ../../../results/peaks/macs3/ENCFF045OAB.macs3.default.summits.bampe_peaks.narrowPeak ENCFF045OAB.macs3.narrowPeak
-	ln -s ../../../results/peaks/macs3/ENCFF363HBZ.macs3.default.summits.bampe_peaks.narrowPeak ENCFF363HBZ.macs3.narrowPeak
-	ln -s ../../../results/peaks/macs3/ENCFF398QLV.macs3.default.summits.bampe_peaks.narrowPeak ENCFF398QLV.macs3.narrowPeak
-	ln -s ../../../results/peaks/macs3/ENCFF828ZPN.macs3.default.summits.bampe_peaks.narrowPeak ENCFF828ZPN.macs3.narrowPeak
+	ln -s ../../../../results/peaks/macs3/ENCFF045OAB.macs3.default.summits.bampe_peaks.narrowPeak ENCFF045OAB.macs3.narrowPeak
+	ln -s ../../../../results/peaks/macs3/ENCFF363HBZ.macs3.default.summits.bampe_peaks.narrowPeak ENCFF363HBZ.macs3.narrowPeak
+	ln -s ../../../../results/peaks/macs3/ENCFF398QLV.macs3.default.summits.bampe_peaks.narrowPeak ENCFF398QLV.macs3.narrowPeak
+	ln -s ../../../../results/peaks/macs3/ENCFF828ZPN.macs3.default.summits.bampe_peaks.narrowPeak ENCFF828ZPN.macs3.narrowPeak
 
 
 To recap, ENCFF398QLV and ENCFF363HBZ are untreated and ENCFF045OAB and ENCFF828ZPN are stimulated NK cells.
