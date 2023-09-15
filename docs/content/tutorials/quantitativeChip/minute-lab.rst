@@ -106,10 +106,10 @@ There are 3 replicates for each condition. In the first part of the tutorial you
   cd my_primary/fastq
 
   # Create symlinks to our fastq files
-  for i in /proj/epi2022/minute_chip/primary/*.fastq.gz; do ln -s ${i}; done
+  for i in /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.fastq.gz; do ln -s ${i}; done
   cd ..
-  cp /proj/epi2022/minute_chip/primary/*.tsv .
-  cp /proj/epi2022/minute_chip/primary/*.yaml .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.tsv .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.yaml .
 
 
 Now, this is how your directory structure should look like:
@@ -135,10 +135,10 @@ Configuration
     hg38:  # Arbitrary name for this reference. This is also used in output file names.
       # Path to a reference FASTA file (may be gzip-compressed).
       # A matching Bowtie2 index must exist in the same location.
-      fasta: "/proj/epi2022/minute_chip/reference/hg38.fa"
+      fasta: "/sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/reference/hg38.fa"
 
       # Path to a BED file with regions to exclude
-      exclude: "/proj/epi2022/minute_chip/reference/hg38.blocklist.bed"
+      exclude: "/sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/reference/hg38.blocklist.bed"
 
   # Length of the 5' UMI
   umi_length: 6
@@ -210,49 +210,49 @@ Additionally, we may have some spike-in data from another reference, so Minute a
      - Naive
      - Untreated
      - 1
-     - H3K27m3-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
+     - H3K27m3_H9_naive_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Naive
      - EZH2i
      - 1
-     - H3K27m3-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
+     - H3K27m3_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Naive
      - Untreated
      - 1
-     - H3K27m3-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
+     - H3K27m3_H9_primed_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Primed
      - EZH2i
      - 1
-     - H3K27m3-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
+     - H3K27m3_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
 
    * - Input
      - Naive
      - Untreated
      - 1
-     - IN-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
+     - IN_H9_naive_rep1_R{1,2}.fastq.gz
   
    * - Input
      - Naive
      - EZH2i
      - 1
-     - IN-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
+     - IN_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
    
    * - Input
      - Primed
      - Untreated
      - 1
-     - IN-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
+     - IN_H9_primed_rep1_R{1,2}.fastq.gz
    
    * - Input
      - Primed
      - EZH2i
      - 1
-     - IN-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
+     - IN_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
   
 
 
@@ -289,10 +289,10 @@ If you already got your files, you need to run something like
   cd my_primary
 
   # Run snakemake on the background, and keep doing something else
-  nohup snakemake -p -s /sw/courses/epigenomics/quantitative_chip_simon/minute/src/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+  nohup minute run -j 4 > minute_pipeline.out 2> minute_pipeline.err &
 
 
-:code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores there are available on your node, you can raise this value.
+:code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores are available on your node, you can raise this value.
 The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
 out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
 cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
@@ -301,15 +301,27 @@ Since this takes some time to run, my recommendation is that you start running t
 the tutorial in the meantime. It is also recommended, same as before, that you do not use *all* the cores you reserved, so you have some processing
 power for the second part of the tutorial. For instance if you have 12 cores, put 6 here and keep the other 6 for the second part of the tutorial.
 
+Another option is to run the `no_bigwigs` version of the pipeline to get the stats and reports but run it faster, in this case you can replace the
+minute run line above with:
+
+.. code-block:: bash
+
+  nohup minute run no_bigwigs -j 4 > minute_pipeline.out 2> minute_pipeline.err &
+
+
+This will take way less time (bigWig generation is the most time consuming step of this workflow) and you can copy the bigWig files to do the second
+part of the tutorial.
+
+
 .. note::
   You can run something in the background by typing :code:`&` at the end of the command. You can also keep the output to stderr and stdout by using
   :code:`>` and :code:`2>` operators. So the :code:`snakemake` call in the previous block just allows you to do this:
 
   .. code-block:: bash
     
-    nohup snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+    nohup minute run -j 4 > minute_pipeline.out 2> minute_pipeline.err &
 
-  `nohup` is a handy command that will make sure that the `snakemake` keeps running even if you logout or are kicked out of the session.
+  `nohup` is a handy command that will make sure that the `snakemake` keeps running even if you logout or are kicked out of the session on Uppmax.
 
   You can peek in the progress of the pipeline by looking at the output from time to time:
 
@@ -317,7 +329,7 @@ power for the second part of the tutorial. For instance if you have 12 cores, pu
 
     tail minute_pipeline.out
 
-  It is important that you do this right away, to see if the pipeline is correctly running or there is some issue with it. Otherwise, if it crashes, it will do so silently.
+  It is important that you do this right away, to see if the pipeline is correctly running or there is some issue with it. Otherwise, if it crashes, it will print the error in the output files you speficied and you will not notice.
 
 
 .. note::
@@ -325,12 +337,15 @@ power for the second part of the tutorial. For instance if you have 12 cores, pu
 
   .. code-block:: bash
 
-    snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 4 --rerun-incomplete
+    minute run --rerun-incomplete > minute_pipeline.out 2> minute_pipeline.err &
+
+
+  This will overwrite the previous logs, so if you want to keep the previous ones, just use a different filename, like `minute_pipeline_rerun.out`.
 
 
 After the pipeline is run, you will have the following folders:
 
-- :code:`final/`: Contains final files: bigWig files, BAM files and demultiplexed FASTQ files (in this case, the same as your input).
+- :code:`final/`: Contains final files: bigWig files, BAM files and demultiplexed FASTQ files (in this case, the same as your input). If you ran the `no_bigwigs` option, this will not have bigWig files, but you can copy them later.
 - :code:`reports/`: Some reports on QC and scaling.
 - :code:`log/`: Log output from each step.
 - :code:`stats/`: Some stats files generated at each step.
@@ -376,7 +391,7 @@ Primed vs Naïve, information that is lost in unscaled files.
 
 
 .. note::
-  Make sure you select the scaled tracks together and click on *group autoscale* so all the scales match.
+  Make sure you select the scaled tracks together (CTRL + clicking on relevant track names), then right-click and select *group autoscale* so the scales are comparable.
 
 
 
@@ -403,8 +418,8 @@ Now you can get a copy of all the bigWig files + the bivalent annotation:
 
   mkdir bw
 
-  cp /proj/epi2022/minute_chip/downstream/*.bw bw/
-  cp /proj/epi2022/minute_chip/downstream/*.bed .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/downstream/*.bw bw/
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/downstream/*.bed .
 
 
 There should be :code:`unscaled` and :code:`scaled` bigWig files, plus a set of genes marked as Bivalent: :code:`Bivalent_Court2017.hg38.bed`. This annotation
@@ -423,7 +438,7 @@ Looking at bivalent genes
 You can look at these using `deepTools <https://deeptools.readthedocs.io/en/develop/>`_. deepTools is a suite to process sequencing data.
 
 .. note::
-  If you just ran the primary analysis before, and you have an active :code:`minute_lab` conda environment, you probably don't need to load the deepTools module anyway. Otherwise, you can do:
+  If you just ran the primary analysis before, and you have an active :code:`minute` conda environment, you probably don't need to load the deepTools module anyway. Otherwise, you can do:
 
   .. code-block:: bash
 
@@ -537,7 +552,10 @@ We can make this a little more readable:
 
 .. code-block:: R
 
-  colnames(df) <- c(c("seqnames", "start", "end"), gsub("_pooled.hg38|.bw", "", colnames(df)[4:ncol(df)]))
+  colnames(df) <- c(
+    c("seqnames", "start", "end"),
+    gsub("_pooled.hg38|.bw", "", colnames(df)[4:ncol(df)])
+  )
 
   colnames(df)
 
