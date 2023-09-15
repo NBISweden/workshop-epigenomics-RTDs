@@ -373,7 +373,7 @@ Now we will do some data cleaning to try to improve the libraries quality and re
   module load samtools/1.8
   module load picard/2.23.4
 
-  java -Xmx64G -jar $PICARD_HOME/picard.jar MarkDuplicates \
+  java -Xmx32G -jar $PICARD_HOME/picard.jar MarkDuplicates \
    -I ../../data/ENCFF000PED.chr12.bam -O ENCFF000PED.chr12.rmdup.bam \
    -M dedup_metrics.txt -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true \
    -ASSUME_SORTED true
@@ -539,7 +539,7 @@ Now we are ready to compute the read coverages for genomic regions for the BAM f
     sknsh/ENCFF000RBT.chr12.rmdup.sort.bam sknsh/ENCFF000RBU.chr12.rmdup.sort.bam \
     --outFileName multiBamArray_dT201_preproc_bam_chr12.npz --binSize=5000 -p 4 \
     --extendReads=110 --labels hela_1 hela_2 hela_i hepg2_1 hepg2_2 hepg2_i1 hepg2_i2 \
-    neural_1 neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2 -p 4 &> multiBamSummary.log
+    neural_1 neural_2 neural_i1 neural_i2 sknsh_1 sknsh_2 sknsh_i1 sknsh_i2 -p 5 &> multiBamSummary.log
 
   plotCorrelation --corData multiBamArray_dT201_preproc_bam_chr12.npz \
     --plotFile REST_bam_correlation_bin.pdf --outFileCorMatrix corr_matrix_bin.txt \
