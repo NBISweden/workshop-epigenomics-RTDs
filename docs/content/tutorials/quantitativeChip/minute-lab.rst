@@ -216,49 +216,49 @@ Additionally, we may have some spike-in data from another reference, so Minute a
      - Naive
      - Untreated
      - 1
-     - H3K27m3_H9_naive_rep1_R{1,2}.fastq.gz
+     - H3K27m3-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Naive
      - EZH2i
      - 1
-     - H3K27m3_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
+     - H3K27m3-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Naive
      - Untreated
      - 1
-     - H3K27m3_H9_primed_rep1_R{1,2}.fastq.gz
+     - H3K27m3-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
    
    * - H3K27m3
      - Primed
      - EZH2i
      - 1
-     - H3K27m3_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
+     - H3K27m3-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
 
    * - Input
      - Naive
      - Untreated
      - 1
-     - IN_H9_naive_rep1_R{1,2}.fastq.gz
+     - IN-ChIP_H9_naive_rep1_R{1,2}.fastq.gz
   
    * - Input
      - Naive
      - EZH2i
      - 1
-     - IN_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
+     - IN-ChIP_H9_naive_EZH2i_rep1_R{1,2}.fastq.gz
    
    * - Input
      - Primed
      - Untreated
      - 1
-     - IN_H9_primed_rep1_R{1,2}.fastq.gz
+     - IN-ChIP_H9_primed_rep1_R{1,2}.fastq.gz
    
    * - Input
      - Primed
      - EZH2i
      - 1
-     - IN_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
+     - IN-ChIP_H9_primed_EZH2i_rep1_R{1,2}.fastq.gz
   
 
 
