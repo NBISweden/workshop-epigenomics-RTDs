@@ -164,7 +164,7 @@ The `regioneR` package uses randomization tests to asses how significant the ove
 
 1. Calulate the overlap between the two given data sets A and B
 
-2. Create a randomized data set B', with the same number of regions, and the same sizes as B, distributes randomly across the genome.
+2. Create a randomized data set B', with the same number of regions, and the same sizes as B, distributed randomly across the genome.
 
 3. Calculate the overlap between A and B'.
 
@@ -172,7 +172,7 @@ The `regioneR` package uses randomization tests to asses how significant the ove
 
 5. Compare the results from step 1 (A vs B) to the results for all the randomized data sets. This makes it possible to calculate a p-value and a z-score. 
 
-To illustrate this, we create a data set of 100 regions, randomly ditributed across the genome. Using the test with 100 randomizations, we check if there is a significant between the Insv peaks and our random data set. *How do you interpret the results?*
+To illustrate this, we create a data set of 100 regions, randomly ditributed across the genome. Using the test with 100 randomizations, we check if there is a significant overlap between the Insv peaks and our random data set. *How do you interpret the results?*
 
 
 ```R
@@ -214,7 +214,6 @@ To check if Insv overlaps insulator elements, we use some public data on insulat
 
 
 ```R
-# Add chr
 beaf32 <- import.gff3("beaf32.gff3")
 cp190 <- import.gff3("cp190.gff3")
 ctcf.1 <- import.gff3("ctcf.gff3")
@@ -340,7 +339,7 @@ pheatmap(overlapZ, cluster_rows=FALSE, cluster_cols=FALSE, color = useCols, main
 
 When testing if the overlap between two data sets is significant, there are many choices that could have a big impact on the results. For example, most transcription factor binding sites are enriched around transcription start sites (TSS). This means that if we use a randomization strategy where we can place regions over the entire genome, we might overestimate the significance of the overlaps.
 
-Below, we check whether the results change if we instead focus on promoter regions only. For this, we load coordinates of promoter regions, here defined as [TSS-1500, TSS+500]. We then only consider binding sites that fall within the prometer regions. As you can see, we still retain most binding sites. In this re-sampling strategy, we now only **sample promoter regions instead of sampling random regions across the genome**. *How does this affect the results?*
+Below, we check whether the results change if we instead focus on promoter regions only. For this, we load coordinates of promoter regions, here defined as [TSS-1500, TSS+500]. We then only consider binding sites that fall within the promoter regions. As you can see, we still retain most binding sites. In this re-sampling strategy, we now only **sample promoter regions instead of sampling random regions across the genome**. *How does this affect the results?*
 
 (Since this randomization strategy is faster than sampling random regions, we now use 500 randomization rounds.)
 
