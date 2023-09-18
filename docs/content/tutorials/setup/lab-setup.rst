@@ -12,7 +12,7 @@ Before we start tutorial, we need to set up our work environment. In particular,
 
 
 1. `be able to login to Uppmax and use the node allocation <Using computational resources>`_
-2. `access files prepared for the tutorial <Directory structure>`_ and keep folder structures organised - we have prepared scripts to set this up for you for most of the labs;
+2. access files prepared for the tutorial and keep folder structures organised - we have prepared scripts to set this up for you for most of the labs;
 3. `learn how to read commands and use module system on Uppmax <Commands and modules>`_
 4. if you work without access to Uppmax: `check the dependencies <Software Dependencies>`_
 
