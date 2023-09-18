@@ -93,6 +93,8 @@ and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(onl
 
 **16:00 - 17:00** Daily challenge 
 
+:raw-html:`<br />`
+
 
 Thursday (21 September 2023)
 --------------------------------
@@ -115,6 +117,7 @@ Thursday (21 September 2023)
 
 **16:00 - 17:00** Daily challenge 
 
+:raw-html:`<br />`
 
 
 Friday (22 September 2023)

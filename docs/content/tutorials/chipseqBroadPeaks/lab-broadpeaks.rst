@@ -613,6 +613,8 @@ Alternative approach: window-based enrichment analysis (csaw)
 This is an alternative workflow for detection of differential binding / occupancy in ChIP-seq data. In this mode, in contrast to working with reads counted within peaks detected in a peak calling step (as in the earlier example with ``DiffBind``), this approach uses a **sliding window** to count reads across the genome. Each window is then tested for significant differences between libraries from different conditions, using the methods in the ``edgeR`` package. This package also offers an FDR control strategy more appropriate for ChIP-seq experiments than simple BH adjustment.
 ``csaw`` can also be used to detect peaks - if the sample to compare to is input.
 
+As this method is agnostic to signal structure, it requires careful choice of strategies for filtering and normalisation. Here, we show a very simple workflow. More details can be found in the `Csaw User Guide <https://bioconductor.org/packages/3.12/workflows/vignettes/csawUsersGuide/inst/doc/csaw.pdf>`_.
+
 
 .. NOTE::
   
