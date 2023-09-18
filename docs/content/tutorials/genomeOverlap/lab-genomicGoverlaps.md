@@ -32,7 +32,40 @@ module load samtools
 
 Then set up a working directory, in which you create links to all data files needed for the exercise, *e.g.* with `ln -s /sw/courses/epigenomics/genomic_overlaps/* .`. 
 
+```bash
+cd <some directory where you work with this course>
+
+mkdir -p genomic_overlaps
+cd genomic_overlaps
+```
+
+
+
 Now start `R`, or `rstudio`.
+
+### Backup method for setting up
+
+If this doesn’t work for some reason (e.g. if you don’t have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that is also works on Linux and Windows. If you haven't done so for the single cell exercise, first install mamba, and the environment for the labs, following the instructions [here](https://nbis-workshop-epigenomics.readthedocs.io/en/latest/content/tutorials/scAtacSeq/lab-sc_atac_seq.html#backup-method-for-setting-up). 
+
+Then copy the data files for the exercise to your laptop (these files are quite small, altogether 5Mb)
+
+```bash
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/beaf32.gff3
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/cp190.gff3
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/ctbp.bed
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/ctcf.gff3
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/dm3_chrom_sizes.txt
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/genes1000bpupstream.bed
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/insv_2_6h.bed
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/genomic_overlaps/insv_6_12h.bed
+```
+
+Finally, activate the environment and start R or Rstudio, and you are ready to go.
+
+```bash
+mamba activate environment_epigenomics2023
+open -na Rstudio
+```
 
 ## Introduction to genomic ranges
 
