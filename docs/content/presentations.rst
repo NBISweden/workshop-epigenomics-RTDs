@@ -37,7 +37,7 @@ Day 2: **ATAC-seq**
 
 :raw-html:`<br />`
 
-Day 3
+Day 3 **Advanced ChIP-seq**
 
 
 
@@ -55,9 +55,7 @@ Day 4: **Nextflow & nf-core**
 :raw-html:`<br />`
 
 
-Day 5
-
-**Single cell methods & data integation**
+Day 5 **Single cell methods & data integation**
 
 .. `Single cell methods <../_static/slides-single-cell-2021.pdf>`_
 
