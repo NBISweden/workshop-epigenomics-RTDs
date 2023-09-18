@@ -117,6 +117,7 @@ Thursday (21 September 2023)
 
 **16:00 - 17:00** Daily challenge 
 
+:raw-html:`<br />`
 
 :raw-html:`<br />`
 
