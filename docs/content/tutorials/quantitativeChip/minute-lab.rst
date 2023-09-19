@@ -469,20 +469,20 @@ We can use :code:`computeMatrix scale-regions` to calculate the values we will p
   computeMatrix scale-regions --downstream 3000 --upstream 3000 \
     -S ./bw/H3K27*pooled.hg38.scaled.bw \
     -R Bivalent_Court2017.hg38.bed \
-    -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+    -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
 
   computeMatrix scale-regions --downstream 3000 --upstream 3000 \
     -S ./bw/H3K27*pooled.hg38.unscaled.bw \
     -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz \
-    --outFileNameMatrix bivalent_values_unscaled.tab -p 8
+    --outFileNameMatrix bivalent_values_unscaled.tab -p 4
 
 .. note:: 
   This backslash `\\` means the command is not complete. So if you paste this to terminal you need to paste the whole thing. If you have problems with this, you can just paste it to a text editor and put it in one line, removing all the backslashes. For instance, here are the equivalent one liners for this:
 
   .. code-block:: bash
 
-      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
-      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.unscaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz --outFileNameMatrix bivalent_values_unscaled.tab -p 8
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.unscaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz --outFileNameMatrix bivalent_values_unscaled.tab -p 4
 
 .. note::
   You can adapt the :code:`-p` parameter to match the number of processors you allocated.
@@ -516,7 +516,7 @@ You can check this by playing with the parameters :code:`--downstream` and :code
 
      .. code-block:: bash
 
-       computeMatrix scale-regions --downstream 5000 --upstream 5000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+       computeMatrix scale-regions --downstream 5000 --upstream 5000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
     
 
 
@@ -544,7 +544,7 @@ distribution.
 
 .. code-block:: bash
 
-  multiBigwigSummary bins -b ./bw/H3K27*pooled.hg38.scaled.bw ./bw/H3K27*pooled.hg38.unscaled.bw -o 10kb_bins.npz --outRawCounts 10kb_bins.tab -bs 10000 -p 10
+  multiBigwigSummary bins -b ./bw/H3K27*pooled.hg38.scaled.bw ./bw/H3K27*pooled.hg38.unscaled.bw -o 10kb_bins.npz --outRawCounts 10kb_bins.tab -bs 10000 -p 4
 
 
 This will generate a :code:`10kb_bins.tab` tab-delimited file that contains mean coverage per 10kb bin across the genome for the different bigWig files. You can import this table into :code:`R` and look at the bin distribution using some simple :code:`ggplot` commands.

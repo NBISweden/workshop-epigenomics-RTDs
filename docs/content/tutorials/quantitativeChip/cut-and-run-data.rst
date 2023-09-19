@@ -200,7 +200,7 @@ Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw \
-        -bs 5000 -p 10 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
+        -bs 5000 -p 4 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
         --labels \
         Pugacheva2020_ChIP_MonoC \
         Pugacheva2020_ChIP_MonoN \
@@ -243,7 +243,7 @@ For instance, if you add ``--region chr1:300000:900000`` to the previous command
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_45s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_5s.GRCh38.bw \
         ./bw/NBIS_Skene2017_K562_CTCF_CnR_9m.GRCh38.bw \
-        -bs 5000 -p 10 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
+        -bs 5000 -p 4 -o ./bins_table.npz --outRawCounts ./bins_table.tab \
         --labels \
         Pugacheva2020_ChIP_MonoC \
         Pugacheva2020_ChIP_MonoN \
@@ -332,7 +332,7 @@ You can plot them.
       Skene2017_CnR_452 \
       Skene2017_CnR_5s \
       Skene2017_CnR_9m \
-      -p 10
+      -p 4
 
 
 .. note::
@@ -361,7 +361,7 @@ Clearly, the CUT&Run data scores better by QC compared to the CTCF ChIP presente
       ./bam/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bam \
       -o ./fingerprint_Pugacheva2020.pdf \
       --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC     Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
-      -p 10
+      -p 4
 
 .. image:: Figures/04_fingerprint2.png
 	:target: Figures/04_fingerprint2.png
