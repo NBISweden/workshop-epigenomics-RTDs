@@ -58,7 +58,7 @@ We will build upon the main labs:
 Setting-up
 ===========
 
-You can continue working in the ``analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the count tables for this exercise). We will use file ``nk_merged_peaksid.bed`` and annotation libraries, which are preinstalled. We access them via:
+You can continue working in the ``atacseq/analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the count tables for this exercise). We will use file ``nk_merged_peaksid.bed`` and annotation libraries, which are preinstalled. We access them via:
 
 .. code-block:: bash
 
