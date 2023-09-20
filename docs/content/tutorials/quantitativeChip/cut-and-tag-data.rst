@@ -22,24 +22,26 @@ Datasets
 ========
 
 .. list-table:: Table 1. H3K27me3 datasets used in this exercise.
-   :widths: 25 40
+   :widths: 25 40 40
    :header-rows: 1
 
    * - GEO Accession
      - Sample
+     - Reference
    * - GSM3536498
      - hESC_H1_H3K27me3_CnT
+     - Kaya-Okur *et al.* 2019 [1]_
    * - GSM3677833 
-     - NBIS_H1_H3K27me3_CnR    
-   * -   
+     - NBIS_H1_H3K27me3_CnR   
+     - Meers *et al.* 2019 [2]_ 
+   * - 
      - hESC_H1_H3K27me3_ChIP     
+     - 
    * - GSM1436879 
-     - WIBR2_H3K27me3_ChIP       
+     - WIBR2_H3K27me3_ChIP
+     - Theunissen *et al.* 2019 [3]_
 
-H3K27me3-enriched regions from Court et. al. 2017: ``Bivalent_primed.hg38.bed``.
-
-Court, Franck, and Philippe Arnaud. "An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research." Oncotarget 8.3 (2017): 4110.
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5354816/
+H3K27me3-enriched regions from Court *et al.* 2019 [4]_: ``Bivalent_primed.hg38.bed`` (lift-overed from hg19).
 
 
 Data preprocessing
@@ -78,9 +80,9 @@ Smaller H3K27me3 domains.
 	:target: Figures/13_cut_tag_igv.png
 	:alt:
 
-**Q: First impression browsing the H3K27me3 data? Consider the Y axis used for each dataset and what it means for signal/noise.**
+**Q: What are your first impressions browsing the H3K27me3 data? Consider the Y axis used for each dataset and what it means regarding signal/noise ratio.**
 
-Let’s look more systematically at known H3K27me3 peaks. We are using a published bed file of bivalent domains (Court, 2017).
+Let’s look more systematically at known H3K27me3 peaks. We are using a published BED file of bivalent domains (Court *et al.* 2017 [4]_ ).
 
 .. image:: Figures/14_heatmap.png
 	:target: Figures/14_heatmap.png
@@ -93,16 +95,24 @@ Let’s look more systematically at known H3K27me3 peaks. We are using a publish
 
 
 
-**Q: While showing the highest signal to noise (note the scale of the heatmap 0-1000!). Could there be a problem with CUT&Tag?**
+**Q: The heatmaps show a similar colorscale but the signal to noise varies a lot (note the scale of CUT&TAG 0-1000!). Could there be a problem with CUT&Tag?**
 
 A common critique about the in-situ methods is that they may be generating false-positive peaks at accessible sites of the genome, since MNase likes to cut open chromatin and Tn5 also is known to integrate best in open chromatin (ATAC-Seq!).
 
-So we could also plot the signal over active enhancers which are 1) known to have open chromatin and 2) are decorated by H3K27ac, thus cannot have H3K27me3.
+So we could also plot the signal over active enhancers which are 1) known to have open chromatin and 2) are decorated by H3K27ac, thus **cannot have H3K27me3**.
 
 .. image:: Figures/15_heatmap_2.png
 	:target: Figures/15_heatmap_2.png
 	:alt:
 
-**Q: Is the concern of false-positive peaks justified (consider the scale used here and above).**
+**Q: Is the aforementioned concern about false-positive peaks justified (consider the scale used here and above)?**
 
 
+
+References
+===============
+
+.. [1] Kaya-Okur, Hatice S., et al. "CUT&Tag for efficient epigenomic profiling of small samples and single cells." Nature communications 10.1 (2019): 1930.
+.. [2] Meers, Michael P., Derek H. Janssens, and Steven Henikoff. "Pioneer factor-nucleosome binding events during differentiation are motif encoded." Molecular cell 75.3 (2019): 562-575.
+.. [3] Theunissen, Thorold W., et al. "Systematic identification of culture conditions for induction and maintenance of naive human pluripotency." Cell stem cell 15.4 (2014): 471-487.
+.. [4] Court, Franck, and Philippe Arnaud. "An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research." Oncotarget 8.3 (2017).

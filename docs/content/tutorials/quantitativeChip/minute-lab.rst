@@ -33,7 +33,7 @@ We are going to analyse H3K27m3 data from human ESCs, where we have shown that N
 
 
 In order to make this tutorial last a reasonable time, the **primary analysis** part is independent from the second part, as it runs only on a subset of the data you can see in the second part. During the **primary analysis**
-you will see H3K27m3 data output for replicate 1 of our experiments. In the **downstream analysis** you can look at the three replicates together.
+you will see H3K27m3 data output for replicate 1 of our experiments. In the **downstream analysis** you can look at the genome-wide values and at relevant loci, such as bivalent genes.
 
 
 What you will learn:
@@ -53,7 +53,8 @@ Primary analysis
 Conda environment
 ^^^^^^^^^^^^^^^^^
 
-To make sure you have all the necessary tools to run :code:`minute`, you can set up a conda environment using a :code:`environment.yml` specification file:
+To make sure you have all the necessary tools to run :code:`minute`, you can use a conda environment. There is a pre-made version of this environment on: 
+:code:`/sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute` so you can just:
 
 
 .. code-block:: bash
@@ -61,44 +62,43 @@ To make sure you have all the necessary tools to run :code:`minute`, you can set
   module load bioinfo-tools
   module load conda
 
-  conda env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab 
+  conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
 
 
-.. admonition:: Speed up the process using mamba
+If you want to make a fresh install, you can make a new conda environment and install minute in it:
 
-   Sometimes :code:`conda` takes long time resolving dependencies on larger environment. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster
-   on the resolution. However, you might still experience some waiting time!
-
-   If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
-
-  .. code-block:: bash
-
-    module load bioinfo-tools
-    module load conda
-
-    mamba env create -f /proj/epi2022/minute_chip/minute/environment.yml -n minute_lab
-
-
-After activating the environment for the first time, you need to install the :code:`minute` package
-in it. You can do this by:
 
 .. code-block:: bash
 
-  cd /proj/epi2022/minute_chip/minute/
-  pip install .
+  module load bioinfo-tools
+  module load conda
+
+  conda create -n minute minute
 
 
-If you run into problems configuring this, there is a copy of this conda environment at: :code:`/proj/epi2022/minute_chip/condaenv/minute_lab`
-It should work if you just:
+
+**Speed up the process using mamba**
+
+Sometimes :code:`conda` takes long time resolving dependencies on large environments. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster on the package dependency resolution. However, you might still experience some waiting time!
+
+If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
 
 .. code-block:: bash
 
-  export CONDA_ENVS_PATH=/proj/epi2022/minute_chip/condaenv/
-  conda activate /proj/epi2022/minute_chip/condaenv/minute_lab
+  module load bioinfo-tools
+  module load conda
+
+  mamba create -n minute minute
+
+
+.. admonition:: Conda-related issues
+   
+  If you run into some issues running :code:`minute` after initializing the conda
+  environment, it could be related to loaded modules. Check section about `conda issues`_.
 
 
 Files
-^^^^^ 
+^^^^^^^^
 
 We are going to look at Naïve vs Primed human ES cells, and as control we have EZH2-inhibitor treatment,
 which removes H3K27m3 from the cells, creating a baseline for technical background.
@@ -113,10 +113,10 @@ There are 3 replicates for each condition. In the first part of the tutorial you
   cd my_primary/fastq
 
   # Create symlinks to our fastq files
-  for i in /proj/epi2022/minute_chip/primary/*.fastq.gz; do ln -s ${i}; done
+  for i in /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.fastq.gz; do ln -s ${i}; done
   cd ..
-  cp /proj/epi2022/minute_chip/primary/*.tsv .
-  cp /proj/epi2022/minute_chip/primary/*.yaml .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.tsv .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/primary/*.yaml .
 
 
 Now, this is how your directory structure should look like:
@@ -128,8 +128,7 @@ Now, this is how your directory structure should look like:
 
 
 
-Configuration
-********************
+**Configuration**
 
 :code:`minute` needs these three configuration files to run:
 
@@ -142,16 +141,20 @@ Configuration
     hg38:  # Arbitrary name for this reference. This is also used in output file names.
       # Path to a reference FASTA file (may be gzip-compressed).
       # A matching Bowtie2 index must exist in the same location.
-      fasta: "/proj/epi2022/minute_chip/reference/hg38.fa"
+      fasta: "/sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/reference/hg38.fa"
 
       # Path to a BED file with regions to exclude
-      exclude: "/proj/epi2022/minute_chip/reference/hg38.blocklist.bed"
+      exclude: "/sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/reference/hg38.blocklist.bed"
 
   # Length of the 5' UMI
   umi_length: 6
 
   # Fragment length (insert size)
   fragment_size: 150
+
+  # Max barcode errors allowed
+  max_barcode_errors: 1
+
 
 :code:`libraries.tsv`: Contains information about the demultiplexing. In our case, the barcodes are skipped because we have the already demultiplexed FASTQ files. The raw FASTQ
 mate 1 contains a 6nt UMI followed by a 8nt barcode that identifies the sample.
@@ -286,16 +289,16 @@ If you already got your files, you need to run something like
 
 .. code-block:: bash
 
-  conda activate minute_lab
+  conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
 
   # Move to the directory where you copied the files
   cd my_primary
 
   # Run snakemake on the background, and keep doing something else
-  nohup snakemake -p -s /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+  nohup minute run --cores 4 > minute_pipeline.out 2> minute_pipeline.err &
 
 
-:code:`-j` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores there are available on your node, you can raise this value.
+:code:`--cores` is the number of jobs/threads used by :code:`snakemake`. Depending on how many cores are available on your node, you can raise this value.
 The amount of files in this part of the tutorial is small enough to be possible to run in a local computer, but it still takes some time. For 4
 out of 8 cores running on my laptop (intel i7), this took around 4 hours to run. If you run this locally, consider not to use all the available
 cores you have, since you still need to run other things on the side and it may eat up your RAM memory as well (more tasks means usually more memory use).
@@ -304,23 +307,35 @@ Since this takes some time to run, my recommendation is that you start running t
 the tutorial in the meantime. It is also recommended, same as before, that you do not use *all* the cores you reserved, so you have some processing
 power for the second part of the tutorial. For instance if you have 12 cores, put 6 here and keep the other 6 for the second part of the tutorial.
 
+Another option is to run the `no_bigwigs` version of the pipeline to get the stats and reports but run it faster, in this case you can replace the
+minute run line above with:
+
+.. code-block:: bash
+
+  nohup minute run no_bigwigs --cores 4 > minute_pipeline.out 2> minute_pipeline.err &
+
+
+This will take way less time (bigWig generation is the most time consuming step of this workflow) and you can copy later the pre-calculated bigWig files
+to do the second part of the tutorial.
+
+
 .. note::
   You can run something in the background by typing :code:`&` at the end of the command. You can also keep the output to stderr and stdout by using
   :code:`>` and :code:`2>` operators. So the :code:`snakemake` call in the previous block just allows you to do this:
 
   .. code-block:: bash
     
-    nohup snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 6 > minute_pipeline.out 2> minute_pipeline.err &
+    nohup minute run --cores 4 > minute_pipeline.out 2> minute_pipeline.err &
 
-  `nohup` is a handy command that will make sure that the `snakemake` keeps running even if you logout or are kicked out of the session.
+  `nohup` is a handy command that will make sure that :code:`snakemake` keeps running even if you log out or are kicked out of the session on Uppmax.
 
   You can peek in the progress of the pipeline by looking at the output from time to time:
 
   .. code-block:: bash
 
-    tail minute_pipeline.out
+    tail minute_pipeline.err
 
-  It is important that you do this right away, to see if the pipeline is correctly running or there is some issue with it. Otherwise, if it crashes, it will do so silently.
+  It is important that you do this right away, to see if the pipeline is correctly running or there is some issue with it. Otherwise, if it crashes, it will print the error in the output files you speficied and you will not notice.
 
 
 .. note::
@@ -328,12 +343,31 @@ power for the second part of the tutorial. For instance if you have 12 cores, pu
 
   .. code-block:: bash
 
-    snakemake -p /proj/epi2022/minute_chip/minute/minute/Snakefile -j 4 --rerun-incomplete
+    minute run --rerun-incomplete > minute_pipeline.out 2> minute_pipeline.err &
+
+
+  This will overwrite the previous logs, so if you want to keep the previous ones, just use a different filename, like `minute_pipeline_rerun.out`. 
+
+Sometimes if the job is canceled externally (for example if you are kicked out of Rackham but forgot to use `nohup`) the running directory stays locked. Snakemake locks directories when it is running to avoid accidental concurrent runs. If you get an error like this:
+
+.. code-block:: bash
+
+  LockException:
+  Error: Directory cannot be locked. Please make sure that no other Snakemake process is trying to create the same files in the following directory:
+
+
+You can fix it by first running minute with the `--unlock` parameter:
+
+.. code-block:: bash
+
+  minute run --unlock
+
+This will print `Unlocking working directory` and exit, so you can run again with `--rerun-incomplete`.
 
 
 After the pipeline is run, you will have the following folders:
 
-- :code:`final/`: Contains final files: bigWig files, BAM files and demultiplexed FASTQ files (in this case, the same as your input).
+- :code:`final/`: Contains final files: bigWig files, BAM files and demultiplexed FASTQ files (in this case, the same as your input). If you ran the `no_bigwigs` option, this will not have bigWig files, but you can copy them later.
 - :code:`reports/`: Some reports on QC and scaling.
 - :code:`log/`: Log output from each step.
 - :code:`stats/`: Some stats files generated at each step.
@@ -379,7 +413,7 @@ Primed vs Naïve, information that is lost in unscaled files.
 
 
 .. note::
-  Make sure you select the scaled tracks together and click on *group autoscale* so all the scales match.
+  Make sure you select the scaled tracks together (CTRL + clicking on relevant track names), then right-click and select *group autoscale* so the scales are comparable.
 
 
 
@@ -406,18 +440,12 @@ Now you can get a copy of all the bigWig files + the bivalent annotation:
 
   mkdir bw
 
-  cp /proj/epi2022/minute_chip/downstream/*.bw bw/
-  cp /proj/epi2022/minute_chip/downstream/*.bed .
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/downstream/bw/*.bw bw/
+  cp /sw/courses/epigenomics/quantitative_chip_simon/minute_tutorial/downstream/*.bed .
 
 
 There should be :code:`unscaled` and :code:`scaled` bigWig files, plus a set of genes marked as Bivalent: :code:`Bivalent_Court2017.hg38.bed`. This annotation
-comes from:
-
-Court, F., & Arnaud, P. (2017). An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research. Oncotarget, 8(3), 4110.
-
-And it has been translated to :code:`hg38` genome using :code:`liftOver`. 
-
-Additionally, some bigWig tracks are pooled. These ones are all the replicates pooled together.
+comes from Court *et al.* 2017 [3]_, and it has been translated to :code:`hg38` genome using :code:`liftOver`. 
 
 
 Looking at bivalent genes
@@ -426,7 +454,7 @@ Looking at bivalent genes
 You can look at these using `deepTools <https://deeptools.readthedocs.io/en/develop/>`_. deepTools is a suite to process sequencing data.
 
 .. note::
-  If you just ran the primary analysis before, and you have an active :code:`minute_lab` conda environment, you probably don't need to load the deepTools module anyway. Otherwise, you can do:
+  If you just ran the primary analysis before, and you have an active :code:`minute` conda environment, you probably don't need to load the deepTools module anyway. Otherwise, you can do:
 
   .. code-block:: bash
 
@@ -441,20 +469,20 @@ We can use :code:`computeMatrix scale-regions` to calculate the values we will p
   computeMatrix scale-regions --downstream 3000 --upstream 3000 \
     -S ./bw/H3K27*pooled.hg38.scaled.bw \
     -R Bivalent_Court2017.hg38.bed \
-    -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+    -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
 
   computeMatrix scale-regions --downstream 3000 --upstream 3000 \
     -S ./bw/H3K27*pooled.hg38.unscaled.bw \
     -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz \
-    --outFileNameMatrix bivalent_values_unscaled.tab -p 8
+    --outFileNameMatrix bivalent_values_unscaled.tab -p 4
 
 .. note:: 
   This backslash `\\` means the command is not complete. So if you paste this to terminal you need to paste the whole thing. If you have problems with this, you can just paste it to a text editor and put it in one line, removing all the backslashes. For instance, here are the equivalent one liners for this:
 
   .. code-block:: bash
 
-      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
-      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.unscaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz --outFileNameMatrix bivalent_values_unscaled.tab -p 8
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
+      computeMatrix scale-regions --downstream 3000 --upstream 3000 -S ./bw/H3K27*pooled.hg38.unscaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_unscaled.npz --outFileNameMatrix bivalent_values_unscaled.tab -p 4
 
 .. note::
   You can adapt the :code:`-p` parameter to match the number of processors you allocated.
@@ -477,6 +505,8 @@ Then you can generate a plot by doing:
    .. image:: Figures/minute_04_scaled_bivalent_profile.png
           :width: 500px
 
+   This is an example of how the pooled replicates look on average. As you can see, when not scaled, Primed looks like it is much more enriched at bivalent genes than Naïve. This difference becomes much smaller when scaled.
+
 
 **Q: How do the scaled Naïve vs Primed differ when you move away from the gene body?**
 You can check this by playing with the parameters :code:`--downstream` and :code:`--upstream` when running `computeMatrix`.
@@ -486,7 +516,7 @@ You can check this by playing with the parameters :code:`--downstream` and :code
 
      .. code-block:: bash
 
-       computeMatrix scale-regions --downstream 5000 --upstream 5000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 8
+       computeMatrix scale-regions --downstream 5000 --upstream 5000 -S ./bw/H3K27*pooled.hg38.scaled.bw -R Bivalent_Court2017.hg38.bed -o bivalent_mat_scaled.npz --outFileNameMatrix bivalent_values_scaled.tab -p 4
     
 
 
@@ -514,11 +544,10 @@ distribution.
 
 .. code-block:: bash
 
-  multiBigwigSummary bins -b ./bw/H3K27*pooled.hg38.scaled.bw ./bw/H3K27*pooled.hg38.unscaled.bw -o 10kb_bins.npz --outRawCounts 10kb_bins.tab -bs 10000 -p 10
+  multiBigwigSummary bins -b ./bw/H3K27*pooled.hg38.scaled.bw ./bw/H3K27*pooled.hg38.unscaled.bw -o 10kb_bins.npz --outRawCounts 10kb_bins.tab -bs 10000 -p 4
 
 
-This will generate a :code:`10kb_bins.tab` tab-delimited file that contains mean coverage per 10kb bin across the genome for the different bigWig files. You can import this table into :code:`R` and
-look at the bin distribution using some simple :code:`ggplot` commands.
+This will generate a :code:`10kb_bins.tab` tab-delimited file that contains mean coverage per 10kb bin across the genome for the different bigWig files. You can import this table into :code:`R` and look at the bin distribution using some simple :code:`ggplot` commands.
 
 .. note::
   Since you already have run :code:`RStudio` in other tutorials, you can use any approach you have used before for running R. Just note that you need to have access to this :code:`10kb_bins.tab` you just created. You can also do it locally in your computer, if you have a :code:`RStudio`  version installed, and you will only need :code:`ggplot2` and :code:`GenomicRanges` + :code:`rtracklayer`.
@@ -540,7 +569,10 @@ We can make this a little more readable:
 
 .. code-block:: R
 
-  colnames(df) <- c(c("seqnames", "start", "end"), gsub("_pooled.hg38|.bw", "", colnames(df)[4:ncol(df)]))
+  colnames(df) <- c(
+    c("seqnames", "start", "end"),
+    gsub("_rep1.hg38|.bw", "", colnames(df)[4:ncol(df)])
+  )
 
   colnames(df)
 
@@ -599,10 +631,33 @@ The same way we generated these figures, there are a lot of things that can be d
 - How is the distribution of values per chromosome? Hint: look again at the tracks in the primary analysis part!
 
 
+.. _conda issues:
+
+Appendix: Interferences between conda and the module system
+-----------------------------------------------------------------------
+
+As a side note, there can be sometimes interference between conda environments
+and the Uppmax module system, so if you don't follow the tutorial in order,
+which could happen (e.g you might want to go see the bigWig files while you wait
+for the minute primary analysis to run), you might run into some issues.
+
+**Problem**: I tried to resume a :code:`minute` run and now it does not run and I get some kind of python exception, most
+likely :code:`ModuleNotFoundError` ... :code:`No module named XYZ`. 
+
+**Solution**: In my experience this has happened when I loaded :code:`module load deepTools` and tried
+to use the conda environment after. A quick check on :code:`which python` yields a path
+that is not in the conda environment directory, but a system-wide installation of
+python. :code:`module list` will show you a list of modules
+that are loaded and very likely there will be :code:`deepTools` in it.
+My recommendation is to unload everything using `module unload`
+(or log-out and log-in to your node again might also work) and restart, :code:`module load bioinfo-tools`,
+:code:`module load conda`, :code:`conda activate` and then try to run :code:`minute` again.
+
 
 References
 ^^^^^^^^^^^^^^^^
 
 .. [1] Navarro, C., Martin, M., & Elsässer, S. J. (2022). minute: A MINUTE-ChIP data analysis workflow. BioRxiv.
 .. [2] Kumar, B., Navarro, C., Winblad, N., Schell, J. P., Zhao, C., Weltner, J., Baqué-Vidal, L., Salazar Mantero, A., Petropoulos, S., Lanner, F., & Elsässer, S. J. (2022). Polycomb Repressive Complex 2 shields naïve human pluripotent cells from trophectoderm differentiation. Nature Cell Biology, 1-13.
+.. [3] Court, Franck, and Philippe Arnaud. "An annotated list of bivalent chromatin regions in human ES cells: a new tool for cancer epigenetic research." Oncotarget 8.3 (2017).
 

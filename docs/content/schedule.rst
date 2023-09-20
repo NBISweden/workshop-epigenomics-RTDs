@@ -59,7 +59,7 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 
 **12:00 - 13:00** lunch (offline)
 
-**13:00 - 13.30** Q&A with National Genomics Infrastructure (online session)
+**13:00 - 13.30** Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
 
 **13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
 
@@ -119,6 +119,8 @@ Thursday (21 September 2023)
 
 :raw-html:`<br />`
 
+:raw-html:`<br />`
+
 
 Friday (22 September 2023)
 --------------------------------
@@ -135,9 +137,11 @@ Friday (22 September 2023)
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 13.05** Introduction to exercises *(online session)*
+**13.00 - 14.00** Inspirational talk: **The role of PRC2-mediated gene silencing for maintenance of differentiated dopaminergic and serotonergic neuronal identity and function in healthy aging and disease.** (`Johan Holmberg <https://www.umu.se/personal/johan-holmberg02/>`_)
 
-**13.05 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
+**14.00 - 14.05** Introduction to exercises *(online session)*
+
+**14.05 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*
 
 **15:00 - 16:00** Daily challenge 

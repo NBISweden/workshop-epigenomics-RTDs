@@ -17,7 +17,7 @@ This page links to current presentations used in online sessions.
 
 Day 1: **Methylation: Arrays and Bisulfite-Seq**
 
-.. `Methylation Introduction Slides <../_static/Methylation_Slides.pdf>`_
+`Methylation Introduction Slides <../_static/Methylation_Slides.pdf>`_
 
 .. `DNA Methylation Methods and Technologies (Jessica Nordlund) <../_static/JN-EpigeneticsMethods_2021-10-25.pdf>`_
 
@@ -29,7 +29,7 @@ Day 2: **ATAC-seq**
 
 .. `ChIPseq data processing <../_static/slides-chipseqproc-as-2021.pdf>`_
 
-`ATACseq <../_static/slides-atacseqproc-as-2022.pdf>`_
+`ATACseq <../_static/slides-atacseqproc-as-2023.pdf>`_
 
 .. `Motif analysis <../_static/slides-motiffinding2021.pdf>`_
 
@@ -39,8 +39,8 @@ Day 2: **ATAC-seq**
 
 Day 3 **Advanced ChIP methods**
 
-
 `Advanced ChIP methods <../_static/NBIS_Course_2023_Day3_ChIP-seqLecture.pdf>`_
+
 
 
 
@@ -58,9 +58,7 @@ Day 4: **Nextflow & nf-core**
 :raw-html:`<br />`
 
 
-Day 5
-
-**Single cell methods & data integation**
+Day 5 **Single cell methods & data integation**
 
 .. `Single cell methods <../_static/slides-single-cell-2021.pdf>`_
 
