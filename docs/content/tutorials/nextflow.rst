@@ -16,7 +16,7 @@ Nextflow and nf-core
 
 .. attention::
 
-    For this tutorial **DO NOT** run the ``salloc`` command! These nextflow exercises are run from the login node (so just ``ssh -Y`` to rackham). If you later today want to work on some earlier exercises you can request cores with ``salloc`` after this tutorial.
+    For this tutorial **DO NOT** run the ``interactive`` command! These nextflow exercises are run from the login node (so just ``ssh -Y`` to rackham). If you later today want to work on some earlier exercises you can request cores with ``interactive`` after this tutorial.
 
 tmux
 -----
