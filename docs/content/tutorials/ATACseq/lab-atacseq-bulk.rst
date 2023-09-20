@@ -525,7 +525,7 @@ Peak Overlap
 ================
 
 
-.. admonition:: Peaks called uding different methods.
+.. admonition:: Peaks called using different methods.
    :class: dropdown, warning
 
    If you got lost in the peak calling madness, you can copy the directories with the results prepared earlier. Assuming you are in ``peaks``::
@@ -557,6 +557,9 @@ Assuming you are in ``peaks`` (you may have to ``cd ..``)
 	mkdir overlaps
 	cd overlaps
 
+	#link the results of peak calling for sample ENCFF828ZPN
+	ln -s  ../../../results/peaks/macs3/ENCFF828ZPN.macs3.default.summits.bampe_peaks.narrowPeak
+	
 	module load BEDTools/2.25.0
 
 	bedtools intersect -a ../macs3/ENCFF045OAB.macs3.default.summits.bampe_peaks.narrowPeak  -b ../macs3/ENCFF828ZPN.macs3.default.summits.bampe_peaks.narrowPeak  -f 0.50 -r >peaks_overlap.nk_stim.macs3.bed
