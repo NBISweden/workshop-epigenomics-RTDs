@@ -23,6 +23,12 @@ Recently (2023-09) this lab was tested on Uppmax using modules:
 
 .. code-block:: bash
 
+    #remove persisting modules to avoid conflicts
+    module purge
+
+    #deactivate any conda environment to avoid conflicts
+    conda deactivate
+    
     module load bioinfo-tools
     module load R_packages/4.0.0
 
@@ -45,6 +51,7 @@ Local
 
 
 The lab was tested on R 4.0.0. (R run from the console, not in R Studio). The packages were installed from Bioconductor version: Release (3.12).
+**Please note that this package has been deprecated from current Bioconductor versions**. The most stable and simple manner to use at this time, is via Uppmax module system.
 
 .. code-block:: R
 
@@ -135,6 +142,19 @@ All files necessary to execute the code in ``R`` can be copied from Rackham from
 
 ``/sw/courses/epigenomics/quantitative_chip_simon/exospike.tar.gz``
 
+**Uppmax**
+
+.. code-block:: bash
+
+    mkdir exospike
+    cd exospike
+
+    cp /sw/courses/epigenomics/quantitative_chip_simon/exospike.tar.gz .
+    tar -xvf exospike.tar.gz 
+
+
+**Local**
+
 After copying the files please decompress the archive and note the path to folder ``/chip_exo_spike`` on your local system.
 
 
@@ -188,7 +208,12 @@ In ``R``:
 
     workdir="/path/to/chip_exo_spike"
     setwd(workdir)
-    
+
+    #or simply
+    workdir="."
+    setwd(workdir)
+
+
     bam_path=file.path(workdir,"bam")
     bw_path=file.path(workdir,"tracks")
     exp_data=file.path(workdir,"exp_data.csv")
@@ -274,6 +299,8 @@ You are supposed to obtain ``*-RPM-BGSub.bw`` after this step.
 
 
 The end result: ``*-RPM-BGSub-reverted-spiked.bw`` files after this step.
+
+You can check the content of ``tracks`` directory: ``dir("tracks")``
 
 
 **Extracting binding values.** The last step of data processing is to extract and format binding scores in order to use plotting methods. The `extractBinding` method extracts binding scores at different locations and stores these values in the form of PlotSetArray objects and matrices. The scores are retrieved on annotations provided in a `gff` file. If one wishes to focus on peaks, their coordinates should be submitted at this step. The genome name must also be provided. For details about installing the required `BSgenome` package corresponding to the endogenous organism, see the BSgenome package documentation.
