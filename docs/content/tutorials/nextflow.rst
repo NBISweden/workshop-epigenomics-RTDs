@@ -332,7 +332,7 @@ Begin with making a fresh analysis directory in your home directory
     mkdir methylseq_analysis
     cd methylseq_analysis
 
-In this folder you can launch the analysis! For this, try to figure out the command you should run. Try to execute the methylseq pipeline with version 1.6.1 using the FastQ files you just linked to.
+In this folder you can launch the analysis! For this, try to figure out the command you should run. Try to execute the methylseq pipeline with version 1.6.1 using the FastQ files mentioned above.
 
 Remember the core Nextflow flags that you will need (one hyphen!)
 
