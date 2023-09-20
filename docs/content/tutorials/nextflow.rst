@@ -62,7 +62,7 @@ To use the environment modules (preferable when on UPPMAX - do all of the steps 
 
     module purge                        # Clears all existing loaded modules, to start fresh
     module load uppmax bioinfo-tools    # Base UPPMAX environment modules, needed for everything else
-    module load Nextflow                # Note: Capital N!
+    module load Nextflow/21.10.6                # Note: Capital N!
 
 
 Alternatively, to install yourself (when not on UPPMAX for example):
@@ -101,8 +101,8 @@ These pipelines can create large temporary files and large result files, so we w
 
 .. code-block::
 
-    mkdir /proj/snic2022-23-333/nobackup/$USER # create personal folder in project directory
-    cd /proj/snic2022-23-333/nobackup/$USER
+    mkdir /proj/naiss2023-23-349/nobackup/private/$USER # create personal folder in project directory
+    cd /proj/naiss2023-23-349/nobackup/private/$USER
     mkdir nextflow-hello-test
     cd nextflow-hello-test
     nextflow run hello
@@ -111,7 +111,7 @@ You should see something like this:
 
 .. code-block:: bash
 
-    N E X T F L O W  ~  version 20.10.0
+    N E X T F L O W  ~  version 22.10.2
     Pulling nextflow-io/hello ...
     downloaded from https://github.com/nextflow-io/hello.git
     Launching `nextflow-io/hello` [sharp_sammet] - revision: 96eb04d6a4 [master]
@@ -170,10 +170,10 @@ Remember the key points:
 
 .. code-block:: bash
 
-    cd /proj/snic2022-23-333/nobackup/$USER
+    cd /proj/naiss2023-23-349/nobackup/private/$USER
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project snic2022-22-634
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project naiss2023-22-673
 
 Now, I’ll be honest, there’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset! This is where you ask for help on Slack instead of suffering in silence.
 
@@ -229,7 +229,7 @@ In a new fresh directory(!), try this out:
 
 .. code-block:: bash
 
-    cd /proj/snic2022-23-333/nobackup/$USER
+    cd /proj/naiss2023-23-349/nobackup/private/$USER
     mkdir atacseq-help
     cd atacseq-help
     nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow --help
@@ -251,7 +251,7 @@ Make a new directory for this CHiP seq analysis and link the data files to a dat
 
 .. code-block:: bash
 
-    cd /proj/snic2022-23-333/nobackup/$USER
+    cd /proj/naiss2023-23-349/nobackup/private/$USER
     mkdir chip_seq_analysis
     cd chip_seq_analysis
     mkdir input_files
@@ -299,7 +299,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
-* ``--project snic2022-22-634``
+* ``--project naiss2023-22-673``
 * ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
@@ -309,7 +309,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: CHiP command
    :class: dropdown, note
 
-    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project snic2022-22-634 --genome GRCh38 --input samplesheet.csv --single_end``
+    ``nextflow run $NF_CORE_PIPELINES/chipseq/1.2.2/workflow -profile uppmax --project naiss2023-22-673 --genome GRCh38 --input samplesheet.csv --single_end``
 
 Methyl-seq
 -----------
@@ -328,7 +328,7 @@ Begin with making a fresh analysis directory in your home directory
 
 .. code-block:: bash
 
-    cd /proj/snic2022-23-333/nobackup/$USER
+    cd /proj/naiss2023-23-349/nobackup/private/$USER
     mkdir methylseq_analysis
     cd methylseq_analysis
 
@@ -342,7 +342,7 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 
 * ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz'``
 * ``--aligner bismark``
-* ``--project snic2022-22-634``
+* ``--project naiss2023-22-673``
 * ``--genome mm10``
 
 If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
@@ -350,7 +350,7 @@ If all goes well, your pipeline will run and kick off lots of jobs and merrily p
 .. admonition:: minimal methylseq command
    :class: dropdown, note
 
-   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project snic2022-22-634 --genome mm10``
+   ``nextflow run $NF_CORE_PIPELINES/methylseq/1.6.1/workflow -profile uppmax --input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz' --aligner bismark --project naiss2023-22-673 --genome mm10``
 
 Getting help
 -------------
