@@ -37,7 +37,10 @@ Day 2: **ATAC-seq**
 
 :raw-html:`<br />`
 
-Day 3 **Advanced ChIP-seq**
+Day 3 **Advanced ChIP methods**
+
+`Advanced ChIP methods <../_static/NBIS_Course_2023_Day3_ChIP-seqLecture.pdf>`_
+
 
 
 
