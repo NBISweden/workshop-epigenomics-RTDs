@@ -514,8 +514,8 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir hepg2
 	mkdir sknsh
 	mkdir neural
-/proj/epi2023/chipseq/data/bam/ 
- 	ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
+
+	ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
  	ln -s /proj/epi2023/chipseq/data/bam/hepg2/* ./hepg2
  	ln -s /proj/epi2023/chipseq/data/bam/sknsh/* ./sknsh
  	ln -s /proj/epi2023/chipseq/data/bam/neural/* ./neural
