@@ -48,7 +48,7 @@ Setting-up
 
 We need access to file ``nk_merged_peaks.saf`` which we created in the :doc:`ATACseq data analysis <../ATACseq/lab-atacseq-bulk>`, part "Merged Peaks" and bam files with alignments.
 
-Assuming we start at ``analysis``:
+Assuming we start at ``atacseq/analysis``:
 
 
 .. code-block:: bash
@@ -59,10 +59,19 @@ Assuming we start at ``analysis``:
 	ln -s ../peaks/consensus/nk_merged_peaks.saf
 	ln -s ../../data_proc/* .
 
+
+If you haven't followed the peak calling and merging lab, you can continue from this point by linking necessary files:
+
+.. code-block:: bash
+
+   ln -s ../../results/peaks/consensus/nk_merged_peaks.saf
+   ln -s ../../data_proc/* .
+
+
 Data Summarisation 
 =======================
 
-We can now summarise the reads:
+We can now summarise the reads allowing for 20% overlap of the read length with peak feature (``--fracOverlap 0.2``) and counting fragments rather than reads (``-p`` for PE):
 
 .. code-block:: bash
 
@@ -101,7 +110,7 @@ Differential Accessibility
 **Please note** that in the following exercise we use a counts table generated using a different peak set, hence some small differences to peaks called during the course may be present.
 
 
-You can continue working in the ``analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the count tables for this exercise). We will use file ``nk_merged_peaks_macs3.counts`` and annotation libraries, which are preinstalled. We access them via:
+You can continue working in the ``atacseq/analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the count tables for this exercise). We will use file ``nk_merged_peaks_macs3.counts`` and annotation libraries, which are preinstalled. We access them via a module ``R_packages``.
 
 
 
