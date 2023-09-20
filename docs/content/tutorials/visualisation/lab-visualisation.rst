@@ -33,7 +33,7 @@ Before we start
 
 Analysis of ATAC/ ChIP-seq data wouldn't be complete without visualising the signal in many ways at various stages of the analysis.
 
-Signal can be visualised and summarised in relation to annotated features, such as in `deepTools <https://deeptools.readthedocs.io/en/develop/>`_ part of this tutorial, and this may serve as a diagnostic tool (i.e. we expect to see higher density of signal in transcription start site regions), for data exploration (i.e. we can detect features with various signal distribution patterns) or for plotting final figures.
+Signal can be visualised and summarised in relation to annotated features, such as in `deepTools <https://deeptools.readthedocs.io/en/3.5.2/>`_ part of this tutorial, and this may serve as a diagnostic tool (i.e. we expect to see higher density of signal in transcription start site regions), for data exploration (i.e. we can detect features with various signal distribution patterns) or for plotting final figures.
 
 We can also use tools to produce visually attractive plots of genomic tracks, such as ones we have inspected using Integrative Genome Browser during the tutorials. We show you how to start with these type of visualisations in section on `pyGenomeTracks <https://pygenometracks.readthedocs.io/en/latest/>`_.
 
@@ -47,7 +47,7 @@ Signal visualisation with deepTools
 ====================================
 
 
-in relation to annotated features.
+We can visualise signal in relation to annotated features.
 
 One such kind of features relevant for TFs are transcription start sites (TSS). In this exercise we use ChIP-seq data from :doc:`ChIPseq lab <../chipseqProc/lab-chipseq-processing>`. The data we are going to plot is from one replicate of ChIP-seq experiment investigating binding of REST transcriptional represssor in HeLa cells.
 and annotations for chromosomes 1 and 2. To do so we will:
@@ -81,7 +81,10 @@ Assuming we are in the home directory:
 Normalised coverage tracks
 -----------------------------
 
-Let's start from generating a normalised coverage track in a format called  ``bedgraph`` from bam file. The bam file contains data subset to chr1 and chr2, hence we use ``effectiveGenomeSize 492449994`` (length of chr1 and chr2). The data is SE, so we extend the reads to average fragment length (which we know from the :doc:`Cross correlation <../data-preproc/data-qc-chip>`) using parameter ``--extendReads 110``. Last but not least, we scale the track to average 1x coverage using option ``--normalizeUsing RPGC``.
+Let's start from generating a normalised coverage track in a format called  ``bedgraph`` from bam file. The bam file contains data subset to chr1 and chr2, hence we use ``effectiveGenomeSize 492449994`` (length of chr1 and chr2). The data is SE, so we extend the reads to average fragment length 
+..(which we know from the :doc:`Cross correlation <../data-preproc/data-qc-chip>`) 
+(which we know from the :doc:`Cross correlation <../chipseqProc/lab-chipseq-processing>`) 
+using parameter ``--extendReads 110``. Last but not least, we scale the track to average 1x coverage using option ``--normalizeUsing RPGC``.
 
 
 .. code-block:: bash
@@ -124,7 +127,7 @@ Plotting signal in relation to TSS
 
 We begin by summarising coverage in bins in relation to a set of reference points, TSS in our case.
 
-We can compute the matrix of scores for visualisation using `computeMatrix <http://deeptools.readthedocs.org/en/latest/content/tools/computeMatrix.html>`_. This tool calculates scores per genome regions and prepares an intermediate file that can be used with ``plotHeatmap`` and ``plotProfiles``. 
+We can compute the matrix of scores for visualisation using `computeMatrix <http://deeptools.readthedocs.org/en/3.5.2/content/tools/computeMatrix.html>`_. This tool calculates scores per genome regions and prepares an intermediate file that can be used with ``plotHeatmap`` and ``plotProfiles``. 
 
 Typically, the genome regions are genes (or TSS as in this case), but any other regions defined in a BED file can be used. ``computeMatrix`` accepts multiple score files (bigWig format) and multiple regions files (BED format). This tool can also be used to filter and sort regions according to their score.
 
@@ -158,7 +161,7 @@ We can now create a heatmap for scores associated with genomic regions, i.e. plo
 
 Have a look at ``tss.hela_rep1.pdf``. Can this plot be improved?
 
-This is a very basic plot. We can add on to it, for example we can cluster genes based on the signal profile around TSS. For more possibilities please check `plotHetmap <https://deeptools.readthedocs.io/en/develop/content/tools/plotHeatmap.html>`_.
+This is a very basic plot. We can add on to it, for example we can cluster genes based on the signal profile around TSS. For more possibilities please check `plotHetmap <https://deeptools.readthedocs.io/en/3.5.2/content/tools/plotHeatmap.html>`_.
 
 .. code-block:: bash
 
@@ -174,6 +177,10 @@ This is a very basic plot. We can add on to it, for example we can cluster genes
    .. image:: figures/tss.hela_rep1_k3.png
       		:width: 200px
 
+
+:raw-html:`<br />`
+
+You can also use the same tools to plot signal along a scaled gene body using ``computeMatrix scale-regions``. More examples are given on deepTools homepage.
 
 :raw-html:`<br />`
 
@@ -328,6 +335,23 @@ Let's build a simple ``ini`` file::
 
 
 
+.. Hint::
+
+    It is generally not advised to edit files used on Linux systems in word processing editors such as MsWord and similar (due to meta characters added by them for formatting purposes - they may not be visible, but they are present in text copied directly from such editors. For generating the *ini files in this example, and general script writing, it is recommended to use text editors developed for programming. Not pnly they do not add any invisible characters to the text, but also often they include conveninet utilities such as syntax highlighting for a wide choice of programming languages.
+
+    One example of such editor is `Sublime <https://www.sublimetext.com/>`_.
+
+    You can copy the contents of ``tracks.ini`` to the editor, modify the paths and paste back to rackham::
+
+	#create a file and open a simple editor
+	nano tracks.ini
+
+	# now copy the file contents
+
+	#to close and save the file
+	Ctrl-X
+	#to save under given name press Y, then "enter"
+
 
 This file is available as ``tracks1.ini``.
 
@@ -336,7 +360,9 @@ This file is available as ``tracks1.ini``.
 
 
 .. code-block:: bash
-	
+
+	#unloading module python may be necessary
+	module unload python
 	module load conda/latest
 	conda activate /sw/courses/epigenomics/software/conda/pygenometracks
 
