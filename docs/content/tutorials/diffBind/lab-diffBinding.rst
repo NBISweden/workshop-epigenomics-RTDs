@@ -48,7 +48,7 @@ The setting-up is the same as for the :doc:`data processing <../chipseqProc/lab-
 
 If you have logged out: log back in, open interactive session, and run ``chipseq_env.sh`` script.
 
-If you followed the ChIP-seq Data Processing QC and Peak Calling lab, you can continue in ``chipseq/analysis``. 
+If you followed the ChIP-seq Data Processing QC and Peak Calling lab, you can continue in ``chipseq/analysis/R``. 
 
 If you haven't, starting in your home directory, you need to copy data:
 
@@ -59,6 +59,8 @@ If you haven't, starting in your home directory, you need to copy data:
 
 	source chipseq_env.sh
 	source chipseq_data.sh
+
+	cd chipseq/analysis/R
 
 
 
@@ -141,7 +143,7 @@ Running ``DiffBind``
 ----------------------
 
 
-We will now follow ``DiffBind`` example to obtain differentially bound sites, given our samples. You may want to open ``DiffBind`` tutorial and read section `3 Example Obtaining differentially bound sites <http://bioconductor.org/packages/devel/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf>`_ while typing the command to get more information about each step.
+We will now follow ``DiffBind`` example to obtain differentially bound sites in our samples (several cell lines). You may want to open ``DiffBind`` tutorial and read section `3 Example Obtaining differentially bound sites <http://bioconductor.org/packages/devel/bioc/vignettes/DiffBind/inst/doc/DiffBind.pdf>`_ while typing the command to get more information about each step.
 
 First we need to create the object which holds data.
 
@@ -285,7 +287,7 @@ The analysis of differential occupancy is performed by a wrapper function ``dba.
 
 .. code-block:: R
 
-	# we will skip generating greylists (regions of high signal in input samples) because of time - it is recommended to perform this step though!
+	# we will skip generating greylists (regions of high signal in input samples) because of time - it is recommended to perform this step in your own analyses though!
 	res.cnt2$config$doGreylist=FALSE
 
 	# performing analysis of differential binding
@@ -348,7 +350,7 @@ We can save some more of many useful plots implemented in ``DiffBind``::
 
 Finally, we can save the results, for HeLa vs neural cells::
 
-	# extracting differentially binding sites in GRanges
+	# extracting differentially occupied sites in a GRanges object
 	res.db1 = dba.report(res.cnt3, contrast=1)
 	head(res.db1)
 
