@@ -514,10 +514,11 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir hepg2
 	mkdir sknsh
 	mkdir neural
- 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hela/* ./hela
- 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/hepg2/* ./hepg2
- 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/sknsh/* ./sknsh
- 	ln -s /proj/g2021025/nobackup/chipseq_proc/data/bam/neural/* ./neural
+/proj/epi2023/chipseq/data/bam/ 
+ 	ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
+ 	ln -s /proj/epi2023/chipseq/data/bam/hepg2/* ./hepg2
+ 	ln -s /proj/epi2023/chipseq/data/bam/sknsh/* ./sknsh
+ 	ln -s /proj/epi2023/chipseq/data/bam/neural/* ./neural
 
 
 
@@ -603,9 +604,9 @@ To avoid long paths in the command line let's create links to BAM files with ChI
   mkdir peak_calling
   cd peak_calling
 
-  ln -s /proj/epi2022/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2023/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
   ./ENCFF000PED.preproc.bam
-  ln -s /proj/epi2022/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2023/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
   ./ENCFF000PET.preproc.bam
 
 Before we run ``MACS`` we need to **look at parameters** as there are several of them affecting peak calling as well as reporting the results. It is important to understand them to be able to modify the command to the needs of your data set.
@@ -900,10 +901,10 @@ in ``chipseq/analysis/``
   mkdir hepg2
   mkdir sknsh
   mkdir neural
-  ln -s /proj/epi2022/chipseq/data/bam/hela/* ./hela
-  ln -s /proj/epi2022/chipseq/data/bam/hepg2/* ./hepg2
-  ln -s /proj/epi2022/chipseq/data/bam/sknsh/* ./sknsh
-  ln -s /proj/epi2022/chipseq/data/bam/neural/* ./neural
+  ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
+  ln -s /proj/epi2023/chipseq/data/bam/hepg2/* ./hepg2
+  ln -s /proj/epi2023/chipseq/data/bam/sknsh/* ./sknsh
+  ln -s /proj/epi2023/chipseq/data/bam/neural/* ./neural
 
   ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
@@ -955,21 +956,21 @@ In this part we will look more closely at our data, which is a good practice, as
 
 We will view and need the following HeLa replicate 1 files:
 
-* ``~/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam``: mapped reads
+* ``chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam``: mapped reads
 
-* ``~/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam.bai`` : mapped reads index file
+* ``chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam.bai`` : mapped reads index file
 
-* ``~/chipseq/results/coverage/ENCFF000PED.cov.norm1x.bedgraph`` : coverage track
+* ``chipseq/results/coverage/ENCFF000PED.cov.norm1x.bedgraph`` : coverage track
 
-* ``~/chipseq/results/peaks_macs/hela_1_REST.chr12.macs2_peaks.narrowPeak`` : peaks' genomic coordinates
+* ``chipseq/results/peaks_macs/hela_1_REST.chr12.macs2_peaks.narrowPeak`` : peaks' genomic coordinates
 
 and corresponding input files:
 
-* ``~/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam``
+* ``chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam``
 
-* ``~/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam.bai``
+* ``chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam.bai``
 
-* ``~/chipseq/results/coverage/ENCFF000PET.cov.norm1x.bedgraph``
+* ``chipseq/results/coverage/ENCFF000PET.cov.norm1x.bedgraph``
 
 Let's copy them to local computers, do you remember how?
 
