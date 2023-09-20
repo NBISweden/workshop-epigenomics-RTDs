@@ -337,7 +337,7 @@ Let's build a simple ``ini`` file::
 
 .. Hint::
 
-    It is generally not advised to edit files used on Linux systems in word processing editors such as MsWord and similar (due to meta characters added by them for formatting purposes - they may not be visible, but they are present in text copied directly from such editors. For generating the *ini files in this example, and general script writing, it is recommended to use text editors developed for programming. Not pnly they do not add any invisible characters to the text, but also often they include conveninet utilities such as syntax highlighting for a wide choice of programming languages.
+    It is generally not advised to edit files used on Linux systems in word processing editors such as MsWord and similar (due to meta characters added by them for formatting purposes - they may not be visible, but they are present in text copied directly from such editors. For generating the ``*ini`` files in this example, and general script writing, it is recommended to use text editors developed for programming. Not only they do not add any invisible characters to the text, but often include conveninet utilities such as syntax highlighting for a wide choice of programming languages.
 
     One example of such editor is `Sublime <https://www.sublimetext.com/>`_.
 
