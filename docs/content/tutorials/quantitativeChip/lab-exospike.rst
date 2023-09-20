@@ -19,12 +19,20 @@ Requirements
 Uppmax
 --------
 
-- R 3.5.0 (2018-04-23) or newer
+Recently (2023-09) this lab was tested on Uppmax using modules:
 
-- Bioconductor packages:
-	
-	- ChIPSeqSpike
-	- BSgenome.Hsapiens.UCSC.hg38
+.. code-block:: bash
+
+    module load bioinfo-tools
+    module load R_packages/4.0.0
+
+
+This package environment should already contain the required modules :code:`ChIPSeqSpike` and :code:`BSgenome.Hsapiens.UCSC.hg38`, so they should not need
+to be installed.
+
+Note that when you load :code:`R_packages/4.0.0` on Uppmax, RStudio is not
+included. The first part has been run on R from the terminal without RStudio.
+
 
 
 Local
@@ -45,6 +53,24 @@ The lab was tested on R 4.0.0. (R run from the console, not in R Studio). The pa
 
 	BiocManager::install("ChIPSeqSpike")
 	BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+
+
+
+ChIPSeqSpike package has been discontinued on Bioconductor, so there
+could be some incompatibilities between versions of packages in the
+local environment.
+
+The files produced in the first part of the tutorial can be found on
+Uppmax under:
+
+.. code-block:: bash
+
+    /sw/courses/epigenomics/quantitative_chip_simon/exospike_part2
+
+There you can find a file: :code:`chipseqspike.RData` that you can 
+load into your R environment by :code:`load("chipseqspike.RData")`.
+There is also a :code:`tracks` directory in the same path that contains
+the resulting spike-in scaled versions of the bigWig tracks.
 
 
 Data
