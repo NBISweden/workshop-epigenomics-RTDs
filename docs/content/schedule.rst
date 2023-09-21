@@ -111,7 +111,9 @@ Thursday (21 September 2023)
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 15:00** :doc:`Downstream analyses exercises <./tutorials/downstream_tutorials>` *(online support)*
+**13:00 - 13:15** Introduction to :doc:`Downstream analyses exercises <./tutorials/downstream_tutorials>` *(online session)*
+
+**13:15 - 15:00** :doc:`Downstream analyses exercises <./tutorials/downstream_tutorials>` *(online support)*
 
 **15:00 - 17:00** Exercises *(offline)*
 
