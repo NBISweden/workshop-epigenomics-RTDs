@@ -36,7 +36,7 @@
 
 ### Option A
 
-The easiest way to run this exercise, which we highly recommend, is on Uppmax. To do this, start an interactive session like you have done for the previous days, and then do
+The easiest way to run this exercise, which we recommend, is on Uppmax using the module system. To do this, start an interactive session like you have done for the previous days, and then do
 
 ```bash
 cd <some directory where you work with this course>
@@ -58,7 +58,7 @@ Now you should be ready to go!
 
 ### Option B
 
-An alternative option, is to run the exercise in a container instead of using the module system. This is a bit more tricky, but there are several advantages:
+An alternative option, is to run the exercise on Uppmax but in a container instead of using the module system. This is a bit more tricky, but there are several advantages:
 
 - You can also use packages that have not previously been installed in Uppmax modules.
 
@@ -66,9 +66,9 @@ An alternative option, is to run the exercise in a container instead of using th
 
 To set up this exercise using this option, you have to go through the following steps:
 
-- Log in to uppmax, and start an interactive session.
+Log in to uppmax, and start an interactive session.
 
-- Run the following script on uppmax, to start Rstudio
+Run the following script on uppmax, to start Rstudio
 
 ```
 /sw/courses/epigenomics/sc_atac_seq/startup_script.sh
@@ -86,9 +86,9 @@ and point your web browser to http://localhost:8787
 ```
 
 
-- On your local computer, run the ssh command printed above
+On your local computer, run the ssh command printed above
 
-- Finally, start a web browser on your local computer, and go to [http://localhost:8787](http://localhost:8787).
+Finally, start a web browser on your local computer, and go to [http://localhost:8787](http://localhost:8787).
 
 You should now see Rstudio in you web browser, and can start the exercise.
 
