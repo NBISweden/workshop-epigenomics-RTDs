@@ -20,7 +20,9 @@
 
 ## Setting up
 
-To run this exercise on Uppmax, first load the following modules on Uppmax:
+### Option A
+
+The easiest way to run this exercise, which we recommend, is on Uppmax using the module system. To do this, start an interactive session like you have done for the previous days, and then do
 
 ```bash
 module load bioinfo-tools
@@ -39,11 +41,54 @@ mkdir -p genomic_overlaps
 cd genomic_overlaps
 ```
 
-
-
 Now start `R`, or `rstudio`.
 
-### Backup method for setting up
+### Option B
+
+An alternative option, is to run the exercise on Uppmax but in a container instead of using the module system. This is a bit more tricky, but there are several advantages:
+
+- You can also use packages that have not previously been installed in Uppmax modules.
+
+- You can use the same containers on other computers, and if you use the same container several years from now you are still sure that you are using exactly the same versions of all tools as you did before. This is great for reproducibility. (Please see the course [Tools for reproducible research](https://uppsala.instructure.com/courses/73110) is you are interested in containers, workflows etc.)
+
+To set up this exercise using this option, you have to go through the following steps:
+
+Log in to uppmax, and start an interactive session.
+
+
+Create a new dirctory for the exercise, and go there
+
+```
+mkdir -p genome_overlaps
+cd genome_overlaps
+```
+
+Run the following script on uppmax, to start Rstudio
+
+```
+/sw/courses/epigenomics/genomic_overlaps/startup_script.sh
+```
+
+This script will print some instructions, e.g.
+
+```
+SSH tunnel from your workstation using the following command:  
+
+ ssh -N -L 8787:r142.uppmax.uu.se:36611 jacke@rackham.uppmax.uu.se
+
+and point your web browser to http://localhost:8787 
+
+```
+
+
+On your local computer, run the ssh command printed above
+
+Finally, start a web browser on your local computer, and go to [http://localhost:8787](http://localhost:8787).
+
+You should now see Rstudio in you web browser, and can start the exercise.
+
+
+### Option C
 
 If this doesn’t work for some reason (e.g. if you don’t have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that is also works on Linux and Windows. If you haven't done so for the single cell exercise, first install mamba, and the environment for the labs, following the instructions [here](https://nbis-workshop-epigenomics.readthedocs.io/en/latest/content/tutorials/scAtacSeq/lab-sc_atac_seq.html#backup-method-for-setting-up). 
 
