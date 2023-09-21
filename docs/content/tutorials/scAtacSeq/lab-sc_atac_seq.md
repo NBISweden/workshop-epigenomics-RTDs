@@ -68,6 +68,14 @@ To set up this exercise using this option, you have to go through the following 
 
 Log in to uppmax, and start an interactive session.
 
+
+Create a new dirctory for the exercise, and go there
+
+```
+mkdir -p sc_lab
+cd sc_lab
+```
+
 Run the following script on uppmax, to start Rstudio
 
 ```
