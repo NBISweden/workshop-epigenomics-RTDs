@@ -39,6 +39,8 @@ cd <some directory where you work with this course>
 
 mkdir -p genomic_overlaps
 cd genomic_overlaps
+
+ln -s /sw/courses/epigenomics/genomic_overlaps/* .
 ```
 
 Now start `R`, or `rstudio`.
