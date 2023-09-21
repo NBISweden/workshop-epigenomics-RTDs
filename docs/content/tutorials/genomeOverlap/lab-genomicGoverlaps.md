@@ -32,7 +32,7 @@ module load RStudio
 module load samtools
 ```
 
-Then set up a working directory, in which you create links to all data files needed for the exercise, *e.g.* with `ln -s /sw/courses/epigenomics/genomic_overlaps/* .`. 
+Then set up a working directory, in which you create links to all data files needed for the exercise, *e.g.* with 
 
 ```bash
 cd <some directory where you work with this course>
