@@ -34,6 +34,8 @@
 
 ## Setting up
 
+### Option A
+
 The easiest way to run this exercise, which we highly recommend, is on Uppmax. To do this, start an interactive session like you have done for the previous days, and then do
 
 ```bash
@@ -54,10 +56,47 @@ rstudio &
 
 Now you should be ready to go!
 
+### Option B
 
-### Backup method for setting up
+An alternative option, is to run the exercise in a container instead of using the module system. This is a bit more tricky, but there are several advantages:
 
-If this doesn't work for some reason (*e.g.* if you don't have an account on uppmax), you can run the exercise on your laptop. This has been tested on Mac, but chances are that it also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
+- You can also use packages that have not previously been installed in Uppmax modules.
+
+- You can use the same containers on other computers, and if you use the same container several years from now you are still sure that you are using exactly the same versions of all tools as you did before. This is great for reproducibility. (Please see the course [Tools for reproducible research](https://uppsala.instructure.com/courses/73110) is you are interested in containers, workflows etc.)
+
+To set up this exercise using this option, you have to go through the following steps:
+
+- Log in to uppmax, and start an interactive session.
+
+- Run the following script on uppmax, to start Rstudio
+
+```
+/sw/courses/epigenomics/sc_atac_seq/startup_script.sh
+```
+
+This script will print some instructions, e.g.
+
+```
+SSH tunnel from your workstation using the following command:  
+
+ ssh -N -L 8787:r142.uppmax.uu.se:36611 jacke@rackham.uppmax.uu.se
+
+and point your web browser to http://localhost:8787 
+
+```
+
+
+- On your local computer, run the ssh command printed above
+
+- Finally, start a web browser on your local computer, and go to [http://localhost:8787](http://localhost:8787).
+
+You should now see Rstudio in you web browser, and can start the exercise.
+
+
+
+### Option C
+
+If this doesn't work for some reason (*e.g.* if you don't have an account on uppmax), you can run the exercise entirely on your local computer. This has been tested on Mac, but chances are that it also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
 
 First, set up the directory where you will work
 
@@ -107,7 +146,7 @@ curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocy
 cd ..
 ```
 
-Finally, activate the environment and start Rstudio. If everything has worked, Rstudio should show up on your screen.
+Finally, activate the environment and start Rstudio.
 
 ```bash
 mamba activate environment_epigenomics2023
