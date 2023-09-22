@@ -145,6 +145,7 @@ curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_1
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz.tbi
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_singlecell.csv
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz
+curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz.tbi 
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv
 curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_10k_v3.rds
