@@ -131,19 +131,20 @@ Friday (22 September 2023)
 
 **09:00 - 09:30** Recap previous day *(online session)*
 
-**09.30 - 10.10** Single cell methods *(online session)*
+**09.30 - 10.20** Single cell methods *(online session)*
 
-10.20 - 11.00 
+**10.30 - 11.10** Integration of genomics data *(online session)*
 
-**11:15 - 12:00** Integration of genomics data *(online session)*
+**11:15 - 11:20** Introduction to exercises *(online session)*
+
+**11.20 - 12.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
+and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*
 
 **12:00 - 13:00** lunch (offline)
 
 **13.00 - 14.00** Inspirational talk: **The role of PRC2-mediated gene silencing for maintenance of differentiated dopaminergic and serotonergic neuronal identity and function in healthy aging and disease.** (`Johan Holmberg <https://www.umu.se/personal/johan-holmberg02/>`_)
 
-**14.00 - 14.05** Introduction to exercises *(online session)*
-
-**14.05 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
+**14.00 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*
 
 **15:00 - 16:00** Daily challenge 

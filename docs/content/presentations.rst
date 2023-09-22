@@ -50,9 +50,7 @@ Day 3 **Advanced ChIP methods**
 
 Day 4: **Nextflow & nf-core**
 
-.. `Introduction to workflow managers <../_static/WFM_Introduction_2021.pdf>`_
-
-.. `Nextflow & nf-core (Phil Ewels) <../_static/nf_core_intro.pdf>`_
+`Introduction to workflow managers <../_static/Introduction_wfm.pdf>`_
 
 
 :raw-html:`<br />`
