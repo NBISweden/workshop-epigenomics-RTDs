@@ -60,6 +60,8 @@ Day 4: **Nextflow & nf-core**
 
 Day 5 **Single cell methods & data integation**
 
-.. `Single cell methods <../_static/slides-single-cell-2021.pdf>`_
+.. `Single cell methods <../_static/single_cell_methods2023out.pdf>`_
 
-.. `Integration of genomics data  <../_static/slides-data-integration-2021.pdf>`_
+.. `Integration of genomics data  <../_static/data_intergation_2023.pdf>`_
+
+.. `Introduction to exercises  <../_static/lab_intro_2023.pdf>`_
