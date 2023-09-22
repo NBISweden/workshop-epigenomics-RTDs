@@ -364,7 +364,7 @@ This file is available as ``tracks1.ini``.
 	#unloading module python may be necessary
 	module unload python
 	module load conda/latest
-	conda activate /sw/courses/epigenomics/software/conda/pygenometracks
+	conda activate /sw/courses/epigenomics/software/conda/pygenometracks3_6
 
 
 Let's plot one of the regions we have viewed in the ATAC-seq peak detection part ``chr14:93,095,621-93,125,599``
