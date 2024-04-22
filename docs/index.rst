@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2023!
+Welcome to Epigenomics Workshop 2024!
 ==========================================================
 
 
@@ -27,7 +27,7 @@ This workshop is an introduction to best practice bioinformatics methods for pro
 
 Date
 ----
-18th - 22nd September 2023
+16th - 20nd September 2024
 
 :raw-html:`<br />`
 
@@ -37,6 +37,8 @@ Date
 
 Application
 -----------
+
+- Application will be open soon!
 
 .. - Application is now closed
 .. - Sign up `here <https://docs.google.com/forms/d/13peV-qkhd9a6nDHjpS_KCYDYUdOtPIUCGI2gRWio_bM/edit>`_ and we will let you know when we open application for the next course.
