@@ -63,7 +63,7 @@ pip install sphinx_copybutton
 Or via environment:
 
 ```bash
-conda create -n sphinx7 -c conda-forge python=3.11 pip sphinx=7.2.4 sphinx_rtd_theme=1.3.0 docutils sphinx-togglebutton sphinx-copybutton pygments recommonmark 
+conda create -n sphinx7 -c conda-forge python=3.11 pip sphinx=7.2.4 sphinx_rtd_theme=1.3.0 docutils sphinx-togglebutton sphinx-copybutton pygments myst-parser==2.0.0
 ```
 
 Versions currently used:
@@ -75,6 +75,7 @@ sphinx-copybutton         0.5.2
 sphinx-togglebutton       0.3.2
 pygments                  2.16.1
 docutils                  0.18.1
+myst-parser               2.0.0
 ```
 
 
@@ -93,7 +94,7 @@ The html to view is `_build/html/index.html`
 
 ### Markdown `.md`
 
-It is supported. However, the tables are not rendered properly in html.
+It is supported. However, the tables may not be rendered properly in html.
 
 ### Restructured text `.rst`
 
