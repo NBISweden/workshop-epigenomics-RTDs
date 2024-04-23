@@ -56,7 +56,8 @@ You can view changes locally while working on. To do so:
 ```bash
 conda install sphinx
 pip install sphinx-rtd-theme
-pip install recommonmark      # to support Markdown
+pip install recommonmark      # to support Markdown ## this may not work anymore, recommonmark is deprecated
+pip install myst-parser       # current way to support Markdown
 pip install sphinx_togglebutton
 pip install sphinx_copybutton
 ```
