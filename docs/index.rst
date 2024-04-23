@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2023!
+Welcome to Epigenomics Workshop 2024!
 ==========================================================
 
 
@@ -153,18 +153,23 @@ This workshop relies on HPC infrastructure kindly provided by `NAISS <https://ww
 Teaching team
 -------------
 
-- `Agata Smialowska <https://nbis.se/about/staff/agata-smialowska/>`_ <agata.smialowska@nbis.se>
+- `Agata Smialowska <https://nbis.se/staff/agata-smialowska>`_ <agata.smialowska@nbis.se>
 
-- `Jakub Orzechowski Westholm <https://nbis.se/about/staff/jakub-orzechowski-westholm/>`_ <jakub.westholm@scilifelab.se>
-
-- `Vincent van Hoef <https://nbis.se/about/staff/vincent-van-hoef>`_ <vincent.vanhoef@nbis.se>
+- Louella Vasquez <louella.vasquez@scilifelab.se>
 
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
 
 - Carmen Navarro Luzón <carmen.navarro@scilifelab.se>
 
-- `Jessica Nordlund <https://katalog.uu.se/profile/?id=N8-1393>`_ <Jessica.Nordlund@medsci.uu.se>
 
+
+.. - `Jessica Nordlund <https://katalog.uu.se/profile/?id=N8-1393>`_ <Jessica.Nordlund@medsci.uu.se>
+
+
+
+.. - `Jakub Orzechowski Westholm <https://nbis.se/about/staff/jakub-orzechowski-westholm/>`_ <jakub.westholm@scilifelab.se>
+
+.. - `Vincent van Hoef <https://nbis.se/about/staff/vincent-van-hoef>`_ <vincent.vanhoef@nbis.se>
 
 
 .. - `Olga Dethlefsen <https://nbis.se/about/staff/olga-dethlefsen/>`_ <olga.dethlefsen@nbis.se>
