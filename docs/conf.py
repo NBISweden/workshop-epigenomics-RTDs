@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Epigenomics Workshop 2023'
-copyright = 'Agata Smialowska, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
-author = 'Agata Smialowska, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
+project = 'Epigenomics Workshop 2024'
+copyright = 'Agata Smialowska, Louella Vasquez, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
+author = 'Agata Smialowska, Louella Vasquez, Jakub Westholm, Vincent Van Hoef, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Olga Dethlefsen, Phil Ewels'
 
 # The full version, including alpha/beta/rc tags
 release = '1'
@@ -30,7 +30,7 @@ release = '1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [	'recommonmark',
+extensions = [	'myst_parser',
 				'sphinx.ext.intersphinx',
 				'sphinx_togglebutton',
 				'sphinx_copybutton'
