@@ -38,12 +38,12 @@ Date
 Application
 -----------
 
-- Application will be open soon!
+.. - Application will be open soon!
 
 .. - Application is now closed
-- Sign up `here <https://docs.google.com/forms/d/16FriIBXraVb_F4Sda-NIKfUUTvFlHbVw1wJ3o3VJzoE/edit>`_ and we will let you know when we open application for the next course.
+.. - Sign up `here <https://docs.google.com/forms/d/16FriIBXraVb_F4Sda-NIKfUUTvFlHbVw1wJ3o3VJzoE/edit>`_ and we will let you know when we open application for the next course.
 
-.. Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online-3/>`_
+Application is now open `here <https://docs.google.com/forms/d/e/1FAIpQLSf9pF5QVPEPZaJYpkrbujaf7LHmVvdYr6laprmzXxWqHe0phA/viewform>`_
 
 :raw-html:`<br />`
 
