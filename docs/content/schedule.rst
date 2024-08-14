@@ -13,7 +13,7 @@ Schedule
 
 
 
-Monday (18 September 2023)
+Monday (16 September 2024)
 --------------------------------
 
 **DNA methylation with Illumina 450K arrays and Bisulfite-seq**
@@ -42,7 +42,7 @@ Monday (18 September 2023)
 :raw-html:`<br />`
 
 
-Tuesday (19 September 2023)
+Tuesday (17 September 2024)
 --------------------------------
 
 **ATAC-seq: data processing and analysis principles**
@@ -71,7 +71,7 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 :raw-html:`<br />`
 
 
-Wednesday (20 September 2023)
+Wednesday (18 September 2024)
 --------------------------------
 
 **New methods and quantitative ChIP-seq** (Simon Elsässer and Carmen Navarro Luzón)
@@ -96,7 +96,7 @@ and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(onl
 :raw-html:`<br />`
 
 
-Thursday (21 September 2023)
+Thursday (19 September 2024)
 --------------------------------
 
 **Workflow Management Systems & Downstream Analyses**
@@ -124,7 +124,7 @@ Thursday (21 September 2023)
 :raw-html:`<br />`
 
 
-Friday (22 September 2023)
+Friday (20 September 2024)
 --------------------------------
 
 **Integrative and single cell omics & inspirational talk**
@@ -142,7 +142,7 @@ and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 14.00** Inspirational talk: **The role of PRC2-mediated gene silencing for maintenance of differentiated dopaminergic and serotonergic neuronal identity and function in healthy aging and disease.** (`Johan Holmberg <https://www.umu.se/personal/johan-holmberg02/>`_)
+**13.00 - 14.00** Inspirational talk: **How does epigenetic mechanisms impact Type 2 diabetes?** (`Charlotte Ling <https://portal.research.lu.se/en/persons/charlotte-ling>`_)
 
 **14.00 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*
