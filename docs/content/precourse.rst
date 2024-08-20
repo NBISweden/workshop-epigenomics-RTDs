@@ -61,7 +61,7 @@ This involves few steps. Briefly,
 
 * accepting the User Agreement;
 
-* becoming a member in both the storage project ( **NAISS 2023/23-349**) and the compute project ( **NAISS 2023/22-673**);
+* becoming a member in both the storage project ( **NAISS 2024/23-388**) and the compute project ( **NAISS 2024/22-842**);
 
 * applying for an account at Uppmax.
 
@@ -72,7 +72,7 @@ This involves few steps. Briefly,
 
 	* Cluster name: rackham
 
-	* Project ID:  **NAISS 2023/22-673** and **NAISS 2023/23-349**
+	* Project ID:  **NAISS 2024/23-388** and **NAISS 2024/22-842**
 
 
 
@@ -81,7 +81,7 @@ Request membership in the course project (for those already having Uppmax accoun
 
 * log in to SUPR;
 
-* under Projects: Requesting Membership in Projects, request membership in **NAISS 2023/22-673** and **NAISS 2023/23-349**
+* under Projects: Requesting Membership in Projects, request membership in **NAISS 2024/23-388** and **NAISS 2024/22-842**
 
 
 Check configuration (everyone)
@@ -95,7 +95,7 @@ After you complete setting-up
 
 * copy the output of the command and email back (to the course organisers at edu.epigenomics@nbis.se)
 
-A guide on how to `log in for the first time <http://www.uppmax.uu.se/support/user-guides/guide–first-login-to-uppmax/>`_
+A guide on how to `log in for the first time <https://www.uu.se/en/centre/uppmax/get-started/first-login>`_
 
 
 R and RStudio
@@ -118,7 +118,7 @@ To install, follow the instructions on the `IGV website <https://software.broadi
 Further optional preparations
 ==============================
 
-It might be useful to set up two factor authorization for UPPMAX. This will be necessary to acces the webversion of ThinLinc at https://rackham-gui.uppmax.uu.se and makes it easier to connect from abroad. The instructions to set up 2FA can be found here: https://www.uppmax.uu.se/support/user-guides/setting-up-two-factor-authentication/.    
+It might be useful to set up two factor authorization for UPPMAX. This will be necessary to acces the webversion of ThinLinc at https://rackham-gui.uppmax.uu.se and makes it easier to connect from abroad. The instructions to set up 2FA can be found here: https://www.uu.se/en/centre/uppmax/get-started/2-factor.    
 
 For those of you wanting to start ahead and/or brush up on various skills before the course.
 
