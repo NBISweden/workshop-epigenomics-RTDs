@@ -1,7 +1,7 @@
 .. below role allows to use the html syntax, for example :raw-html:`<br />`
 .. role:: raw-html(raw)
     :format: html
-
+		
 ===============
 Setting-up
 ===============
@@ -35,7 +35,7 @@ We have booked 5 cores on Rackham per course participant. To run the tutorial in
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
-	interactive -A naiss2023-22-673 -p core -n 5 -t 08:00:00
+	interactive -A naiss2024-22-842 -p core -n 5 -t 08:00:00
 
 This command gives you access to 5 cores for eight hours or until 17:00, whichever comes first.
 
@@ -72,7 +72,7 @@ Many commands are quite long as there are many input files as well as several pa
 
 	To see all options for applications used throughout the class type ``command -h`` to view usage help.
 
-You will notice that you will load and unload modules practically before and after each command. This is done because there are often dependency conflicts between the modules used in this exercise. If not unloaded, some modules will cause error messages from the module system on Rackham. More on `module system used on Uppmax <https://www.uppmax.uu.se/resources/software/module-system/](https://www.uppmax.uu.se/resources/software/module-system/>`_.
+You will notice that you will load and unload modules practically before and after each command. This is done because there are often dependency conflicts between the modules used in this exercise. If not unloaded, some modules will cause error messages from the module system on Rackham. More on `module system used on Uppmax <https://docs.uppmax.uu.se/cluster_guides/modules/>`_.
 
 .. HINT::
 
