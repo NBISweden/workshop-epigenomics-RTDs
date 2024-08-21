@@ -11,10 +11,10 @@ Setting-up
 Before we start tutorial, we need to set up our work environment. In particular, we need to:
 
 
-1. `be able to login to Uppmax and use the node allocation <Using computational resources>`_
-2. access files prepared for the tutorial and keep folder structures organised - we have prepared scripts to set this up for you for most of the labs;
-3. `learn how to read commands and use module system on Uppmax <Commands and modules>`_
-4. if you work without access to Uppmax: `check the dependencies <Software Dependencies>`_
+1. Be able to login to Uppmax and use the node allocation.
+2. Access files prepared for the tutorial and keep folder structures organised - we have prepared scripts to set this up for you for most of the labs.
+3. Learn how to read commands and use module system on Uppmax.
+4. If you work without access to Uppmax: check the dependencies.
 
 :raw-html:`<br />`
 
