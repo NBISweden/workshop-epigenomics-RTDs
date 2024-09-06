@@ -87,7 +87,7 @@ Request membership in the course project (for those already having Uppmax accoun
 Check configuration (everyone)
 *******************************
 
-After you complete setting-up
+After you complete setting-up and you receive a notification from SUPR that **your account have been added to the course allocation**
 
 * log in to ``rackham.uppmax.uu.se``
 
