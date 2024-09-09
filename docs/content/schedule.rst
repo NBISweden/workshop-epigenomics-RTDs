@@ -59,7 +59,7 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 
 **12:00 - 13:00** lunch (offline)
 
-**13:00 - 13.30** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
+**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
 
 **13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
 
