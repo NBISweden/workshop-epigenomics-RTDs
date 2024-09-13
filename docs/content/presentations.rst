@@ -27,11 +27,12 @@ Day 1: **Methylation: Arrays and Bisulfite-Seq**
 Day 2: **ATAC-seq**
 
 
-.. `ChIPseq data processing <../_static/slides-chipseqproc-as-2021.pdf>`_
 
 .. `ATACseq <../_static/slides-atacseqproc-as-2023.pdf>`_
 
 .. `Motif analysis <../_static/slides-motiffinding2021.pdf>`_
+
+.. `ChIPseq data processing <../_static/slides-chipseqproc-as-2021.pdf>`_
 
 
 
@@ -42,15 +43,13 @@ Day 3 **Advanced ChIP methods**
 `Advanced ChIP methods <../_static/NBIS-2024-ChIP-seq-Lecture.pdf>`_
 
 
-
-
-
-
 :raw-html:`<br />`
+
 
 Day 4: **Nextflow & nf-core**
 
-.. `Introduction to workflow managers <../_static/Introduction_wfm.pdf>`_
+`Introduction to workflow managers <../_static/as-wfm-2024.pdf>`_
+
 
 
 :raw-html:`<br />`

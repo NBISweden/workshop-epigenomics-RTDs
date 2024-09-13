@@ -1,3 +1,23 @@
+.. |Green-boxts| raw:: html
+
+    <div style="background-color: lightgreen; width: 100%; padding: 5px;">
+    <h1>
+.. |Orange-boxts| raw:: html
+
+    <div style="background-color: powderblue; width: 100%; padding: 5px;">
+    <h1>
+
+.. |boxs| raw:: html
+
+    </h1><p>
+
+.. |boxe| raw:: html
+
+    </p></div>
+
+
+
+==============================================
 DNA Methylation: Bisulfite Sequencing Workflow
 ==============================================
 
@@ -55,61 +75,76 @@ Set Up R environment
 
 This exercise has been set up to run on Uppmax, so connect to the server as described in :doc:`../setup/lab-setup`. Now, there are two options to set up the R environment. 
 
-**Option A**
 
-The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first.
+|Green-boxts| Option A |boxs| The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first. |boxe|
 
-On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
-.. code-block:: bash
+|Orange-boxts| Option B |boxs| Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. |boxe|
 
-   module load R/4.0.0
-   module load R_packages/4.0.0
-   module load RStudio
 
-Start the analysis by initiating *RStudio*... This might take a few seconds and a :code:`libGL error` can be shown before loading the RStudio graphical interface.
+These options are described in detail below. Please note, choose *one of them* to connect to Uppmax.
 
-.. code-block:: bash
 
-   rstudio
+.. admonition::  Option A
+   :class: optionA
 
-.. note::
+   The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first.
 
-   If rstudio runs too slow, you could also decide to run the whole tutorial in the normal R terminal. Instead of ``rstudio`` do
+   On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
    .. code-block:: bash
 
-      R
+      module load R/4.0.0
+      module load R_packages/4.0.0
+      module load RStudio
 
-   If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC, follow the instructions on `this website <https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906>`_ (under the section "Alternate methods using OS-soecific tools").
+   Start the analysis by initiating *RStudio*... This might take a few seconds and a :code:`libGL error` can be shown before loading the RStudio graphical interface.
 
-Next, run the R commands by copying them from this website into the Rstudio terminal or R terminal and pressing *Enter*. 
+   .. code-block:: bash
 
-**Option B**
+      rstudio
 
-Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. Containers are a relatively new method to package software together with all its dependencies and an operating system. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. Containers will be discussed in a bit more detail on Thursday. A benefit of using it here is that Rstudio runs a whole lot faster using the container approach. However, to access it from Uppmax, a few more steps are necessary. First, make sure you are connected to your alloted node (described in :doc:`../setup/lab-setup`) and then perform following steps.
+   .. note::
 
-.. code-block:: bash
+      If rstudio runs too slow, you could also decide to run the whole tutorial in the normal R terminal. Instead of ``rstudio`` do
 
-   # Run the startup script; this will start the container and run Rstudio
-   sh /sw/courses/epigenomics/DNAmethylation/startup_script.sh
+      .. code-block:: bash
 
-You should see something like this:
+         R
 
-.. code-block:: bash
+      If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC, follow the instructions on `this website <https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906>`_ (under the section "Alternate methods using OS-soecific tools").
 
-   1. SSH tunnel from your workstation using the following command:
+   Next, run the R commands by copying them from this website into the Rstudio terminal or R terminal and pressing *Enter*. 
 
-   ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
-   
-   and point your web browser to http://localhost:8787
 
-   2. log in to RStudio Server using the following credentials:
+.. admonition::  Option B
+   :class: optionB
 
-   user: vincent
-   password: epi2021
+   Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. Containers are a relatively new method to package software together with all its dependencies and an operating system. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. Containers will be discussed in a bit more detail on Thursday. A benefit of using it here is that Rstudio runs a whole lot faster using the container approach. However, to access it from Uppmax, a few more steps are necessary. First, make sure you are connected to your alloted node (described in :doc:`../setup/lab-setup`) and then perform following steps.
 
-Now, open a second terminal and run **your** ssh command from 1. Then open your web browser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
+   .. code-block:: bash
+
+      # Run the startup script; this will start the container and run Rstudio
+      sh /sw/courses/epigenomics/DNAmethylation/startup_script.sh
+
+   You should see something like this:
+
+   .. code-block:: bash
+
+      1. SSH tunnel from your workstation using the following command:
+
+      ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
+      
+      and point your web browser to http://localhost:8787
+
+      2. log in to RStudio Server using the following credentials:
+
+      user: vincent
+      password: epi2021
+
+   Now, open a second terminal and run **your** ssh command from 1. Then open your web browser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
+
+
 
 **Load Libraries**
 
