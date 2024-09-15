@@ -127,7 +127,7 @@ We load data from shifted bam file:
 	seqlev <- "chr14"
 
 
-Let's first check signatures for a general TF **CTCF**. This is its motif as position weight matrix (PWM), which consists of frequencies of each base at each motif position:
+Let's first check signatures for a general TF **CTCF**. This is its motif as position probability matrix (PPM), also referred to as position frequency matrix (PFM), which consists of frequencies of each base at each motif position:
 
 .. code-block:: R
 
@@ -136,10 +136,10 @@ Let's first check signatures for a general TF **CTCF**. This is its motif as pos
 	CTCF <- as.list(CTCF)
 	print(CTCF[[1]], digits=2)
 
-.. admonition:: CTCF PWM
+.. admonition:: CTCF PFM
    :class: dropdown, warning
 
-   CTCF PWM::
+   CTCF PFM::
 
 	       1    2    3     4     5     6     7     8     9    10    11    12    13
 	A 0.10 0.16 0.30 0.072 0.012 0.786 0.024 0.122 0.914 0.012 0.376 0.022 0.028
