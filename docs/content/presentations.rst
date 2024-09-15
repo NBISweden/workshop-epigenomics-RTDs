@@ -28,7 +28,7 @@ Day 2: **ATAC-seq**
 
 
 
-.. `ATACseq <../_static/slides-atacseqproc-as-2023.pdf>`_
+`ATACseq <../_static/slides-atacseqproc-as-2024.pdf>`_
 
 .. `Motif analysis <../_static/slides-motiffinding2021.pdf>`_
 
