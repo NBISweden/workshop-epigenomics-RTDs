@@ -161,7 +161,7 @@ Quality Control metrics are very important to understand whether the experiment 
 Correlation plots
 -----------------
 
-One way to look at similarity between ChIP dataset is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. 
+One way to look at similarity between ChIP datasets is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. 
 
 This can be done using ``deepTools``.
 
@@ -290,7 +290,7 @@ This will generate a correlation plot based on genome-wide 5kb bins.
 **Q: Check out how the datasets cluster - does it make sense? Is the overall clustering following the biological target/control or underlying batch effect?**
 
 .. note:: 
-    If something here does not work, you can get the bins files from: ``cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins* .``.
+    If some step did not work, you can get the generated genome-wide bins files from: ``cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins* .``.
 
 
 
@@ -342,11 +342,6 @@ You can plot them.
       Skene2017_CnR_9m \
       -p 4
 
-
-.. note::
-    Again, here the ``--region`` trick also works to plot a subset of the data.
-
-
 The resulting plot should look like:
 
 .. image:: Figures/03_fingerprint1.png
@@ -368,14 +363,14 @@ Clearly, the CUT&Run data scores better by QC compared to the CTCF ChIP presente
       ./bam/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bam \
       ./bam/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bam \
       -o ./fingerprint_Pugacheva2020.pdf \
-      --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC     Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
+      --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
       -p 4
 
 .. image:: Figures/04_fingerprint2.png
 	:target: Figures/04_fingerprint2.png
 	:alt:
 
-**Q: How does Pugacheva CTCF ChIP measure up with the CUT&Run? Given that the Skene CTCF ChIP was done under native conditions (no crosslinker) and Pugacheva CTCF ChIP (formaldehyde crosslinked), what do you think could be the problem with the native ChIP?**
+**Q: How does Pugacheva CTCF ChIP measure up with the CUT&Run? Given that the Skene CTCF ChIP was done under native conditions (no crosslinker) and Pugacheva CTCF ChIP was formaldehyde crosslinked, what do you think could be the problem with the native ChIP?**
 
 
 Peak calling
