@@ -178,7 +178,20 @@ Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
     module load bioinfo-tools
     module load deepTools
 
-``deepTools`` needs that you first compute a bin matrix. From this, many other things can be done, such as correlation plots and PCA:
+``deepTools`` needs that you first compute a bin matrix. From this, many other things can be done, such as correlation plots and PCA.
+
+You can calculate a bin matrix using the command below. Since it is a very long one-line command, it is split into several lines
+so it is easier to read. You can split any shell command in lines using the back slash ``\``, which tells the shell parser that the
+command continues on the next line. Just be sure that there are no white spaces after the back slash. 
+
+When working on a data analysis with deepTools, if you are not sure if a command is correct, it is a good
+idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
+and will run faster (failing fast is a good philosophy that will save you loads of time). 
+
+For instance, this command has a ``--region chr1:300000:900000`` parameter, which will only calculate 
+bins on that genomic region and will run immediately. Then you can check the output and verify that it is what you expected.
+
+You can copy and paste the command below as it is on the terminal:
 
 .. code-block:: bash
 
@@ -214,18 +227,15 @@ Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
         Skene2017_CnR_3m \
         Skene2017_CnR_452 \
         Skene2017_CnR_5s \
-        Skene2017_CnR_9m
+        Skene2017_CnR_9m \
+        --region chr1:300000:900000
 
 
 .. note::
     The parameter ``--outRawCounts`` is not necessary and usually not generated, as the same values are saved in ``bins_table.npz`` in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using ``head`` or ``more``.
 
 
-If something does not work properly or you are not sure if a command is going to work, it is a good
-idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
-and will run faster (failing fast is a good philosophy that will save you loads of time on the computer). 
-
-For instance, if you add ``--region chr1:300000:900000`` to the previous command:
+If the small test ran successfully, you can run ``multiBigWigSummary`` on the whole genome by running:
 
 .. code-block:: bash
         
@@ -257,10 +267,8 @@ For instance, if you add ``--region chr1:300000:900000`` to the previous command
         Skene2017_CnR_3m \
         Skene2017_CnR_452 \
         Skene2017_CnR_5s \
-        Skene2017_CnR_9m \
-        --region chr1:300000:900000
+        Skene2017_CnR_9m
 
-It will run immediately if everything is working, and will produce a tiny dataset with 120 bins.
 
 The ``.npz`` matrix is then used by ``deepTools`` to produce other plots. For our correlation plot:
 
