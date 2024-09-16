@@ -383,6 +383,7 @@ Peaks were called with MACS2 using standard parameters.
 
 Again, it is usually a good idea to visually inspect the tracks, so you can have a feeling on whether the peaks were correctly called and how the samples look like.
 
+You can visualize the peaks and bigwig files you downloaded before to your local computer.
 
 .. image:: Figures/05_IGV_peaks.png
 	:target: Figures/05_IGV_peaks.png
@@ -393,7 +394,7 @@ Again, it is usually a good idea to visually inspect the tracks, so you can have
 Number of peaks per sample
 --------------------------
 
-A simple ``wc`` count allows you to quickly check how many peaks you got:
+A simple ``wc -l peaks/*.narrowPeak`` count allows you to quickly check how many peaks you got:
 
 .. code-block:: bash
 
