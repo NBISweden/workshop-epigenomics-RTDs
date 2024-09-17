@@ -616,10 +616,11 @@ How many peaks?
 .. code-block:: bash
 
 	wc -l *Peak
-	  1852 ENCFF045OAB.macs3.narrowPeak
-	  1910 ENCFF363HBZ.macs3.narrowPeak
-	  1938 ENCFF398QLV.macs3.narrowPeak
-	  2482 ENCFF828ZPN.macs3.narrowPeak
+
+   1852 ENCFF045OAB.macs3.narrowPeak
+   1910 ENCFF363HBZ.macs3.narrowPeak
+   2666 ENCFF398QLV.macs3.narrowPeak
+   2482 ENCFF828ZPN.macs3.narrowPeak
 
 How many overlap?
 
