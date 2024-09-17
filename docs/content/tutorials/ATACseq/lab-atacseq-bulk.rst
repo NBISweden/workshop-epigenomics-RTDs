@@ -270,12 +270,14 @@ We can now process the remaining replicate:
 Genrich can also call peaks for multiple replicates collectively. First, it analyzes the replicates separately, with p-values calculated for each. At each genomic position, the multiple replicates' p-values are then combined by Fisher's method. The combined p-values are converted to q-values, and peaks are output.
 
 
-And use the joint replicate peak calling mode:
+**This part of the tutorial has been modified 17 Sep 2024** to correct error in command line formatting which lead genrich to use only the last listed bam file for read mapping.
+
+
+For comparison, use the joint replicate peak calling mode:
 
 .. code-block:: bash
 
-	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t ENCFF045OAB.chr14.proc_rh.nsort.bam -t ENCFF828ZPN.chr14.proc_rh.nsort.bam 	-o nk_stim.chr14.genrich.narrowPeak
-
+	/sw/courses/epigenomics/ATACseq_bulk/software/Genrich/Genrich -j -t ENCFF045OAB.chr14.proc_rh.nsort.bam,ENCFF828ZPN.chr14.proc_rh.nsort.bam  -o nk_stim.chr14.genrich.narrowPeak
 
 How many peaks were detected by Genrich?
 
@@ -285,7 +287,24 @@ How many peaks were detected by Genrich?
   
   1027 ENCFF045OAB.chr14.genrich.narrowPeak
   1007 ENCFF828ZPN.chr14.genrich.narrowPeak
-  1007 nk_stim.chr14.genrich.narrowPeak
+  2115 nk_stim.chr14.genrich.narrowPeak
+
+It turns out ``Genrich`` detected more peaks in the joint mode, including in locations not picked up in neither of the individual libraries. Some of  these locations have been also detected by ``MACS3 callpeak``, see figures below. This requires further investigation and comparisons, for now however we can conclude that adding more replicates improves the sensitivity.
+
+
+.. list-table:: Figure 0. Comparison of peaks detected by Genrich and macs3.
+   :widths: 60
+   :header-rows: 0
+
+   * - .. image:: figures/2024_igv_region1.png
+   			:width: 400px
+
+   * - .. image:: figures/2024_igv_region2.png
+   			:width: 400px
+
+   * - .. image:: figures/2024_igv_region3.png
+   			:width: 400px
+
 
 
 
