@@ -142,7 +142,7 @@ and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 14.00** Inspirational talk: **How does epigenetic mechanisms impact Type 2 diabetes?** (`Charlotte Ling <https://portal.research.lu.se/en/persons/charlotte-ling>`_)
+**13.00 - 14.00** Inspirational talk: **How does epigenetic mechanisms impact Type 2 diabetes?** (`Charlotte Ling <https://portal.research.lu.se/en/persons/charlotte-ling>`_) Zoom link: https://lu-se.zoom.us/j/67681656100
 
 **14.00 - 15.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*

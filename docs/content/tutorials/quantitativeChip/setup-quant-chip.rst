@@ -25,7 +25,7 @@ Bioconductor packages can be installed in the usual way:
   BiocManager::install("rtracklayer")
 
 
-You can run things from Uppmax as well as on your local laptop. If you choose to run examples on Uppmax, the relevant module load calls are:
+You can run things from Uppmax as well as on your local laptop. The relevant module load calls on Uppmax are:
 
 .. code-block:: bash
 
@@ -35,10 +35,14 @@ You can run things from Uppmax as well as on your local laptop. If you choose to
 
 :code:`R_packages` contains all the mentioned R packages and their dependencies: :code:`GenomicRanges`, :code:`rtracklayer`. Be sure to have the corresponding modules loaded (and :code:`module load bioinfo-tools` before anything) before running them.
 
+Across the tutorials, the environment considered best for running each step will be specified as **Uppmax** or **local** (your computer).
 
-Things that can be easily done locally across these tutorials: IGV visualization (download the bigWig files as these are not too large), R figures.
+In general, Uppmax is preferrable for computationally demanding steps, however working on a local environment tends to be more straightforward.
 
-Things that will run better on Uppmax: First part of the Minute tutorial is more computationally demanding. It is still small enough that can be run on a laptop, but it will take a few hours. Some deepTools calls, especially fingerprint plots, are also slow, so it may be better to run on Uppmax.
+Things that can easily be done locally: IGV visualization (you can download the bigWig files, peaks or genomic annotations, since these are not large files), R figures.
+
+Things that will run faster on Uppmax: The first part of the minute tutorial is more demanding. It is still small enough that can be run on a laptop, but it will take a few hours. Some deepTools calls, especially fingerprint plots, are also slow, so it may be better to run on Uppmax.
 
 .. note:: 
-    Computationally demanding steps have been precalculated and resulting plots are shown. Some of them can optionally be run again (such as ``deepTools`` computations). In those cases it will be noted within the corresponding section. 
+    Computationally demanding steps have been precalculated and the resulting plots and data are available throughout the tutorials, so if there is some issue
+    in any of these steps, you can pick up from the precalculated data. In those cases it will be noted within the corresponding section. 

@@ -35,6 +35,11 @@ We have booked 5 cores on Rackham per course participant. To run the tutorial in
 .. code-block:: bash
 
 	ssh -Y <username>@rackham.uppmax.uu.se
+
+While logged to Rackham, book the interactive session:
+
+.. code-block:: bash
+
 	interactive -A naiss2024-22-842 -p core -n 5 -t 08:00:00
 
 This command gives you access to 5 cores for eight hours or until 17:00, whichever comes first.
