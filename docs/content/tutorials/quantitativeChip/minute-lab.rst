@@ -65,7 +65,7 @@ To make sure you have all the necessary tools to run :code:`minute`, you can use
   conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
 
 
-If you want to make a fresh install, you can make a new conda environment and install minute in it:
+Optional: If you want to make a fresh install, you can make a new conda environment and install minute in it. However this could take a little while:
 
 
 .. code-block:: bash
@@ -74,21 +74,6 @@ If you want to make a fresh install, you can make a new conda environment and in
   module load conda
 
   conda create -n minute minute
-
-
-
-**Speed up the process using mamba**
-
-Sometimes :code:`conda` takes long time resolving dependencies on large environments. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster on the package dependency resolution. However, you might still experience some waiting time!
-
-If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
-
-.. code-block:: bash
-
-  module load bioinfo-tools
-  module load conda
-
-  mamba create -n minute minute
 
 
 .. admonition:: Conda-related issues
