@@ -289,7 +289,7 @@ How many peaks were detected by Genrich?
   1007 ENCFF828ZPN.chr14.genrich.narrowPeak
   2115 nk_stim.chr14.genrich.narrowPeak
 
-It turns out ``Genrich`` detected more peaks in the joint mode, including in locations not picked up in neither of the individual libraries. Some of  these locations have been also detected by ``MACS3 callpeak``, see figures below. This requires further investigation and comparisons, for now however we can conclude that adding more replicates improves the sensitivity.
+It turns out ``Genrich`` detected more peaks in the joint mode, including in locations not picked up in neither of the individual libraries. Some of  these locations have been also detected by ``MACS3 callpeak``, see figures below. This requires further investigation and comparisons, for now however we can conclude that adding more replicates improves the sensitivity of peak calling. Upon inspection of alignments in bam files and peak calls, many of the peaks called only in joint replicate analysis tend to have lower signal-to-noise ratio than peaks detected also in individual replicates.
 
 
 .. list-table:: Figure 0. Comparison of peaks detected by Genrich and macs3.
