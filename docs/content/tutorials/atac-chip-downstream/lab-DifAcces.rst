@@ -110,7 +110,7 @@ Differential Accessibility
 **Please note** that in the following exercise we use a counts table generated using a different peak set, hence some small differences to peaks called during the course may be present.
 
 
-You can continue working in the ``atacseq/analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the count tables for this exercise). We will use file ``nk_merged_peaks_macs3.counts`` and annotation libraries, which are preinstalled. We access them via a module ``R_packages``.
+You can continue working in the ``atacseq/analysis/counts`` directory. This directory contains merged peaks called earlier using ``macs3 callpeak`` as well as count tables derived from summarising of non-subset data (we won't need the peak calls for this exercise). We will use file ``nk_merged_peaks_macs3.counts`` and annotation libraries, which are preinstalled. We access them via a module ``R_packages``.
 
 
 
