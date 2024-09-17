@@ -88,7 +88,7 @@ Primary analysis of the initial FASTQ files was performed beforehand. Reads were
 .. attention::
    You can download bigWig and peak annotations. Most of what we are going to do can be done locally on a regular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.
 
-When running things on Uppmax, copy the files to your home directory:
+**Uppmax**: When running things on Uppmax, copy the files to your home directory:
 
 .. code-block:: bash
 
@@ -112,7 +112,7 @@ Besides quality control tools and exploratory analyses, it is usually a good ide
     When running these commands, the same relative path structure is expected to be kept. So if you
     made a directory for this tutorial, be sure you are in that directory when starting.
 
-If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.
+**Local**: If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.
 
 .. code-block:: bash
 
@@ -161,11 +161,9 @@ Quality Control metrics are very important to understand whether the experiment 
 Correlation plots
 -----------------
 
-One way to look at similarity between ChIP datasets is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. 
+One way to look at similarity between ChIP datasets is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. This can be done using ``deepTools``.
 
-This can be done using ``deepTools``.
-
-This is a time consuming step that would need to be done on Uppmax. Move to the directory where you copied bigWig files on Uppmax. If you followed the same names, it would be:
+**Uppmax**: This is a time consuming step that would need to be done on Uppmax. Move to the directory where you copied bigWig files before. If you followed the same names, it would be:
 
 .. code-block:: bash
     
@@ -300,7 +298,7 @@ Cumulative enrichment
 Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
 can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_.
 
-You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
+**Uppmax**: You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
 
 .. code-block:: bash
 
@@ -383,7 +381,7 @@ Peaks were called with MACS2 using standard parameters.
 
 Again, it is usually a good idea to visually inspect the tracks, so you can have a feeling on whether the peaks were correctly called and how the samples look like.
 
-You can visualize the peaks and bigwig files you downloaded before to your local computer.
+**Local**: You can visualize the peaks and bigwig files you downloaded before to your local computer.
 
 .. image:: Figures/05_IGV_peaks.png
 	:target: Figures/05_IGV_peaks.png
@@ -422,7 +420,7 @@ Peaks overlap using intervene
 .. attention::
     There is no ``intervene`` module on Uppmax. If you want to run it there, you can activate a conda environment that is precomputed: ``conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/intervene``. Otherwise you can download the peaks files to your local computer and install intervene there, if you prefer.
 
-You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
+**Uppmax**: You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
 
 .. code-block::
     
@@ -466,7 +464,7 @@ This has actually been noted in the CnR paper. They say that too scarce backgrou
 **Q: Now that you have peaks, think about what you could do with the peak information. How to make sense of the peaks? Would you use the dataset with the most or the least peaks for downstream analysis?**
 
 .. note::
-    ``MACS`` doesn’t just give peaks, it also assigns a score. High/confident peaks have high score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be better.
+    ``MACS`` doesn’t just give peaks, it also assigns a score. High confidence peaks have higher score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be better.
 
 Comparison between methods
 ==========================
