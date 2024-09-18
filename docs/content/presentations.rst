@@ -40,7 +40,7 @@ Day 2: **ATAC-seq**
 
 Day 3 **Advanced ChIP methods**
 
-`Advanced ChIP methods <../_static/NBIS-2024-ChIP-seq-Lecture.pdf>`_
+`Advanced ChIP methods <../_static/NBIS-Course_2024.pdf>`_
 
 
 :raw-html:`<br />`
