@@ -1,6 +1,6 @@
 # Unsupervised data integration
 
-This is a bonus exercise, for those of you who are interested and have some time over. It is from the course [Omics Integration and Systems Biology](https://nbisweden.github.io/workshop_omics_integration/), and the lab was created by **Nikolay Oskolkov**. In this exervise you will analyze a single cell data set with chromatin accessebility (scATACseq), DNA methylation (scBSseq) and gene expression (scRNAseq) data, using MOFA.
+This is a bonus exercise, for those of you who are interested and have some time over. It is from the course [Omics Integration and Systems Biology](https://uppsala.instructure.com/courses/67276), and the lab was created by **Nikolay Oskolkov**. In this exervise you will analyze a single cell data set with chromatin accessebility (scATACseq), DNA methylation (scBSseq) and gene expression (scRNAseq) data, using MOFA.
 
 ![](logo.png)
 
@@ -39,4 +39,4 @@ Now you are ready to start `R` or `rstudio`.
 
 ## The exercise
 
-The instructions for the exercise are [here](https://nbisweden.github.io/workshop_omics_integration/session_ml/UnsupervisedOMICsIntegration/UnsupervisedOMICsIntegration.html). First, there is short introduction to MOFA. For the exercise, scroll down to "Prepare scNMT Data Set for MOFA". 
+The instructions for the exercise are [here](https://uppsala.instructure.com/courses/67276/pages/lab-unsupervised-integration-through-mofa2). First, there is short introduction to MOFA. For the exercise, scroll down to "Prepare scNMT Data Set for MOFA". 
