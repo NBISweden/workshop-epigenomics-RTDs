@@ -355,6 +355,7 @@ Let's build a simple ``ini`` file::
 
 This file is available as ``tracks1.ini``.
 
+**Hint**: You can keep only the file names (not the full paths), if running the plotting from the same directory where the files are located.
 
 ``pyGenomeTracks`` is installed via a conda environment, so we activate it first
 
@@ -364,8 +365,7 @@ This file is available as ``tracks1.ini``.
 	#unloading module python may be necessary
 	module unload python
 	module load conda/latest
-	conda activate /sw/courses/epigenomics/software/conda/pygenometracks3_6
-
+	conda activate /sw/courses/epigenomics/software/conda/pygenometracks3_7
 
 Let's plot one of the regions we have viewed in the ATAC-seq peak detection part ``chr14:93,095,621-93,125,599``
 
