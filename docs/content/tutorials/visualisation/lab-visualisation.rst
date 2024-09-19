@@ -201,22 +201,22 @@ Let's link the necessary files and produce coverage tracks (assuming we are in `
 	mkdir pyGT
 	cd pyGT
 
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
 
-	ln -s /proj/epi2023/vis/pyGT/nk_genrich.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_stim_genrich.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_macs_broad.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_stim_macs_broad.bed
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.genrich.narrowPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_genrich.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_stim_genrich.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_macs_broad.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_stim_macs_broad.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT//ENCFF398QLV.genrich.narrowPeak
 
-	ln -s /proj/epi2023/vis/pyGT/hg38.refGene.gtf
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/hg38.refGene.gtf
 
-	cp /proj/epi2023/vis/pyGT/tracks1.ini .
-	cp /proj/epi2023/vis/pyGT/tracks2.ini .
+	cp /sw/courses/epigenomics/2022/vis/pyGT/tracks1.ini .
+	cp /sw/courses/epigenomics/2022/vis/pyGT//tracks2.ini .
 
 
 .. Hint::
