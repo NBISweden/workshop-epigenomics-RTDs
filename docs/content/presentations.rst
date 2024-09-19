@@ -59,6 +59,6 @@ Day 5 **Single cell methods & data integation**
 
 `Single cell methods <../_static/single_cell_methods.pdf>`_
 
-`Integration of genomics data  <../_static/data_intergation.pdf>`_
+`Integration of genomics data  <../_static/data_intergration.pdf>`_
 
 `Introduction to exercises  <../_static/lab_intro.pdf>`_
