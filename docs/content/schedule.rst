@@ -137,8 +137,8 @@ Friday (20 September 2024)
 
 **11:15 - 11:20** Introduction to exercises *(online session)*
 
-**11.20 - 12.00** :doc:`Single cell <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
-and :doc:`data integration exercises <./tutorials/scAtacSeq/lab-sc_atac_seq>` *(online support)*
+**11.20 - 12.00** :doc:`Single cell and data integration exercises <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
+and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/scAtacSeq>` *(online support)*
 
 **12:00 - 13:00** lunch (offline)
 
