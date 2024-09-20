@@ -4,6 +4,19 @@ This is a bonus exercise, for those of you who are interested and have some time
 
 ![](logo.png)
 
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+Note that this tutorial only serves as a guide and not meant to be taken as a copy-and-paste exercise.
+The tutorial will give you a general framework in how to use MOFA as a tool to integrate multidimensional data and how to interpret MOFA's results.
+
+
+</div>
+
+
 ## Learning outcomes
 
 - apply feature selection methods on multi -omics data 
