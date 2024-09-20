@@ -133,7 +133,9 @@ Friday (20 September 2024)
 
 **09.30 - 10.20** Single cell methods *(online session)*
 
-**10.30 - 11.10** Integration of genomics data *(online session)*
+**10.20 - 10.35** Break
+
+**10.35 - 11.15** Integration of genomics data *(online session)*
 
 **11:15 - 11:20** Introduction to exercises *(online session)*
 
@@ -145,7 +147,9 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **13.00 - 14.00** Inspirational talk: **How does epigenetic mechanisms impact Type 2 diabetes?** (`Charlotte Ling <https://portal.research.lu.se/en/persons/charlotte-ling>`_) Zoom link: https://lu-se.zoom.us/j/67681656100
 
-**14.00 - 15.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
+**14.00 - 14.10** Break
+
+**14.10 - 15.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
 and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` *(online support)*
 
 
