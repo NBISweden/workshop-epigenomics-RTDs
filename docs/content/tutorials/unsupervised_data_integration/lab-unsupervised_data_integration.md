@@ -10,8 +10,8 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
 <div class = "blue">
 
-Note that this tutorial only serves as a guide and not meant to be taken as a copy-and-paste exercise.
-The tutorial will give you a general framework in how to use MOFA as a tool to integrate multidimensional data and how to interpret MOFA's results.
+Note that this [tutorial](https://uppsala.instructure.com/courses/67276/pages/lab-unsupervised-integration-through-mofa2) only serves as a guide and not meant to be taken as a copy-and-paste exercise.
+The [tutorial](https://uppsala.instructure.com/courses/67276/pages/lab-unsupervised-integration-through-mofa2) will give you a general framework in how to use MOFA as a tool to integrate multidimensional data and how to interpret MOFA's results.
 
 
 </div>
