@@ -88,6 +88,21 @@ We begin by loading necessary libraries:
 
 :raw-html:`<br />`
 
+If you would like to use TSS annotations from Ensembl rather than from the UCSC-based ``TxDb.Hsapiens.UCSC.hg38.knownGene``:
+
+.. code-block:: R
+
+	library(txdbmaker)
+
+	txdb_ens = txdbmaker::makeTxDbFromBiomart(biomart="ensembl",
+                              dataset="hsapiens_gene_ensembl",
+                              circ_seqs=NULL,
+                              host="https://www.ensembl.org",
+                              taxonomyId=NA,
+                              miRBaseBuild=NA)
+
+
+:raw-html:`<br />`
 
 
 Peaks Coverage Plot
