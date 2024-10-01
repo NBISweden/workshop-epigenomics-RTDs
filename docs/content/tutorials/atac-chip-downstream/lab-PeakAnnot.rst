@@ -104,7 +104,7 @@ We begin by loading necessary libraries:
 	                              taxonomyId=NA,
 	                              miRBaseBuild=NA)
 
-	The code above gives you access to the current annotations. Sometimes you would like to access older annotations, e.g. when mapping  to genome assembly which is not the newest, e.g. to *mm10* rather than the current **mm11*. To access the annotations to previous assembly or annotation versions, you need to locate their ensembl version, and use the url as host.
+	The code above gives you access to the current annotations. Sometimes you would like to access older annotations, for instance when mapping to genome assembly which is not the newest, e.g. to *mm10* rather than the current *mm11*. To access the annotations to previous assembly or annotation versions, you need to locate their ensembl version, and use the url as host.
 
 	.. code-block:: R
 		
