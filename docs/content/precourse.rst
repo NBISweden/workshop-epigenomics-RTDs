@@ -55,37 +55,46 @@ Computational resources are provided by SNIC / `Uppmax <https://uppmax.uu.se/>`_
 Create user account & request membership in the course project (for those new to Uppmax)
 *****************************************************************************************
 
-This involves few steps. Briefly,
-
-* registering at `SUPR <https://supr.naiss.se/>`_;
-
-* accepting the User Agreement;
-
-* becoming a member in both the storage project ( **NAISS 2024/23-388**) and the compute project ( **NAISS 2024/22-842**);
-
-* applying for an account at Uppmax.
+*This section in only related to accepted workshop participants.*
 
 
-.. note::
+.. This involves few steps. Briefly,
 
-	To go through the steps follow the instructions on Uppmax website. While at this keep this information handy:
+.. * registering at `SUPR <https://supr.naiss.se/>`_;
 
-	* Cluster name: rackham
+.. * accepting the User Agreement;
 
-	* Project ID:  **NAISS 2024/23-388** and **NAISS 2024/22-842**
+.. * becoming a member in both the storage project ( **NAISS 2024/23-388**) and the compute project ( **NAISS 2024/22-842**);
+
+.. * applying for an account at Uppmax.
+
+
+.. .. note::
+
+..	To go through the steps follow the instructions on Uppmax website. While at this keep this information handy:
+
+..	* Cluster name: rackham
+
+..	* Project ID:  **NAISS 2024/23-388** and **NAISS 2024/22-842**
+
 
 
 
 Request membership in the course project (for those already having Uppmax account)
 ***********************************************************************************
 
-* log in to SUPR;
+*This section in only related to accepted workshop participants.*
 
-* under Projects: Requesting Membership in Projects, request membership in **NAISS 2024/23-388** and **NAISS 2024/22-842**
+.. * log in to SUPR;
+
+.. * under Projects: Requesting Membership in Projects, request membership in **NAISS 2024/23-388** and **NAISS 2024/22-842**
 
 
 Check configuration (everyone)
 *******************************
+
+*This section in only related to accepted workshop participants.*
+
 
 After you complete setting-up and you receive a notification from SUPR that **your account have been added to the course allocation**
 
