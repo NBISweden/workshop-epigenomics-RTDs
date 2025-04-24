@@ -8,7 +8,7 @@
     :format: html
 
 ==========================================================
-Welcome to Epigenomics Workshop 2024!
+Welcome to Epigenomics Workshop 2025!
 ==========================================================
 
 
@@ -27,7 +27,7 @@ This workshop is an introduction to best practice bioinformatics methods for pro
 
 Date
 ----
-16th - 20nd September 2024
+22 - 26 September 2025
 
 :raw-html:`<br />`
 
@@ -38,12 +38,10 @@ Date
 Application
 -----------
 
-.. - Application will be open soon!
 
-- Application is now closed
-- Sign up `here <https://forms.gle/UQeYCXC6QrokuGu4A>`_ and we will let you know when we open application for the next course.
+- Application is now open!
+- Sign up `here <https://forms.gle/gToSCQffqBgBBcpr8>`_.
 
-.. Application is now open `here <https://www.scilifelab.se/event/epigenomics-data-analysis-from-bulk-to-single-cell-online-4/>`_
 
 :raw-html:`<br />`
 
@@ -120,7 +118,7 @@ Makes learning experience easier:
 Selection criteria
 ------------------
 
- - Due to limited capacity the workshop can accommodate maximum of 30 participants. If we receive more applications, participants will be selected based on several criteria. Selection criteria include correct entry requirements, motivation to attend the course as well as gender and geographical balance.
+ - Due to limited capacity the workshop can accommodate maximum of 25 participants. If we receive more applications, participants will be selected based on several criteria. Selection criteria include correct entry requirements, motivation to attend the course as well as gender and geographical balance.
  - NBIS prioritises academic participants, especially PhD students, affiliated with Swedish universities. We warmly welcome international and/or non-academic participants when we have seats available and the requirements criteria are met.
 
 
