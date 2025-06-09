@@ -88,7 +88,7 @@ Primary analysis of the initial FASTQ files was performed beforehand. Reads were
 .. attention::
    You can download bigWig and peak annotations. Most of what we are going to do can be done locally on a regular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.
 
-When running things on Uppmax, copy the files to your home directory:
+**Uppmax**: When running things on Uppmax, copy the files to your home directory:
 
 .. code-block:: bash
 
@@ -112,7 +112,7 @@ Besides quality control tools and exploratory analyses, it is usually a good ide
     When running these commands, the same relative path structure is expected to be kept. So if you
     made a directory for this tutorial, be sure you are in that directory when starting.
 
-If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.
+**Local**: If you have not done it yet, download a copy of the bigWig and peaks to your local laptop.
 
 .. code-block:: bash
 
@@ -161,11 +161,9 @@ Quality Control metrics are very important to understand whether the experiment 
 Correlation plots
 -----------------
 
-One way to look at similarity between ChIP dataset is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. 
+One way to look at similarity between ChIP datasets is to partition the signal in bins of a fixed size and compute a pairwise correlation value between distributions. This can be done using ``deepTools``.
 
-This can be done using ``deepTools``.
-
-This is a time consuming step that would need to be done on Uppmax. Move to the directory where you copied bigWig files on Uppmax. If you followed the same names, it would be:
+**Uppmax**: This is a time consuming step that would need to be done on Uppmax. Move to the directory where you copied bigWig files before. If you followed the same names, it would be:
 
 .. code-block:: bash
     
@@ -178,7 +176,20 @@ Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
     module load bioinfo-tools
     module load deepTools
 
-``deepTools`` needs that you first compute a bin matrix. From this, many other things can be done, such as correlation plots and PCA:
+``deepTools`` needs that you first compute a bin matrix. From this, many other things can be done, such as correlation plots and PCA.
+
+You can calculate a bin matrix using the command below. Since it is a very long one-line command, it is split into several lines
+so it is easier to read. You can split any shell command in lines using the back slash ``\``, which tells the shell parser that the
+command continues on the next line. Just be sure that there are no white spaces after the back slash. 
+
+When working on a data analysis with deepTools, if you are not sure if a command is correct, it is a good
+idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
+and will run faster (failing fast is a good philosophy that will save you loads of time). 
+
+For instance, this command has a ``--region chr1:300000:900000`` parameter, which will only calculate 
+bins on that genomic region and will run immediately. Then you can check the output and verify that it is what you expected.
+
+You can copy and paste the command below as it is on the terminal:
 
 .. code-block:: bash
 
@@ -214,18 +225,15 @@ Load ``deepTools`` (and ``bioinfo-tools``) module beforehand:
         Skene2017_CnR_3m \
         Skene2017_CnR_452 \
         Skene2017_CnR_5s \
-        Skene2017_CnR_9m
+        Skene2017_CnR_9m \
+        --region chr1:300000:900000
 
 
 .. note::
     The parameter ``--outRawCounts`` is not necessary and usually not generated, as the same values are saved in ``bins_table.npz`` in a way they occupy less space. But raw counts are text, so you can basically peek at the values directly using ``head`` or ``more``.
 
 
-If something does not work properly or you are not sure if a command is going to work, it is a good
-idea to use the ``--region`` parameter, which will do the analysis only on a given genomic region,
-and will run faster (failing fast is a good philosophy that will save you loads of time on the computer). 
-
-For instance, if you add ``--region chr1:300000:900000`` to the previous command:
+If the small test ran successfully, you can run ``multiBigWigSummary`` on the whole genome by running:
 
 .. code-block:: bash
         
@@ -257,10 +265,8 @@ For instance, if you add ``--region chr1:300000:900000`` to the previous command
         Skene2017_CnR_3m \
         Skene2017_CnR_452 \
         Skene2017_CnR_5s \
-        Skene2017_CnR_9m \
-        --region chr1:300000:900000
+        Skene2017_CnR_9m
 
-It will run immediately if everything is working, and will produce a tiny dataset with 120 bins.
 
 The ``.npz`` matrix is then used by ``deepTools`` to produce other plots. For our correlation plot:
 
@@ -282,7 +288,7 @@ This will generate a correlation plot based on genome-wide 5kb bins.
 **Q: Check out how the datasets cluster - does it make sense? Is the overall clustering following the biological target/control or underlying batch effect?**
 
 .. note:: 
-    If something here does not work, you can get the bins files from: ``cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins* .``.
+    If some step did not work, you can get the generated genome-wide bins files from: ``cp /sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/tmp/bins* .``.
 
 
 
@@ -292,7 +298,7 @@ Cumulative enrichment
 Also known as fingeprint plots, these give a feeling about the signal to noise ratio of each signal. You
 can understand more about what they exactly mean in `deepTools` `documentation <https://deeptools.readthedocs.io/en/develop/content/tools/plotFingerprint.html#id6>`_.
 
-You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
+**Uppmax**: You can plot this with ``deepTools`` as well. This requires the BAM files and takes quite a bit to compute. You can symlink the bam files from: ``/sw/courses/epigenomics/quantitative_chip_simon/K562_CTCF_CnR/bam/`` the same way as before:
 
 .. code-block:: bash
 
@@ -334,11 +340,6 @@ You can plot them.
       Skene2017_CnR_9m \
       -p 4
 
-
-.. note::
-    Again, here the ``--region`` trick also works to plot a subset of the data.
-
-
 The resulting plot should look like:
 
 .. image:: Figures/03_fingerprint1.png
@@ -360,14 +361,14 @@ Clearly, the CUT&Run data scores better by QC compared to the CTCF ChIP presente
       ./bam/NBIS_Pugacheva2020_K562_ChIP_IGG_Abs_Control.GRCh38.bam \
       ./bam/NBIS_Pugacheva2020_K562_ChIP_Mix_of_CTCF_PolyC_Abs.GRCh38.bam \
       -o ./fingerprint_Pugacheva2020.pdf \
-      --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC     Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
+      --labels Pugacheva2020_ChIP_MonoC Pugacheva2020_ChIP_MonoN Pugacheva2020_ChIP_RabbitC Pugacheva2020_ChIP_Control Pugacheva2020_ChIP_Mix \
       -p 4
 
 .. image:: Figures/04_fingerprint2.png
 	:target: Figures/04_fingerprint2.png
 	:alt:
 
-**Q: How does Pugacheva CTCF ChIP measure up with the CUT&Run? Given that the Skene CTCF ChIP was done under native conditions (no crosslinker) and Pugacheva CTCF ChIP (formaldehyde crosslinked), what do you think could be the problem with the native ChIP?**
+**Q: How does Pugacheva CTCF ChIP measure up with the CUT&Run? Given that the Skene CTCF ChIP was done under native conditions (no crosslinker) and Pugacheva CTCF ChIP was formaldehyde crosslinked, what do you think could be the problem with the native ChIP?**
 
 
 Peak calling
@@ -380,6 +381,7 @@ Peaks were called with MACS2 using standard parameters.
 
 Again, it is usually a good idea to visually inspect the tracks, so you can have a feeling on whether the peaks were correctly called and how the samples look like.
 
+**Local**: You can visualize the peaks and bigwig files you downloaded before to your local computer.
 
 .. image:: Figures/05_IGV_peaks.png
 	:target: Figures/05_IGV_peaks.png
@@ -390,7 +392,7 @@ Again, it is usually a good idea to visually inspect the tracks, so you can have
 Number of peaks per sample
 --------------------------
 
-A simple ``wc`` count allows you to quickly check how many peaks you got:
+A simple ``wc -l peaks/*.narrowPeak`` count allows you to quickly check how many peaks you got:
 
 .. code-block:: bash
 
@@ -418,7 +420,7 @@ Peaks overlap using intervene
 .. attention::
     There is no ``intervene`` module on Uppmax. If you want to run it there, you can activate a conda environment that is precomputed: ``conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/intervene``. Otherwise you can download the peaks files to your local computer and install intervene there, if you prefer.
 
-You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
+**Uppmax**: You can generate venn diagrams (pairwise or more). For example, we may want to look at how much two of the CTCF ChIP peaks from Pugacheva 2020 agree:
 
 .. code-block::
     
@@ -462,7 +464,7 @@ This has actually been noted in the CnR paper. They say that too scarce backgrou
 **Q: Now that you have peaks, think about what you could do with the peak information. How to make sense of the peaks? Would you use the dataset with the most or the least peaks for downstream analysis?**
 
 .. note::
-    ``MACS`` doesn’t just give peaks, it also assigns a score. High/confident peaks have high score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be better.
+    ``MACS`` doesn’t just give peaks, it also assigns a score. High confidence peaks have higher score. Small peaks have low score. It is not apparent from the analysis above, but it is quite likely that if you would pick the top 5000 scored peaks from each dataset, the overlap would be better.
 
 Comparison between methods
 ==========================

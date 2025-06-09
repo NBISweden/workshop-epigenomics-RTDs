@@ -89,6 +89,39 @@ We begin by loading necessary libraries:
 :raw-html:`<br />`
 
 
+.. HINT::
+
+	If you would like to use TSS annotations from Ensembl rather than from the UCSC-based ``TxDb.Hsapiens.UCSC.hg38.knownGene``:
+
+	.. code-block:: R
+	
+		library(txdbmaker)
+	
+		txdb_ens = txdbmaker::makeTxDbFromBiomart(biomart="ensembl",
+	                              dataset="hsapiens_gene_ensembl",
+	                              circ_seqs=NULL,
+	                              host="https://www.ensembl.org",
+	                              taxonomyId=NA,
+	                              miRBaseBuild=NA)
+
+	The code above gives you access to the current annotations. Sometimes you would like to access older annotations, for instance when mapping to genome assembly which is not the newest, e.g. to *mm10* rather than the current *mm11*. To access the annotations to previous assembly or annotation versions, you need to locate their ensembl version, and use the url as host.
+
+	.. code-block:: R
+		
+		txdb_ens_mm10 = txdbmaker::makeTxDbFromBiomart(biomart="ENSEMBL_MART_ENSEMBL",
+                              dataset="mmusculus_gene_ensembl",
+                              circ_seqs=NULL,
+                              host="https://nov2020.archive.ensembl.org",
+                              taxonomyId=NA,
+                              miRBaseBuild=NA)
+
+
+
+:raw-html:`<br />`
+
+
+:raw-html:`<br />`
+
 
 Peaks Coverage Plot
 =====================

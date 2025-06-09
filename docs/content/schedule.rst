@@ -4,7 +4,7 @@
 
 
 ========
-Schedule
+Schedule (Tentative)
 ========
 
 
@@ -13,7 +13,7 @@ Schedule
 
 
 
-Monday (16 September 2024)
+Monday (22 September 2025)
 --------------------------------
 
 **DNA methylation with Illumina 450K arrays and Bisulfite-seq**
@@ -42,37 +42,9 @@ Monday (16 September 2024)
 :raw-html:`<br />`
 
 
-Tuesday (17 September 2024)
+Tuesday (23 September 2025)
 --------------------------------
 
-**ATAC-seq: data processing and analysis principles**
-
-
-**09:00 - 09:30** Recap previous day *(online session)*
-
-**09:30 - 10:15** Introduction to ATAC-seq data analysis  *(online session)*
-
-**10:30 - 11.30** :doc:`Exercise: Data preprocessing and general QC <./tutorials/data-preproc-tutorials>` 
-and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
-
-**11:30 - 12:00** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
-
-**12:00 - 13:00** lunch (offline)
-
-**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
-
-**13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
-
-**15:30 - 17:00** Exercise *(offline)*
-
-**16:00 - 17:00** Daily challenge 
-
-
-:raw-html:`<br />`
-
-
-Wednesday (18 September 2024)
---------------------------------
 
 **New methods and quantitative ChIP-seq** (Simon Elsässer and Carmen Navarro Luzón)
 
@@ -86,17 +58,47 @@ Wednesday (18 September 2024)
 
 **13:00 - 13:30** Introduction to exercises  *(online session)*
 
-**13:30 - 16:00** :doc:`Principles of ChIP-seq <./tutorials/chipseqProc/lab-chipseq-processing>` 
+**13:30 - 16:00** :doc:`Principles of ChIP-seq <./tutorials/chipseqProc/lab-chipseq-processing>`
 and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(online support)*
 
 **16:00 - 17:00** Exercises *(offline)*
 
-**16:00 - 17:00** Daily challenge 
+**16:00 - 17:00** Daily challenge
+
 
 :raw-html:`<br />`
 
 
-Thursday (19 September 2024)
+Wednesday (24 September 2025)
+--------------------------------
+
+**ATAC-seq: data processing and analysis principles**
+
+
+**09:00 - 09:30** Recap previous day *(online session)*
+
+**09:30 - 10:15** Introduction to ATAC-seq data analysis  *(online session)*
+
+**10:30 - 11.30** :doc:`Exercise: Data preprocessing and general QC <./tutorials/data-preproc-tutorials>`
+and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
+
+**11:30 - 12:00** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
+
+**12:00 - 13:00** lunch (offline)
+
+**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
+
+**13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
+
+**15:30 - 17:00** Exercise *(offline)*
+
+**16:00 - 17:00** Daily challenge
+
+
+:raw-html:`<br />`
+
+
+Thursday (25 September 2025)
 --------------------------------
 
 **Workflow Management Systems & Downstream Analyses**
@@ -124,7 +126,7 @@ Thursday (19 September 2024)
 :raw-html:`<br />`
 
 
-Friday (20 September 2024)
+Friday (26 September 2025)
 --------------------------------
 
 **Integrative and single cell omics & inspirational talk**
@@ -145,7 +147,7 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 14.00** Inspirational talk: **How does epigenetic mechanisms impact Type 2 diabetes?** (`Charlotte Ling <https://portal.research.lu.se/en/persons/charlotte-ling>`_) Zoom link: https://lu-se.zoom.us/j/67681656100
+**13.00 - 14.00** Inspirational talk:
 
 **14.00 - 14.10** Break
 
@@ -156,7 +158,7 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **15:00 - 16:00** Daily challenge 
 
-**15:00 - 16:00** `Short term feedback form <https://forms.gle/AQT6hW8DVTEP1HET8>`_
+**15:00 - 16:00** `Short term feedback form
 
 **15.00 - 16.00** Course wrap-up
 

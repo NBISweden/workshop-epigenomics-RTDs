@@ -201,22 +201,22 @@ Let's link the necessary files and produce coverage tracks (assuming we are in `
 	mkdir pyGT
 	cd pyGT
 
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.chr14.norm1x.bedgraph
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.chr14.norm1x.bedgraph
 
-	ln -s /proj/epi2023/vis/pyGT/nk_genrich.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_stim_genrich.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_macs_broad.bed
-	ln -s /proj/epi2023/vis/pyGT/nk_stim_macs_broad.bed
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
-	ln -s /proj/epi2023/vis/pyGT/ENCFF398QLV.genrich.narrowPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_genrich.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_stim_genrich.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_macs_broad.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/nk_stim_macs_broad.bed
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT//ENCFF398QLV.genrich.narrowPeak
 
-	ln -s /proj/epi2023/vis/pyGT/hg38.refGene.gtf
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/hg38.refGene.gtf
 
-	cp /proj/epi2023/vis/pyGT/tracks1.ini .
-	cp /proj/epi2023/vis/pyGT/tracks2.ini .
+	cp /sw/courses/epigenomics/2022/vis/pyGT/tracks1.ini .
+	cp /sw/courses/epigenomics/2022/vis/pyGT//tracks2.ini .
 
 
 .. Hint::
@@ -355,6 +355,7 @@ Let's build a simple ``ini`` file::
 
 This file is available as ``tracks1.ini``.
 
+**Hint**: You can keep only the file names (not the full paths), if running the plotting from the same directory where the files are located.
 
 ``pyGenomeTracks`` is installed via a conda environment, so we activate it first
 
@@ -364,8 +365,7 @@ This file is available as ``tracks1.ini``.
 	#unloading module python may be necessary
 	module unload python
 	module load conda/latest
-	conda activate /sw/courses/epigenomics/software/conda/pygenometracks3_6
-
+	conda activate /sw/courses/epigenomics/software/conda/pygenometracks3_7
 
 Let's plot one of the regions we have viewed in the ATAC-seq peak detection part ``chr14:93,095,621-93,125,599``
 

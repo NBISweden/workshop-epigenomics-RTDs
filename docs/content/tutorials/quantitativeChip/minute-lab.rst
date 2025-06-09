@@ -28,8 +28,7 @@ This tutorial has two parts:
 2. **Downstream analysis**: Look at the resulting bigWig files using usual bioinformatics tools.
 
 
-We are going to analyse H3K27m3 data from human ESCs, where we have shown that Naive cells' H3K27m3 landscape looks very different when compared to Primed cells in a quantitative manner. This dataset comes from our `recent publication <https://www.nature.com/articles/s41556-022-00916-w>`_ [2]_.
-
+We are going to analyse H3K27m3 data from human ESCs, where we have shown that Naive cells' H3K27m3 landscape looks very different when compared to Primed cells in a quantitative manner. This dataset comes from our `publication <https://www.nature.com/articles/s41556-022-00916-w>`_ [2]_.
 
 
 In order to make this tutorial last a reasonable time, the **primary analysis** part is independent from the second part, as it runs only on a subset of the data you can see in the second part. During the **primary analysis**
@@ -65,7 +64,7 @@ To make sure you have all the necessary tools to run :code:`minute`, you can use
   conda activate /sw/courses/epigenomics/quantitative_chip_simon/condaenv/minute
 
 
-If you want to make a fresh install, you can make a new conda environment and install minute in it:
+Optional: If you want to make a fresh install, you can make a new conda environment and install minute in it. However this could take a little while:
 
 
 .. code-block:: bash
@@ -74,21 +73,6 @@ If you want to make a fresh install, you can make a new conda environment and in
   module load conda
 
   conda create -n minute minute
-
-
-
-**Speed up the process using mamba**
-
-Sometimes :code:`conda` takes long time resolving dependencies on large environments. An alternative is :code:`mamba`, a reimplementation of :code:`conda` in C++. It is faster on the package dependency resolution. However, you might still experience some waiting time!
-
-If you want to use mamba instead (on Uppmax it is included in the `conda module <https://www.uppmax.uu.se/support/user-guides/python-user-guide/>`_), your code would look like:
-
-.. code-block:: bash
-
-  module load bioinfo-tools
-  module load conda
-
-  mamba create -n minute minute
 
 
 .. admonition:: Conda-related issues
@@ -103,7 +87,7 @@ Files
 We are going to look at Naïve vs Primed human ES cells, and as control we have EZH2-inhibitor treatment,
 which removes H3K27m3 from the cells, creating a baseline for technical background.
 
-There are 3 replicates for each condition. In the first part of the tutorial you will run replicate 1, and results for all replicates are available in the second part.
+There are 3 replicates for each condition. In the first part of the tutorial you will run replicate 1, and results for all replicates are precalculated and available in the second part.
 
 
 .. code-block:: bash
@@ -190,10 +174,10 @@ mate 1 contains a 6nt UMI followed by a 8nt barcode that identifies the sample.
 
 :code:`groups.tsv`: Contains *scaling* information. Reads are normalized to matching sample input read counts, and in each scaling group, the first sample is used as reference. This has two implications:
 
-1. Reference sample is normalized to 1x genome coverage.
-2. Rest of samples values are directly comparable to the reference and across themselves.
+1. The reference sample is normalized to 1x genome coverage.
+2. The rest of samples' values are directly comparable to the reference and across themselves.
 
-Additionally, we may have some spike-in data from another reference, so Minute allows to map to different references in the same run. So :code:`groups.tsv` has also attached the name of the reference to which we are mapping.
+Additionally, we may have some spike-in data from another reference, so ``minute`` allows to map to different references in the same run. So :code:`groups.tsv` has also attached the name of the reference to which we are mapping.
 
 .. code-block::
 

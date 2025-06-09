@@ -19,7 +19,8 @@ Day 1: **Methylation: Arrays and Bisulfite-Seq**
 
 `DNA Methylation Slides <../_static/2024-Methylation.pdf>`_
 
-.. `DNA Methylation Methods and Technologies (Jessica Nordlund) <../_static/JN-EpigeneticsMethods_2023-09-18.pdf>`_
+`DNA Methylation Methods and Technologies (Jessica Nordlund) <../_static/JN-EpigeneticsMethods_2023-09-18.pdf>`_
+
 
 :raw-html:`<br />`
 
@@ -35,12 +36,25 @@ Day 2: **ATAC-seq**
 .. `ChIPseq data processing <../_static/slides-chipseqproc-as-2021.pdf>`_
 
 
+:raw-html:`<br />`
+
+Day 2: **NGI**
+
+
+`Bulk Functional Genomics Methods (Orlando Contreras‐López) <../_static/EpigeneticsatNGIforNBIS2024.pdf>`_
+
+`Single Cell Methods (Anja Metzger) <../_static/2024-09-17NBISsinglecell.pdf>`_
+
+
+
+:raw-html:`<br />`
+
 
 :raw-html:`<br />`
 
 Day 3 **Advanced ChIP methods**
 
-`Advanced ChIP methods <../_static/NBIS-2024-ChIP-seq-Lecture.pdf>`_
+`Advanced ChIP methods <../_static/NBIS-Course_2024.pdf>`_
 
 
 :raw-html:`<br />`

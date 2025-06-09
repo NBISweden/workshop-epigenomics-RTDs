@@ -47,11 +47,11 @@ H3K27me3-enriched regions from Court *et al.* 2019 [4]_: ``Bivalent_primed.hg38.
 Data preprocessing
 ==================
 
-Primary analysis of the initial FASTQ files was performed beforehand. Reads were mapped with bowtie2 with default parameters. Resulting BAM files were deduplicated using Picard and blacklisted regions were removed. BigWig files were generated with deepTools to 1x coverage. Resulting files are available under ``/sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3``.
+Primary analysis of the initial FASTQ files was performed beforehand. Reads were mapped with bowtie2 with default parameters. Resulting BAM files were deduplicated using Picard and blacklisted regions were removed. BigWig files were generated with deepTools to 1x coverage. Resulting files are available on Uppmax under ``/sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3``.
 
 You can download bigWig and peak annotations. Most of what we are going to do can be done locally on a regular laptop. When this is not the case, Uppmax-specific instructions will be given. In case something does not work properly, the output of most of these is available also in the workshop folder and in this documentation.
 
-When running things on Uppmax, copy the files to your home directory:
+**Uppmax**: Copy the files to your home directory:
 
 .. code-block:: bash
 
@@ -68,7 +68,20 @@ When running things on Uppmax, copy the files to your home directory:
 Manual inspection of bigWig files using IGV
 ===========================================
 
-HOXA locus.
+**Local**: If you want, you can browse these locally by first downloading the bigWig files to your laptop.
+
+.. code-block:: bash
+
+    # Wherever you have this directory, it's from now on your main working directory
+    mkdir cnt_chip
+    cd cnt_chip
+
+    mkdir bw
+
+    scp <youruser>@rackham.uppmax.uu.se:/sw/courses/epigenomics/quantitative_chip_simon/hESC_H3K27me3/bw/*.bw  ./bw/
+
+
+Here we are going to have a look at the HOXA locus:
 
 .. image:: Figures/12_cut_tag_hoxa.png
 	:target: Figures/12_cut_tag_hoxa.png
