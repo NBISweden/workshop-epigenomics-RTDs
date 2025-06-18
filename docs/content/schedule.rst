@@ -147,7 +147,7 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 14.00** Inspirational talk: \`Marek Bartosovic <https://www.bartosovic-lab.com>`_ 
+**13.00 - 14.00** Inspirational talk: `Marek Bartosovic <https://www.bartosovic-lab.com>`_ 
 
 **14.00 - 14.10** Break
 
