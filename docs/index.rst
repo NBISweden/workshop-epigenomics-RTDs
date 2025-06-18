@@ -157,6 +157,10 @@ Teaching team
 
 - Louella Vasquez <louella.vasquez@scilifelab.se>
 
+- Dania Machlab <dania.machlab@scilifelab.se>
+
+- Markus Ringner <markus.ringner@scilifelab.se>
+
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
 
 - Carmen Navarro Luzón <carmen.navarro@scilifelab.se>
