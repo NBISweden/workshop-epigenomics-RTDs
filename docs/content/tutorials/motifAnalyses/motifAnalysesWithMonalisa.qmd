@@ -1,0 +1,51 @@
+---
+title: "Motif Analyses with `monaLisa`"
+author: Dania Machlab
+format: 
+  rst:
+    toc: false
+    toc-depth: 2
+    fig-format: png
+date: July 15, 2025
+---
+
+## 
+
+# Overview
+
+So far, we have seen how transcription factor binding sites (TFBSs), also called motifs, can be represented and visualized in matrix form. We will make use of the position weight matrices (PWMs) from public databases like JASPAR, to scan for motif hits against reference sequences like enhancers, to get predicted binding sites for the motifs. These will then be used look for relevant motifs that explain our signal of interest, such as fold changes in accessibility.
+
+We will do this using the \[`monaLisa` package\]([https://bioconductor.org/packages/monaLisa](https://www.bioconductor.org/packages/monaLisa/ "For citation in publications, etc., please use DOI: 10.18129/B9.bioc.monaLisa")), short for **mo**tif **an**alysis with **Lisa**, inspired by her father \[**Homer\](**[http://homer.ucsd.edu/homer](http://homer.ucsd.edu/homer/motif/)**)**, a widely used tool for motif enrichment analyses.
+
+mention benchmaarking papers?
+
+# Learning outcomes
+
+# Libraries
+
+We start by loading the needed packages. If necessary, use `BiocManager::install()` to install missing packages.
+
+```{r echo=FALSE}
+.libPaths(c("/Users/daniamachlab/Library/R/arm64/4.5-Bioc-3.21/library", .libPaths()))
+```
+
+```{r}
+suppressPackageStartupMessages({
+  #library(TFBSTools)
+  library(Biostrings)
+  #library(monaLisa) # use findMotifHits which uses matchPWM (optimised for parallel processing of multiple PWMs)
+  library(JASPAR2024)
+  library(RSQLite)
+})
+```
+
+# Quantify reads on the enhancers
+
+If not starting from a count matrix we have from previous sessions, then use the peaks defined and annotated in previous sessions to 1. select distal enhancer peaks \> 1kb away from any TSS, 2. create a common set of peaks (GRanges object) and 3. count the reads using quasR::qCount or featureCount.
+
+# Session
+
+```{r}
+date()
+sessionInfo()
+```

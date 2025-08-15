@@ -32,4 +32,5 @@ These are tutorials for downstream processing of ChIP-seq and ATAC-seq data.
    Detection of differential occupancy in ChIP-seq data using DiffBind <diffBind/lab-diffBinding.rst>
    Signal Visualisation in Functional Genomics <visualisation/lab-visualisation.rst>
    Transcription Factor Footprinting <ATACseq/lab-atac-TFfootprnt.rst>
+   Identifying Potentially Relevant Transcription Factors <motifAnalyses/motifAnalyses.rst>
 
