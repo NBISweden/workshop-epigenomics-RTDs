@@ -52,7 +52,7 @@ Apply for an UPPMAX user account
 
 After you have been added to a SUPR project, you can now apply for a user account in UPPMAX if you do not have an existing account yet.
 This will be the account you use to log in to UPPMAX so it is not the same as your SUPR account.  
-Note that It might take up to 2 working days for your account to be created.  You will then receive 2 emails with information on how to login to UPPMAX.
+Note that it might take up to 2 working days for your account to be created.  You will then receive 2 emails with information on how to login to UPPMAX.
 To apply, please follow this `instruction <https://docs.uppmax.uu.se/getting_started/user_account/#apply-for-an-account-at-uppmax>`_.
 
 :raw-html:`<br />`
@@ -162,7 +162,6 @@ Further optional preparations
 
 For those of you wanting to start ahead and/or brush up on various skills before the course.
 
-:raw-html:`<br />`
 
 Computer skills
 ------------------
