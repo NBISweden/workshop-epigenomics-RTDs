@@ -8,7 +8,7 @@ Setting-up
 
 
 
-Before we start tutorial, we need to set up our work environment. In particular, we need to:
+Before we start the tutorial, we need to set up our work environment. In particular, we need to:
 
 
 1. Be able to login to Uppmax and use the node allocation.
@@ -40,7 +40,7 @@ While logged to Rackham, book the interactive session:
 
 .. code-block:: bash
 
-	interactive -A naiss2024-22-842 -p core -n 5 -t 08:00:00
+	interactive -A uppmax2025-2-309 -p core -n 5 -t 08:00:00
 
 This command gives you access to 5 cores for eight hours or until 17:00, whichever comes first.
 
