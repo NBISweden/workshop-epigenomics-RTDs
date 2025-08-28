@@ -39,8 +39,12 @@ Application
 -----------
 
 
-- Application is now open!
-- Sign up `here <https://forms.gle/gToSCQffqBgBBcpr8>`_.
+.. - Application is now open!
+.. - Sign up `here <https://forms.gle/gToSCQffqBgBBcpr8>`_.
+
+- Application is now closed
+- Sign up `here <https://forms.gle/BSieETwyWHACwRsT8>`_ and we will let you know when we open application for the next workshop.
+
 
 
 :raw-html:`<br />`
@@ -156,6 +160,10 @@ Teaching team
 - `Agata Smialowska <https://nbis.se/staff/agata-smialowska>`_ <agata.smialowska@nbis.se>
 
 - Louella Vasquez <louella.vasquez@scilifelab.se>
+
+- Dania Machlab <dania.machlab@scilifelab.se>
+
+- Markus Ringnér <markus.ringner@scilifelab.se>
 
 - `Simon Elsässer <https://www.scilifelab.se/researchers/simon-elsasser/>`_ <simon.elsasser@ki.se>
 

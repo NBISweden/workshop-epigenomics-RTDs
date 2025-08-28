@@ -147,6 +147,7 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **12:00 - 13:00** lunch (offline)
 
+
 **13.00 - 14.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
 and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` *(online support)*
 
