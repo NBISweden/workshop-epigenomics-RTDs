@@ -115,7 +115,7 @@ Thursday (25 September 2025)
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials.html>` *(online support)*
+**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` *(online support)*
 
 **15:00 - 17:00** Exercises *(offline)*
 
