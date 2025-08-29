@@ -22,7 +22,7 @@ DNA Methylation: Array Workflow
 
 **Learning Outcomes**
 
-In this tutorial, we will provide examples of the steps involved in analyzing 450K methylation array data using R and Bioconductor. The different steps include: importing the raw data, quality control checks, data filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented. 
+In this tutorial, we will provide examples of the steps involved in analyzing methylation array data using R and Bioconductor. The different steps include: importing the raw data, quality control checks, data filtering, different normalization methods and probe-wise differential methylation analysis. Additional approaches such as differential methylation analysis of regions, gene ontology analysis and estimating cell type composition will also be presented. 
 
 .. Contents
 .. ========
@@ -33,7 +33,7 @@ In this tutorial, we will provide examples of the steps involved in analyzing 45
 Introduction
 ------------
 
-Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation450 array will be presented. 
+Despite the increasing popularity of sequencing based methods, methylation arrays remain the platform of choice for many epigenome-wide association studies. Their user-friendly and more streamlined data analysis workflow in combination with a lower price per sample make them the preferred tool for - especially larger scale - studies. In this tutorial, an overview of a typical analysis of a Illumina HumanMethylation array will be presented. 
 
 But first; a bit of history. Measurement of DNA methylation by Infinium technology (Infinium I) was first employed by Illumina on the HumanMethylation27 (27k) array, which measured methylation at approximately 27,000 CpGs, primarily in gene promoters. Like bisulfite sequencing, the Infinium assay detected methylation status at single base resolution. However, due to its relatively limited coverage the array platform was not truly considered “genome-wide” until the arrival of the 450k array. Introduced in 2011, the 450k array increased the genomic coverage of the platform to over 450,000 gene-centric sites by combining the original Infinium I probes with the novel Infinium II probes. Both probe types employ 50bp probes that query a [C/T] polymorphism created by bisulfite conversion of unmethylated cytosines in the genome. However, the Infinium I and II assays differ in the number of beads required to detect methylation at a single locus. Infinium I assays use two beads per CpG, one for each of the methylated and unmethylated states. If bisulfite converted DNA matches the probe, the probe is extended with a nucleotide  attached to a red or green dye. In contrast, the Infinium II design uses one bead type and the methylated state is determined at the single base extension step after hybridization (the methylated signal is measured in the green channel and the unmethylated signal in the red channel) [See Figure 1]. In 2016, the 850k array (also called EPIC array) was introduced. This array also uses a combination of the Infinium I and II assays but builds upon the 450k slide with >90% of the original 450K CpGs plus an additional 350,000 CpGs in mainly enhancer regions. As a result of this increase coverage a 450k slide can contain 12 arrays for 12 samples whilst the EPIC has only 8 spaces for 8 samples per array. The EPIC array is replacing the 450K array as the *de facto* standard for methylation analyses; the data processing for both is however fairly similar.
 
@@ -116,7 +116,7 @@ These options are described in detail below. Please note, choose *one of them* t
 
          R
 
-      If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC, follow the instructions on `this website <https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906>`_ (under the section "Alternate methods using OS-soecific tools").
+      If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC and using MobaXterm, make sure that X11 forwarding is enabled.
 
    Next, run the R commands by copying them from this website into the Rstudio terminal or R terminal and pressing *Enter*. 
 
@@ -124,7 +124,7 @@ These options are described in detail below. Please note, choose *one of them* t
 .. admonition::  Option B
    :class: optionB
 
-   Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. Containers are a relatively new method to package software together with all its dependencies and an operating system. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. Containers will be discussed in a bit more detail on Thursday. A benefit of using it here is that Rstudio runs a whole lot faster using the container approach. However, to access it from Uppmax, a few more steps are necessary. First, make sure you are connected to your alloted node (described in :doc:`../setup/lab-setup`) and then perform following steps.
+   Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. Containers are a relatively new method to package software together with all its dependencies and an operating system. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. A benefit of using it here is that Rstudio runs a whole lot faster using the container approach. However, to access it from Uppmax, a few more steps are necessary. First, make sure you are connected to your alloted node (described in :doc:`../setup/lab-setup`) and then perform following steps.
 
    .. code-block:: bash
 
@@ -137,13 +137,13 @@ These options are described in detail below. Please note, choose *one of them* t
 
       1. SSH tunnel from your workstation using the following command:
 
-      ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
+      ssh -N -L 8787:r37.uppmax.uu.se:35616 louella@rackham.uppmax.uu.se
       
       and point your web browser to http://localhost:8787
 
       2. log in to RStudio Server using the following credentials:
 
-      user: vincent
+      user: louella
       password: epi2021
 
    Now, open a second terminal and run **your** ssh command from 1. Then open your web browser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.
