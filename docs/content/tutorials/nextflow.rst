@@ -108,8 +108,8 @@ These pipelines can create large temporary files and large result files, so we w
 
 .. code-block::
 
-    mkdir /proj/epi2023/nobackup/private/$USER # create personal folder in project directory
-    cd /proj/naiss2023-23-349/nobackup/private/$USER
+    mkdir /proj/epi2025/nobackup/private/$USER # create personal folder in project directory
+    cd /proj/epi2025/nobackup/private/$USER
     mkdir nextflow-hello-test
     cd nextflow-hello-test
     nextflow run hello
@@ -184,10 +184,10 @@ Remember the key points:
 
 .. code-block:: bash
 
-    cd /proj/epi_2023/nobackup/private/$USER
+    cd /proj/epi2025/nobackup/private/$USER
     mkdir atacseq-test
     cd atacseq-test
-    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project naiss2024-22-842
+    nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow -profile test,uppmax --project uppmax2025-2-309
 
 There’s a pretty good chance that something will go wrong at this point. But that’s ok, that’s why we run a small test dataset. This is where you check the configuration, environment, and ask for help on Slack.
 
@@ -261,7 +261,7 @@ In a new fresh directory(!), try this out:
 
 .. code-block:: bash
 
-    cd /proj/epi2023/nobackup/private/$USER
+    cd /proj/epi2025/nobackup/private/$USER
     mkdir atacseq-help
     cd atacseq-help
     nextflow run $NF_CORE_PIPELINES/atacseq/1.2.1/workflow --help
@@ -288,7 +288,7 @@ Make a new directory for this ChIP seq analysis and link the data files to a dat
 
 .. code-block:: bash
 
-    cd /proj/epi2023/nobackup/private/$USER
+    cd /proj/epi2025/nobackup/private/$USER
     mkdir chip_seq_analysis
     cd chip_seq_analysis
     mkdir input_files
@@ -340,7 +340,7 @@ Remember the core Nextflow flags that you will need (one hyphen!)
 
 Remember the pipeline specific parameter flags that you will need (two hyphens!)
 
-* ``--project naiss2024-22-842``
+* ``--project uppmax2025-2-309``
 * ``--genome GRCh38``
 * ``--input samplesheet.csv``
 * ``--single_end``
@@ -419,7 +419,7 @@ Begin with making a fresh analysis directory in your home directory
 
 .. code-block:: bash
 
-    cd /proj/epi2023/nobackup/private/$USER
+    cd /proj/epi2025/nobackup/private/$USER
     mkdir methylseq_analysis
     cd methylseq_analysis
 
@@ -433,10 +433,10 @@ Figure out the pipeline specific parameter flags that you will need (two hyphens
 
 * ``--input '/sw/courses/epigenomics/DNAmethylation/pipeline_bsseq_data/Sample1_PE_R{1,2}.fastq.gz'``
 * ``--aligner bismark``
-* ``--project naiss2024-22-842``
+* ``--project uppmax2025-2-309``
 * ``--genome mm10``
 
-If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
+If all goes well, your pipeline will run and kick off lots of jobs and merrily process the data! Once it’s finished, take a look in the ``results`` folder and see what it generated. A description of the outputs can be seen `here <https://nf-co.re/methylseq/1.6.1/docs/output>`_.  Again, this might take a while due to the job queue (1 hour +), so feel free to detach from the tmux session and return later.
 
 .. admonition:: minimal methylseq command
    :class: dropdown, note
