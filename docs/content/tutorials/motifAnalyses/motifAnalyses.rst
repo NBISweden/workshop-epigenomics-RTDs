@@ -3,12 +3,22 @@
     :format: html
     
 ======================================================
-Identifying Relevant Transcription Factors
+Predicting Relevant Transcription Factors
 ======================================================
 
 :raw-html:`<br />`
 
-DNA-binding proteins known as transcription factors (TFs) add another facet from 
+
+
+
+
+DNA-binding proteins known as transcription factors (TFs) can regulate gene
+expression by binding to gene promoters and/or enhancers. (cite here). The 
+binding site is typically 6-12 base pairs long and the mechanisms by which TFs
+regulate and influence gene expression are quite varied and still not fully
+understood.
+
+facet from 
 which gene expression can be controlled. Gene expression can be regulated by the
 interaction between enhacer elements and promoters, and TFs play key roles in 
 these interactions. TF binding sites (TFBSs) tend to be in the range of 6-12 

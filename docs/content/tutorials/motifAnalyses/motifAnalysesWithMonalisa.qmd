@@ -1,25 +1,50 @@
 ---
 title: "Motif Analyses with `monaLisa`"
-author: Dania Machlab
 format: 
   rst:
     toc: false
     toc-depth: 2
     fig-format: png
-date: July 15, 2025
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 ---
 
 ## 
 
-# Overview
+```{=html}
+<!-- 
+Author:         Dania Machlab
+About:          This qmd file is used to render the .rst file. To modify or 
+                update the .rst file, please do so in the .qmd file here and 
+                render it. After rendering in RStudio, go to the 
+                workshop-epigenomics-RTDs/docs folder and from the terminal:
+                1. activate the needed conda env set up as described here
+                (https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/Contributing.md), 
+                and 2. run "make html". The resulting html files can be found
+                under the workshop-epigenomics-RTDs/docs/_build folder.
+"data" folder:  contains the data/files/objects loaded into and used in this 
+                .qmd file.
+-->
+```
 
-So far, we have seen how transcription factor binding sites (TFBSs), also called motifs, can be represented and visualized in matrix form. We will make use of the position weight matrices (PWMs) from public databases like JASPAR, to scan for motif hits against reference sequences like enhancers, to get predicted binding sites for the motifs. These will then be used look for relevant motifs that explain our signal of interest, such as fold changes in accessibility.
+# Background
+
+So far, we have seen how transcription factor binding sites (TFBSs) or motifs can be represented and visualized in matrix form, how the position weight matrix (PWM) can be used to scan for motif hits against a reference sequence, for example like the reference genome, and how these matrices can be retrieved from public databases like [Jaspar](https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites).
+
+Now we will make use of these functionalities and use additional tools to enrich or select for TFs are likely to be key players in experimental differences we observe between different conditions. As mentioned, the effect of TF binding can be indirectly observed via associated changes in transcription, chromatin accessibility, DNA methylation and histone modifications. Given such data types, one may for example pose the question: which TFs could be explaining the observed changes in accessibility we see? To address such questions, we will be using the Bioconductor package called `monsaLisa`, short for **mo**tif **an**alysis with **Lisa**, and inspired by her father [Homer](http://homer.ucsd.edu/homer).
+
+We will make use of the position weight matrices (PWMs) from public databases like JASPAR, to scan for motif hits against reference sequences like enhancers, to get predicted binding sites for the motifs. These will then be used look for relevant motifs that explain our signal of interest, such as fold changes in accessibility.
 
 We will do this using the \[`monaLisa` package\]([https://bioconductor.org/packages/monaLisa](https://www.bioconductor.org/packages/monaLisa/ "For citation in publications, etc., please use DOI: 10.18129/B9.bioc.monaLisa")), short for **mo**tif **an**alysis with **Lisa**, inspired by her father \[**Homer\](**[http://homer.ucsd.edu/homer](http://homer.ucsd.edu/homer/motif/)**)**, a widely used tool for motif enrichment analyses.
 
 mention benchmaarking papers?
 
 # Learning outcomes
+
+-   QC/ examine sequence composition for bias before enrichment test with monalisa
+
+-   perfrom motif enrichment analysis and be able to interpret results
+
+-   (?be aware of regression-vbased approach and difference to enrichment approach)
 
 # Libraries
 
@@ -31,15 +56,75 @@ We start by loading the needed packages. If necessary, use `BiocManager::install
 
 ```{r}
 suppressPackageStartupMessages({
-  #library(TFBSTools)
-  library(Biostrings)
-  #library(monaLisa) # use findMotifHits which uses matchPWM (optimised for parallel processing of multiple PWMs)
-  library(JASPAR2024)
-  library(RSQLite)
+  library(monaLisa)
+  library(ggplot2)
+  library(GenomicRanges)
 })
 ```
 
-# Quantify reads on the enhancers
+# Load data
+
+Here, we will load in the count matrix produced in the previous section (reference peak annotation section?). Namely, in this matrix we have use the ATAC-seq `bam` files to count the number of reads across the enhacer regions. We read in this matrix, normalize for library-size differences and calculate log-fold changes in accessibility between condition A and B across the enhancers. Note: consider making them the same size before counting.. what if this dampens the signal and logFC intensity.. let's stick to binning by the origianl logFC and then resizing to inluede more seqs, I htin kthis approach makes more sense since we are interested in sequence enrichment and not the logFC value at this point, just binning by it.
+
+```{r}
+
+# load GRanges object with logFC and peaks
+gr_path <- system.file("extdata", "atac_liver_vs_lung.rds", 
+                       package = "monaLisa")
+gr <- readRDS(gr_path)
+gr
+
+```
+
+# Binned motif-enrichment analysis
+
+some intro on overall of what is done here (seq bais correction, fisher's test etc) and link to the monaLisa vignette we are following
+
+mention that we want to bin by logFC and that this does things similarly to Homer.
+
+## Bin by log-fold changes in accessibility
+
+Before proceeding with the motif enrichment analysis, we want to make sure that the regions we are using have similar sizes, to avoid any length biases in the comparisons between the different bins. We will resize the regions to a fixed size around the midpoint of each region, corresponding to the median region size.
+
+```{r}
+# region size distribution
+summary(width(gr))
+
+# resize the regions and trim out-of bounds ranges
+gr <- trim(resize(gr, width = median(width(gr)), fix = "center"))
+summary(width(gr))
+
+```
+
+for example by using a fixed-size region around the midpoint of each region of interest using [`GenomicRanges::resize`](https://rdrr.io/pkg/IRanges/man/intra-range-methods.html). In addition, the resized regions may have to be constrained to the chromosome boundaries using trim:
+
+Note on the region sizes and how to adjust the size...
+
+Let us look at the logFC histogram.
+
+```{r}
+ggplot(data = data.frame(logFC = gr$logFC_liver_vs_lung)) + 
+  geom_histogram(aes(x = logFC), bins = 100, fill = "steelblue") + 
+  theme_bw()
+```
+
+We can now use the `bin` function from `monaLisa` to bin the histogram. We bin such that we end up with an equal number of sequences for each bin with logFC of at least `minAbsX`. See the `bin` function for more options on how binning can be done. Note that having too few sequences (enhancer regions in this example) per bin will affect the robustness of the motif enrichment calculations. It is recommended to have a least a couple of hundreds of sequences per bin to get more robust results.
+
+```{r}
+bins <- bin(x = gr$logFC_liver_vs_lung, binmode = "equalN", nElement = 1000, 
+            minAbsX = 0.5)
+table(bins)
+```
+
+We can now use the built in `plotBinDensity` function to visualize the bins we have created along the histogram.
+
+```{r}
+plotBinDensity(x = gr$logFC_liver_vs_lung, b = bins)
+```
+
+## Motif enrichment with `monaLisa`
+
+# Regression-based analysis
 
 If not starting from a count matrix we have from previous sessions, then use the peaks defined and annotated in previous sessions to 1. select distal enhancer peaks \> 1kb away from any TSS, 2. create a common set of peaks (GRanges object) and 3. count the reads using quasR::qCount or featureCount.
 

@@ -6,52 +6,64 @@ format:
     toc-depth: 2
     fig-format: png
 date: "`r format(Sys.time(), '%B %d, %Y')`"
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
+```{=html}
 <!-- 
 Author:         Dania Machlab
 About:          This qmd file is used to render the .rst file. To modify or 
                 update the .rst file, please do so in the .qmd file here and 
-                render it.
+                render it. After rendering in RStudio, go to the 
+                workshop-epigenomics-RTDs/docs folder and from the terminal:
+                1. activate the needed conda env set up as described here
+                (https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/Contributing.md), 
+                and 2. run "make html". The resulting html files can be found
+                under the workshop-epigenomics-RTDs/docs/_build folder.
 "data" folder:  contains the data/files/objects loaded into and used in this 
                 .qmd file.
 -->
-
+```
 
 # Background
 
-DNA-binding proteins, called transcription factors (TFs), play key roles in
-gene expression regulation, including the regulation of cellular functions and 
-during organismal development. The TF binding sites (TFBSs) tend to be in the 
-range of 6-12 base pairs (bp) long [(Spitz and Furlong, 2012)](https://doi.org/10.1038/nrg3207).
-The effect of their binding can be indirectly observed via associated changes 
-in transcription, chromatin accessibility, DNA methylation and histone 
+DNA-binding proteins, called transcription factors (TFs), play key roles
+in gene expression regulation, including the regulation of cellular
+functions and during organismal development. The TF binding sites
+(TFBSs) tend to be in the range of 6-12 base pairs (bp) long [(Spitz and
+Furlong, 2012)](https://doi.org/10.1038/nrg3207). The effect of their
+binding can be indirectly observed via associated changes in
+transcription, chromatin accessibility, DNA methylation and histone
 modifications.
 
-Here, we will examine how the TFBSs, also called motifs, can be represented in 
-the form of nucleotide (rows) x position (columns) matrices, such as the 
-position weight matrix (PWM). We will learn how such matrices can be created, 
-downloaded from public databases like Jaspar, and use them to scan against a 
-reference sequence in search for predicted motif hits.
+Here, we will examine how the TFBSs, also called motifs, can be
+represented in the form of nucleotide (rows) x position (columns)
+matrices, such as the position weight matrix (PWM). We will learn how
+such matrices can be created, downloaded from public databases like
+Jaspar, and use them to scan against a reference sequence in search for
+predicted motif hits.
 
 # Learning outcomes
 
-* understand how motifs can be represented in nucleotide x sequence position 
-matrices.
-* understand the differences between the position frequency matrix (PFM), 
-position probability matrix (PPM), position weight matrix (PWM), and information 
-content matrix (ICM), and learn how these matrices can be constructed.
-* learn how to load PWMs in `R` and scan for motif hits against a reference.
+-   understand how motifs can be represented in nucleotide x sequence
+    position matrices.
+-   understand the differences between the position frequency matrix
+    (PFM), position probability matrix (PPM), position weight matrix
+    (PWM), and information content matrix (ICM), and learn how these
+    matrices can be constructed.
+-   learn how to load PWMs in `R` and scan for motif hits against a
+    reference.
 
 # Libraries
 
-We start by loading the needed packages. If necessary, use 
+We start by loading the needed packages. If necessary, use
 `BiocManager::install()` to install missing packages.
 
 ```{r echo=FALSE}
 .libPaths(c("/Users/daniamachlab/Library/R/arm64/4.5-Bioc-3.21/library", .libPaths()))
 ```
-
 
 ```{r}
 suppressPackageStartupMessages({
@@ -66,46 +78,50 @@ suppressPackageStartupMessages({
 })
 ```
 
-
 # Motif databases
 
-As mentioned, TFBSs or motifs can be represented in matrices with rows 
-corresponding to the nucleotides, namely $A$, $C$, $G$, and $T$, and columns
-corresponding to the position along the binding site. The position frequency
-matrix (PFM), also called the position count matrix (PCM), shows the count each
-nucleotide contributes at a particular position. Such matrices can be obtained 
-from publicly available databases like [Jaspar](https://jaspar.elixir.no) 
-([Sandelin et al.](https://doi.org/10.1093/nar/gkh012)) and [Hocomoco](https://hocomoco11.autosome.org)
-([Vorontsov, Eliseeva, Zinkevich, et al.](https://doi.org/10.1093/nar/gkad1077)).
-We will focus on Jaspar, which is also available as Bioconductor packages
-like [JASPAR2024](https://bioconductor.org/packages/JASPAR2024/).
+As mentioned, TFBSs or motifs can be represented in matrices with rows
+corresponding to the nucleotides, namely $A$, $C$, $G$, and $T$, and
+columns corresponding to the position along the binding site. The
+position frequency matrix (PFM), also called the position count matrix
+(PCM), shows the count each nucleotide contributes at a particular
+position. Such matrices can be obtained from publicly available
+databases like [Jaspar](https://jaspar.elixir.no) ([Sandelin et
+al.](https://doi.org/10.1093/nar/gkh012)) and
+[Hocomoco](https://hocomoco11.autosome.org) ([Vorontsov, Eliseeva,
+Zinkevich, et al.](https://doi.org/10.1093/nar/gkad1077)). We will focus
+on Jaspar, which is also available as Bioconductor packages like
+[JASPAR2024](https://bioconductor.org/packages/JASPAR2024/).
 
+```{=html}
 <!-- 
 [JASPAR](https://jaspar.elixir.no) is an open-access database that provides TF binding preferences in the form of position frequency matrices (PFMs), where columns represent positions along the binding site, rows represent nucleotides (A,C,G and T), and the entries show the counts of each nucleotide at a given position. PFMs are generated by aligning DNA binding-site sequences from high-quality experiments such as ChIP-seq, protein binding microarrays, and SELEX-based methods, along with incorporating curated external motifs. More details about this can be found on the [JASPAR website](https://jaspar.elixir.no/docs/).
 -->
+```
 
-[Jaspar](https://jaspar.elixir.no) is an open-access database that provides TF 
-binding preferences in the form of position frequency matrices (PFMs). PFMs are 
-generated by aligning DNA binding-site sequences from high-quality experiments 
-such as ChIP-seq, protein binding microarrays, and SELEX-based methods, along 
-with incorporating curated external motifs. More details about this can be found 
-on the Jaspar [website](https://jaspar.elixir.no/docs/).
-
+[Jaspar](https://jaspar.elixir.no) is an open-access database that
+provides TF binding preferences in the form of position frequency
+matrices (PFMs). PFMs are generated by aligning DNA binding-site
+sequences from high-quality experiments such as ChIP-seq, protein
+binding microarrays, and SELEX-based methods, along with incorporating
+curated external motifs. More details about this can be found on the
+Jaspar [website](https://jaspar.elixir.no/docs/).
 
 # Position frequency matrix
 
-As stated, the PFM depicts the frequencies of the nucleotides i.e. the number 
-of times each nucleotide occurs at each position along the motif. 
+As stated, the PFM depicts the frequencies of the nucleotides i.e. the
+number of times each nucleotide occurs at each position along the motif.
+Note that the motif positions are independent of one another.
 
-To illustrate this more we will use the CTCFL motif as an example, read in 
-the DNA sequences which we have downloaded from 
-[Jaspar](https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites), 
-and produce the corresponding PFM. We will use the `Biostrings` package to read 
-the sequences and represent them as a `DNAStringSet` object, which is a 
-convenient way to represent and manipulate DNA sequences in `R`. See the
+To illustrate this more we will use the CTCFL motif as an example, read
+in the DNA sequences which we have downloaded from
+[Jaspar](https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites),
+and produce the corresponding PFM. We will use the `Biostrings` package
+to read the sequences and represent them as a `DNAStringSet` object,
+which is a convenient way to represent and manipulate DNA sequences in
+`R`. See the
 [vignette](https://bioconductor.org/packages/release/bioc/vignettes/Biostrings/inst/doc/Biostrings2Classes.pdf)
 from the `Biostrings` package for more details.
-
 
 ```{r}
 # read in the TFBS sequences
@@ -114,9 +130,9 @@ CTCFLsequences <- readDNAStringSet(CTCFLsequencesFile)
 CTCFLsequences
 ```
 
-We can see that we have a total of `r length(CTCFLsequences)` sequences of the 
-TF binding site. Next, we generate the PFM by counting the nucleotide 
-occurrences per position.
+We can see that we have a total of `r length(CTCFLsequences)` sequences
+of the TF binding site. Next, we generate the PFM by counting the
+nucleotide occurrences per position.
 
 ```{r}
 # create PFM by counting nucleotide occurrences per position
@@ -127,15 +143,15 @@ pfm
 
 # Position probability matrix
 
-We can now calculate the probability of observing each nucleotide at a 
+We can now calculate the probability of observing each nucleotide at a
 particular position by dividing counts by the total count per position.
 
 $$
 PPM_{ij} = \frac{count_{ij}}{\sum_{i}{count_{ij}}}
-$$ 
+$$
 
-Where $i$ is the nucleotide and $i \in \{A, C, G, T\}$, and $j$ is the position 
-along the motif.
+Where $i$ is the nucleotide and $i \in \{A, C, G, T\}$, and $j$ is the
+position along the motif.
 
 ```{r}
 # calculate PPM
@@ -146,9 +162,9 @@ ppm
 colSums(ppm)
 ```
 
-We can now calculate the probability of observing a certain motif sequence by 
-multiplying the probabilities of each nucleotide per position. Let us look at 
-some examples below.
+We can now calculate the probability of observing a certain motif
+sequence by multiplying the probabilities of each nucleotide per
+position. Let us look at some examples below.
 
 ```{r}
 p_CAGACGGC <- ppm["C", 1] * ppm["A", 2] * ppm["G", 3] * ppm["A", 4] * 
@@ -160,15 +176,16 @@ p_AATTGGTT <- ppm["A", 1] * ppm["A", 2] * ppm["T", 3] * ppm["T", 4] *
 p_AATTGGTT
 ```
 
-In this PPM, we do not have any zero counts for any given nculeotide and 
-position. What would happen if we did? Let us suppose that `pfm["T", 7]` had a 
-count of zero and therefore `ppm["T", 7]` is also zero. Multiplying by zero
-would result in `p_AATTGGTT = 0`. This issue can especially emerge when 
-starting from a low number of sequences to construct the PFM. To avoid low count 
-issues, we will add a peudo-count $p$ of 1 per position, to the PFM. This 
-corresponds to a pseudo-count of $p/N$ for each entry in the matrix, where $N$ 
-is the total number number of nucleotides, and $N=4$ in our case. We will 
-then re-calculate the PPM. 
+In this PPM, we do not have any zero counts for any given nculeotide and
+position. What would happen if we did? Let us suppose that `pfm["T", 7]`
+had a count of zero and therefore `ppm["T", 7]` is also zero.
+Multiplying by zero would result in `p_AATTGGTT = 0`. This issue can
+especially emerge when starting from a low number of sequences to
+construct the PFM. To avoid low count issues, we will add a peudo-count
+$p$ of 1 per position, to the PFM. This corresponds to a pseudo-count of
+$p/N$ for each entry in the matrix, where $N$ is the total number number
+of nucleotides, and $N=4$ in our case. We will then re-calculate the
+PPM.
 
 $$
 PPM_{ij} = \frac{count_{ij}+\frac{p}{N}}{\sum_{i}{count_{ij}+p}}
@@ -187,23 +204,24 @@ ppm
 
 # Position weight matrix
 
-The position weight matrix (PWM) is also known as the position-specific scoring 
-matrix or the logodds scoring matrix. Here, log-odds scores are calculated by 
-comparing the probabilities we have in the PPM to the probabilities of observing 
-each nucleotide outside of a binding site (background nucleotide probabilities). 
-Assuming a uniform background, in which each nucleotide has an equal 
-probability, would give us the following background probabilities for each 
-nucleotide: $p(A) = p(C) = p(G) = p(T) = 0.25$. The log-odds scores can be 
-obtained as follows:
+The position weight matrix (PWM) is also known as the position-specific
+scoring matrix or the logodds scoring matrix. Here, log-odds scores are
+calculated by comparing the probabilities we have in the PPM to the
+probabilities of observing each nucleotide outside of a binding site
+(background nucleotide probabilities). Assuming a uniform background, in
+which each nucleotide has an equal probability, would give us the
+following background probabilities for each nucleotide:
+$p(A) = p(C) = p(G) = p(T) = 0.25$. The log-odds scores can be obtained
+as follows:
 
 $$
 PWM_{ij}=log_2\Bigl(\frac{PPM_{ij}}{B_i}\Bigr) 
 $$
 
-Where $i$ is the nucleotide, $j$ is the position along the motif, and $B_i$ is 
-the background probability for nucleotide $i$. Thanks to the pseudo-count we 
-have added, we will avoid situations where we are taking the $log_2(0)$ which 
-is $-Inf$.
+Where $i$ is the nucleotide, $j$ is the position along the motif, and
+$B_i$ is the background probability for nucleotide $i$. Thanks to the
+pseudo-count we have added, we will avoid situations where we are taking
+the $log_2(0)$ which is $-Inf$.
 
 ```{r}
 # define background probabilities
@@ -214,21 +232,20 @@ pwm <- log2(sweep(x = ppm, MARGIN = 2, STATS = B, FUN = "/"))
 pwm
 ```
 
-The score for a specific sequence can now be calculated by combining the PWM 
-scores at each position. For example the score for `CAGACGGC` is:
+The score for a specific sequence can now be calculated by combining the
+PWM scores at each position. For example the score for `CAGACGGC` is:
 
 ```{r}
 pwm["C", 1] + pwm["A", 2] + pwm["G", 3] + pwm["A", 4] + pwm["C", 5] + pwm["G", 6]+ pwm["G", 7] + pwm["C", 8]
 ```
 
-
-In this manner, PWMs can be used to scan for motif matches against a reference 
-DNA sequence. The `matchPWM` function from the `Biostrings` can be used to do
-that. Matches with greater that the set `min.score` will be called as predicted
-binding sites. `min.score` can be set as a fixed empiric number or as a 
-character reflecting the percentage of the highest possible score. See the 
-`matchPWM` function for more details. Let us try scanning for this motif against 
-a given DNA string.
+In this manner, PWMs can be used to scan for motif matches against a
+reference DNA sequence. The `matchPWM` function from the `Biostrings`
+can be used to do that. Matches with greater that the set `min.score`
+will be called as predicted binding sites. `min.score` can be set as a
+fixed empiric number or as a character reflecting the percentage of the
+highest possible score. See the `matchPWM` function for more details.
+Let us try scanning for this motif against a given DNA string.
 
 ```{r}
 # reference DNA sequence (this is typically the reference genome)
@@ -236,64 +253,62 @@ refDNA <-"GCCTATACAGACGGCGTTGGATATACGCAGACGGCTGTGA"
 matchPWM(pwm, subject = refDNA, min.score = 6)
 ```
 
-
 ::: callout-tip
-
 ## Exercise
-Using the PWM we have created, calculate the score for sequence `CAGGGGGC`.
-Then, using the `matchPWM` function and setting `min.score=10`, find the motif 
-matches in the following reference sequence: 
+
+Using the PWM we have created, calculate the score for sequence
+`CAGGGGGC`. Then, using the `matchPWM` function and setting
+`min.score=10`, find the motif matches in the following reference
+sequence:
 `GGCAGGGGGCTGCCCCGACAGACGGCCTAGGTATGCTGTTCCCACAGGGGGCTCTTCCGGGGTGTCAGGGGGCTT`.
 
 ```{=html}
 <details>
 <summary>Show solution</summary>
 ```
+
 ```{r}
 # reference DNA sequence (this is typically the reference genome)
 refDNA <- "GGCAGGGGGCTGCCCCGACAGACGGCCTAGGTATGCTGTTCCCACAGGGGGCTCTTCCGGGGTGTCAGGGGGCTT"
 matchPWM(pwm, subject = refDNA, min.score = 10)
 ```
-```{=html}
-</details>
-```
 
+</details>
 :::
 
 \
 
 # Information content matrix
 
-The information content matrix (ICM) can additionally reflect which positions 
-along the motif are more or less conserved. To have a better understanding
-of this, we need to first introduce some key concepts in information 
-theory, a field established by Claude Shannon with his influential publication
-in 1948, entitled ["A Mathematical Theory of Communication"](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x).
-We will largely borrow explanations from David McKay's book 
-"Information Theory, Inference, and Learning Algorithms", which offers
-great explanations and deeper dives into the topic for those interested.
+The information content matrix (ICM) can additionally reflect which
+positions along the motif are more or less conserved. To have a better
+understanding of this, we need to first introduce some key concepts in
+information theory, a field established by Claude Shannon with his
+influential publication in 1948, entitled ["A Mathematical Theory of
+Communication"](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x). We
+will largely borrow explanations from David McKay's book "Information
+Theory, Inference, and Learning Algorithms", which offers great
+explanations and deeper dives into the topic for those interested.
 
-Let us consider a random variable $X$ with an outcome $x$. The 
-**Shannon information content** of $x$ is defined as $h(x)=log_2\frac{1}{p(x)}$, where
-$p(x)$ is the probability of outcome $x$. It is measured in bits since we are
-using $log_2$, and reflects
-a measure of surprise from an outcome. For example, an outcome with probability
-of 1 is not surprising and provides no information: $log_2(1)=0$. Whereas an outcome with a 
-very low probability is more surprising and provides more information were it to
-happen. For example, assume the following probabilities of observing the outcome 
-of a random variable $X$: $p(x=0)=0.4$ and $p(x=1)=0.6$. You could imagine a bent 
-coin with binary outcomes. The Shannon information content for outcome $x=0$ is
+Let us consider a random variable $X$ with an outcome $x$. The **Shannon
+information content** of $x$ is defined as $h(x)=log_2\frac{1}{p(x)}$,
+where $p(x)$ is the probability of outcome $x$. It is measured in bits
+since we are using $log_2$, and reflects a measure of surprise from an
+outcome. For example, an outcome with probability of 1 is not surprising
+and provides no information: $log_2(1)=0$. Whereas an outcome with a
+very low probability is more surprising and provides more information
+were it to happen. For example, assume the following probabilities of
+observing the outcome of a random variable $X$: $p(x=0)=0.4$ and
+$p(x=1)=0.6$. You could imagine a bent coin with binary outcomes. The
+Shannon information content for outcome $x=0$ is
 $h(x=0)=log_2\frac{1}{p(x=0)}=log_2\frac{1}{0.4}\approx1.322$.
 
-
-The **entropy** represents the average Shannon information content of an outcome
-and is: 
-$$
+The **entropy** represents the average Shannon information content of an
+outcome and is: $$
 H(X)=\sum_{x}p(x)log_2\frac{1}{p(x)}
-$$ 
-
-Following our example from above, the entropy of $X$ is 
 $$
+
+Following our example from above, the entropy of $X$ is $$
 \begin{aligned}
 H(X) &= \sum_{x}p(x)log_2\frac{1}{p(x)} \\
      &= p(x=0)log_2\frac{1}{p(x=0)} + p(x=1)log_2\frac{1}{p(x=1)} \\
@@ -302,22 +317,22 @@ H(X) &= \sum_{x}p(x)log_2\frac{1}{p(x)} \\
 \end{aligned}  
 $$
 
-We can think of it as an average measure of surprise. Another name for the 
-entropy is the uncertainty. You may notice that it is maximized 
-when we have uniform probabilities. 
+We can think of it as an average measure of surprise. Another name for
+the entropy is the uncertainty. You may notice that it is maximized when
+we have uniform probabilities.
 
-Coming back to our motif, we want to calculate the bits per position, which 
-reflect the degree of conservation of the positions. We calculate this
-by taking the maximum uncertainty per position and subtracting the actual 
-uncertainty at that position. As mentioned, uncertainty (entropy) is maximum 
-when all outcomes have equal probabilities. In our case, the outcome is 
-the specific instance of a nucleotide. We thus have 4 outcomes ($A$, $C$, $G$, 
-and $T$). In a scenario, where all nucleotides are equally likely, there is no
- *preference* for any particular nucleotide. Assuming equal probabilities of 
-$\frac{1}{N}$ for each nucleotide, where $N$ is the total number of nucleotides, 
-the maximum entropy, or total information content $IC_{total}$, can be 
-calculated as follows:
-$$
+Coming back to our motif, we want to calculate the bits per position,
+which reflect the degree of conservation of the positions. We calculate
+this by taking the maximum uncertainty per position and subtracting the
+actual uncertainty at that position. As mentioned, uncertainty (entropy)
+is maximum when all outcomes have equal probabilities. In our case, the
+outcome is the specific instance of a nucleotide. We thus have 4
+outcomes ($A$, $C$, $G$, and $T$). In a scenario, where all nucleotides
+are equally likely, there is no *preference* for any particular
+nucleotide. Assuming equal probabilities of $\frac{1}{N}$ for each
+nucleotide, where $N$ is the total number of nucleotides, the maximum
+entropy, or total information content $IC_{total}$, can be calculated as
+follows: $$
 \begin{aligned}
 IC_{total} &= \sum_{x}p(x)log_2\frac{1}{p(x)} \\
            &= N*\frac{1}{N}log_2N \\
@@ -327,26 +342,24 @@ IC_{total} &= \sum_{x}p(x)log_2\frac{1}{p(x)} \\
 \end{aligned}           
 $$
 
-
-The actual uncertainty $U$ per position is 
-$$
+The actual uncertainty $U$ per position is $$
 \begin{aligned}
 U &= \sum_{x}p(x)log_2\frac{1}{p(x)} \\
   &= -\sum_{x}p(x)log_2p(x)
 \end{aligned}
-$$ 
-The final information content $IC_{final}$ per position is:
-$$
+$$ The final information content $IC_{final}$ per position is: $$
 \begin{aligned}
 IC_{final} &= IC_{total}-U \\
            &= 2-U
 \end{aligned}
 $$
 
-When $U=0$ (when one nucleotide has a probability of 1), $IC_{final}=2-0=2$ and
-you know the nucleotide with no uncertainty.
+When $U=0$ (when one nucleotide has a probability of 1),
+$IC_{final}=2-0=2$ and you know the nucleotide with no uncertainty.
 
-Following our example motif, let us calculate $IC_{final}$ for each position.
+Following our example motif, let us calculate $IC_{final}$ for each
+position.
+
 ```{r}
 # total information content (maximum uncertainty)
 IC_total <- log2(4)
@@ -363,9 +376,9 @@ IC_final <- IC_total - U
 IC_final
 ```
 
-Finally, to get the ICM where the height of each nulceotide (letter) shows
-the bits each nucleotide contributes, we will multiply the probability 
-of each nucleotide by $IC_{final}$ per position.
+Finally, to get the ICM where the height of each nulceotide (letter)
+shows the bits each nucleotide contributes, we will multiply the
+probability of each nucleotide by $IC_{final}$ per position.
 
 ```{r}
 # ICM
@@ -383,14 +396,15 @@ seqLogo(icmatrix)
 
 ```
 
-This is a useful way to visualize motifs, and get a sense of how conserved
-the sequence is.
+This is a useful way to visualize motifs, and get a sense of how
+conserved the sequence is.
 
 # Scanning for motif hits
 
-Now that we have a good understanding of the PWM and the other matrices, let us
-see how we can load a list of PWMs from Jaspar and what useful functions are
-at our disposal. We will extract the list of all vertebrate TFs.
+Now that we have a good understanding of the PWM and the other matrices,
+let us see how we can load a list of PWMs from Jaspar and what useful
+functions are at our disposal. We will extract the list of all
+vertebrate TFs.
 
 ```{r}
 # extract PFMs of vertebrate TFs from JASPAR2024
@@ -436,15 +450,15 @@ tags(motif)
 dbDisconnect(JASPARConnect)
 ```
 
-As we have seen, PWMs can be used to predict TFBSs against a reference 
-sequence. To illustrate this, let us use some of the PWMs we have loaded from 
-Jaspar above, to scan against hits at the gene promoters from the UCSC
-mouse reference genome. We will use the `findMotifHits` function from the 
-`monaLisa` package to scan for motif hits. This function uses `Biostrings::matchPWM`
-internally to scan for matches, but additionally allows for the `subject` 
-argument to accept `DNAStringSet` or `GRanges` objects. It also allows for 
-parallelization across PWMs with the `BPPARAM` argument.
-
+As we have seen, PWMs can be used to predict TFBSs against a reference
+sequence. To illustrate this, let us use some of the PWMs we have loaded
+from Jaspar above, to scan against hits at the gene promoters from the
+UCSC mouse reference genome. We will use the `findMotifHits` function
+from the `monaLisa` package to scan for motif hits. This function uses
+`Biostrings::matchPWM` internally to scan for matches, but additionally
+allows for the `subject` argument to accept `DNAStringSet` or `GRanges`
+objects. It also allows for parallelization across PWMs with the
+`BPPARAM` argument.
 
 ```{r}
 # get promoters as GRanges object
@@ -474,33 +488,37 @@ head(hitsMatrix)
 
 ```
 
-It is good to remember that these are predicted TF binding sites. By making use 
-of additionally available information, like ATAC-seq data, and focusing on 
-accessible regions of the DNA, one could reduce the number of false hits. 
-Ultimately, to find true binding sites for a particular TF, ChIP-seq experiments
-are needed. Still, as we will see in the section to come, predicted binding
-sites can be useful to look for TFs that are consistently enriched, and 
-come up with a list of candidate TFs that could be playing key roles in 
-our biological system of interest.
-
+It is good to remember that these are predicted TF binding sites. By
+making use of additionally available information, like ATAC-seq data,
+and focusing on accessible regions of the DNA, one could reduce the
+number of false hits. Ultimately, to find true binding sites for a
+particular TF, ChIP-seq experiments are needed. Still, as we will see in
+the section to come, predicted binding sites can be useful to look for
+TFs that are consistently enriched, and come up with a list of candidate
+TFs that could be playing key roles in our biological system of
+interest.
 
 # Additional material
 
-The contents of this tutorial were inspired by several available resources which
-are listed below and serve as additional reading material for those interested:
+The contents of this tutorial were inspired by several available
+resources which are listed below and serve as additional reading
+material for those interested:
 
-* David McKay's book "Information Theory, Inference, and Learning Algorithms" 
-is a great resource with introductions to key concepts in information theory, 
-as well as deeper dives.
+-   David McKay's book "Information Theory, Inference, and Learning
+    Algorithms" is a great resource with introductions to key concepts
+    in information theory, as well as deeper dives.
 
-* The `universalmotif` [Bioconductor package](https://bioconductor.org/packages/universalmotif/) 
-contains additional vignettes, including  [explanations](<https://bioconductor.org/packages/release/bioc/vignettes/universalmotif/inst/doc/IntroductionToSequenceMotifs.pdf) 
-on the discussed motif matrices and how to derive them, as well as additional 
-material. 
+-   The `universalmotif` [Bioconductor
+    package](https://bioconductor.org/packages/universalmotif/) contains
+    additional vignettes, including
+    [explanations](%3Chttps://bioconductor.org/packages/release/bioc/vignettes/universalmotif/inst/doc/IntroductionToSequenceMotifs.pdf)
+    on the discussed motif matrices and how to derive them, as well as
+    additional material.
 
-* The `TFBSTools` [Bioconductor package](https://bioconductor.org/packages/TFBSTools/)
-vignette found [here](https://bioconductor.org/packages/release/bioc/vignettes/TFBSTools/inst/doc/TFBSTools.html).
-
+-   The `TFBSTools` [Bioconductor
+    package](https://bioconductor.org/packages/TFBSTools/) vignette
+    found
+    [here](https://bioconductor.org/packages/release/bioc/vignettes/TFBSTools/inst/doc/TFBSTools.html).
 
 # Session information
 
@@ -508,6 +526,3 @@ vignette found [here](https://bioconductor.org/packages/release/bioc/vignettes/T
 date()
 sessionInfo()
 ```
-
-
-
