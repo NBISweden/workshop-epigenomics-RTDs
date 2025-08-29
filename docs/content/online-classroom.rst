@@ -7,11 +7,10 @@ Online classroom
 General info
 -------------
 
-All of the courses administered by NBIS are delivered on a learning platform Canvas.
+The main course webpage is this *readthedocs* site, where you can find all the course material, exercises, and links to other resources.
+The quiz is hosted in the course `Canvas website <https://uppsala.instructure.com/courses/112730>`_.  You should have received an invitation to join the course on Canvas via email.
 
-This means that some of content will be linked between the *readthedocs* website and the `Canvas website <https://uppsala.instructure.com/courses/84538>`_. 
-
-The schedule for this week is located on Canvas, with links to the content and exercises on this website.
+The schedule for this week is found in :doc:`<schedule>`, with links to the content and exercises.
 
 We make sure that all the material on this site is up to date and **always** accessible.
 
@@ -46,7 +45,7 @@ Where should you be and when?
 
 * Listen and talk in Main room.
 * Please have your cameras on during online sessions in the Main room.
-* But mute the mic though; if you would like to ask a question (higly recommended!) raise a virtual hand or write it in in the Zoom chat!
+* But mute the mic though; if you would like to ask a question (highly recommended!) raise a virtual hand or write it in in the Zoom chat!
 
 **Exercises**
 
@@ -62,4 +61,4 @@ Where should you be and when?
 **stuck with exercises? Choose:**
 
 * Main room to ask questions to your teaching team or fellow students (be brave, we all benefit from hearing your question)
-* Write in Slack in the appropriate channel or directly to Agata, Jakub or Vincent
+* Write in Slack in the appropriate channel or directly to Agata, Louella or Dania.
