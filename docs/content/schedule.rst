@@ -151,7 +151,8 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 
 **14.00 - 15.00** Inspirational talk: Marek Bartosovic (Stockholm University).  
-`Deciphering the epigenetic landscape of the brain: Innovations in chromatin profiling with single-cell nano-CUT&Tag <https://www.scilifelab.se/organizer/big-talks/>`_
+`Deciphering the epigenetic landscape of the brain: Innovations in chromatin profiling with single-cell nano-CUT&Tag <https://www.scilifelab.se/event/big-talk-deciphering-the-epigenetic-landscape-of-the-brain-innovations-in-chromatin-profiling-with-single-cell-nano-cuttag/>`_.  `Zoom <https://lu-se.zoom.us/j/62767371752>`_
+
 
 
 **15:00 - 16:00** Daily challenge 
