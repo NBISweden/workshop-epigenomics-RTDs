@@ -47,7 +47,7 @@ Regardless of the approach, the rationale behind bisulfite sequencing is fairly 
    :alt: 
 *Fig. 1: Bisulfite sequencing overview.*
 
-Being able to do this quantification reliably depends on rigorous quality control before alignment, the choice of alignment method and post-alignment quality control. Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment.  A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see `methylseq <https://nf-co.re/methylseq>`_\ ). On Thursday, the use of this and other pipelines through nf-core will be extensively demonstrated. Therefore, in this tutorial we will focus on the downstream analysis, i.e. the part of the analysis after running for example nf-core methylseq. 
+Being able to do this quantification reliably depends on rigorous quality control before alignment, the choice of alignment method and post-alignment quality control. Other issues to consider are the reduced complexity and the increased degradation that occurs during bisulfite treatment.  A best-practices pipeline for the mapping and quantification of bisulfite converted reads has been developed by nf-core (see `methylseq <https://nf-co.re/methylseq>`_\ ) using either ``Bismark`` or ``bwa-meth`` as aligners for BS-seq data.  You can follow this tutorial :doc:`../nextflow` to run nf-core workflows.  For today, we will focus on the downstream analysis, i.e. the part of the analysis after running for example nf-core methylseq. 
 
 Datasets
 --------
@@ -57,7 +57,7 @@ To showcase a basic analysis, a small set of samples has been collected consisti
 In this study, the methylation status of two major functionally distinct epithelial compartments: basal and luminal cells were studied. We have 4 Bismark coverage files in total; 2 basal samples and 2 luminal samples. These files contain information about the location of each CpG and the number of reads corresponding to a methylated or unmethylated cytosine (see Table 1 for example). 
 
 .. note::
-   In this tutorial we will be focusing on the downstream analysis of bisulfite sequencing data. Preprocessing steps such as mapping bisulfite treated sequencing reads to a genome and perform methylation calls need to be performed prior to this analysis. Here, we will start from coverage files.These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the `methylseq nf-core pipeline <https://nf-co.re/methylseq>`_. On Thursday, you will learn how to work with these type of nf-core pipelines! 
+   In this tutorial we will be focusing on the downstream analysis of bisulfite sequencing data. Preprocessing steps such as mapping bisulfite treated sequencing reads to a genome and perform methylation calls need to be performed prior to this analysis. Here, we will start from coverage files.These type of coverage files are a standard output of the bisulfite read mapper Bismark which is a part of the `methylseq nf-core pipeline <https://nf-co.re/methylseq>`_.
 
 
 .. image:: Figures/coverage.png
@@ -76,7 +76,7 @@ Set Up R environment
 This exercise has been set up to run on Uppmax, so connect to the server as described in :doc:`../setup/lab-setup`. Now, there are two options to set up the R environment. 
 
 
-|Green-boxts| Option A |boxs| The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first. |boxe|
+|Green-boxts| Option A |boxs| The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Because of the easy setup it might still be worth trying out this option first. |boxe|
 
 
 |Orange-boxts| Option B |boxs| Alternatively, we provide a containerized environment consisting of R, Rstudio and the necessary packages for this session. This means the software can easily run within the container on almost any computer or server, greatly simplifying software installation and management. |boxe|
@@ -88,7 +88,7 @@ These options are described in detail below. Please note, choose *one of them* t
 .. admonition::  Option A
    :class: optionA
 
-   The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Becuse of the easy setup it might still be worth trying out this option first.
+   The easiest option makes use of the module system on Uppmax. This is the best way to avoid problems with dependencies between packages and avoids the issue of missing system libraries. Sometimes, this option suffers from slow response times when using Rstudio or has issues rendering figures. Because of the easy setup it might still be worth trying out this option first.
 
    On Uppmax, most packages are already installed, and can be loaded into R after the *R/4.0.0* and  *R_packages/4.0.0* modules have been loaded. If you are running on Uppmax, start by loading the following modules:
 
@@ -112,7 +112,7 @@ These options are described in detail below. Please note, choose *one of them* t
 
          R
 
-      If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham. If you are on a PC, follow the instructions on `this website <https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906>`_ (under the section "Alternate methods using OS-soecific tools").
+      If you do this, you might have to take a few extra steps to show the graphics produced by R. First, check if plotting works by trying ``plot(1:10)`` in the R terminal. If you see the plot, you are good to start the tutorial. If not and you are on Mac; install and open `Xquartz  <https://www.xquartz.org>`_ on your Mac before ssh-ing to rackham.  If you are on a PC and using MobaXterm, make sure that X11 forwarding is enabled.
 
    Next, run the R commands by copying them from this website into the Rstudio terminal or R terminal and pressing *Enter*. 
 
@@ -133,13 +133,13 @@ These options are described in detail below. Please note, choose *one of them* t
 
       1. SSH tunnel from your workstation using the following command:
 
-      ssh -N -L 8787:r37.uppmax.uu.se:35616 vincent@rackham.uppmax.uu.se
+      ssh -N -L 8787:r37.uppmax.uu.se:35616 louella@rackham.uppmax.uu.se
       
       and point your web browser to http://localhost:8787
 
       2. log in to RStudio Server using the following credentials:
 
-      user: vincent
+      user: louella
       password: epi2021
 
    Now, open a second terminal and run **your** ssh command from 1. Then open your web browser (Safari, Chrome, ...) and go to http://localhost:8787. Here, fill in **your** user and password as in 2. and Rstudio will start.

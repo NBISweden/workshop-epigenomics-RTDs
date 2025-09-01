@@ -3,9 +3,9 @@
     :format: html
 
 
-========
+========================
 Schedule (Tentative)
-========
+========================
 
 
 .. contents::
@@ -16,7 +16,7 @@ Schedule (Tentative)
 Monday (22 September 2025)
 --------------------------------
 
-**DNA methylation with Illumina 450K arrays and Bisulfite-seq**
+**DNA methylation with Illumina array and Bisulfite-seq**
 
 **09:00 - 09:30** Welcome
 
@@ -34,9 +34,9 @@ Monday (22 September 2025)
 
 **14:15 - 14:30** Methylation Exercises Overview II: Methylation Sequencing
 
-**14:30 - 16:30** :doc:`Exercises Methylation Sequencing <./tutorials/methylationSeq/Seq_Tutorial>`
+**14:30 - 16:00** :doc:`Exercises Methylation Sequencing <./tutorials/methylationSeq/Seq_Tutorial>`
 
-**16:30 - 17:00** Daily challenge
+**16:00 - 17:00** Daily challenge
 
 
 :raw-html:`<br />`
@@ -86,7 +86,7 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 
 **12:00 - 13:00** lunch (offline)
 
-**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Anja Metzger) (online session)
+**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Michelle Ljungmark)
 
 **13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
 
@@ -101,21 +101,21 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
 Thursday (25 September 2025)
 --------------------------------
 
-**Workflow Management Systems & Downstream Analyses**
+**Downstream analyses**
 
 **09:00 - 09:30** Recap previous day *(online session)*
 
-**09:30 - 10:00** Introduction to Workflow Management *(online session)*
+**09:30 - 10:00** Introduction to transcription factors and gene regulation *(online session)*
 
-**10:00 - 10:15** break *(offline)*
+**10:00 - 10:30** Representing transcription factor binding sites *(online session)*
 
-**10:15 - 12:00** :doc:`nf-core exercises <./tutorials/nextflow>` *(online support)*
+**10:30 - 10:45** break *(offline)*
+
+**10:45 - 12:00** Predicting relevant motifs *(online session)*
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 13:15** Introduction to :doc:`Downstream analyses exercises <./tutorials/downstream_tutorials>` *(online session)*
-
-**13:15 - 15:00** :doc:`Downstream analyses exercises <./tutorials/downstream_tutorials>` *(online support)*
+**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` *(online support)*
 
 **15:00 - 17:00** Exercises *(offline)*
 
@@ -123,13 +123,11 @@ Thursday (25 September 2025)
 
 :raw-html:`<br />`
 
-:raw-html:`<br />`
-
 
 Friday (26 September 2025)
 --------------------------------
 
-**Integrative and single cell omics & inspirational talk**
+**Integrative and single cell omics**
 
 **09:00 - 09:30** Recap previous day *(online session)*
 
@@ -147,18 +145,18 @@ and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsuperv
 
 **12:00 - 13:00** lunch (offline)
 
-**13.00 - 14.00** Inspirational talk: `Marek Bartosovic <https://www.bartosovic-lab.com>`_ 
 
-**14.00 - 14.10** Break
-
-**14.10 - 15.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
+**13.00 - 14.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
 and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` *(online support)*
 
+
+**14.00 - 15.00** Inspirational talk: Marek Bartosovic (Stockholm University).  
+`Deciphering the epigenetic landscape of the brain: Innovations in chromatin profiling with single-cell nano-CUT&Tag <https://www.scilifelab.se/organizer/big-talks/>`_
 
 
 **15:00 - 16:00** Daily challenge 
 
-**15:00 - 16:00** `Short term feedback form
+**15:00 - 16:00** Short term feedback form
 
 **15.00 - 16.00** Course wrap-up
 
