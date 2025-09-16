@@ -111,7 +111,7 @@ We begin by loading necessary libraries:
 
    .. code:: r
 
-      workdir="/Users/agata.smialowska/teaching/epigenomics/labs2025/atacseq/Tsao2022/results/DA/tsao2022_invivo_tutorials"
+      workdir="/path/to/workdir"
 
 To set working directory to your desired path you can use these
 commands:
@@ -225,7 +225,7 @@ We can now count reads in all bam files in the data set, and plot them.
 
    .. code:: r
 
-      bam_dir="/Users/agata.smialowska/teaching/epigenomics/labs2025/atacseq/Tsao2022/bam"
+      bam_dir="path/to/bam"
       bam_fnames=list.files(bam_dir,pattern = "\\.bam$",)
 
       par(mfrow = c(2, length(bam_fnames)/2 ) )

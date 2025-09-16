@@ -120,7 +120,7 @@ We begin by loading necessary libraries:
 
    .. code:: r
 
-      workdir="/Users/agata.smialowska/teaching/epigenomics/labs2025/atacseq/Tsao2022/results/DA/tsao2022_invivo_tutorials"
+      workdir="/path/to/workdir"
 
 
 To set working directory to your desired path you can use these commands:
