@@ -524,7 +524,7 @@ look as expected.
 :raw-html:`<br />`
 
 At this point we can add the information from peak annotation
-(:doc:``Peak Annotation <PeakAnnot_tsao2022.fulldata_rtds.12ix2025>`` .)
+:doc:`Peak Annotation <./PeakAnnot_tsao2022.fulldata_rtds.12ix2025>` 
 
 If you are still in **the same R session**, you can skip the step below.
 
@@ -586,6 +586,25 @@ We can now join the tables with peak annotations and DA results:
       ## 6               Adh4          4661
 
 :raw-html:`<br />`
+
+
+We can save the complete results of peak annotation, GC content and DA analysis:
+
+
+.. code-block:: R
+
+
+   saveRDS(DA_res_table, file = "FiltPeaks.DA.TMM.annot.rds")
+
+
+:raw-html:`<br />`
+
+
+You can now follow with other downstream tutorials listed under 
+:doc:`Downstream Analyses <../downstream_tutorials>` 
+
+:raw-html:`<br />`
+
 
 GC Bias Correction
 ========================
