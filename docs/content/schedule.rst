@@ -108,24 +108,22 @@ Thursday (25 September 2025)
 
 **09:00 - 09:30** Recap previous day 
 
-**09:30 - 10:00** Introduction to transcription factors and gene regulation 
+**09:30 - 10:00** Introduction to transcription factors and gene regulation *(online session)*
 
-**10:00 - 10:30** Representing transcription factor binding sites 
+**10:00 - 10:30** Representing transcription factor binding sites *(online session)*
 
 **10:30 - 10:45** break *(offline)*
 
-**10:45 - 12:00** Predicting relevant motifs 
+**10:45 - 12:00** Predicting relevant motifs *(online session)*
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` 
+**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` *(online support)*
 
 **15:00 - 17:00** Exercises *(offline support)*
 
 **16:00 - 17:00** Daily challenge *(offline)*
 
-
-:raw-html:`<br />`
 
 
 Friday (26 September 2025)

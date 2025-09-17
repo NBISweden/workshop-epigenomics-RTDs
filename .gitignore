@@ -3,3 +3,4 @@ _build
 .vscode
 .Rproj.user
 workshop-epigenomics-RTDs.Rproj
+.Rhistory
