@@ -61,7 +61,9 @@ and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>`
 
 **13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Michelle Ljungmark)
 
-**13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` 
+**13:45 - 14:00** Break
+
+**14:00 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` 
 
 **15:30 - 17:00** Exercise *(offline support)*
 
@@ -90,7 +92,7 @@ Wednesday (24 September 2025)
 **13:00 - 13:30** Introduction to exercises  
 
 **13:30 - 16:00** :doc:`Principles of ChIP-seq <./tutorials/chipseqProc/lab-chipseq-processing>`
-and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(online support)*
+and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` 
 
 **16:00 - 17:00** Exercises *(offline support)*
 
@@ -118,7 +120,7 @@ Thursday (25 September 2025)
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` *(online support)*
+**13:00 - 15:00** :doc:`Exercises: Downstream analyses <./tutorials/downstream_tutorials>` 
 
 **15:00 - 17:00** Exercises *(offline support)*
 
