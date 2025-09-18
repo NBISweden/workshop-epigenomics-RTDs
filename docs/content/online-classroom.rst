@@ -16,29 +16,10 @@ We make sure that all the material on this site is up to date and **always** acc
 
 During the course we will create a page on *readthedocs* where you can access the presentations.
 
-Most interactions and talks will be happening on Zoom (`Zoom link <https://stockholmuniversity.zoom.us/j/63365179340?pwd=aVD7kAgAPHtZDKWtBItiJXvWL9mjC3.1>`_). For this, we have created several rooms to accommodate the main session, exercises and group discussions:
+Most interactions and talks will be happening on Zoom. For this, we have created several rooms to accommodate the main session, exercises and group discussions.
 
 
-
-**Zoom rooms**
-
-  - Main
-  - Quiet room
-  - Team 1: DNAwesome
-  - Team 2: HISStones
-  - Team 3: ATACers
-  - Team 4: TufFactors
-  - Team 5: MethylNation
-  - Q&A 1
-  - Q&A 2
-  - Q&A 3
-  - Extra 1
-  - Extra 2
-  - Extra 3
-  - Extra 4
-  - Extra 5
-
-We also have a `Slack workspace <https://join.slack.com/t/epigenomicsda-iyv4127/shared_invite/zt-3do2m0iwm-b6ySmNwleHunsqBp2WXkVQ>`_. You should have already gotten an invitation via email to access this (let us know if not!). To keep things somewhat ordered, we have a general channel and day-specific channels. The general channel can be used for more general questions or discussions; while any issues or questions related to specific days can be taken in the appropriate channel. Please try to answer questions in a "thread" to avoid cluttering up the channel! You will have access to this Slack channel after the course, but please bear in mind that the messages have a lifespan of 30 days, after which time they are deleted by Slack.
+We also have a Slack workspace. You should have already gotten an invitation via email to access this (let us know if not!). To keep things somewhat ordered, we have a general channel and day-specific channels. The general channel can be used for more general questions or discussions; while any issues or questions related to specific days can be taken in the appropriate channel. Please try to answer questions in a "thread" to avoid cluttering up the channel! You will have access to this Slack channel after the course, but please bear in mind that the messages have a lifespan of 30 days, after which time they are deleted by Slack.
 
 Where should you be and when?
 -----------------------------
