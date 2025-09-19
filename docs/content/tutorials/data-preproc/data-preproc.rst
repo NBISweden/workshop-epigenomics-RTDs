@@ -144,7 +144,7 @@ Copy the script to your home directory and execute it:
 
   cp /proj/epi2025/atacseq_proc/atacseq_data.sh .
   
-  source atacseq_data.sh
+  bash atacseq_data.sh
 
 
 You should see a newly created directory named ``atacseq``. Everything you need for completing the ATAC-seq tutorials is located there. When you enter ``atacseq`` you'll see several other directories. ``results`` contains precomputed results of (most of) the steps, so you can continue in case something goes wrong along the way. You can enter ``analysis``; this is where we'll be working today.
