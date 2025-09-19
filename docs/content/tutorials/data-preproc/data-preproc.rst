@@ -13,9 +13,9 @@ Data Preprocessing for Functional Genomics
 
 **Learning outcomes**
 
-- apply standard processing methods used in functional genomics on an example of ATAC-seq data
+- apply standard processing methods used in functional genomics on ATAC-seq data
 
-- become accustomed to work on Rackham cluster
+- become accustomed to work in interactive HPC environment (Rackham cluster)
 
 
 :raw-html:`<br />`
@@ -57,7 +57,7 @@ We assume that starting point are reads mapped to a reference sequence.
 Before we start
 ==================
 
-Today we are going to work on `Rackham <https://www.uppmax.uu.se/support/user-guides/rackham-user-guide>`_, an HPC cluster hosted by `Uppmax <https://www.uppmax.uu.se>`_.
+Today we are going to work on `Rackham <https://docs.uppmax.uu.se/cluster_guides/rackham/>`_, an HPC cluster hosted by `Uppmax <https://www.uppmax.uu.se>`_.
 
 Please follow the setup procedure to book a node and log in to it as described in section :doc:`Setting up <../setup/lab-setup>`.
 
@@ -68,46 +68,48 @@ Data
 
 We will work with **ATAC-seq** data in this tutorial, however the same principles apply to other functional genomics data types. In particular, **ChIP-seq data** used in this workshop has been processed using similar workflow.
 
-We will use data that come from `ENCODE <www.encodeproject.org>`_ consortium. These are **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in natural killer (NK) cells prior to and upon stimulation.
+We will use data that come from publication `Batf-mediated epigenetic control of effector CD8+
+T cell differentiation` (Tsao et al 2022). These are **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in murine CD8+ T lymphocytes prior to and upon Batf knockout.
 
-Natural killer (NK) cells are innate immune cells that show strong cytolytic function against physiologically stressed cells such as tumor cells and virus-infected cells. NK cells express several activating and inhibitory receptors that recognize the altered expression of proteins on target cells and control the cytolytic function. To read more about NK cells please refer to `Paul and Lal <https://doi.org/10.3389/fimmu.2017.01124>`_ . The interleukin cocktail used to stimulate NK cells induces proliferation and activation (`Lauwerys et al <https://doi.org/10.1006/cyto.1999.0501>`_ ).
+The response of naive CD8+ T cells to their cognate antigen involves rapid and broad changes to gene expression that are coupled with extensive chromatin remodeling. Basic leucine zipper ATF-like transcription
+factor **Batf** is essential for the early phases of the process.
 
-ENCODE sample accession numbers are listed in Table 1.
+We will use data from *in vivo* experiment.
 
 
-.. list-table:: Table 1. ENCODE accession numbers for data set used in this tutorial.
+SRA sample accession numbers are listed in Table 1.
+
+
+.. list-table:: Table 1. Samples used in this tutorial.
    :widths: 10 25 25 50
    :header-rows: 1
 
    * - No
      - Accession
-     - Cell type
+     - Sample Name
      - Description
    * - 1
-     - ENCFF398QLV
-     - Homo sapiens natural killer cell female adult
-     - untreated
+     - SRR17296554
+     - B1_WT_Batf-floxed_Cre_P14
+     - WT Batf
    * - 2
-     - ENCFF363HBZ
-     - Homo sapiens natural killer cell female adult
-     - untreated
+     - SRR17296555
+     - B2_WT_Batf-floxed_Cre_P14
+     - WT Batf
    * - 3
-     - ENCFF045OAB
-     - Homo sapiens natural killer cell female adult
-     - Interleukin-18, Interleukin-12-alpha, Interleukin-12-beta, Interleukin-15
+     - SRR17296556
+     - A1_Batf_cKO_P14
+     - KO Batf
    * - 4
-     - ENCFF828ZPN
-     - Homo sapiens natural killer cell female adult
-     - Interleukin-18, Interleukin-12-alpha, Interleukin-12-beta, Interleukin-15
+     - SRR17296557
+     - A2_Batf_cKO_P14
+     - KO Batf
 
 
-We have processed the data, starting from reads aligned to **hg38** reference assembly using **bowtie2**. The alignments were obtained from ENCODE in *bam* format and further processed:
 
-* alignments were subset to include chromosome 14 and 1% of reads mapped to chromosomes 1 to 6 and chrM.
+We have processed the data, starting from raw reads. The reads were aligned to **GRCm39** reference assembly using **bowtie2** and subset to include alignments to chromosome 1 and 1% of reads mapped to chromosomes 2 to 5 and MT.
 
-
-This allows you to see a realistic coverage of one selected chromosome and collect QC metrics while allowing shorter computing times. Non-subset ATAC-seq data contains 100 - 200 M PE reads, too many to conveniently process during a workshop.
-
+This allows you to see a realistic coverage of one selected chromosome and collect QC metrics while allowing shorter computing times.
 
 
 Setting up directory structure and files
@@ -118,30 +120,31 @@ Normally you process several files from your data set using the same workflow. W
 
 * ``atac_data.sh`` that sets up directory structure and creates symbolic links to data as well as copies smaller files **[RUN ONLY ONCE]**
 
-* ``atac_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
+.. * ``atac_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
 
 
-.. Note::
+.. .. Note::
 	
-	In many commands in this workshop we use certain environmental variables, which are preset for you in the ``*_env.sh`` scripts which are used to set up some tutorials.
-	These variables are:
+.. 	In many commands in this workshop we use certain environmental variables, which are preset for you in the ``*_env.sh`` scripts which are used to set up some tutorials.
+.. 	These variables are:
 
 
-		* ``$USER`` - expands to your user id
+.. 		* ``$USER`` - expands to your user id
 
-		* ``$COURSE_DIR`` - contains path to the course storage directory
+.. 		* ``$COURSE_DIR`` - contains path to the course storage directory
 
 		
 .. * ``$COURSE_ALLOC`` - contains the course CPU allocation
 
 
-Copy the scripts to your home directory and execute them:
+Copy the script to your home directory and execute it:
 
 
 .. code-block:: bash
 
-  cp /proj/epi2023/atacseq_proc/atacseq_data.sh .
-  cp /proj/epi2023/atacseq_proc/atacseq_env.sh .
+  cp /proj/epi2025/atacseq_proc/atacseq_data.sh .
+  
+  ..cp /proj/epi2025/atacseq_proc/atacseq_env.sh .
 
 
   source atacseq_env.sh 
@@ -171,63 +174,71 @@ To start with, we can inspect the statistics of these unprocessed data. We will 
 	cd processedData
 
 	module load bioinfo-tools
-	module load samtools/1.8
+	module load samtools/1.19
 
-	samtools idxstats ../../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.idxstats
-	samtools stats ../../data/ENCFF045OAB.chr14.bam  >ENCFF045OAB.chr14.bam.stats
+	samtools idxstats ../../data/SRR17296554.mapped.bowtie2.chr1.bam  >SRR17296554.idxstats
+	samtools stats ../../data/SRR17296554.mapped.bowtie2.chr1.bam  >SRR17296554.stats
 
 
-One of the characteristics of the ATAC-seq signal is the presence of reads mapped to organelles. These reads may constitute even 40% of the library, depending on the library preparation method. Mt contents be used to flag failed libraries early on. 
+One of the characteristics of the ATAC-seq signal is the presence of reads mapped to organelles. These reads may constitute even 40% of the library, depending on the library preparation method. MT contents be used to flag failed libraries early on. 
 
 We can inspect the Mt contents of our data::
 
 	#total fragments
-	awk '{sum += $3} END {print sum}' ENCFF045OAB.chr14.bam.idxstats
-	4947098
+	awk '{sum += $3} END {print sum}' SRR17296554.idxstats
+	11335599
 
 	#chrM fragments
-	awk '$1 ~ /chrM/ {print $3}' ENCFF045OAB.chr14.bam.idxstats
-	53737
+	awk '$1 ~ /MT/ {print $3}' SRR17296554.idxstats
+	75245
 
 
-``chrM/total`` ratio in this file is ``0.011`` (thanks to data subsetting). The fraction of Mt reads in the nonsubset file was ``0.053``, a value to be expected if using the `Omni ATAC library prep <https://doi.org/10.1038/nmeth.4396>`_. Older protocols result in much higher values.
+``MT/total`` ratio in this file is ``0.007`` (thanks to data subsetting). The fraction of MT reads in the nonsubset file was ``0.053``, a value to be expected if using the `Omni ATAC library prep <https://doi.org/10.1038/nmeth.4396>`_. Older protocols result in much higher values.
 
 
-Let's inspect the read mapping statistics in ``ENCFF045OAB.chr14.bam.stats``::
+Let's inspect the read mapping statistics in ``SRR17296554.stats``::
 
-	grep ^SN ENCFF045OAB.chr14.bam.stats | cut -f 2-
+	grep ^SN SRR17296554.stats | cut -f 2-
 
-	raw total sequences:	3344316
+	raw total sequences:	11399457	# excluding supplementary and secondary reads
 	filtered sequences:	0
-	sequences:	3344316
+	sequences:	11399457
 	is sorted:	1
-	1st fragments:	1672719
-	last fragments:	1671597
-	reads mapped:	3314986
-	reads mapped and paired:	3285656	# paired-end technology bit set + both mates mapped
-	reads unmapped:	29330
-	reads properly paired:	3259566	# proper-pair bit set
-	reads paired:	3344316	# paired-end technology bit set
+	1st fragments:	5694081
+	last fragments:	5705376
+	reads mapped:	11335599
+	reads mapped and paired:	11271741	# paired-end technology bit set + both mates mapped
+	reads unmapped:	63858
+	reads properly paired:	11230312	# proper-pair bit set
+	reads paired:	11399457	# paired-end technology bit set
 	reads duplicated:	0	# PCR or optical duplicate bit set
-	reads MQ0:	5113	# mapped and MQ=0
+	reads MQ0:	5945	# mapped and MQ=0
 	reads QC failed:	0
-	non-primary alignments:	1632112
-	total length:	285098443	# ignores clipping
-	bases mapped:	282153143	# ignores clipping
-	bases mapped (cigar):	282153143	# more accurate
+	non-primary alignments:	0
+	supplementary alignments:	0
+	total length:	420662620	# ignores clipping
+	total first fragment length:	210119227	# ignores clipping
+	total last fragment length:	210543393	# ignores clipping
+	bases mapped:	418303160	# ignores clipping
+	bases mapped (cigar):	417695422	# more accurate
 	bases trimmed:	0
 	bases duplicated:	0
-	mismatches:	1645084	# from NM fields
-	error rate:	5.830465e-03	# mismatches / bases mapped (cigar)
-	average length:	85
-	maximum length:	101
-	average quality:	35.5
-	insert size average:	284.8
-	insert size standard deviation:	150.6
-	inward oriented pairs:	1005958
-	outward oriented pairs:	10041
-	pairs with other orientation:	77
-	pairs on different chromosomes:	1719
+	mismatches:	822766	# from NM fields
+	error rate:	1.969775e-03	# mismatches / bases mapped (cigar)
+	average length:	37
+	average first fragment length:	37
+	average last fragment length:	37
+	maximum length:	37
+	maximum first fragment length:	37
+	maximum last fragment length:	37
+	average quality:	34.1
+	insert size average:	220.2
+	insert size standard deviation:	134.6
+	inward oriented pairs:	5597226
+	outward oriented pairs:	19488
+	pairs with other orientation:	1094
+	pairs on different chromosomes:	18062
+	percentage of properly paired reads (%):	98.5
 
 
 
@@ -236,63 +247,65 @@ Processing alignments
 
 We start by removing alignments within problematic genomic regions.
 
-We use **hg38** specific blacklist from ENCODE, accession ``ENCFF356LFX``.
+We use **mm38** specific blacklist from ENCODE, accession ``ENCFF999QPV``, which was litover to **GRCm39** using UCSC ``liftOver`` web tool. 
+We will perform this as a "complement" operation, i.e. we'll retain alignments which overlap the *non-blacklisted* regions (``complementBed`` from `bedtools <https://bedtools.readthedocs.io/en/latest/content/tools/complement.html>`_ ).
 
 
-First, we remove alignments within the blacklisted regions:
-
-.. code-block:: bash
-
-	module load NGSUtils/0.5.9
-
-	bamutils filter ../../data/ENCFF045OAB.chr14.bam ENCFF045OAB.chr14.blacklist_filt.bam -excludebed ../../annot/ENCFF356LFX.bed nostrand
-
-
-The output::
-
-	Done! (1:48)                                                                                             
-	4574099 kept
-	402329 failed
-
-
-Next, we remove alignments to mitochondrial genome:
-
-.. code-block:: bash
-
-	bamutils filter ENCFF045OAB.chr14.blacklist_filt.bam ENCFF045OAB.chr14.blacklist_M_filt.bam -excluderef chrM
-
-
-The output::
-
-
-	Done! (1:23)                                                                             
-	4520362 kept
-	53737 failed
-
-
-Next, we remove low quality (by MAPQ) and incorrect alignments (as specified by the aligner). We also need to index the resulting bam file for the next step.
+Before we can do this we need to prepare the genomic regions:
 
 
 .. code-block:: bash
 
-	samtools view -f 0x2 -q 5 -hbo ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam ENCFF045OAB.chr14.blacklist_M_filt.bam
-	samtools index ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam
+	module load BEDTools/2.31.1
+
+	sortBed -i  ../../annot/ENCFF999QPV.mm39_ens.bed  | complementBed -i stdin -g ../../annot/GRCm39.sizes > mm39.noblcklst.bed
 
 
-Finally, we can remove duplicated alignments.
+While we are at it, we can also remove the MT contig from the *non-blacklist* regions:
+
+.. code-block:: bash
+
+   awk '$1 != "MT" { print $0 }' mm39.noblcklst.bed > mm39.noblcklst_MT.bed
+
+We can now remove the alignments in problematic reagions (blacklists and MT). Please note the bam file should be sorted and indexed first (required by ``samtools view``), which we have done beforehand.
+
+
+We retain alignments **not** within the blacklisted regions, which also are *properly paired* and of minimum MAPQ 5 (``-f 0x2 -q 5``):
+
+.. code-block:: bash
+
+		samtools view -f 0x2 -q 5 -M -L mm39.noblcklst_MT.bed -hbo SRR17296554.blstMT_filt.bam ../../data/SRR17296554.mapped.bowtie2.chr1.bam
+
+		samtools index SRR17296554.blstMT_filt.bam
+
+
+How many alignments are kept?
+
+
+.. code-block:: bash
+	
+	samtools idxstats SRR17296554.blstMT_filt.bam >SRR17296554.blstMT_filt.idxstats
+
+	awk '{sum += $3} END {print sum}' SRR17296554.blstMT_filt.idxstats
+
+
+9440817 alignemnts are retained after filtering (out of initial 11335599).
+
+
+Finally, we can mark / remove duplicated alignments.
 
 
 .. code-block:: bash
 
-	module load picard/2.23.4
+	module load picard/3.1.1
 
-	java -Xmx31G -jar $PICARD_HOME/picard.jar MarkDuplicates -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.bam \
-	 -O ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam -M ENCFF045OAB.dedup_metrics \
-	 -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES true -ASSUME_SORTED true
+	java -Xmx31G -jar $PICARD MarkDuplicates -I SRR17296554.blstMT_filt.bam \
+	 -O SRR17296554.blstMT_filt.dedup.bam -M SRR17296554.dedup_metrics \
+	 -VALIDATION_STRINGENCY LENIENT -REMOVE_DUPLICATES false -ASSUME_SORTED true
 
-	samtools index ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam
+	samtools index SRR17296554.blstMT_filt.dedup.bam
 
-Resulting file ``ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` containes preprocessed alignments we can use in the analysis and visualisations.
+Resulting file ``SRR17296554.blstMT_filt.dedup.bam`` containes preprocessed alignments we can use in the analysis and visualisations.
 
 
 While we are at it, we can inspect the duplication status of the library. This is another early QC step we perform, and it informs us of library complexity.
@@ -300,20 +313,42 @@ While we are at it, we can inspect the duplication status of the library. This i
 
 .. code-block:: bash
 
-	head ENCFF045OAB.dedup_metrics
+	head SRR17296554.dedup_metrics
 
-Key information from ``ENCFF045OAB.dedup_metrics``::
 
-	READ_PAIRS_EXAMINED 1544973
-	READ_PAIR_DUPLICATES 105752
-	PERCENT_DUPLICATION 0.068449
+Key information from ``SRR17296554.dedup_metrics``::
+
+	READ_PAIRS_EXAMINED 4720408
+	READ_PAIR_DUPLICATES 1389167
+	PERCENT_DUPLICATION 0.29429
 
 
 .. admonition:: Inspecting file contents.
    :class: dropdown, warning
 
-   head ENCFF045OAB.dedup_metrics
+	## METRICS CLASS	picard.sam.DuplicationMetrics
+	
+	LIBRARY	UNPAIRED_READS_EXAMINED	READ_PAIRS_EXAMINED	SECONDARY_OR_SUPPLEMENTARY_RDS	UNMAPPED_READS	UNPAIRED_READ_DUPLICATES	READ_PAIR_DUPLICATES	READ_PAIR_OPTICAL_DUPLICATES	PERCENT_DUPLICATION	ESTIMATED_LIBRARY_SIZE
+	
+	Unknown Library	0	4720408	0	0	0	1389167	0	0.29429	6354197
 
 
-Good news, low duplication level in this library, we can proceed with further :doc:`QC <data-qc1>` and :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
+Good news, acceptable duplication level in this library, we can proceed with further :doc:`QC <data-qc1>` and :doc:`analysis <../ATACseq/lab-atacseq-bulk>`. 
+
+
+
+References
+==========
+
+.. container:: references csl-bib-body hanging-indent
+   :name: refs
+
+   .. container:: csl-entry
+      :name: ref-Tsao2022
+
+      Tsao, Hsiao-Wei, James Kaminski, Makoto Kurachi, R. Anthony
+      Barnitz, Michael A. DiIorio, Martin W. LaFleur, Wataru Ise, et al.
+      2022. “Batf-Mediated Epigenetic Control of Effector CD8 + t Cell
+      Differentiation.” *Science Immunology* 7 (68).
+      https://doi.org/10.1126/sciimmunol.abi4919.
 

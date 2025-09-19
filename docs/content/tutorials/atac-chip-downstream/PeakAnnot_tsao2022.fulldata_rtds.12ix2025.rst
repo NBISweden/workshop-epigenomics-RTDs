@@ -28,7 +28,7 @@ Using ``ChIPseeker`` package
 
 -  to annotate peaks with the nearest feature
 
--  to run functional annotation
+-  to perform functional annotation
 
 :raw-html:`<br />`
 
@@ -60,27 +60,41 @@ so feel free to have this open alongside to read and experiment more.
 Data & Methods
 ==============
 
-We will build upon the main labs:
+We will build upon the main lab:
 
--  ATAC-seq: all detected peaks (merged consensus peaks);
-
--  ATAC-seq: differentially accessible peaks;
+-  :doc:`ATAC data analysis <../ATACseq/lab-atacseq-bulk>`: detected peaks (merged consensus peaks);
 
 
 :raw-html:`<br />`
 
 
+
 Setting Up
 -------------
 
-You can continue working in the directory ``atacseq/analysis/counts``.
-This directory contains merged peaks called earlier using genrich as
-well as count tables derived from summarising of non-subset data.
-Although strictly speaking we won’t need the count tables for this
-exercise, this will be our staring point, to prepare the object for the
-differential accessibility analysis. We will use file
-``AB_Batf_KO_invivo.genrich_joint.merged_peaks.featureCounts`` and
-annotation libraries, which are preinstalled.
+You can continue working in the directory ``atacseq/analysis``.
+
+We will use counts table which summarises reads in peaks detected using non-subset data in file
+``AB_Batf_KO_invivo.genrich_joint.merged_peaks.featureCounts``
+and annotation libraries, which are preinstalled.
+
+
+We can create a new directory which will be our ``workdir`` in the subsequent code:
+
+.. code-block:: bash
+
+   mkdir DA
+   cd DA
+
+
+We can link all necessary files:
+
+.. code-block:: bash
+   
+   ln -s ../counts
+
+   ln -s ../../results/DA/annotation/
+
 
 We access the R environment via:
 
@@ -116,18 +130,21 @@ We begin by loading necessary libraries:
       library(org.Mm.eg.db)
       library(ReactomePA)
 
+
+We need to set the path to ``workdir`` first, as other paths are relative to it:
+
 .. container:: cell
 
    .. code:: r
 
-      workdir="/path/to/workdir"
+      workdir=getwd()
 
 
-To set working directory to your desired path you can use these commands:
+To set working directory to your desired path (other than the current directory the R session started at) you can use these commands:
 
 .. code-block:: R
 
-   workdir=getwd()
+   workdir="/path/to/workdir"
 
    workdir=setwd()
 
@@ -260,7 +277,7 @@ use the Bioconductor package directly:
 ::
 
    library(TxDb.Mmusculus.UCSC.mm39.knownGene)
-   txdb <- TxDb.Hsapiens.UCSC.mm39.knownGene
+   txdb=TxDb.Hsapiens.UCSC.mm39.knownGene
 
 Please note that UCSC and Ensembl use different contig naming schemes,
 so it is advisable to use the annotation matching the genome reference
@@ -282,9 +299,9 @@ peaks on assembled chromosomes.
    .. code:: r
 
       count_table_fname="AB_Batf_KO_invivo.genrich_joint.merged_peaks.featureCounts"
-      cnt_table_pth=file.path(file.path(workdir,"data"),count_table_fname)
+      cnt_table_pth=file.path(file.path(workdir,"counts"),count_table_fname)
 
-      cnt_table=read.table(cnt_table_pth, sep="\t", header=TRUE, blank.lines.skip=TRUE)
+      cnt_table=read.table(cnt_table_pth, sep="\t", header=TRUE, blank.lines.skip=TRUE, comment.char = "#")
       rownames(cnt_table)=cnt_table$Geneid
       rownames(cnt_table)=c(gsub("AB_Batf_KO_invivo.genrich_joint.","",rownames(cnt_table)))
       colnames(cnt_table)=c(colnames(cnt_table)[1:6],gsub(".filt.bam","",colnames(cnt_table)[7:10]))
@@ -353,7 +370,7 @@ and inspect it:
       ##   -------
       ##   seqinfo: 21 sequences from an unspecified genome; no seqlengths
 
-We’re ready to annotate the peaks to their closest feature:
+We’re ready to annotate the peaks to their closest feature. Regions up to 3kb from TSS are annotated as "promoter".
 
 ::
 
@@ -389,7 +406,7 @@ Over 30% peaks localised to TSS, as expected in an ATAC-seq experiment.
 :raw-html:`<br />`
 :raw-html:`<br />`
 
-Let’s see peak annotations:
+Let’s inspect peak annotations:
 
 .. code-block:: R
 
@@ -565,11 +582,11 @@ These results look roughly in agreement with analyses using reactome:
 -  immune response-activating signaling pathway
 
 
-Similar strategy can be used for analysis of subset peaks, i.e. differentially accessible peaks.
+Similar strategy can be used for analysis of subset peaks, i.e. differentially accessible peaks, peaks following similar level changes over a range of conditions etc.
 
 
 Please remember that the results of functional analysis like the one
-presented above can be only as good as the annotations.
+presented above can be only as accurate as the annotations.
 
 :raw-html:`<br />`
 :raw-html:`<br />`

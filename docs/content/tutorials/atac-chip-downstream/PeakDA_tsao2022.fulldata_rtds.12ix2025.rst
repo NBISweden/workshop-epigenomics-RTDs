@@ -56,18 +56,32 @@ We will build upon the main lab ATACseq data analysis:
 -  we will use the counts table encompassing **complete data** for
    differential accessibility analysis;
 
+
 :raw-html:`<br />`
 
 Setting Up
 ----------
 
-You can continue working in the directory ``atacseq/analysis/counts``.
-This directory contains merged peaks called earlier using genrich as
-well as count tables derived from summarising of non-subset data. We
+You can continue working in the directory ``atacseq/analysis/DA``.
+This directory contains count tables derived from summarising of non-subset data to merged peaks called by genrich in the **joint** mode. We
 will use file
 ``AB_Batf_KO_invivo.genrich_joint.merged_peaks.featureCounts``.
 
 :raw-html:`<br />`
+
+
+
+We can link additional files:
+
+.. code-block:: bash
+   
+   mkdir bam_dir
+   cd bam_dir
+   find ../../../data_proc/ -name \*.ba* -exec ln -vs "{}" ';'
+   cd ..
+
+:raw-html:`<br />`
+
 
 We access the R environment via:
 
@@ -76,6 +90,10 @@ We access the R environment via:
    module load R_packages/4.3.1
 
 We activate R console upon typing ``R`` in the terminal.
+
+
+:raw-html:`<br />`
+
 
 We begin by loading necessary libraries:
 
@@ -225,7 +243,7 @@ We can now count reads in all bam files in the data set, and plot them.
 
    .. code:: r
 
-      bam_dir="path/to/bam"
+      bam_dir=file.path(workdir,"bam_dir")
       bam_fnames=list.files(bam_dir,pattern = "\\.bam$",)
 
       par(mfrow = c(2, length(bam_fnames)/2 ) )
@@ -535,11 +553,20 @@ annotations:
 
    .. code:: r
 
-      peak_annots_pth=file.path(workdir,"objects","Allpeaks_annot.Ensembl.rds")
+      peak_annots_pth=file.path(workdir,"Allpeaks_annot.Ensembl.rds")
 
       peakAnno_df=readRDS(peak_annots_pth)
 
 :raw-html:`<br />`
+
+.. Note::
+   
+   If you did not follow the Peak Annotation lab, you copy the saved file from
+   ``../../results/DA/Allpeaks_annot.Ensembl.rds``
+
+
+:raw-html:`<br />`
+
 
 We can now join the tables with peak annotations and DA results:
 

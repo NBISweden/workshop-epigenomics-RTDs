@@ -61,11 +61,8 @@ In ATAC-seq experiments, tagmentation of Tn5 transposases produces signature siz
 Please note the pre-processed BAM files need to be used to get an unbiased distribution of insert fragment size in the ATAC-seq library.
 
 
-
 .. image:: figures/Lietal_atacTn5.png
    			:width: 600px
-
-
 
 
 
@@ -79,21 +76,21 @@ To compute fragment length distribution for processed bam file in our ATAC-seq d
 	mkdir QC
 	cd QC
 
-	ln -s ../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam  .
-	ln -s ../processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam.bai  .
+	ln -s ../processedData/SRR17296554.blstMT_filt.dedup.bam  .
+	ln -s ../processedData/SRR17296554.blstMT_filt.dedup.bam.bai  .
 	
-	module load picard/2.23.4
+	module load picard/3.1.1
 
-	java -Xmx32G -jar $PICARD_HOME/picard.jar CollectInsertSizeMetrics \
-	 -I ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam \
-	 -O ENCFF045OAB.chr14.proc.fraglen.stats \
-	 -H ENCFF045OAB.chr14.proc.fraglen.pdf -M 0.5
+	java -Xmx31G -jar $PICARD CollectInsertSizeMetrics \
+	-I SRR17296554.blstMT_filt.dedup.bam \
+	-O SRR17296554.chr1.proc.fraglen.stats \
+	-H SRR17296554.chr1.proc.fraglen.pdf -M 0.5
 
 
 You can copy the resulting file to your local system to view it.
 
 
-Have a look at ``ENCFF045OAB.chr14.proc.fraglen.pdf``, and answer
+Have a look at ``SRR17296554.chr1.proc.fraglen.pdf``, and answer
 
 - does it indicate a good sample quality? is the chromatin structure preserved?
 
@@ -101,10 +98,10 @@ Have a look at ``ENCFF045OAB.chr14.proc.fraglen.pdf``, and answer
 
 
 
-.. admonition:: Fragment length histogram of ATAC-seq signal in NK cells.
+.. admonition:: Fragment length histogram of ATAC-seq signal in sample SRR17296554.
    :class: dropdown, warning
 
-   .. image:: figures/ENCFF045OAB.chr14.proc.fraglen.png
+   .. image:: figures/SRR17296554.chr1.proc.fraglen.png
           :width: 300px
 
 
@@ -144,7 +141,7 @@ We will be working in ``R`` in this section. First, we load the required version
 
 .. code-block:: bash
 
-	module load R_packages/4.1.1
+	module load R_packages/4.3.1
 
 
 We activate R console upon typing ``R`` in the terminal. 
@@ -157,8 +154,8 @@ We begin by loading necessary libraries:
 .. code-block:: R
 
 	library(ATACseqQC)
-	library(BSgenome.Hsapiens.UCSC.hg38)
-	library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+	library(BSgenome.Mmusculus.UCSC.mm39)
+	library(TxDb.Mmusculus.UCSC.mm39.knownGene)
 	library(ChIPpeakAnno)
 	library(Rsamtools)
 
@@ -167,8 +164,8 @@ We can now give the path to the processed bam file:
 
 .. code-block:: R
 
-	bamFile="ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam"
-	bamFileLabels <- "ENCFF045OAB"
+	bamFile="SRR17296554.blstMT_filt.dedup.bam"
+	bamFileLabels <- "SRR17296554"
 
 
 We collect library statistics:
@@ -188,10 +185,10 @@ The output::
 	bam_qc[1:10]
 
 	$totalQNAMEs
-	[1] 1439244
+	[1] 4720683
 
 	$duplicateRate
-	[1] 0
+	[1] 0.2942896
 
 	$mitochondriaRate
 	[1] 0
@@ -209,51 +206,53 @@ The output::
 	[1] 0
 
 	$nonRedundantFraction
-	[1] 0.9999958
+	[1] 0.5100756
 
 	$PCRbottleneckCoefficient_1
-	[1] 0.9999979
+	[1] 0.710388
 
 	$PCRbottleneckCoefficient_2
-	[1] 479746
-
-Most of these values are meaningless at this point, as we have already processed the bam file (i.e. removed duplicated fragments etc.) To compare the statistics for the unprocessed file, please see below.
+	[1] 3.366668
 
 
-.. admonition:: Summary statistics for unprocessed ENCFF045OAB.chr14 data
+Some of these values are meaningless at this point, as we have already processed the bam file (i.e. filtered fragments in problematic regions etc.) To compare the statistics for the non-subset file, please see below.
+
+
+.. admonition:: Summary statistics for filtered non-subset SRR17296554.filt.bam data
    :class: dropdown, warning
 
-	bam_qc_unproc[1:10]::
+	bam_qc_nonsub[1:10]::
 
 		$totalQNAMEs
-		[1] 1673636
+		[1] 58847066
 
 		$duplicateRate
-		[1] 0
+		[1] 0.302227
 
 		$mitochondriaRate
-		[1] 0.01487629
+		[1] 0
 
 		$properPairRate
-		[1] 0.9746585
+		[1] 1
 
 		$unmappedRate
-		[1] 0.008770104
+		[1] 0
 
 		$hasUnmappedMateRate
-		[1] 0.008770104
+		[1] 0
 
 		$notPassingQualityControlsRate
 		[1] 0
 
 		$nonRedundantFraction
-		[1] 0.8793997
+		[1] 0.4967934
 
 		$PCRbottleneckCoefficient_1
-		[1] 0.9408998
+		[1] 0.699404
 
 		$PCRbottleneckCoefficient_2
-		[1] 17.92948
+		[1] 3.18878
+
 
 
 
@@ -269,7 +268,7 @@ We create a directory where the processed bam files will be saved:
 .. code-block:: R
 
 	## files will be saved into outPath respective to the working directory
-	outPath <- "splitBam"
+	outPath = "splitBam"
 	dir.create(outPath)
 
 
@@ -277,28 +276,31 @@ First, we collect information on which SAM/BAM tags are present in our bam file:
 
 .. code-block:: R
 
-	possibleTag <- combn(LETTERS, 2)
-	possibleTag <- c(paste0(possibleTag[1, ], possibleTag[2, ]),
+	possibleTag = combn(LETTERS, 2)
+	possibleTag = c(paste0(possibleTag[1, ], possibleTag[2, ]),
 	                 paste0(possibleTag[2, ], possibleTag[1, ]))
 	
-	bamTop100 <- scanBam(BamFile(bamFile, yieldSize = 100),
+	bamTop100 = scanBam(BamFile(bamFile, yieldSize = 100),
 	                     param = ScanBamParam(tag = possibleTag))[[1]]$tag
-	tags <- names(bamTop100)[lengths(bamTop100)>0]
+	tags = names(bamTop100)[lengths(bamTop100)>0]
 
 
-We **shift the coordinates** only for alignments on chr14, which is where most of our data is:
+We **shift the coordinates** only for alignments on chr1, which is where most of our data is. We need to rename the chromosome id few times during this lab because of mismatch between annotation packages available via _Bioconductor_ and the reference genome used for read mapping. Please note that prepending / removing "chr" only works for assembled chromosomes, and is a somewhat hacky, so for other genomes, use it at your own risk.
 
 .. code-block:: R
 
-	seqlev <- "chr14"
-	which <- as(seqinfo(Hsapiens)[seqlev], "GRanges")
+	seqlev = "chr1"
+	which = as(seqinfo(Mmusculus)[seqlev], "GRanges")
+	
+	#rename chr ids to match reference genome
+	seqlevels(which)=gsub("chr","",seqlevels(which))
 
 
 We create an object with genomic alignments:
 
 .. code-block:: R
 
-	gal <- readBamFile(bamFile, tag=tags, which=which,asMates=TRUE, bigFile=TRUE)
+	gal = readBamFile(bamFile, tag=tags, which=which,asMates=TRUE, bigFile=TRUE)
 
 This object is empty, because we used ``bigFile=TRUE`` - this is expected, so do not be alarmed.
 
@@ -308,12 +310,8 @@ The function ``shiftGAlignmentsList`` in the ``ATACseqQC`` package is used for s
 
 .. code-block:: R
 
-	shiftedBamFile <- file.path(outPath, "shifted.bam")
-	gal1 <- shiftGAlignmentsList(gal, outbam=shiftedBamFile)
-
-	### save the GRanges object for future use
-	saveRDS(gal1, file = "gal1.rds", ascii = FALSE, version = NULL,compress = TRUE, refhook = NULL)
-
+	shiftedBamFile = file.path(outPath, "shifted.bam")
+	gal1 = shiftGAlignmentsList(gal, outbam=shiftedBamFile)
 
 Next, we **split** the shifted alignments into different fractions **by length** (nucleosome free, mononucleosome, dinucleosome, and trinucleosome).
 
@@ -327,22 +325,28 @@ We need genomic locations of TSS:
 
 .. code-block:: R
 
-	txs <- transcripts(TxDb.Hsapiens.UCSC.hg38.knownGene)
-	txs <- txs[seqnames(txs) %in% "chr14"]
-	genome <- Hsapiens
+	txs = transcripts(TxDb.Mmusculus.UCSC.mm39.knownGene)
+	txs = txs[seqnames(txs) %in% "chr1"]
+	seqlevels(txs)=gsub("chr","",seqlevels(txs))
+
+
+We need to rename chromosome ids in the ``BSgenome`` object:
+
+.. code-block:: R
+
+	seqlevelsStyle(BSgenome.Mmusculus.UCSC.mm39) <- "NCBI"
+	seqinfo(BSgenome.Mmusculus.UCSC.mm39)
+
+	genome = Mmusculus
 
 
 We split the alignments (this process takes a few minutes):
 
 .. code-block:: R
 
-		objs <- splitGAlignmentsByCut(gal1, txs=txs, genome=genome, outPath = outPath)
+		objs = splitGAlignmentsByCut(gal1, txs=txs, genome=genome, outPath = outPath)
 
-When done, we save the object for later use:
-
-.. code-block:: R
-
-	saveRDS(objs, file = "objs.rds", ascii = FALSE, version = NULL,compress = TRUE, refhook = NULL)
+		saveRDS(objs, file="atacsqQC.objs.rds")
 
 
 Finally, we have prepared the data for **plotting the signal in NFR and mononuclesome fraction** and calculating **signal distribution at TSS**.
@@ -386,6 +390,8 @@ Calculate and log2 transform the signal around TSS:
 	                          n.tile = NTILE,
 	                          upstream = ups,
 	                          downstream = dws)
+
+	saveRDS(sigs, file="atacsqQC.sigs.rds")
 
 	sigs.log2 <- lapply(sigs, function(.ele) log2(.ele+1))
 
@@ -452,7 +458,7 @@ And plot it:
 * What are the differences in the signal profile in these two fractions? Why do we observe them?
 
 
-.. admonition:: Heatmap of ATAC-seq signal in NFR and mononculeosome fractions.
+.. admonition:: Profiles of ATAC-seq signal in NFR and mononculeosome fractions.
    :class: dropdown, warning
 
    .. image:: figures/TSSprofile_splitbam.png
@@ -479,7 +485,7 @@ We would like to visualise processed alignments (bam and corresponding bai) at s
 
 We will need the following files:
 
-* ``atacseq/analysis/processedData/ENCFF045OAB.chr14.blacklist_M_filt.mapq5.dedup.bam`` and ``bai``
+* ``atacseq/analysis/processedData/SRR17296554.blstMT_filt.dedup.bam`` and ``bai``
 
 * ``atacseq/analysis/QC/splitBam/NucleosomeFree.bam`` and ``bai``
 
@@ -503,21 +509,25 @@ We will need the following files:
 
    	$pwd
 
-   	/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools
+   	/proj/epi2025/nobackup/agata/tst/atac_proc/atacseq/analysis/QC
 
-   To copy file ``NKcellsATAC_chr14.fingerprint.pdf`` to *current directory*, type in the **local** terminal::
+   To copy file ``SRR17296554.blstMT_filt.dedup.bam`` to *current directory*, type in the **local** terminal::
 
    	scp <username>@rackham.uppmax.uu.se:/path/to/file .
 
    E.g.::
 
-   scp agata@rackham.uppmax.uu.se:/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools/NKcellsATAC_chr14.fingerprint.pdf .
+   	scp agata@rackham.uppmax.uu.se:/proj/epi2025/nobackup/agata/tst/atac_proc/atacseq/analysis/QC/SRR17296554.blstMT_filt.dedup.bam .
 
    **when connecting from abroad**
 
    You need to login in another session to be able to copy files, as 2FA does not work with ``scp``. This mock-login serves only to refresh your credentials and results in a few minutes of grace time, during which each session from the same host is accepted without the need to provide 2FA. This time window is sufficient for copying files.
 
 
+
+.. Note::
+	
+	The reads are mapped to genome assembly **GRCm39**  / **mm39** which may need to be downloaded in your IGV version. To download a new genome, in IGV: Genomes > Hosted Genomes, then search for mm39.
 
 
 :raw-html:`<br />`
@@ -534,27 +544,38 @@ Change the default viewing settings in IGV by ``shift-clicking`` onto a track na
 
 **coverage** tracks:
 
-* pay attention to track scale; it is set to ``Auto``; the tracks won't show at the same scale, you can harmonise the scale if you want to see the differences in signal height
+* pay attention to track scale; it is set to ``Auto``; the tracks won't show at the same scale, you can harmonise the scale if you want to see the differences in signal range
 
 
 :raw-html:`<br />`
 
-You can move long the chromosome 14 and you will spot locations with high signal density.
+You can move long the chromosome 1 and you will spot locations with high signal density.
 
 Examples:
 
-* ``chr14:61,513,568-61,543,546``
+* ``chr1:10,009,356-10,018,135``
 
-* ``chr14:90,365,635-90,395,613``
+* ``chr1:10,105,613-10,114,392``
 
-* ``chr14:92,508,638-92,538,616``
+* ``chr1:161,497,776-161,499,970``
 
-* ``chr14:93,095,621-93,125,599``
+* ``chr1:155,074,991-155,079,380``
+
+* ``chr1:95,191,577-95,200,356``
+
+:raw-html:`<br />`
+
+
+
+
+.. image:: figures/splitBam_chr1_95M.png
+   			:width: 600px
 
 
 :raw-html:`<br />`
 
-An example is shown on the Figure below (this figure includes also detected peak intervals - we will discuss them in detail in the following sections).
+
+Another example is shown on the figure below (different data set). This figure includes also detected peak intervals - we will discuss them in detail in the following sections).
 
 .. image:: figures/igv_qc_split1.png
    			:width: 600px
