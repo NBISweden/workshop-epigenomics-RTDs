@@ -80,11 +80,11 @@ To compute cumulative enrichment for processed bam files in our ATAC-seq data se
 	#link necessary files to avoid long paths in commands
 	ln -s ../../data_proc/* .
 
-	module load deepTools/3.3.2
+	module load deepTools/3.5.6
 
-	plotFingerprint --bamfiles ENCFF363HBZ.chr14.proc.bam ENCFF398QLV.chr14.proc.bam ENCFF045OAB.chr14.proc.bam ENCFF828ZPN.chr14.proc.bam \
-	 --binSize=1000 --plotFile NKcellsATAC_chr14.fingerprint.pdf \
-	 --labels ENCFF363HBZ ENCFF398QLV ENCFF045OAB ENCFF828ZPN -p 5 &> fingerprint.log
+	plotFingerprint --bamfiles SRR17296554.filt.chr1.bam SRR17296555.filt.chr1.bam SRR17296556.filt.chr1.bam SRR17296556.filt.chr1.bam \
+	 --binSize=1000 --plotFile Invivo_proc.fingerprint.pdf \
+	 --smartLabels -p 5 &> fingerprint.log
 
 
 You can copy the resulting file to your local system to view it.
@@ -101,15 +101,15 @@ You can copy the resulting file to your local system to view it.
 
    	$pwd
 
-   	/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools
+   	/proj/epi2025/nobackup/agata/tst/atac_proc/atacseq/analysis/deepTools/
 
-   To copy file ``NKcellsATAC_chr14.fingerprint.pdf`` to *current directory*, type in the **local** terminal::
+   To copy file ``Invivo_proc.fingerprint.pdf`` to *current directory*, type in the **local** terminal::
 
    	scp <username>@rackham.uppmax.uu.se:/path/to/file .
 
    E.g.::
 
-   scp agata@rackham.uppmax.uu.se:/proj/epi2023/nobackup/private/agata/tests/atacseq/analysis/deepTools/NKcellsATAC_chr14.fingerprint.pdf .
+      scp agata@rackham.uppmax.uu.se:/proj/epi2025/nobackup/agata/tst/atac_proc/atacseq/analysis/deepTools/Invivo_proc.fingerprint.pdf .
 
    **when connecting from abroad**
 
@@ -118,15 +118,24 @@ You can copy the resulting file to your local system to view it.
 
 
 
-Have a look at ``NKcellsATAC_chr14.fingerprint.pdf``, read ``deepTools`` `What the plots tell you <http://deeptools.readthedocs.io/en/3.5.2/content/tools/plotFingerprint.html#what-the-plots-tell-you>`_ and answer
+Have a look at ``Invivo_proc.fingerprint.pdf``, read ``deepTools`` `What the plots tell you <https://deeptools.readthedocs.io/en/latest/content/tools/plotFingerprint.html#what-the-plots-tell-you>`_ and answer
 
 - does it indicate a good sample quality, i.e. signal present in narrow regions?
 
 
-.. admonition:: Fingerprint for ATAC-seq signal in NK cells.
+.. admonition:: Fingerprint for ATAC-seq signal in Batf KO dataset. Data subset to chr1.
    :class: dropdown, warning
 
-   .. image:: figures/NKcellsATAC_chr14.fingerprint.png
+   .. image:: figures/Invivo_proc.fingerprint.png
+          :width: 300px
+
+
+The plot below contains non subset data and more samples presented in the article.
+
+.. admonition:: Fingerprint for ATAC-seq signal in Batf KO dataset. Non subset data.
+   :class: dropdown, warning
+
+   .. image:: figures/tsao2022_proc.plotFingerprint.png
           :width: 300px
 
 
@@ -135,25 +144,31 @@ Replicate Clustering
 ========================
 
 **To assess overall similarity between libraries from different samples** one can compute sample clustering heatmaps using
-`multiBamSummary <http://deeptools.readthedocs.io/en/3.5.2/content/tools/multiBamSummary.html>`_ and `plotCorrelation <http://deeptools.readthedocs.io/en/3.5.2/content/tools/plotCorrelation.html>`_ in bins mode from ``deepTools``.
+`multiBamSummary <http://deeptools.readthedocs.io/en/latest/content/tools/multiBamSummary.html>`_ and `plotCorrelation <http://deeptools.readthedocs.io/en/latest/content/tools/plotCorrelation.html>`_ in bins mode from ``deepTools``.
 
 In this method the genome is divided into bins of specified size (``--binSize`` parameter) and reads mapped to each bin are counted. The resulting signal profiles are used to cluster libraries to identify groups of similar signal profile.
 
-We chose to compute pairwise Spearman correlation coefficients for this step, as they are based on ranks of each bin rather than signal values.
+..We chose to compute pairwise Spearman correlation coefficients for this step, as they are based on ranks of each bin rather than signal values.
 
-In this part we use bam files filtered previously, to save time.
+In this part we use bam files prepared before the workshop, to save time.
 
 
 .. code-block:: bash
 
-	multiBamSummary bins --bamfiles ENCFF363HBZ.chr14.proc.bam ENCFF398QLV.chr14.proc.bam ENCFF045OAB.chr14.proc.bam ENCFF828ZPN.chr14.proc.bam \
-	 --labels ENCFF363HBZ ENCFF398QLV ENCFF045OAB ENCFF828ZPN \
-	 --outFileName multiBamArray_NKcellsATAC_chr14.npz --binSize 5000 -p 5 &> multiBamSummary.log
+	multiBamSummary bins --bamfiles SRR17296554.filt.chr1.bam SRR17296555.filt.chr1.bam SRR17296556.filt.chr1.bam SRR17296557.filt.chr1.bam \
+	 --smartLabels \
+	 --outFileName Invivo_proc.npz --binSize 5000 -p 5 &> multiBamSummary.log
 
 
-	plotCorrelation --corData multiBamArray_NKcellsATAC_chr14.npz \
-	 --plotFile NKcellsATAC_chr14_correlation_bin.pdf --outFileCorMatrix NKcellsATAC_chr14_correlation_bin.txt \
-	 --whatToPlot heatmap --corMethod spearman
+	plotCorrelation --corData Invivo_proc.npz \
+	 --plotFile Invivo_proc_correlation_bin.pdf --outFileCorMatrix Invivo_proc_correlation_bin.txt \
+	 --whatToPlot heatmap --corMethod pearson --plotNumbers
+
+	# to change the min number plotted
+	plotCorrelation --corData Invivo_proc.npz \
+	 --plotFile Invivo_proc_correlation_bin.pdf --outFileCorMatrix Invivo_proc_correlation_bin.txt \
+	 --whatToPlot heatmap --corMethod pearson --plotNumbers -min 0.95
+
 
 
 You can copy the resulting file to your local system to view it.
@@ -165,18 +180,32 @@ What do you think?
 - are the clustering results as you would have expected them to be?
 
 
-.. admonition:: Correlation of binned ATAC-seq signal in NK cells.
-   :class: dropdown, warning
+.. list-table:: Figure 2. Correlation of binned ATAC-seq signal in Batf KO *in vivo* data set. Data subset to chr 1.
+   :widths: 25 25
+   :header-rows: 1
 
-   .. image:: figures/NKcellsATAC_chr14_correlation_bin.png
-          :width: 300px
+   * - Pearson correlation, data subset to chr1
+     - Pearson correlation, data subset to chr1, min 0.95
+   * - .. image:: figures/Invivo_proc_correlation_bin.png
+   			:width: 200px
+     - .. image:: figures/Invivo_proc_correlation_bin_2.png
+   			:width: 200px
 
 
 
+.. list-table:: Figure 3. Correlation of binned ATAC-seq signal in Batf KO *in vivo* and *in vitro* data sets. Non subset data.
+   :widths: 25 25
+   :header-rows: 1
 
-In addition to these general procedures, several specialised assay - specific quality metrics exist, which probe signal characteristics related to each method. These are **key QC metrics** to evaluate the experiment and should always be colleced during the QC step. The method specific tutorials are: :doc:`ATACseq <data-qc-atac>` and :doc:`ChIPseq <data-qc-chip.rst>`. 
+   * - Pearson correlation, non-subset data
+     - Spearman correlation, non-subset data
+   * - .. image:: figures/tsao2022_proc.plotCorrelation.pearson.png
+            :width: 200px
+     - .. image:: figures/tsao2022_proc.plotCorrelation.spearman.png
+            :width: 200px
+
+
+In addition to these general procedures, several specialised assay - specific quality metrics exist, which probe signal characteristics related to each method. These are **key QC metrics** to evaluate the experiment and should always be colleced during the QC step. The method specific tutorials are: :doc:`ATACseq <data-qc-atac>` and :doc:`ChIPseq <data-qc-chip>`. 
 
 We can now follow with :doc:`ATACseq specifc <data-qc-atac>` QC methods.
-
-
 

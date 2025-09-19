@@ -80,7 +80,7 @@ We will use data from *in vivo* experiment.
 SRA sample accession numbers are listed in Table 1.
 
 
-.. list-table:: Table 1. ENCODE accession numbers for data set used in this tutorial.
+.. list-table:: Table 1. Samples used in this tutorial.
    :widths: 10 25 25 50
    :header-rows: 1
 
@@ -120,30 +120,31 @@ Normally you process several files from your data set using the same workflow. W
 
 * ``atac_data.sh`` that sets up directory structure and creates symbolic links to data as well as copies smaller files **[RUN ONLY ONCE]**
 
-* ``atac_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
+.. * ``atac_env.sh`` that sets several environmental variables you will use in the exercise: **[RUN EVERY TIME when the connection to Uppmax has been broken, i.e. via logging out]**
 
 
-.. Note::
+.. .. Note::
 	
-	In many commands in this workshop we use certain environmental variables, which are preset for you in the ``*_env.sh`` scripts which are used to set up some tutorials.
-	These variables are:
+.. 	In many commands in this workshop we use certain environmental variables, which are preset for you in the ``*_env.sh`` scripts which are used to set up some tutorials.
+.. 	These variables are:
 
 
-		* ``$USER`` - expands to your user id
+.. 		* ``$USER`` - expands to your user id
 
-		* ``$COURSE_DIR`` - contains path to the course storage directory
+.. 		* ``$COURSE_DIR`` - contains path to the course storage directory
 
 		
 .. * ``$COURSE_ALLOC`` - contains the course CPU allocation
 
 
-Copy the scripts to your home directory and execute them:
+Copy the script to your home directory and execute it:
 
 
 .. code-block:: bash
 
   cp /proj/epi2025/atacseq_proc/atacseq_data.sh .
-  cp /proj/epi2025/atacseq_proc/atacseq_env.sh .
+  
+  ..cp /proj/epi2025/atacseq_proc/atacseq_env.sh .
 
 
   source atacseq_env.sh 
@@ -326,7 +327,9 @@ Key information from ``SRR17296554.dedup_metrics``::
    :class: dropdown, warning
 
 	## METRICS CLASS	picard.sam.DuplicationMetrics
+	
 	LIBRARY	UNPAIRED_READS_EXAMINED	READ_PAIRS_EXAMINED	SECONDARY_OR_SUPPLEMENTARY_RDS	UNMAPPED_READS	UNPAIRED_READ_DUPLICATES	READ_PAIR_DUPLICATES	READ_PAIR_OPTICAL_DUPLICATES	PERCENT_DUPLICATION	ESTIMATED_LIBRARY_SIZE
+	
 	Unknown Library	0	4720408	0	0	0	1389167	0	0.29429	6354197
 
 
