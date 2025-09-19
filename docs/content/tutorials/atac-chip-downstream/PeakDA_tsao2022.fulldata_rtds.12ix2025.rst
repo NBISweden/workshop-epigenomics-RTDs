@@ -487,7 +487,7 @@ analysis:
 We can inspect sample grouping on multidimensional scaling (MDS) plot
 before proceeding:
 
-.. image:: figures/DA/unnamed-chunk-7-1.png
+.. image:: figures/DA/unnamed-chunk-16-1.png
           :width: 600px
 
 
