@@ -144,10 +144,6 @@ Copy the script to your home directory and execute it:
 
   cp /proj/epi2025/atacseq_proc/atacseq_data.sh .
   
-  ..cp /proj/epi2025/atacseq_proc/atacseq_env.sh .
-
-
-  source atacseq_env.sh 
   source atacseq_data.sh
 
 
