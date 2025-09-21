@@ -3,9 +3,9 @@
     :format: html
 
 
-========================
-Schedule (Tentative)
-========================
+=========
+Schedule 
+=========
 
 
 .. contents::
