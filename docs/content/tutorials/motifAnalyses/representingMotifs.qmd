@@ -2,7 +2,7 @@
 title: "Motifs: representing them and searching for hits against a reference"
 format: 
   rst:
-    toc: false
+    toc: true
     toc-depth: 2
     fig-format: png
 date: "`r format(Sys.time(), '%B %d, %Y')`"

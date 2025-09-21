@@ -4,6 +4,10 @@ Motif Analyses with ``monaLisa``
 
 :Date: 2025-09-21
 
+.. contents::
+   :depth: 2
+..
+
 .. raw:: html
 
    <!-- 
@@ -42,8 +46,6 @@ Bioconductor package called
 `monaLisa <https://bioconductor.org/packages/monaLisa/>`__, short for
 **mo**\ tif a\ **na**\ lysis with **Lisa**.
 
-mention benchmaarking papers?
-
 Learning outcomes
 =================
 
@@ -78,7 +80,7 @@ We start by loading the needed packages. If necessary, use
         library(SummarizedExperiment)
       })
 
-      # Note on installing specific ggplot2 version
+      # Note on installing specific ggplot2 version in case the latest version causes problems
       #remotes::install_version("ggplot2", version = "3.5.2")
 
 The Dataset
@@ -609,6 +611,11 @@ plot function provided by the package to do this.
 
 .. _section-1:
 
+The Fos/Jun motif is particularly enriched in bins corresponding to
+negative logFC values, so regions which lost accessibility in the
+BatfKO. Seeing a gradient of enrichment the more extreme the logFC
+values are adds another layer of confidence in the enrichment results.
+
 Binned k-mer enrichment analysis
 --------------------------------
 
@@ -1057,7 +1064,7 @@ Session
 
       ::
 
-         [1] "Sun Sep 21 15:24:42 2025"
+         [1] "Sun Sep 21 16:44:35 2025"
 
    .. code:: r
 

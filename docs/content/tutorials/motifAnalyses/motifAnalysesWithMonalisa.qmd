@@ -2,7 +2,7 @@
 title: "Motif Analyses with `monaLisa`"
 format: 
   rst:
-    toc: false
+    toc: true
     toc-depth: 2
     fig-format: png
 date: "`r format(Sys.time(), '%B %d, %Y')`"

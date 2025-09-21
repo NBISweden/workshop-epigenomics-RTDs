@@ -2,7 +2,11 @@
 Motifs: representing them and searching for hits against a reference
 ====================================================================
 
-:Date: 2025-08-15
+:Date: 2025-09-21
+
+.. contents::
+   :depth: 2
+..
 
 .. raw:: html
 
@@ -10,7 +14,12 @@ Motifs: representing them and searching for hits against a reference
    Author:         Dania Machlab
    About:          This qmd file is used to render the .rst file. To modify or 
                    update the .rst file, please do so in the .qmd file here and 
-                   render it.
+                   render it. After rendering in RStudio, go to the 
+                   workshop-epigenomics-RTDs/docs folder and from the terminal:
+                   1. activate the needed conda env set up as described here
+                   (https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/Contributing.md), 
+                   and 2. run "make html". The resulting html files can be found
+                   under the workshop-epigenomics-RTDs/docs/_build folder.
    "data" folder:  contains the data/files/objects loaded into and used in this 
                    .qmd file.
    -->
@@ -37,14 +46,14 @@ predicted motif hits.
 Learning outcomes
 =================
 
--  understand how motifs can be represented in nucleotide x sequence
-   position matrices.
--  understand the differences between the position frequency matrix
-   (PFM), position probability matrix (PPM), position weight matrix
-   (PWM), and information content matrix (ICM), and learn how these
-   matrices can be constructed.
--  learn how to load PWMs in ``R`` and scan for motif hits against a
-   reference.
+- understand how motifs can be represented in nucleotide x sequence
+  position matrices.
+- understand the differences between the position frequency matrix
+  (PFM), position probability matrix (PPM), position weight matrix
+  (PWM), and information content matrix (ICM), and learn how these
+  matrices can be constructed.
+- learn how to load PWMs in ``R`` and scan for motif hits against a
+  reference.
 
 Libraries
 =========
@@ -102,6 +111,7 @@ Position frequency matrix
 
 As stated, the PFM depicts the frequencies of the nucleotides i.e. the
 number of times each nucleotide occurs at each position along the motif.
+Note that the motif positions are independent of one another.
 
 To illustrate this more we will use the CTCFL motif as an example, read
 in the DNA sequences which we have downloaded from
@@ -392,6 +402,8 @@ string.
 
 .. container::
 
+   ..
+
       **Exercise**
 
       Using the PWM we have created, calculate the score for sequence
@@ -516,7 +528,7 @@ The actual uncertainty :math:`U` per position is
      &= -\sum_{x}p(x)log_2p(x)
    \end{aligned}
 
-The final information content :math:`IC_{final}` per position is:
+\ The final information content :math:`IC_{final}` per position is:
 
 .. math::
 
@@ -1054,21 +1066,21 @@ The contents of this tutorial were inspired by several available
 resources which are listed below and serve as additional reading
 material for those interested:
 
--  David McKay’s book “Information Theory, Inference, and Learning
-   Algorithms” is a great resource with introductions to key concepts as
-   well as deeper dives.
+- David McKay’s book “Information Theory, Inference, and Learning
+  Algorithms” is a great resource with introductions to key concepts in
+  information theory, as well as deeper dives.
 
--  The ``universalmotif`` `Bioconductor
-   package <https://bioconductor.org/packages/universalmotif/>`__
-   contains additional vignettes, including
-   `explanations <%3Chttps://bioconductor.org/packages/release/bioc/vignettes/universalmotif/inst/doc/IntroductionToSequenceMotifs.pdf>`__
-   on the discussed motif matrices and how to derive them, as well as
-   additional material.
+- The ``universalmotif`` `Bioconductor
+  package <https://bioconductor.org/packages/universalmotif/>`__
+  contains additional vignettes, including
+  `explanations <%3Chttps://bioconductor.org/packages/release/bioc/vignettes/universalmotif/inst/doc/IntroductionToSequenceMotifs.pdf>`__
+  on the discussed motif matrices and how to derive them, as well as
+  additional material.
 
--  The ``TFBSTools`` `Bioconductor
-   package <https://bioconductor.org/packages/TFBSTools/>`__ vignette
-   found
-   `here <https://bioconductor.org/packages/release/bioc/vignettes/TFBSTools/inst/doc/TFBSTools.html>`__.
+- The ``TFBSTools`` `Bioconductor
+  package <https://bioconductor.org/packages/TFBSTools/>`__ vignette
+  found
+  `here <https://bioconductor.org/packages/release/bioc/vignettes/TFBSTools/inst/doc/TFBSTools.html>`__.
 
 Session information
 ===================
@@ -1083,7 +1095,7 @@ Session information
 
       ::
 
-         [1] "Fri Aug 15 16:38:30 2025"
+         [1] "Sun Sep 21 16:45:04 2025"
 
    .. code:: r
 
@@ -1095,7 +1107,7 @@ Session information
 
          R version 4.5.1 (2025-06-13)
          Platform: aarch64-apple-darwin20
-         Running under: macOS Sequoia 15.6
+         Running under: macOS Sequoia 15.6.1
 
          Matrix products: default
          BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
@@ -1122,7 +1134,7 @@ Session information
           [8] rtracklayer_1.68.0                       
           [9] BiocIO_1.18.0                            
          [10] GenomicRanges_1.60.0                     
-         [11] RSQLite_2.4.1                            
+         [11] RSQLite_2.4.3                            
          [12] JASPAR2024_0.99.7                        
          [13] BiocFileCache_2.16.0                     
          [14] dbplyr_2.5.0                             
@@ -1144,18 +1156,18 @@ Session information
          [11] vctrs_0.6.5                 pwalign_1.4.0              
          [13] pkgconfig_2.0.3             shape_1.4.6.1              
          [15] crayon_1.5.3                fastmap_1.2.0              
-         [17] caTools_1.18.3              Rsamtools_2.24.0           
+         [17] caTools_1.18.3              Rsamtools_2.24.1           
          [19] rmarkdown_2.29              UCSC.utils_1.4.0           
          [21] DirichletMultinomial_1.50.0 purrr_1.0.4                
          [23] bit_4.6.0                   xfun_0.52                  
          [25] glmnet_4.1-9                cachem_1.1.0               
          [27] jsonlite_2.0.0              blob_1.2.4                 
-         [29] DelayedArray_0.34.1         BiocParallel_1.42.1        
+         [29] DelayedArray_0.34.1         BiocParallel_1.42.2        
          [31] parallel_4.5.1              cluster_2.1.8.1            
          [33] R6_2.6.1                    RColorBrewer_1.1-3         
          [35] Rcpp_1.1.0                  SummarizedExperiment_1.38.1
          [37] iterators_1.0.14            knitr_1.50                 
-         [39] splines_4.5.1               Matrix_1.7-3               
+         [39] splines_4.5.1               Matrix_1.7-4               
          [41] tidyselect_1.2.1            abind_1.4-8                
          [43] yaml_2.3.10                 doParallel_1.0.17          
          [45] codetools_0.2-20            curl_6.4.0                 
