@@ -40,6 +40,7 @@ the experimental read outs we see. In that part, we will focus on ATAC-seq
 data, and look for motifs that could potentially explain the differences in 
 accessibility we see between two conditions.
 
+reference the 2 benchmark papers on methods..
 
 
 delete below: 
