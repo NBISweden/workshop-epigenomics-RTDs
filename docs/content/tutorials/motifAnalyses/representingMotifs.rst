@@ -46,13 +46,13 @@ predicted motif hits.
 Learning outcomes
 =================
 
-- understand how motifs can be represented in nucleotide x sequence
+- Understand how motifs can be represented in nucleotide x sequence
   position matrices.
-- understand the differences between the position frequency matrix
+- Understand the differences between the position frequency matrix
   (PFM), position probability matrix (PPM), position weight matrix
   (PWM), and information content matrix (ICM), and learn how these
   matrices can be constructed.
-- learn how to load PWMs in ``R`` and scan for motif hits against a
+- Learn how to load PWMs in ``R`` and scan for motif hits against a
   reference.
 
 Libraries
@@ -88,8 +88,9 @@ contributes at a particular position. Such matrices can be obtained from
 publicly available databases like `Jaspar <https://jaspar.elixir.no>`__
 (`Sandelin et al. <https://doi.org/10.1093/nar/gkh012>`__) and
 `Hocomoco <https://hocomoco11.autosome.org>`__ (`Vorontsov, Eliseeva,
-Zinkevich, et al. <https://doi.org/10.1093/nar/gkad1077>`__). We will
-focus on Jaspar, which is also available as Bioconductor packages like
+Zinkevich, et al. <https://doi.org/10.1093/nar/gkad1077>`__). In this
+tutorial we will focus on Jaspar, which is also available as
+Bioconductor packages like
 `JASPAR2024 <https://bioconductor.org/packages/JASPAR2024/>`__.
 
 .. raw:: html
@@ -111,12 +112,13 @@ Position frequency matrix
 
 As stated, the PFM depicts the frequencies of the nucleotides i.e. the
 number of times each nucleotide occurs at each position along the motif.
-Note that the motif positions are independent of one another.
+Note that the motif positions are independent of one another in this
+representation.
 
-To illustrate this more we will use the CTCFL motif as an example, read
-in the DNA sequences which we have downloaded from
-`Jaspar <https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites>`__,
-and produce the corresponding PFM. We will use the ``Biostrings``
+To illustrate this more we will use the CTCFL motif as an example by
+reading in the DNA sequences which we have downloaded from
+`Jaspar <https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites>`__
+and producing the corresponding PFM. We will use the ``Biostrings``
 package to read the sequences and represent them as a ``DNAStringSet``
 object, which is a convenient way to represent and manipulate DNA
 sequences in ``R``. See the
@@ -221,7 +223,7 @@ Where :math:`i` is the nucleotide and :math:`i \in \{A, C, G, T\}`, and
 
          [1] 1 1 1 1 1 1 1 1
 
-We can now calculate the probability of observing a certain motif
+Now we can calculate the probability of observing a certain motif
 sequence by multiplying the probabilities of each nucleotide per
 position. Let us look at some examples below.
 
@@ -261,8 +263,8 @@ issue can especially emerge when starting from a low number of sequences
 to construct the PFM. To avoid low count issues, we will add a
 peudo-count :math:`p` of 1 per position, to the PFM. This corresponds to
 a pseudo-count of :math:`p/N` for each entry in the matrix, where
-:math:`N` is the total number number of nucleotides, and :math:`N=4` in
-our case. We will then re-calculate the PPM.
+:math:`N` is the total number of nucleotides, and :math:`N=4` in our
+case. We will then re-calculate the PPM.
 
 .. math::
 
@@ -374,12 +376,12 @@ PWM scores at each position. For example the score for ``CAGACGGC`` is:
 
 In this manner, PWMs can be used to scan for motif matches against a
 reference DNA sequence. The ``matchPWM`` function from the
-``Biostrings`` can be used to do that. Matches with greater that the set
-``min.score`` will be called as predicted binding sites. ``min.score``
-can be set as a fixed empiric number or as a character reflecting the
-percentage of the highest possible score. See the ``matchPWM`` function
-for more details. Let us try scanning for this motif against a given DNA
-string.
+``Biostrings`` can be used to do that. Matches with scores greater that
+the set ``min.score`` will be called as predicted binding sites.
+``min.score`` can be set as a fixed empiric number or as a character
+reflecting the percentage of the highest possible score. See the
+``matchPWM`` function for more details. Let us try scanning for this
+motif against a given DNA string.
 
 .. container:: cell
 
@@ -461,13 +463,14 @@ The **Shannon information content** of :math:`x` is defined as
 :math:`h(x)=log_2\frac{1}{p(x)}`, where :math:`p(x)` is the probability
 of outcome :math:`x`. It is measured in bits since we are using
 :math:`log_2`, and reflects a measure of surprise from an outcome. For
-example, an outcome with probability of 1 is not surprising and provides
-no information: :math:`log_2(1)=0`. Whereas an outcome with a very low
-probability is more surprising and provides more information were it to
-happen. For example, assume the following probabilities of observing the
-outcome of a random variable :math:`X`: :math:`p(x=0)=0.4` and
-:math:`p(x=1)=0.6`. You could imagine a bent coin with binary outcomes.
-The Shannon information content for outcome :math:`x=0` is
+example, an outcome with probability of 1 is not very surprising and
+thus provides no information if observed: :math:`log_2(1)=0`. Whereas an
+outcome with a very low probability is more surprising and provides more
+information were it to happen. For example, assume the following
+probabilities of observing the outcome of a random variable :math:`X`:
+:math:`p(x=0)=0.4` and :math:`p(x=1)=0.6`. You could imagine a bent coin
+with binary outcomes. The Shannon information content for outcome
+:math:`x=0` is
 :math:`h(x=0)=log_2\frac{1}{p(x=0)}=log_2\frac{1}{0.4}\approx1.322`.
 
 The **entropy** represents the average Shannon information content of an
@@ -495,17 +498,18 @@ the entropy is the uncertainty. You may notice that it is maximized when
 we have uniform probabilities.
 
 Coming back to our motif, we want to calculate the bits per position,
-which reflect the degree of conservation of the positions. We calculate
-this by taking the maximum uncertainty per position and subtracting the
-actual uncertainty at that position. As mentioned, uncertainty (entropy)
-is maximum when all outcomes have equal probabilities. In our case, the
-outcome is the specific instance of a nucleotide. We thus have 4
-outcomes (:math:`A`, :math:`C`, :math:`G`, and :math:`T`). In a
-scenario, where all nucleotides are equally likely, there is no
-*preference* for any particular nucleotide. Assuming equal probabilities
-of :math:`\frac{1}{N}` for each nucleotide, where :math:`N` is the total
-number of nucleotides, the maximum entropy, or total information content
-:math:`IC_{total}`, can be calculated as follows:
+and use that to reflect the degree of conservation of the positions. We
+calculate this by taking the maximum uncertainty per position and
+subtracting the actual uncertainty at that position. As mentioned,
+uncertainty (entropy) is maximum when all outcomes have equal
+probabilities. In our case, the outcome is the specific instance of a
+nucleotide. We thus have 4 outcomes (:math:`A`, :math:`C`, :math:`G`,
+and :math:`T`). In a scenario, where all nucleotides are equally likely,
+there is no *preference* for any particular nucleotide. Assuming equal
+probabilities of :math:`\frac{1}{N}` for each nucleotide, where
+:math:`N` is the total number of nucleotides, the maximum entropy, or
+total information content :math:`IC_{total}`, can be calculated as
+follows:
 
 .. math::
 
@@ -540,7 +544,7 @@ The actual uncertainty :math:`U` per position is
 
 When :math:`U=0` (when one nucleotide has a probability of 1),
 :math:`IC_{final}=2-0=2` and you know the nucleotide with no
-uncertainty.
+uncertainty. This reflects a highly conserved nucleotide.
 
 Following our example motif, let us calculate :math:`IC_{final}` for
 each position.
@@ -659,7 +663,7 @@ probability of each nucleotide by :math:`IC_{final}` per position.
       |image1|
 
 This is a useful way to visualize motifs, and get a sense of how
-conserved the sequence is.
+conserved the sequence is at each position.
 
 Scanning for motif hits
 =======================
@@ -793,7 +797,7 @@ vertebrate TFs.
    .. code:: r
 
       # pwmList is a PWMatrixList object
-      # we can look at the structure and information available on the first motif
+      # we can look at the structure and information available for the first motif
       str(pwmList[[1]])
 
    .. container:: cell-output cell-output-stdout
@@ -916,17 +920,17 @@ vertebrate TFs.
 
    .. code:: r
 
-      # disconnect
+      # disconnect Db
       dbDisconnect(JASPARConnect)
 
-As we have seen, PWMs can be used to predict TFBSs against a reference
-sequence. To illustrate this, let us use some of the PWMs we have loaded
-from Jaspar above, to scan against hits at the gene promoters from the
-UCSC mouse reference genome. We will use the ``findMotifHits`` function
-from the ``monaLisa`` package to scan for motif hits. This function uses
-``Biostrings::matchPWM`` internally to scan for matches, but
-additionally allows for the ``subject`` argument to accept
-``DNAStringSet`` or ``GRanges`` objects. It also allows for
+As we have seen, PWMs can be used to scan for potential TFBSs against a
+reference sequence. To illustrate this, let us use some of the PWMs we
+have loaded from Jaspar above, to scan against hits at the gene
+promoters from the UCSC mouse reference genome. We will use the
+``findMotifHits`` function from the ``monaLisa`` package to scan for
+motif hits. This function uses ``Biostrings::matchPWM`` internally to
+scan for matches, but additionally allows for the ``subject`` argument
+to accept ``DNAStringSet`` or ``GRanges`` objects. It also allows for
 parallelization across PWMs with the ``BPPARAM`` argument.
 
 .. container:: cell
@@ -987,12 +991,12 @@ parallelization across PWMs with the ``BPPARAM`` argument.
 
    .. code:: r
 
-      # scan for motif hits
+      # scan for motif hits with 4 cores
       hits <- findMotifHits(query = pwms,
                             subject = promoterSeqs,
                             min.score = 10.0,
                             method = "matchPWM",
-                            BPPARAM = BiocParallel::MulticoreParam(5))
+                            BPPARAM = BiocParallel::MulticoreParam(4))
       hits
 
    .. container:: cell-output cell-output-stdout
@@ -1053,18 +1057,19 @@ It is good to remember that these are predicted TF binding sites. By
 making use of additionally available information, like ATAC-seq data,
 and focusing on accessible regions of the DNA, one could reduce the
 number of false hits. Ultimately, to find true binding sites for a
-particular TF, ChIP-seq experiments are needed. Still, as we will see in
-the section to come, predicted binding sites can be useful to look for
-TFs that are consistently enriched, and come up with a list of candidate
-TFs that could be playing key roles in our biological system of
-interest.
+particular TF, experiments such as ChIP-seq are necessary. Still, as we
+will see in the section to come, predicted binding sites can be useful
+to look for TFs that are consistently and robustly enriched. These are
+TFs that could be playing key roles in our biological system of interest
+and could be followed up with functional experiments to confirm our
+findings.
 
-Additional material
-===================
+Additional resources
+====================
 
 The contents of this tutorial were inspired by several available
 resources which are listed below and serve as additional reading
-material for those interested:
+material:
 
 - David McKay’s book “Information Theory, Inference, and Learning
   Algorithms” is a great resource with introductions to key concepts in
@@ -1095,7 +1100,7 @@ Session information
 
       ::
 
-         [1] "Sun Sep 21 16:45:04 2025"
+         [1] "Sun Sep 21 21:49:46 2025"
 
    .. code:: r
 

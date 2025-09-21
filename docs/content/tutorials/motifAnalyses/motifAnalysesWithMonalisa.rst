@@ -50,12 +50,14 @@ Learning outcomes
 =================
 
 - Be aware of potential sequence composition biases before motif
-  enrichment analysis
+  enrichment analysis.
 
 - Perfrom binned motif enrichment analysis and be able to interpret the
-  results
+  results.
 
-- Select motifs via regression framework
+- Select motifs via regression framework.
+
+- Understand the nuances and differences between both approaches.
 
 Libraries
 =========
@@ -78,6 +80,7 @@ We start by loading the needed packages. If necessary, use
         library(JASPAR2024)
         library(TFBSTools)
         library(SummarizedExperiment)
+        library(RSQLite)
       })
 
       # Note on installing specific ggplot2 version in case the latest version causes problems
@@ -86,21 +89,21 @@ We start by loading the needed packages. If necessary, use
 The Dataset
 ===========
 
-We give a quick recap on the dataset we are dealing with: When CD8+
-T-cells encounter antigens they expand and differentiate into effector
-cells, undergoing marked changes on the chromatin and gene expression
-levels. `Tsao, Kaminski et
-al. <https://doi.org/10.1126/sciimmunol.abi4919>`__ investigated how
-these changes depend on the basic leucine zipper ATF-like transcription
-factor Batf. To this end, they generated inducible Batf conditional
-knock out (cKO) CD8+ T-cells derived from the P14 T-cell receptor
-transgenic mouse. The Batf cKO P14 CD8+ T-cells were transferred to
-recipient mice, which were then infected with the lymphocytic
-choriomeningitis virus to drive the CD8+ T-cells into differentiation to
-effector cells. These cells were sorted and collected for ATAC-seq. Here
-we use this dataset to look at the differences in accessibility between
-``Batf-cKO`` and ``Wt`` and ask the question, which TFs could explain
-these observed changes in accessibility?
+We give a quick recap on the dataset we are dealing with and which was
+used in the ATAC-seq sections of the tutorials: When CD8+ T-cells
+encounter antigens they expand and differentiate into effector cells,
+undergoing marked changes on the chromatin and gene expression levels.
+`Tsao, Kaminski et al. <https://doi.org/10.1126/sciimmunol.abi4919>`__
+investigated how these changes depend on the basic leucine zipper
+ATF-like transcription factor Batf. To this end, they generated
+inducible Batf conditional knock out (cKO) CD8+ T-cells derived from the
+P14 T-cell receptor transgenic mouse. The Batf cKO P14 CD8+ T-cells were
+transferred to recipient mice, which were then infected with the
+lymphocytic choriomeningitis virus to drive the CD8+ T-cells into
+differentiation to effector cells. These cells were sorted and collected
+for ATAC-seq. Here we use this dataset to look at the differences in
+accessibility between ``Batf-cKO`` and ``Wt`` and ask the question,
+which TFs could explain these observed changes in accessibility?
 
 We start by loading in the ``RDS`` file called
 ``FiltPeaks.DA.TMM.annot.rds`` which was generated in previous
@@ -279,13 +282,12 @@ sequence biases associated with the log-fold changes in accessibility?
       |image1|
 
 We see no dependence of the logFC in accessibility on the GC content.
-This agrees with what we have seen in the previous quality control parts
-of the tutorials.
+This is also what we have seen previously.
 
 As mentioned, we posed the question: which motifs could explain the
-changes in accessibility we see between KO and Wt. To predict and select
-potential motifs, we will use the approaches available in the
-``monaLisa`` package, which offers two main approaches:
+changes in accessibility we see between ``Batf-cKO`` and ``Wt``. To
+predict and select potential motifs, we will use the ``monaLisa``
+package, which offers two main approaches:
 
 1. Binned enrichment approach: the enhancer sequences are binned by
    their logFC, and motif enrichment is calculated in each bin vs the
@@ -337,8 +339,8 @@ corresponding to the median region size.
    .. code:: r
 
       # resize the regions and trim out-of bounds ranges
-      grAdj <- trim(resize(gr, width = median(width(gr)), fix = "center"))
-      summary(width(grAdj))
+      gr <- trim(resize(gr, width = median(width(gr)), fix = "center"))
+      summary(width(gr))
 
    .. container:: cell-output cell-output-stdout
 
@@ -358,7 +360,7 @@ set a min absolute logFC above which to bin.
    .. code:: r
 
       # plot log2FC histogram
-      ggplot(data = data.frame(logFC = grAdj$logFC)) + 
+      ggplot(data = data.frame(logFC = gr$logFC)) + 
         geom_histogram(aes(x = logFC), bins = 100, fill = "steelblue") + 
         xlab("Batf cKO vs Wt logFC") + 
         theme_bw()
@@ -370,7 +372,7 @@ set a min absolute logFC above which to bin.
    .. code:: r
 
       # bin the histogram
-      bins <- bin(x = grAdj$logFC, binmode = "equalN", nElement = 800, 
+      bins <- bin(x = gr$logFC, binmode = "equalN", nElement = 800, 
                   minAbsX = 0.3)
 
       table(bins)
@@ -388,7 +390,7 @@ set a min absolute logFC above which to bin.
    .. code:: r
 
       # plot binned histogram
-      plotBinDensity(x = grAdj$logFC, b = bins) + 
+      plotBinDensity(x = gr$logFC, b = bins) + 
         xlab("logFC")
 
    .. container:: cell-output-display
@@ -397,14 +399,14 @@ set a min absolute logFC above which to bin.
 
 Before proceeding with the enrichment analysis, let’s check if there is
 any sequence bias associated with the bins. ``monaLisa`` offers some
-plot functions for this purpose.
+plotting functions for this purpose.
 
 .. container:: cell
 
    .. code:: r
 
       # extract DNA sequences of the enhancers
-      seqs <- getSeq(BSgenome.Mmusculus.UCSC.mm39, grAdj)
+      seqs <- getSeq(BSgenome.Mmusculus.UCSC.mm39, gr)
 
       # by GC fraction
       plotBinDiagnostics(seqs = seqs, bins = bins, aspect = "GCfrac")
@@ -459,11 +461,13 @@ per bin vs all other bins, which is the default option in
 options, which can be controlled via the ``background`` parameter, see
 the help page of the function.
 
-The enrichment test is using Fisher’s exact test. We illustrate this
-more with the contingency table below. Given a specific bin, for each
-motif, we end up with a table of weighted counts as shown below. They
-are weighted to correct for sequence composition differences between the
-foreground and background sets.
+The p-value for the enrichment test is calculated using Fisher’s exact
+test. We illustrate this more with the contingency table below. Given a
+specific bin, for each motif, we end up with a table of weighted counts
+as shown below. They are weighted to correct for sequence composition
+differences between the foreground and background sets, where foreground
+reflects the sequences belonging to the bin being testes, and background
+sequences from all other bins.
 
 ============== =========== ==============
 \              with TF hit with no TF hit
@@ -501,13 +505,15 @@ foreground and background sets.
          colData names(6): bin.names bin.lower ... totalWgtForeground
            totalWgtBackground
 
-The resulting object is a ``SummarizedExperiment`` class. If you are
-unfamiliar with this class, check
-`here <https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html>`__
-for more details. Briefly, these classes are a convenient way to store
-matrices of the same dimensions as well as any row and column metadata.
-In our case, the rows correspond to the motifs and the columns to the
-bins. Let us examine this output in more detail.
+The resulting object is a ``SummarizedExperiment`` object. Briefly,
+these classes are a convenient way to store matrices of the same
+dimensions as well as any row and column metadata. In our case, the rows
+correspond to the motifs and the columns to the bins. The figure below
+illustrates what this class of objects looks like and more details can
+be found on
+`Bioconductor <https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html>`__.
+
+|image6|
 
 .. container:: cell
 
@@ -554,7 +560,7 @@ bins. Let us examine this output in more detail.
          MA0107.1   0.17052358
 
 Let’s visualize the results of the enrichment analysis. We can use the
-plot function provided by the package to do this.
+plot function provided by ``monaLisa`` to do this.
 
 .. container:: cell
 
@@ -582,7 +588,7 @@ plot function provided by the package to do this.
 
    .. container:: cell-output-display
 
-      |image6|
+      |image7|
 
    .. code:: r
 
@@ -607,14 +613,19 @@ plot function provided by the package to do this.
 
    .. container:: cell-output-display
 
-      |image7|
+      |image8|
 
 .. _section-1:
 
 The Fos/Jun motif is particularly enriched in bins corresponding to
 negative logFC values, so regions which lost accessibility in the
-BatfKO. Seeing a gradient of enrichment the more extreme the logFC
-values are adds another layer of confidence in the enrichment results.
+BatfKO. Coming back to our earlier note of a tendency to have GC-poor
+sequences in the first bin with the most negative logFCs, we don’t see
+purely AT-rich motifs enriched in this bin, hinting that the internal
+sequence bias corrections were good enough. Furthermore, The rest of the
+bins with negative logFCs also show enrichments of the Fos/Jun motif.
+Seeing a gradient of enrichment the more extreme the logFC values are
+adds another layer of confidence in the enrichment results.
 
 Binned k-mer enrichment analysis
 --------------------------------
@@ -662,7 +673,7 @@ will set the kmer size to 6 base pairs.
 
    .. code:: r
 
-      # plot enriched kmers and the motifs they are similar to
+      # plot kmers and motif similarity
       maxwidth <- max(sapply(TFBSTools::Matrix(pfmSel), ncol))
       seqlogoGrobs <- lapply(pfmSel, seqLogoGrob, xmax = maxwidth)
       hmSeqlogo <- rowAnnotation(logo = annoSeqlogo(seqlogoGrobs, which = "row"),
@@ -679,7 +690,10 @@ will set the kmer size to 6 base pairs.
 
    .. container:: cell-output-display
 
-      |image8|
+      |image9|
+
+We can appreciate the enriched k-mers corresponding to the enriched
+motifs from earlier.
 
 Regression-based analysis
 =========================
@@ -693,7 +707,19 @@ in accessibilty we see across the enhancers. In ``monaLisa``, stability
 selection with randomized lasso is the implemented regression method of
 choice. For more details about the method, see the details section in
 the ``randLassoStabSel`` function, as well as the publication from
-Meinshausen and Bühlmann (ref here).
+`Meinshausen and
+Bühlmann <https://doi.org/10.1111/j.1467-9868.2010.00740.x>`__. Briefly,
+with lasso stability selection, the lasso regression is performed
+multiple times on subsets of the response vector and predictor matrix,
+and each predictor (TF) end up with a selection probability which is
+simply the number of times it was selected divided by the total number
+of times a regression was done. With the randomized lasso, a *weakness*
+parameter is additionally used to vary the lasso penalty term λ to a
+randomly chosen value between [λ, λ/weakness] for each predictor. This
+type of regularization has advantages in cases where the number of
+predictors exceeds the number of observations, in selecting variables
+consistently, demonstrating better error control and not depending
+strongly on the penalization parameter (Meinshausen and Bühlmann 2010).
 
 First, we will create the predictor matrix in our regression framework.
 This will consist of the predicted TF binding sites (TFBSs) across the
@@ -759,7 +785,7 @@ enhancers, using a minimum score of 10 for a match.
 
    .. code:: r
 
-      # remove TF motifs with 0 binding sites in all regions
+      # remove TF motifs with 0 binding sites (if any) in all regions
       zero_TF <- colSums(TFBSmatrix) == 0
       sum(zero_TF)
 
@@ -813,7 +839,7 @@ results.
 
       # run randomized lasso stability selection
       set.seed(123)
-      se <- randLassoStabSel(x = TFBSmatrix, y = grAdj$logFC, cutoff = 0.8)
+      se <- randLassoStabSel(x = TFBSmatrix, y = gr$logFC, cutoff = 0.8)
       se
 
    .. container:: cell-output cell-output-stdout
@@ -845,23 +871,22 @@ results.
 
 As mentioned, motifs are competing against each other for selection
 here. A known challenge with regression methods is colinearity between
-the predictors, or the TFBSs in our case. It is thus worth keeping in
-mind to focus on interpreting the motifs rather than the particular TF
-name. If we have two TFs with highly similar motifs explaining the
-logFC, only one of them may end up being selected.
-
-Comment on how it compares to motif enrichment results..
+the predictors. This is worth keeping in mind for very highly correlated
+TFBSs. If we have two TFs with highly similar motifs explaining the
+logFC, only one of them may end up being selected. It is also worth
+remembering to focus on interpreting the motifs rather than the
+particular TF name.
 
 Let’s have a look at the stability paths of the motifs. These paths show
 the selection probability as a function of the regularization step. The
 strength of the regularization increases from left to right and the
-stronger the regularization, the less motifs can be selected. The motifs
+stronger the regularization, the less motifs are selected. The motifs
 above the minimum selection probability at the last step are the final
 selected ones. These paths can give an indication of how strongly a
 particular motif can explain the logFC in accessibility, by being
 selected fairly early and then consistently along the regulalrization
 steps. It can also show how well the selected motifs separate from the
-non-selected ones if the signal is strong.
+non-selected ones and how strong the signal is.
 
 .. container:: cell
 
@@ -871,10 +896,11 @@ non-selected ones if the signal is strong.
 
    .. container:: cell-output-display
 
-      |image9|
+      |image10|
 
 Based on these, BATF3 is the first motif to be selected which indicates
 that this motif quite strongly explains the logFC compared to the rest.
+This may be expected since this TF was knocked down.
 
 Let’s look at where the GC and CpG content predictors fall on these
 paths.
@@ -888,7 +914,7 @@ paths.
 
    .. container:: cell-output-display
 
-      |image10|
+      |image11|
 
 They have very low selection probabilities and were not contributing to
 explaining the logFC in accessibility. What if we want to get a sense of
@@ -902,19 +928,19 @@ by the sign of the correlation to the logFC vector.
 
    .. code:: r
 
-      plotSelectionProb(se, directional = TRUE, ylimext = 4)
+      plotSelectionProb(se, directional = TRUE, ylimext = 1) 
 
    .. container:: cell-output-display
 
-      |image11|
+      |image12|
 
 BATF3, Runx1 and FOSL1::JUND explain negative changes in accessibility,
 so enhancers which were more accessible in Wt and lost that
 accessibility in the Batf-KO. The motifs for BATF3 and FOSL1::JUND were
 also enriched in the binned approach, in bins with lower logFC values.
 Interestingly Runx1 only shows up here. Let’s have a look at the motif
-seqlogo to see if that motif came up in the enrichment approach with
-another TF.
+seqlogo to see if that motif came up in the enrichment approach under
+another TF name.
 
 .. container:: cell
 
@@ -925,20 +951,29 @@ another TF.
       JASPARConnect <- RSQLite::dbConnect(RSQLite::SQLite(), db(JASPAR2024))
       pfm <- getMatrixByID(x = JASPARConnect, ID = "MA0002.3")
       RSQLite::dbDisconnect(JASPARConnect)
+      name(pfm)
+
+   .. container:: cell-output cell-output-stdout
+
+      ::
+
+         [1] "Runx1"
+
+   .. code:: r
 
       # plot seqlogo
       seqLogo(x = toICM(pfm))
 
    .. container:: cell-output-display
 
-      |image12|
+      |image13|
 
 We did not see this motif in the binned approach. Perhaps this could
 only be selected in context with the rest of the motifs. We can also
-have a closer look at some enhancers which have predicted binding sites
-for a motif of interest, ordering by absolute logFC in accessibility as
-a means of ranking the most important ones. Let’s look at such top
-enhancers for the Runx1 motif.
+have a closer look at some of the enhancers which have predicted binding
+sites for a motif of interest, ordering by absolute logFC in
+accessibility as a means of ranking the most important ones. Let’s look
+at such top enhancers for the Runx1 motif.
 
 .. container:: cell
 
@@ -960,8 +995,8 @@ enhancers for the Runx1 motif.
       i <- which(assay(se, "x")[, TF] > 0) 
 
       # order by absolute logFC
-      o <- order(abs(grAdj$logFC[i]), decreasing = TRUE)
-      grAdj[i][o]
+      o <- order(abs(gr$logFC[i]), decreasing = TRUE)
+      gr[i][o]
 
    .. container:: cell-output cell-output-stdout
 
@@ -1051,6 +1086,17 @@ reading material.
     Biotechnology Journal, 23*, Article
     1274-1287. https://doi.org/10.1016/j.csbj.2024.03.016
 
+- Stability selection paper: Meinshausen, N., & Bühlmann, P. (2010).
+  Stability selection. *Journal of the Royal Statistical Society: Series
+  B (Statistical Methodology), 72*\ (4),
+  417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
+
+- Improved error bounds on stability selection: Shah, R. D., & Samworth,
+  R. J. (2013). Variable selection with error control: Another look at
+  stability selection. *Journal of the Royal Statistical Society: Series
+  B (Statistical Methodology), 75*\ (1),
+  55–80. https://doi.org/10.1111/j.1467-9868.2011.01034.x
+
 Session
 =======
 
@@ -1064,7 +1110,7 @@ Session
 
       ::
 
-         [1] "Sun Sep 21 16:44:35 2025"
+         [1] "Sun Sep 21 21:48:34 2025"
 
    .. code:: r
 
@@ -1093,73 +1139,73 @@ Session
          [8] methods   base     
 
          other attached packages:
-          [1] SummarizedExperiment_1.38.1        Biobase_2.68.0                    
-          [3] MatrixGenerics_1.20.0              matrixStats_1.5.0                 
-          [5] TFBSTools_1.46.0                   JASPAR2024_0.99.7                 
-          [7] BiocFileCache_2.16.0               dbplyr_2.5.0                      
-          [9] BSgenome.Mmusculus.UCSC.mm39_1.4.3 BSgenome_1.76.0                   
-         [11] rtracklayer_1.68.0                 BiocIO_1.18.0                     
-         [13] Biostrings_2.76.0                  XVector_0.48.0                    
-         [15] GenomicRanges_1.60.0               GenomeInfoDb_1.44.0               
-         [17] IRanges_2.42.0                     S4Vectors_0.46.0                  
-         [19] BiocGenerics_0.54.0                generics_0.1.4                    
-         [21] circlize_0.4.16                    ComplexHeatmap_2.24.1             
-         [23] ggplot2_3.5.2                      BiocParallel_1.42.2               
-         [25] monaLisa_1.14.0                   
+          [1] RSQLite_2.4.3                      SummarizedExperiment_1.38.1       
+          [3] Biobase_2.68.0                     MatrixGenerics_1.20.0             
+          [5] matrixStats_1.5.0                  TFBSTools_1.46.0                  
+          [7] JASPAR2024_0.99.7                  BiocFileCache_2.16.0              
+          [9] dbplyr_2.5.0                       BSgenome.Mmusculus.UCSC.mm39_1.4.3
+         [11] BSgenome_1.76.0                    rtracklayer_1.68.0                
+         [13] BiocIO_1.18.0                      Biostrings_2.76.0                 
+         [15] XVector_0.48.0                     GenomicRanges_1.60.0              
+         [17] GenomeInfoDb_1.44.0                IRanges_2.42.0                    
+         [19] S4Vectors_0.46.0                   BiocGenerics_0.54.0               
+         [21] generics_0.1.4                     circlize_0.4.16                   
+         [23] ComplexHeatmap_2.24.1              ggplot2_3.5.2                     
+         [25] BiocParallel_1.42.2                monaLisa_1.14.0                   
 
          loaded via a namespace (and not attached):
           [1] DBI_1.2.3                   bitops_1.0-9               
           [3] stabs_0.6-4                 rlang_1.1.6                
           [5] magrittr_2.0.3              clue_0.3-66                
           [7] GetoptLong_1.0.5            compiler_4.5.1             
-          [9] RSQLite_2.4.3               png_0.1-8                  
-         [11] vctrs_0.6.5                 pwalign_1.4.0              
-         [13] pkgconfig_2.0.3             shape_1.4.6.1              
-         [15] crayon_1.5.3                fastmap_1.2.0              
-         [17] labeling_0.4.3              caTools_1.18.3             
-         [19] Rsamtools_2.24.1            rmarkdown_2.29             
-         [21] UCSC.utils_1.4.0            DirichletMultinomial_1.50.0
-         [23] purrr_1.0.4                 bit_4.6.0                  
-         [25] xfun_0.52                   glmnet_4.1-9               
-         [27] cachem_1.1.0                jsonlite_2.0.0             
-         [29] blob_1.2.4                  DelayedArray_0.34.1        
-         [31] parallel_4.5.1              cluster_2.1.8.1            
-         [33] R6_2.6.1                    RColorBrewer_1.1-3         
-         [35] Rcpp_1.1.0                  iterators_1.0.14           
-         [37] knitr_1.50                  Matrix_1.7-4               
-         [39] splines_4.5.1               tidyselect_1.2.1           
-         [41] abind_1.4-8                 yaml_2.3.10                
-         [43] doParallel_1.0.17           codetools_0.2-20           
-         [45] curl_6.4.0                  lattice_0.22-7             
-         [47] tibble_3.3.0                withr_3.0.2                
-         [49] evaluate_1.0.4              survival_3.8-3             
-         [51] pillar_1.11.0               filelock_1.0.3             
-         [53] KernSmooth_2.23-26          foreach_1.5.2              
-         [55] RCurl_1.98-1.17             scales_1.4.0               
-         [57] gtools_3.9.5                glue_1.8.0                 
-         [59] seqLogo_1.74.0              tools_4.5.1                
-         [61] TFMPvalue_0.0.9             GenomicAlignments_1.44.0   
-         [63] XML_3.99-0.18               Cairo_1.6-2                
-         [65] tidyr_1.3.1                 colorspace_2.1-1           
-         [67] GenomeInfoDbData_1.2.14     restfulr_0.0.16            
-         [69] cli_3.6.5                   S4Arrays_1.8.1             
-         [71] dplyr_1.1.4                 gtable_0.3.6               
-         [73] digest_0.6.37               ggrepel_0.9.6              
-         [75] SparseArray_1.8.0           rjson_0.2.23               
-         [77] farver_2.1.2                memoise_2.0.1              
-         [79] htmltools_0.5.8.1           lifecycle_1.0.4            
-         [81] httr_1.4.7                  GlobalOptions_0.1.2        
-         [83] bit64_4.6.0-1              
+          [9] png_0.1-8                   vctrs_0.6.5                
+         [11] pwalign_1.4.0               pkgconfig_2.0.3            
+         [13] shape_1.4.6.1               crayon_1.5.3               
+         [15] fastmap_1.2.0               labeling_0.4.3             
+         [17] caTools_1.18.3              Rsamtools_2.24.1           
+         [19] rmarkdown_2.29              UCSC.utils_1.4.0           
+         [21] DirichletMultinomial_1.50.0 purrr_1.0.4                
+         [23] bit_4.6.0                   xfun_0.52                  
+         [25] glmnet_4.1-9                cachem_1.1.0               
+         [27] jsonlite_2.0.0              blob_1.2.4                 
+         [29] DelayedArray_0.34.1         parallel_4.5.1             
+         [31] cluster_2.1.8.1             R6_2.6.1                   
+         [33] RColorBrewer_1.1-3          Rcpp_1.1.0                 
+         [35] iterators_1.0.14            knitr_1.50                 
+         [37] Matrix_1.7-4                splines_4.5.1              
+         [39] tidyselect_1.2.1            abind_1.4-8                
+         [41] yaml_2.3.10                 doParallel_1.0.17          
+         [43] codetools_0.2-20            curl_6.4.0                 
+         [45] lattice_0.22-7              tibble_3.3.0               
+         [47] withr_3.0.2                 evaluate_1.0.4             
+         [49] survival_3.8-3              pillar_1.11.0              
+         [51] filelock_1.0.3              KernSmooth_2.23-26         
+         [53] foreach_1.5.2               RCurl_1.98-1.17            
+         [55] scales_1.4.0                gtools_3.9.5               
+         [57] glue_1.8.0                  seqLogo_1.74.0             
+         [59] tools_4.5.1                 TFMPvalue_0.0.9            
+         [61] GenomicAlignments_1.44.0    XML_3.99-0.18              
+         [63] Cairo_1.6-2                 tidyr_1.3.1                
+         [65] colorspace_2.1-1            GenomeInfoDbData_1.2.14    
+         [67] restfulr_0.0.16             cli_3.6.5                  
+         [69] S4Arrays_1.8.1              dplyr_1.1.4                
+         [71] gtable_0.3.6                digest_0.6.37              
+         [73] ggrepel_0.9.6               SparseArray_1.8.0          
+         [75] rjson_0.2.23                farver_2.1.2               
+         [77] memoise_2.0.1               htmltools_0.5.8.1          
+         [79] lifecycle_1.0.4             httr_1.4.7                 
+         [81] GlobalOptions_0.1.2         bit64_4.6.0-1              
 
 .. |image1| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-4-1.png
 .. |image2| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-6-1.png
 .. |image3| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-6-2.png
 .. |image4| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-1.png
 .. |image5| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-2.png
-.. |image6| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-1.png
-.. |image7| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-2.png
-.. |image8| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-12-1.png
-.. |image9| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-16-1.png
-.. |image10| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-17-1.png
-.. |image11| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-18-1.png
-.. |image12| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-19-1.png
+.. |image6| image:: figures/SE.png
+.. |image7| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-1.png
+.. |image8| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-2.png
+.. |image9| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-12-1.png
+.. |image10| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-16-1.png
+.. |image11| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-17-1.png
+.. |image12| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-18-1.png
+.. |image13| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-19-1.png
