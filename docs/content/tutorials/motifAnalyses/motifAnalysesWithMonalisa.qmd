@@ -32,8 +32,6 @@ So far, we have seen how transcription factor binding sites (TFBSs) or motifs ca
 
 Now we will make use of these functionalities and use additional tools to enrich or select for TFs are likely to be key players in experimental differences we observe between different conditions. As mentioned, the effect of TF binding can be indirectly observed via associated changes in transcription, chromatin accessibility, DNA methylation and histone modifications. Given such data types, one may for example pose the question: which TFs could be explaining the observed changes in accessibility we see? To address such questions, we will be using the Bioconductor package called [monaLisa](https://bioconductor.org/packages/monaLisa/), short for **mo**tif a**na**lysis with **Lisa**.
 
-mention benchmaarking papers?
-
 # Learning outcomes
 
 -   Be aware of potential sequence composition biases before motif enrichment analysis
@@ -64,7 +62,7 @@ suppressPackageStartupMessages({
   library(SummarizedExperiment)
 })
 
-# Note on installing specific ggplot2 version
+# Note on installing specific ggplot2 version in case the latest version causes problems
 #remotes::install_version("ggplot2", version = "3.5.2")
 ```
 
@@ -255,6 +253,8 @@ plotMotifHeatmaps(x = seSel, which.plots = c("log2enr", "negLog10Padj"),
 ```
 
 ## 
+
+The Fos/Jun motif is particularly enriched in bins corresponding to negative logFC values, so regions which lost accessibility in the BatfKO. Seeing a gradient of enrichment the more extreme the logFC values are adds another layer of confidence in the enrichment results.
 
 ## Binned k-mer enrichment analysis
 
