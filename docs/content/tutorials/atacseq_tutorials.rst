@@ -30,8 +30,6 @@ ATAC-seq can been used to
    			:width: 400px
 
 
-:raw-html:`<br />`
-
 The tutorials in this section cover the steps oulined on Figure 2.
 
 
@@ -53,8 +51,9 @@ These are tutorials for analysis an QC of ATAC-seq data:
    Quality Control for ATAC-seq <data-preproc/data-qc-atac.rst>
    ATACseq: Peak Detection <ATACseq/lab-atacseq-bulk.rst>
    Peak Annotation <atac-chip-downstream/PeakAnnot_tsao2022.fulldata_rtds.12ix2025.rst>
-   Transcription Factor Footprinting <ATACseq/lab-atac-TFfootprnt.rst>
    Differential Accessibility in ATAC-seq data <atac-chip-downstream/PeakDA_tsao2022.fulldata_rtds.12ix2025.rst>
+   Predicting Relevant Transcription Factors <motifAnalyses/motifAnalyses.rst>
+   Transcription Factor Footprinting <ATACseq/lab-atac-TFfootprnt.rst>
 
 
 Tutorials for processing the results after identification of occupancy regions (i.e. peaks or broad domains) can be found in :doc:`Downstream Processing <downstream_tutorials>` .
