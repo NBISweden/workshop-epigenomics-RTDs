@@ -285,7 +285,7 @@ How many alignments are kept?
 	awk '{sum += $3} END {print sum}' SRR17296554.blstMT_filt.idxstats
 
 
-9440817 alignemnts are retained after filtering (out of initial 11335599).
+9440817 alignments are retained after filtering (out of initial 11335599).
 
 
 Finally, we can mark / remove duplicated alignments.

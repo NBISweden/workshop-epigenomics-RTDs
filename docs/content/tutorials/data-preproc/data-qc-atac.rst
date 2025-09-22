@@ -377,6 +377,8 @@ Calculate and log2 transform the signal around TSS:
 
 	librarySize <- estLibSize(bamFiles)
 
+	seqlev="1"
+	
 	NTILE <- 101
 	dws <- ups <- 1010
 	sigs <- enrichedFragments(gal=objs[c("NucleosomeFree",
