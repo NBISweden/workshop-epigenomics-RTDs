@@ -36,7 +36,7 @@ These are tutorials for quality control and processing of ChIP-seq data:
 
    ChIPseq: data processing, QC and narrow peak detection <chipseqProc/lab-chipseq-processing.rst>
    ChIPseq: broad peaks detection <chipseqBroadPeaks/lab-broadpeaks.rst>
-   Peak Annotation <atac-chip-downstream/lab-PeakAnnot.rst>
+   Peak Annotation <atac-chip-downstream/PeakAnnot_tsao2022.fulldata_rtds.12ix2025.rst>
    Detection of differential occupancy in ChIP-seq data using DiffBind <diffBind/lab-diffBinding.rst>
 
-Tutorials for processing the results after identification of occupancy regions (i.e. peaks or broad domains) can be found in :doc:`Downstream Processing <./downstream_tutorials>` .
+Tutorials for processing the results after identification of occupancy regions (i.e. peaks or broad domains) can be found in :doc:`Downstream Processing <downstream_tutorials>` .

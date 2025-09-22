@@ -8,7 +8,6 @@ Transcription Factor Footprinting
 ========================================
 
 
-
 **Learning outcomes**
 
 
@@ -19,9 +18,8 @@ Transcription Factor Footprinting
    :widths: 60
    :header-rows: 0
 
-   * - .. image:: figures/TFfootprinting_tobias.png
+   * - .. image:: figures-ftprnt/TFfootprinting_tobias.png
    			:width: 600px
-
 
 
 
@@ -43,283 +41,192 @@ Transcription Factor Footprinting
 Introduction
 =============
 
+Transcription factor (TF) footprinting allows for the prediction of binding of a TF at a particular locus. This is because the DNA bases that are directly bound by the TF are actually protected from transposition while the DNA bases immediately adjacent to TF binding are accessible (Figure 1.). This results in **footprints**: defined regions of decreased signal strength within larger regions of high signal. 
 
 While ATAC-seq can uncover accessible regions where transcription factors (TFs) *might* bind, reliable identification of specific TF binding sites (TFBS) still relies on chromatin immunoprecipitation methods such as ChIP-seq.
-ChIP-seq methods require high input cell numbers, are limited to one TF per assay, and are further restricted to TFs for which antibodies are available. Therefore, it remains costly, or even impossible, to study the binding of multiple TFs in one experiment.
+ChIP-seq methods require high input cell numbers, are limited to one TF per assay, and are further restricted to TFs for which antibodies are available.
 
-Similarly to nucleosomes, **bound TFs hinder cleavage of DNA**, resulting in **footprints**: defined regions of decreased signal strength within larger regions of high signal (Figure 1.).
+Another caveat of TF footprinting is that not all TFs leave footprints detectable in ATAC-seq data, and not all footprints for given TF can be detected.
 
-Despite its compelling potential, a number of issues have rendered footprinting of ATAC-seq data cumbersome.
-It has been described that enzymes used in chromatin accessibility assays (e.g., DNase-I, Tn5) are biased towards certain sequence compositions. If unaccounted for, this impairs the discovery of true TF footprints.
+In this tutorial we use `TOBIAS <https://github.com/loosolab/TOBIAS/wiki/>`_ to detect TF binding signatures in ATAC-seq data (Bentsen et al 2020).
 
-In this tutorial we use an R / Bioconductor packages ``ATACseqQC`` and ``MotifDb`` to detect TF binding signatures in ATAC-seq data. Please note this tutorial is merely an early attempt to determine whether TF bindng sites can be identified in ATAC-seq data, and *not a statistical framework for TF footrpinting*. It can be used as a QC step to detect expected TF sites in the data rather than for discovery of novel binding patterns.
 
+
+Data
+=====
+
+We will use data that come from publication `Batf-mediated epigenetic control of effector CD8+
+T cell differentiation` (Tsao et al 2022). These are **ATAC-seq** libraries (in duplicates) prepared to analyse chromatin accessibility status in murine CD8+ T lymphocytes prior to and upon Batf knockout.
+
+The response of naive CD8+ T cells to their cognate antigen involves rapid and broad changes to gene expression that are coupled with extensive chromatin remodeling. Basic leucine zipper ATF-like transcription
+factor **Batf** is essential for the early phases of the process.
+
+We will use data from *in vivo* experiment.
+
+
+SRA sample accession numbers are listed in Table 1.
+
+
+.. list-table:: Table 1. Samples used in this tutorial.
+   :widths: 10 25 25 50
+   :header-rows: 1
+
+   * - No
+     - Accession
+     - Sample Name
+     - Description
+   * - 1
+     - SRR17296554
+     - B1_WT_Batf-floxed_Cre_P14
+     - WT Batf
+   * - 2
+     - SRR17296555
+     - B2_WT_Batf-floxed_Cre_P14
+     - WT Batf
+   * - 3
+     - SRR17296556
+     - A1_Batf_cKO_P14
+     - KO Batf
+   * - 4
+     - SRR17296557
+     - A2_Batf_cKO_P14
+     - KO Batf
+
+
+We will use precomputed tracks and perform the last step: footprints detection.
+
+We will use motifs of selected TF, to shorten the computation time.
+
+We will inspect the results of footprinting of a comprehensive TF landscape of non-redundant vertebrate TF motif collection from `JASPAR <https://jaspar.elixir.no/>`_ .
 
 :raw-html:`<br />`
 
+The starting point for this analyses are bam files with alignments **merged across replicates** i.e. one bam file per condition. This is done to increase read depth.
 
 
-Data & Methods
-===============
-
-We will build upon the lab :doc:`ATACseq specifc QC <../data-preproc/data-qc-atac>` and use the same data as for other ATAC-seq labs.
-
-
+:raw-html:`<br />`
 :raw-html:`<br />`
 
 
 Setting-up
 ===========
 
-We need access to bam file with shifted alignments ``shifted.bam`` which we created in the :doc:`ATACseq specifc QC <../data-preproc/data-qc-atac>`. This file contains alignments shifted +4 bps on the + strand and -5 bps on the - strand, to account for Tn5 transposition.
-
-
-Assuming we start at ``analysis``:
+Starting at ``atacseq/analysis`` we will create a dedicated directory and copy necessary files.
 
 
 .. code-block:: bash
 
-	mkdir TF_footprnt
-	cd TF_footprnt
+	mkdir TF_footprinting
+	cd TF_footprinting
 
-	ln -s ../QC/splitBam/shifted.bam .
-	ln -s ../QC/splitBam/shifted.bam.bai .
-
-	module load R_packages/4.1.1
+	cp /sw/courses/epigenomics/2025/lab-prep/cp_TFftprnt.sh .
+	bash cp_TFftprnt.sh
 
 
-.. Hint::
-
-	Please check first that file ``shifted.bam`` exists in this location: ``ls ../QC/splitBam/shifted.bam``. If it does, the output of this command is the path; if it does not you get "file does not exist". You can link the file prepared earlier:
-
-	.. code-block:: bash
-
-		ln -s ../../results/QC/splitBam/shifted.bam
-		ln -s ../../results/QC/splitBam/shifted.bam.bai
-
-
-We activate R console upon typing ``R`` in the terminal.
-
-:raw-html:`<br />`
 
 Detection of TF Binding Signatures
 ======================================
 
-We begin by loading necessary libraries:
+``TOBIAS`` workflow consists of three stages:
 
 
-.. code-block:: R
+1. Correction for the Tn5 transposase insertion sequence bias using ``ATACorrect``;
 
-	library(ATACseqQC)
-	library(MotifDb)
+2. Identify regions of protein binding in open chromatin (within peaks) using ``ScoreBigwig``;
 
-	library(BSgenome.Hsapiens.UCSC.hg38)
-	genome <- Hsapiens
+3. Calculate TF binding by combining footprint scores and TF binding motif information using ``BINDetect``.
 
 
-We load data from shifted bam file:
+ATACorrect and ScoreBigwig
+----------------------------
 
-.. code-block:: R
 
-	shifted.bamFile="shifted.bam"
+We have precomputed these tracks, as it takes time and CPU resources.
 
-	# we will limit the analysis to chr14
-	seqlev <- "chr14"
 
+.. code-block:: bash
 
-Let's first check signatures for a general TF **CTCF**. This is its motif as position probability matrix (PPM), also referred to as position frequency matrix (PFM), which consists of frequencies of each base at each motif position:
+	TOBIAS ATACorrect --bam B_WT_merged_replicates.sorted.bam --genome GRCm39/Mus_musculus.GRCm39.dna.primary_assembly.fa --peaks genrich_joint_peaks_merged.Allpeaks_annot.Ensembl.bed --outdir TF_footprinting/tracks/B_WT/Footprint/
 
-.. code-block:: R
+	TOBIAS ScoreBigwig --signal Footprint/B_WT_merged_replicates.sorted_corrected.bw --regions genrich_joint_peaks_merged.Allpeaks_annot.Ensembl.bed --output B_WT_footprints.bw
 
 
-	CTCF <- query(MotifDb, c("CTCF"))
-	CTCF <- as.list(CTCF)
-	print(CTCF[[1]], digits=2)
 
-.. admonition:: CTCF PFM
-   :class: dropdown, warning
+TF Binding Detection
+-----------------------
 
-   CTCF PFM::
+We will run ``TOBIAS`` ``BINDetect`` in **comparative mode** where we compare TF footprints in **BATF KO vs WT**.
 
-	       1    2    3     4     5     6     7     8     9    10    11    12    13
-	A 0.10 0.16 0.30 0.072 0.012 0.786 0.024 0.122 0.914 0.012 0.376 0.022 0.028
-	C 0.36 0.21 0.10 0.826 0.966 0.024 0.620 0.494 0.010 0.008 0.010 0.022 0.002
-	G 0.12 0.41 0.44 0.050 0.012 0.108 0.336 0.056 0.048 0.976 0.602 0.606 0.962
-	T 0.42 0.22 0.16 0.052 0.010 0.082 0.020 0.328 0.028 0.004 0.012 0.350 0.008
-	     14    15    16    17   18   19
-	A 0.024 0.096 0.424 0.086 0.12 0.34
-	C 0.016 0.818 0.024 0.532 0.35 0.26
-	G 0.880 0.038 0.522 0.326 0.12 0.32
-	T 0.080 0.048 0.030 0.056 0.41 0.08
 
+We need to set some paths first:
 
 
-We now summarise the signal in the vicinity of CTCF motifs (100 bps up- and down-stream):
-
-.. code-block:: R
-
-	ctcf <- factorFootprints(shifted.bamFile, pfm=CTCF[[1]], 
-	                         genome=genome,
-	                         min.score="90%", seqlev=seqlev,
-	                         upstream=100, downstream=100)
-
-
-
-This function outputs signal mean values of coverage for positive strand and negative strand in feature regions, and other information which you can inspect using ``str(ctcf)``:
-
-* ``spearman.correlation`` spearman correlations of cleavage counts in the highest 10-nucleotide-window
-
-* ``bindingSites`` - GRanges object with detected bindng sites
-
-* ``Profile.segmentation``
-
-
-:raw-html:`<br />`
-
-
-Let's inspect the statistics ``ctcf$spearman.correlation``::
-
-
-	> ctcf$spearman.correlation
-	$`+`
-
-		Spearman's rank correlation rho
-
-	data:  predictedBindingSiteScore and highest.sig.windows
-	S = 3761558200, p-value < 2.2e-16
-	alternative hypothesis: true rho is not equal to 0
-	sample estimates:
-	      rho 
-	0.2653951 
-
-
-	$`-`
-
-		Spearman's rank correlation rho
-
-	data:  predictedBindingSiteScore and highest.sig.windows
-	S = 3801340300, p-value < 2.2e-16
-	alternative hypothesis: true rho is not equal to 0
-	sample estimates:
-	      rho 
-	0.2576259 
-
-
-.. Strength of the site can be summarised by profile segmentation. Distal and proximal abundance (shown as red dash lines in the plot produce dby this function) are calculated by averaging the signal at the center of binding sites to the end of distal sites, and then calculated in the proximal and distal locations with respect to the motif.
-
-.. Profile segmentation::
-
-.. 	 ctcf$Profile.segmentation
-.. 	          pos   distal_abun proximal_abun       binding 
-.. 	   56.0000000     0.1481738     0.2627657     0.1392823 
-
-
-
-
-The plot produced by this function is of signal mean values of coverage for positive strand and negative strand in feature regions.
-
-
-.. code-block:: R
-
-	pdf("ctcf_footprnt.pdf")
-	sigs <- factorFootprints(shifted.bamFile, pfm=CTCF[[1]], 
-	                         genome=genome,
-	                         min.score="90%", seqlev=seqlev,
-	                         upstream=100, downstream=100)
-	dev.off()
-
-
-
-We can generate similar plots for other TFs.
-
-RFX5
-
-.. code-block:: R
-
-	RFX5 <- query(MotifDb, c("RFX5"))
-	RFX5 <- as.list(RFX5)
-
-
-	rfx5 <- factorFootprints(shifted.bamFile, pfm=RFX5[[1]], 
-	                         genome=genome,
-	                         min.score="90%", seqlev=seqlev,
-	                         upstream=100, downstream=100)
-
-	 rfx5$spearman.correlation$`+`$estimate
-	 rfx5$spearman.correlation$`+`$p.value
-
-
-	pdf("rfx5_footprnt.pdf")
-	rfx5 <- factorFootprints(shifted.bamFile, pfm=RFX5[[1]], 
-	                         genome=genome,
-	                         min.score="90%", seqlev=seqlev,
-	                         upstream=100, downstream=100)
-	dev.off()
-
-
-
-STAT3
-
-.. code-block:: R
-
-
-	STAT3 <- query(MotifDb, c("STAT3"))
-	STAT3 <- as.list(STAT3)
-
-
-	stat3 <- factorFootprints(shifted.bamFile, pfm=STAT3[[1]], 
-		                         genome=genome,
-		                         min.score="90%", seqlev=seqlev,
-		                         upstream=100, downstream=100)
-
-	stat3$spearman.correlation$`+`$estimate
-	stat3$spearman.correlation$`+`$p.value
-
-	stat3$Profile.segmentation
+.. code-block:: bash
 	
-	pdf("stat3_footprnt.pdf")
-	stat3 <- factorFootprints(shifted.bamFile, pfm=STAT3[[1]], 
-		                         genome=genome,
-		                         min.score="90%", seqlev=seqlev,
-		                         upstream=100, downstream=100)
-	dev.off()
+    container_pth="/sw/courses/epigenomics/2025/software/singularity/agatasm-tobias-uropa.img"
+
+    file_fa="/sw/courses/epigenomics/2025/reference/GRCm39/Mus_musculus.GRCm39.dna.primary_assembly.fa"
+    
+    motifs_file="JASPAR2024_selTFs_pfms_meme.txt"
+
+    peaks="genrich_joint_peaks_merged.Allpeaks_annot.Ensembl.bed"
+
+    footprnt_1="/sw/courses/epigenomics/2025/atacseq/tsao2022/proc_6ix2025/TF_footprinting/tracks/A_Batf_KO/Footprint/A_Batf_KO_footprints.bw"
+    
+    footprnt_2="/sw/courses/epigenomics/2025/atacseq/tsao2022/proc_6ix2025/TF_footprinting/tracks/B_WT/Footprint/B_WT_footprints.bw"
+
+    smpl="Batf_KO_vs_WT_selTFs"
 
 
-.. profile segmentation for stat3
-
-	.. ``stat3$Profile.segmentation``::
-
-	..  stat3$Profile.segmentation
-	..           pos   distal_abun proximal_abun       binding 
-	..   88.00000000    0.04103757    0.05341195    0.04394870 
+We will execute ``TOBIAS`` in a software container, so the command looks a bit different.
 
 
+.. code-block:: bash
 
-Which factors show evidence of binding enrichment in this data set?
-
-
-.. list-table:: Figure 2. Examples of TF footprints.
-   :widths: 40 40 40 
-   :header-rows: 1
-
-   * - CTCF
-     - RFX5
-     - STAT3
-   * - .. image:: figures/ctcf_footprnt.png
-   			:width: 300px
-     - .. image:: figures/rfx5_footprnt.png
-   			:width: 300px
-     - .. image:: figures/stat3_footprnt.png
-   			:width: 300px
+	apptainer exec ${container_pth} TOBIAS  BINDetect --motifs ${motifs_file} --signals ${footprnt_1} ${footprnt_2} --genome ${file_fa} --peaks ${peaks} --cores 6 --outdir ${smpl}/BINDdetect
 
 
+Output description can be found at `BINDetect documentation <https://github.com/loosolab/TOBIAS/wiki/BINDetect#output>`_ 
 
-image source: *https://doi.org/10.1038/s41467-020-18035-1* (Figure 1.)
+You can view summary of the results obtained for all TFs in directory ``all_TFs``. In particular, file ``bindetect_A_Batf_KO_footprints_B_WT_footprints.html`` contains an interactive volcano plot highlighting the TFs with most extreme differences in their footprint scores uopn Batf knock-out.
 
 
-.. spearman correlation of binding score (scoring by pwm) and signal in sliding windows
+.. list-table:: Figure 2. Results of TF footprinting in Batf KO vs WT.
+   :widths: 60
+   :header-rows: 0
+
+   * - .. image:: figures-ftprnt/BINDetect_allTFs.png
+   			:width: 600px
+
+**Batf** motif is part of the JUN / FOS points cluster at the top left arm of the volcano. The results for one of its motifs are::
+
+	output_prefix	name	motif_id	cluster	total_tfbs	A_Batf_KO_footprints_mean_score	A_Batf_KO_footprints_bound	B_WT_footprints_mean_score	B_WT_footprints_bound	A_Batf_KO_footprints_B_WT_footprints_change	A_Batf_KO_footprints_B_WT_footprints_pvalue	A_Batf_KO_footprints_B_WT_footprints_highlighted
+
+	BATF_MA1634.2	BATF	MA1634.2	C_FOS::JUND	17254	0.33875	2304	0.38674	2747	-0.39584	1.07531E-169	True
 
 
 
-.. For transcription factor footprint analysis, pwmScore, plotFootprints and factorFootprints are implemented in ATACseqQC. It makes use of genomic sequences as BSgenome objects, available for various reference genomes, which can be efficiently accessed by methods in the BSgenome package [29], and of the position frequency matrices (PFMs) of binding motifs of transcription factors from the Jaspar database in the MotifDb package [30]. The footprint analysis also leverages the matchPWM function in the BSgenome package [29, 31] to search potential binding sites for a given DNA-binding protein, represent the matched genomic coordinates as GenomicRanges objects, and plot the motif as a sequence logo using the motifStack package [32]. The factorFootprints function first uses the matchPWM function to predict the binding sites with an input position weight matrix (PWM) for a DNA-binding protein. Next, it calculates and plots the average cutting rates for those binding sites and 100-bp flanking sequences.
+
+References
+==========
+
+.. container:: references csl-bib-body hanging-indent
+   :name: refs
+
+   .. container:: csl-entry
+      :name: ref-Tsao2022
+
+      Tsao, Hsiao-Wei, James Kaminski, Makoto Kurachi, R. Anthony
+      Barnitz, Michael A. DiIorio, Martin W. LaFleur, Wataru Ise, et al.
+      2022. “Batf-Mediated Epigenetic Control of Effector CD8 + t Cell
+      Differentiation.” *Science Immunology* 7 (68).
+      https://doi.org/10.1126/sciimmunol.abi4919.
+
+
+   .. container:: csl-entry
+      :name: ref-Bentsen2020
+
+      Bentsen, Mette, Goymann Philipp, Schultheis Hendrik, Klee Kathrin, Petrova Anastasiia, Wiegandt René, Fust Annika, Preussner Jens, Kuenne Carsten, Braun Thomas, Kim Johnny, Looso Mario
+      2020. "ATAC-seq footprinting unravels kinetics of transcription factor binding during zygotic genome activation" *Nature Communications*  Vol. 11, No. 1 
+      https://doi.org/10.1038/s41467-020-18035-1
 

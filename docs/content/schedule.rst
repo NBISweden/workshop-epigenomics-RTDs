@@ -3,9 +3,9 @@
     :format: html
 
 
-========================
-Schedule (Tentative)
-========================
+=========
+Schedule 
+=========
 
 
 .. contents::
@@ -26,7 +26,7 @@ Monday (22 September 2025)
 
 **10:30 - 12:00** :doc:`Exercises Array Workflow <./tutorials/methylationArray/Array_Tutorial>`
 
-**12:00 - 13:00** lunch (offline)
+**12:00 - 13:00** lunch *(offline)*
 
 **13:00 - 14:00** Methylation methods & technologies (Jessica Nordlund)
 
@@ -36,7 +36,7 @@ Monday (22 September 2025)
 
 **14:30 - 16:00** :doc:`Exercises Methylation Sequencing <./tutorials/methylationSeq/Seq_Tutorial>`
 
-**16:00 - 17:00** Daily challenge
+**16:00 - 17:00** Daily challenge *(offline)*
 
 
 :raw-html:`<br />`
@@ -45,25 +45,32 @@ Monday (22 September 2025)
 Tuesday (23 September 2025)
 --------------------------------
 
+**ATAC-seq: data processing and analysis principles**
 
-**New methods and quantitative ChIP-seq** (Simon Elsässer and Carmen Navarro Luzón)
 
-**09:00 - 10:00** Recap previous day *(online session)*
+**09:00 - 09:30** Recap previous day 
 
-**10.00 - 11.00** ChIP-seq methods  *(online session)*
+**09:30 - 10:15** Introduction to ATAC-seq data analysis  
 
-**11.00 - 12.00** ChIP-seq alternatives  *(online session)*
+**10:30 - 11.30** :doc:`Exercise: Data preprocessing and general QC <./tutorials/data-preproc-tutorials>`
+and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` 
+
+**11:30 - 12:00** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` 
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 13:30** Introduction to exercises  *(online session)*
+**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Michelle Ljungmark)
 
-**13:30 - 16:00** :doc:`Principles of ChIP-seq <./tutorials/chipseqProc/lab-chipseq-processing>`
-and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(online support)*
+**13:45 - 14:00** Break
 
-**16:00 - 17:00** Exercises *(offline)*
+**14:00 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` 
 
-**16:00 - 17:00** Daily challenge
+**15:30 - 17:00** Exercise *(offline support)*
+
+**16:00 - 17:00** Daily challenge *(offline)*
+
+
+
 
 
 :raw-html:`<br />`
@@ -72,27 +79,25 @@ and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` *(onl
 Wednesday (24 September 2025)
 --------------------------------
 
-**ATAC-seq: data processing and analysis principles**
+**New methods and quantitative ChIP-seq** (Simon Elsässer and Carmen Navarro Luzón)
 
+**09:00 - 10:00** Recap previous day 
 
-**09:00 - 09:30** Recap previous day *(online session)*
+**10.00 - 11.00** ChIP-seq methods  
 
-**09:30 - 10:15** Introduction to ATAC-seq data analysis  *(online session)*
+**11.00 - 12.00** ChIP-seq alternatives  
 
-**10:30 - 11.30** :doc:`Exercise: Data preprocessing and general QC <./tutorials/data-preproc-tutorials>`
-and :doc:`ATACseq QC <./tutorials/data-preproc/data-qc-atac>` *(online support)*
+**12:00 - 13:00** lunch *(offline)*
 
-**11:30 - 12:00** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
+**13:00 - 13:30** Introduction to exercises  
 
-**12:00 - 13:00** lunch (offline)
+**13:30 - 16:00** :doc:`Principles of ChIP-seq <./tutorials/chipseqProc/lab-chipseq-processing>`
+and :doc:`Advanced ChIP Methods <./tutorials/quantitative_chip_tutorials>` 
 
-**13:00 - 13.45** Presentation and Q&A with National Genomics Infrastructure (Orlando Contreras Lopez and Michelle Ljungmark)
+**16:00 - 17:00** Exercises *(offline support)*
 
-**13:30 - 15:30** :doc:`Exercise: ATAC-seq data analysis <./tutorials/ATACseq/lab-atacseq-bulk>` *(online support)*
+**16:00 - 17:00** Daily challenge *(offline)*
 
-**15:30 - 17:00** Exercise *(offline)*
-
-**16:00 - 17:00** Daily challenge
 
 
 :raw-html:`<br />`
@@ -103,7 +108,7 @@ Thursday (25 September 2025)
 
 **Downstream analyses**
 
-**09:00 - 09:30** Recap previous day *(online session)*
+**09:00 - 09:30** Recap previous day 
 
 **09:30 - 10:00** Introduction to transcription factors and gene regulation *(slides)*
 
@@ -118,11 +123,10 @@ Thursday (25 September 2025)
 **13:00 - 15:00** :doc:`Additional downstream exercises <./tutorials/downstream_tutorials>` 
 and :doc:`genome overlaps <./tutorials/downstream_tutorials>` *(online support)*
 
-**15:00 - 17:00** Exercises *(offline)*
+**15:00 - 17:00** Exercises *(offline support)*
 
-**16:00 - 17:00** Daily challenge 
+**16:00 - 17:00** Daily challenge *(offline)*
 
-:raw-html:`<br />`
 
 
 Friday (26 September 2025)
@@ -130,32 +134,35 @@ Friday (26 September 2025)
 
 **Integrative and single cell omics**
 
-**09:00 - 09:30** Recap previous day *(online session)*
+**09:00 - 09:30** Recap previous day 
 
-**09.30 - 10.20** Single cell methods *(online session)*
+**09.30 - 10.20** Single cell methods 
 
 **10.20 - 10.35** Break
 
-**10.35 - 11.15** Integration of genomics data *(online session)*
+**10.35 - 11.15** Integration of genomics data 
 
-**11:15 - 11:20** Introduction to exercises *(online session)*
+**11:15 - 11:20** Introduction to exercises 
 
-**11.20 - 12.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>`
-and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` *(online support)*
+**11.20 - 12.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
+
+.. and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 
 
 **12:00 - 13:00** lunch (offline)
 
 
 **13.00 - 14.00** :doc:`Single cell and data integration exercises <./tutorials/data_integration_tutorials>` 
-and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` *(online support)*
+
+.. and :doc:`optional exercise on Multi-OMICs Factor Analysis <./tutorials/unsupervised_data_integration/lab-unsupervised_data_integration>` 
 
 
 **14.00 - 15.00** Inspirational talk: Marek Bartosovic (Stockholm University).  
-`Deciphering the epigenetic landscape of the brain: Innovations in chromatin profiling with single-cell nano-CUT&Tag <https://www.scilifelab.se/organizer/big-talks/>`_
+`Deciphering the epigenetic landscape of the brain: Innovations in chromatin profiling with single-cell nano-CUT&Tag <https://www.scilifelab.se/event/big-talk-deciphering-the-epigenetic-landscape-of-the-brain-innovations-in-chromatin-profiling-with-single-cell-nano-cuttag/>`_.  Join by `Zoom <https://lu-se.zoom.us/j/62767371752>`_.
 
 
-**15:00 - 16:00** Daily challenge 
+
+**15:00 - 16:00** Daily challenge  
 
 **15:00 - 16:00** Short term feedback form
 
