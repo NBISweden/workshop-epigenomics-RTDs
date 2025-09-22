@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Epigenomics Workshop 2025'
-copyright = 'Agata Smialowska, Louella Vasquez, Markus Ringnér, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Anja Metzger, Orlando Contreras‐López,Jakub Westholm, Vincent Van Hoef, Olga Dethlefsen, Phil Ewels'
-author = 'Agata Smialowska, Louella Vasquez, Markus Ringnér, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Anja Metzger, Orlando Contreras‐López, Jakub Westholm, Vincent Van Hoef, Olga Dethlefsen, Phil Ewels'
+copyright = 'Agata Smialowska, Louella Vasquez, Dania Machlab, Markus Ringnér, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Anja Metzger, Orlando Contreras‐López,Jakub Westholm, Vincent Van Hoef, Olga Dethlefsen, Phil Ewels'
+author = 'Agata Smialowska, Louella Vasquez, Dania Machlab, Markus Ringnér, Simon Elsässer, Carmen Navarro Luzón, Jessica Nordlund, Anja Metzger, Orlando Contreras‐López, Jakub Westholm, Vincent Van Hoef, Olga Dethlefsen, Phil Ewels'
 
 # The full version, including alpha/beta/rc tags
 release = '1'
