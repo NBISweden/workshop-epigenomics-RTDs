@@ -23,4 +23,5 @@ Transcription factors (TFs) regulate gene expression by binding sites in the gen
 
    Predicting Relevant Transcription Factors <motifAnalyses/motifAnalyses.rst>
    Transcription Factor Footprinting <ATACseq/lab-atac-TFfootprnt.rst>
-   Identification of Sequence Motifs <motifs/lab-motifs.rst>
+   
+.. Identification of Sequence Motifs <motifs/lab-motifs.rst>
