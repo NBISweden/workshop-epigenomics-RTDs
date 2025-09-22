@@ -277,7 +277,7 @@ use the Bioconductor package directly:
 ::
 
    library(TxDb.Mmusculus.UCSC.mm39.knownGene)
-   txdb=TxDb.Hsapiens.UCSC.mm39.knownGene
+   txdb=TxDb.Mmusculus.UCSC.mm39.knownGene
 
 Please note that UCSC and Ensembl use different contig naming schemes,
 so it is advisable to use the annotation matching the genome reference

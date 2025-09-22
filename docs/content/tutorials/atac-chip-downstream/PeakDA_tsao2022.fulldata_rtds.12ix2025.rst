@@ -76,9 +76,7 @@ We can link additional files:
 .. code-block:: bash
    
    mkdir bam_dir
-   cd bam_dir
-   find ../../../data_proc/ -name \*.ba* -exec ln -vs "{}" ';'
-   cd ..
+   find /proj/epi2025/atacseq_proc/data_proc/ -name \*.ba* -exec ln -vs "{}" bam_dir/ ';'
 
 :raw-html:`<br />`
 
@@ -129,16 +127,17 @@ We begin by loading necessary libraries:
 
    .. code:: r
 
-      workdir="/path/to/workdir"
+      workdir=getwd()  
 
 To set working directory to your desired path you can use these
 commands:
 
 ::
 
-   workdir=getwd()
+   workdir="/path/to/workdir"
 
    workdir=setwd()
+
 
 :raw-html:`<br />`
 
@@ -161,7 +160,7 @@ peaks on assembled chromosomes.
    .. code:: r
 
       count_table_fname="AB_Batf_KO_invivo.genrich_joint.merged_peaks.featureCounts"
-      cnt_table_pth=file.path(file.path(workdir,"data"),count_table_fname)
+      cnt_table_pth=file.path(file.path(workdir,"counts"),count_table_fname)
 
       cnt_table=read.table(cnt_table_pth, sep="\t", header=TRUE, blank.lines.skip=TRUE)
       rownames(cnt_table)=cnt_table$Geneid
@@ -487,6 +486,14 @@ analysis:
 We can inspect sample grouping on multidimensional scaling (MDS) plot
 before proceeding:
 
+.. container:: cell
+
+   .. code:: r
+
+      plotMDS(reads.dge.tmm)
+
+
+
 .. image:: figures/DA/unnamed-chunk-16-1.png
           :width: 600px
 
@@ -532,7 +539,15 @@ This results in a table with results of DA analysis:
 :raw-html:`<br />`
 
 We should also take a look at the diagnostic plots to verify that they
-look as expected.
+look as expected. 
+The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the average expression across all the samples (A) for each gene. The expectation is that for the bulk of the peaks the log2FC is close to 0 (the cloud of points is centred on 0 on the Y-axis) and minimal signal amplitude related effects.
+
+
+.. container:: cell
+
+   .. code:: r
+
+      plotMD(qlf.ftest.tmm)
 
 
 .. image:: figures/DA/unnamed-chunk-19-1.png
@@ -557,12 +572,16 @@ annotations:
 
       peakAnno_df=readRDS(peak_annots_pth)
 
+      #rename the column with peakID for data frame joining and remove redundant columns
+      peakAnno_df=peakAnno_df|>dplyr::rename(peakID=mcols.peakID)|>dplyr::select(!c(seqnames,strand.x,start,end,width,strand.y))
+
+
 :raw-html:`<br />`
 
 .. Note::
    
    If you did not follow the Peak Annotation lab, you copy the saved file from
-   ``../../results/DA/Allpeaks_annot.Ensembl.rds``
+   ``../../results/DA/objects/Allpeaks_annot.Ensembl.rds``
 
 
 :raw-html:`<br />`
@@ -574,9 +593,13 @@ We can now join the tables with peak annotations and DA results:
 
    .. code:: r
 
+      peaks_gr_df=as.data.frame(peaks_gr)|>dplyr::rename(peakID=mcols.peakID)
+
       DA_res_table=DA_res.qlf.tmm |>
         dplyr::left_join(peakAnno_df,by="peakID")|>
-        dplyr::select(seqnames,start,end,peakID,logFC,FDR,gc,annotation,geneChr,geneStart,geneEnd,geneStrand,geneId,transcriptId,external_gene_name,distanceToTSS)
+        dplyr::left_join(peaks_gr_df,by="peakID")|>
+        dplyr::select(seqnames,start,end,peakID,gc,logFC,FDR,annotation,geneChr,geneStart,geneEnd,geneStrand,geneId,transcriptId,external_gene_name,distanceToTSS)
+
 
 .. container:: cell
 
