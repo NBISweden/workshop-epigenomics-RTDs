@@ -19,7 +19,7 @@ Day 1: **Methylation: Arrays and Bisulfite-Seq**
 
 `DNA Methylation Slides <../_static/Methylation_Day1_2025.pdf>`_
 
-`DNA Methylation Methods and Technologies (Jessica Nordlund) <../_static/JN-EpigeneticsMethods_2023-09-18.pdf>`_
+`DNA Methylation Methods and Technologies (Jessica Nordlund) <../_static/JN-EpigeneticsMethods_updated2025.pdf>`_
 
 
 :raw-html:`<br />`
