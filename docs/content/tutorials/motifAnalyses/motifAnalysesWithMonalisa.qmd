@@ -1,0 +1,450 @@
+---
+title: "Motif Analyses with `monaLisa`"
+format: 
+  rst:
+    toc: true
+    toc-depth: 2
+    fig-format: png
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+---
+
+## 
+
+```{=html}
+<!-- 
+Author:         Dania Machlab
+About:          This qmd file is used to render the .rst file. To modify or 
+                update the .rst file, please do so in the .qmd file here and 
+                render it. After rendering in RStudio, go to the 
+                workshop-epigenomics-RTDs/docs folder and from the terminal:
+                1. activate the needed conda env set up as described here
+                (https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/Contributing.md), 
+                and 2. run "make html". The resulting html files can be found
+                under the workshop-epigenomics-RTDs/docs/_build folder.
+"data" folder:  contains the data/files/objects loaded into and used in this 
+                .qmd file.
+-->
+```
+
+# Background
+
+So far, we have seen how transcription factor binding sites (TFBSs) or motifs can be represented and visualized in matrix form, how the position weight matrix (PWM) can be used to scan for motif hits against a reference sequence, for example like the reference genome, and how these matrices can be retrieved from public databases like [Jaspar](https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites).
+
+Now we will make use of these functionalities and use additional tools to enrich or select for TFs are likely to be key players in experimental differences we observe between different conditions. As mentioned, the effect of TF binding can be indirectly observed via associated changes in transcription, chromatin accessibility, DNA methylation and histone modifications. Given such data types, one may for example pose the question: which TFs could be explaining the observed changes in accessibility we see? To address such questions, we will be using the Bioconductor package called [monaLisa](https://bioconductor.org/packages/monaLisa/), short for **mo**tif a**na**lysis with **Lisa**.
+
+# Learning outcomes
+
+-   Be aware of potential sequence composition biases before motif enrichment analysis.
+
+-   Perfrom binned motif enrichment analysis and be able to interpret the results.
+
+-   Select motifs via regression framework.
+
+-   Understand the nuances and differences between both approaches.
+
+# Libraries
+
+We start by loading the needed packages. If necessary, use `BiocManager::install()` to install missing packages.
+
+```{r echo=FALSE}
+.libPaths(c("/Users/daniamachlab/Library/R/arm64/4.5-Bioc-3.21/library", .libPaths()))
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(monaLisa)
+  library(BiocParallel)
+  library(ggplot2)
+  library(ComplexHeatmap)
+  library(circlize)
+  library(GenomicRanges)
+  library(BSgenome.Mmusculus.UCSC.mm39)
+  library(JASPAR2024)
+  library(TFBSTools)
+  library(SummarizedExperiment)
+  library(RSQLite)
+})
+
+# Note on installing specific ggplot2 version in case the latest version causes problems
+#remotes::install_version("ggplot2", version = "3.5.2")
+```
+
+# The Dataset
+
+We give a quick recap on the dataset we are dealing with and which was used in the ATAC-seq sections of the tutorials: When CD8+ T-cells encounter antigens they expand and differentiate into effector cells, undergoing marked changes on the chromatin and gene expression levels. [Tsao, Kaminski et al.](https://doi.org/10.1126/sciimmunol.abi4919) investigated how these changes depend on the basic leucine zipper ATF-like transcription factor Batf. To this end, they generated inducible Batf conditional knock out (cKO) CD8+ T-cells derived from the P14 T-cell receptor transgenic mouse. The Batf cKO P14 CD8+ T-cells were transferred to recipient mice, which were then infected with the lymphocytic choriomeningitis virus to drive the CD8+ T-cells into differentiation to effector cells. These cells were sorted and collected for ATAC-seq. Here we use this dataset to look at the differences in accessibility between `Batf-cKO` and `Wt` and ask the question, which TFs could explain these observed changes in accessibility?
+
+We start by loading in the `RDS` file called `FiltPeaks.DA.TMM.annot.rds` which was generated in previous exercises. This is a `GRanges` object containing the annotated merged peak regions, as well as log-fold changes in accessibility for `Batf-cKO` vs `Wt`. We will subset the enhancer peaks which we define as being at least 1kb away from any TSS. We will rely on the annotations column to extract these regions. This includes the regions called "Promoter (1-2kb)", "Promoter (2-3kb)" and "Distal Intergenic".
+
+```{r}
+# read in the GRanges object
+gr <- readRDS("data/FiltPeaks.DA.TMM.annot.rds")
+gr
+
+# keep enhancers at least 1kb away from any TSS and not in any gene
+keep <- gr$annotation %in% c("Distal Intergenic", "Promoter (1-2kb)", "Promoter (2-3kb)")
+gr <- gr[keep]
+table(gr$annotation)
+
+# fix chr names in gr
+seqlevels(gr) <- paste0("chr", seqlevels(gr))
+
+# subset autosomal enhancers
+keep <- seqnames(gr) %in% paste0("chr", 1:19)
+gr <- gr[keep]
+table(gr$annotation)
+
+# fix enhancer names
+names(gr) <- paste0("e_", 1:length(gr))
+head(gr)
+```
+
+Let us have a look at the enhancers we have and check if there is a relationship between logFC and GC content. We have already done quality checks like this in previous sections of the tutorial. Are there any sequence biases associated with the log-fold changes in accessibility?
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+
+# logFC vs GC content
+par(mfrow=c(1,2))
+plot(gr$gc, gr$logFC, pch = ".")
+abline(h = 0, col = "red", lty = 5)
+smoothScatter(gr$gc, gr$logFC)
+abline(h = 0, col = "red", lty = 5)
+
+```
+
+We see no dependence of the logFC in accessibility on the GC content. This is also what we have seen previously.
+
+As mentioned, we posed the question: which motifs could explain the changes in accessibility we see between `Batf-cKO` and `Wt`. To predict and select potential motifs, we will use the `monaLisa` package, which offers two main approaches:
+
+1.  Binned enrichment approach: the enhancer sequences are binned by their logFC, and motif enrichment is calculated in each bin vs the rest. This is done independently for each motif. Internally, this approach utilizes the sequence composition corrections between foreground and background sequences which [Homer](http://homer.ucsd.edu/homer) does.
+2.  Regression approach: here motifs compete against each other for selection and those that are more likely to explain the logFCs are selected.
+
+Both approaches are valid ways to answer the question we posed, but do so from a different angle. More details on both approaches will be described below as we explore and apply them to our dataset.
+
+# Binned motif enrichment analysis
+
+For this approach we are closely following the main [vignette](https://bioconductor.org/packages/release/bioc/vignettes/monaLisa/inst/doc/monaLisa.html) from `monaLisa`. Briefly, we will take the logFC vector across enhancer regions, draw a histogram of the logFCs, bin the histogram, test for motif enrichment per bin for each TF and finally visualize the results.
+
+## Bin by log-fold changes in accessibility
+
+Before proceeding with the motif enrichment analysis, we want to make sure that the regions we are using have similar sizes, to avoid any length biases in the comparisons between the different bins. We will resize the regions to a fixed size around the midpoint of each region, corresponding to the median region size.
+
+```{r}
+# region size distribution
+summary(width(gr))
+
+# resize the regions and trim out-of bounds ranges
+gr <- trim(resize(gr, width = median(width(gr)), fix = "center"))
+summary(width(gr))
+
+```
+
+Let us examine the histogram depicting the logFCs across the enhancers and create bins. In order to have robust calculations in enrichment, it is recommended to have at least a couple of hundred sequences per bin. Here, we will have 800 regions or sequences per bin, and additionally set a min absolute logFC above which to bin.
+
+```{r}
+# plot log2FC histogram
+ggplot(data = data.frame(logFC = gr$logFC)) + 
+  geom_histogram(aes(x = logFC), bins = 100, fill = "steelblue") + 
+  xlab("Batf cKO vs Wt logFC") + 
+  theme_bw()
+
+# bin the histogram
+bins <- bin(x = gr$logFC, binmode = "equalN", nElement = 800, 
+            minAbsX = 0.3)
+
+table(bins)
+
+# plot binned histogram
+plotBinDensity(x = gr$logFC, b = bins) + 
+  xlab("logFC")
+
+```
+
+Before proceeding with the enrichment analysis, let's check if there is any sequence bias associated with the bins. `monaLisa` offers some plotting functions for this purpose.
+
+```{r}
+# extract DNA sequences of the enhancers
+seqs <- getSeq(BSgenome.Mmusculus.UCSC.mm39, gr)
+
+# by GC fraction
+plotBinDiagnostics(seqs = seqs, bins = bins, aspect = "GCfrac")
+
+# by dinucleotide frequency
+plotBinDiagnostics(seqs = seqs, bins = bins, aspect = "dinucfreq")
+
+```
+
+We note a small tendency for the bin with the most negative logFC values to have lower GC content. This is also reflected in the heatmap with the dinucleotide frequencies, with that (first) bin being slightly more AT-rich. We will keep this in mind when we examine the enriched motifs. We will want to see if mostly GC-poor motifs are enriched in this bin. That could indicate that the built-in sequence composition corrections were not enough. For now we just make note of it.
+
+## Get PWMs from Jaspar
+
+We load the PWMs of vertebrate TFs from Jaspar.
+
+```{r}
+# extract PWMs of vertebrate TFs from JASPAR2024
+JASPAR2024 <- JASPAR2024()
+JASPARConnect <- RSQLite::dbConnect(RSQLite::SQLite(), db(JASPAR2024))
+pwms <- getMatrixSet(JASPARConnect,
+                     opts = list(tax_group = "vertebrates",
+                                 collection="CORE",
+                                 matrixtype = "PWM"))
+
+# disconnect Db
+RSQLite::dbDisconnect(JASPARConnect)
+```
+
+## Run binned enrichment
+
+We can now run the motif enrichment analysis. We will do the enrichment per bin vs all other bins, which is the default option in `calcBinnedMotifEnrR`. To learn more about the other available options, which can be controlled via the `background` parameter, see the help page of the function.
+
+The p-value for the enrichment test is calculated using Fisher's exact test. We illustrate this more with the contingency table below. Given a specific bin, for each motif, we end up with a table of weighted counts as shown below. They are weighted to correct for sequence composition differences between the foreground and background sets, where foreground reflects the sequences belonging to the bin being testes, and background sequences from all other bins.
+
+|                | with TF hit | with no TF hit |
+|----------------|-------------|----------------|
+| **foreground** | a           | b              |
+| **background** | c           | d              |
+
+```{r}
+# motif enrichment using 4 cores
+se <- calcBinnedMotifEnrR(seqs = seqs, 
+                          bins = bins, 
+                          pwmL = pwms, 
+                          background = "otherBins", 
+                          BPPARAM = MulticoreParam(4))
+se
+```
+
+The resulting object is a `SummarizedExperiment` object. Briefly, these classes are a convenient way to store matrices of the same dimensions as well as any row and column metadata. In our case, the rows correspond to the motifs and the columns to the bins. The figure below illustrates what this class of objects looks like and more details can be found on [Bioconductor](https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html).
+
+![](figures/SE.png)
+
+```{r}
+# assays (matrices)
+assays(se)
+head(assays(se)$log2enr)
+
+```
+
+Let's visualize the results of the enrichment analysis. We can use the plot function provided by `monaLisa` to do this.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+
+# select strongly enriched motifs
+sel <- apply(assay(se, "negLog10Padj"), 1, 
+             function(x) max(abs(x), 0, na.rm = TRUE)) > 4.0
+sum(sel)
+seSel <- se[sel, ]
+
+# plot
+plotMotifHeatmaps(x = seSel, which.plots = c("log2enr", "negLog10Padj"), 
+                  width = 2.0, cluster = TRUE, maxEnr = 2, maxSig = 10, 
+                  show_motif_GC = TRUE)
+
+
+# plot with motif sequence logos
+SimMatSel <- motifSimilarity(rowData(seSel)$motif.pfm)
+range(SimMatSel)
+
+# create hclust object, similarity defined by 1 - Pearson correlation
+hcl <- hclust(as.dist(1 - SimMatSel), method = "average")
+plotMotifHeatmaps(x = seSel, which.plots = c("log2enr", "negLog10Padj"), 
+                  width = 1.8, cluster = hcl, maxEnr = 2, maxSig = 10,
+                  show_dendrogram = TRUE, show_seqlogo = TRUE,
+                  width.seqlogo = 1.2)
+
+```
+
+## 
+
+The Fos/Jun motif is particularly enriched in bins corresponding to negative logFC values, so regions which lost accessibility in the BatfKO. Coming back to our earlier note of a tendency to have GC-poor sequences in the first bin with the most negative logFCs, we don't see purely AT-rich motifs enriched in this bin, hinting that the internal sequence bias corrections were good enough. Furthermore, The rest of the bins with negative logFCs also show enrichments of the Fos/Jun motif. Seeing a gradient of enrichment the more extreme the logFC values are adds another layer of confidence in the enrichment results.
+
+## Binned k-mer enrichment analysis
+
+Sometimes one may want to perform the binned enrichment analysis in a more unbiased way, without using known motifs from a database. We perform this on our dataset and look at which kmers are enriched. We will set the kmer size to 6 base pairs.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+
+# binned kmer enrichment
+seKmer <-  calcBinnedKmerEnr(seqs = seqs, bins = bins, kmerLen = 6, 
+                          includeRevComp = TRUE, BPPARAM = MulticoreParam(4))
+
+# enriched kmers
+selKmer <- apply(assay(seKmer, "negLog10Padj"), 1, 
+               function(x) max(abs(x), 0, na.rm = TRUE)) > 4
+sum(selKmer)
+seKmerSel <- seKmer[selKmer, ]
+
+# calculate similarity between enriched kmers and enriched motifs
+pfmSel <- rowData(seSel)$motif.pfm
+sims <- motifKmerSimilarity(x = pfmSel,
+                            kmers = rownames(seKmerSel),
+                            includeRevComp = TRUE)
+dim(sims)
+
+# plot kmers and motif similarity
+maxwidth <- max(sapply(TFBSTools::Matrix(pfmSel), ncol))
+seqlogoGrobs <- lapply(pfmSel, seqLogoGrob, xmax = maxwidth)
+hmSeqlogo <- rowAnnotation(logo = annoSeqlogo(seqlogoGrobs, which = "row"),
+                           annotation_width = unit(1.5, "inch"), 
+                           show_annotation_name = FALSE
+)
+
+Heatmap(sims, 
+        show_row_names = TRUE, row_names_gp = gpar(fontsize = 8),
+        show_column_names = TRUE, column_names_gp = gpar(fontsize = 8),
+        name = "Similarity", column_title = "Selected TFs and enriched k-mers",
+        col = colorRamp2(c(0, 1), c("white", "red")), 
+        right_annotation = hmSeqlogo)
+
+```
+
+We can appreciate the enriched k-mers corresponding to the enriched motifs from earlier.
+
+# Regression-based analysis
+
+Another method to find relevant motifs is via a regression-based approach. As opposed to the binned approach, where each motif is tested independently for enrichment, the regression framework allows motifs to compete against each other for selection. Following our example, the aim is to select those which are more likely to explain the observed changes in accessibilty we see across the enhancers. In `monaLisa`, stability selection with randomized lasso is the implemented regression method of choice. For more details about the method, see the details section in the `randLassoStabSel` function, as well as the publication from [Meinshausen and Bühlmann](https://doi.org/10.1111/j.1467-9868.2010.00740.x). Briefly, with lasso stability selection, the lasso regression is performed multiple times on subsets of the response vector and predictor matrix, and each predictor (TF) end up with a selection probability which is simply the number of times it was selected divided by the total number of times a regression was done. With the randomized lasso, a *weakness* parameter is additionally used to vary the lasso penalty term λ to a randomly chosen value between \[λ, λ/weakness\] for each predictor. This type of regularization has advantages in cases where the number of predictors exceeds the number of observations, in selecting variables consistently, demonstrating better error control and not depending strongly on the penalization parameter (Meinshausen and Bühlmann 2010).
+
+First, we will create the predictor matrix in our regression framework. This will consist of the predicted TF binding sites (TFBSs) across the enhancers. We use the PWMs from Jaspar to scan for motif hits across the enhancers, using a minimum score of 10 for a match.
+
+```{r}
+
+# scan for motif hits across enhancer sequences
+#   (this step takes a few seconds)
+hits <- findMotifHits(query = pwms, subject = seqs, min.score = 10.0,
+                      BPPARAM = BiocParallel::MulticoreParam(4))
+head(hits)
+
+# add columns reflecting motif ID and name (for ease of interpretability later)
+hits$pwmIdName <- paste0(hits$pwmid, "_", hits$pwmname)
+
+# create TFBS matrix (unique motif IDs are shown as columns rather than the names)
+TFBSmatrix <- unclass(table(factor(seqnames(hits), levels = seqlevels(hits)),
+                            factor(hits$pwmIdName, levels = unique(hits$pwmIdName))))
+TFBSmatrix[1:6, 1:6]
+
+# remove TF motifs with 0 binding sites (if any) in all regions
+zero_TF <- colSums(TFBSmatrix) == 0
+sum(zero_TF)
+TFBSmatrix <- TFBSmatrix[, !zero_TF]
+
+```
+
+We add the fraction of G+C and CpG observed/expected ratio as predictors to the matrix, to ensure that selected TF motifs are not just detecting a simple trend in GC or CpG composition.
+
+```{r}
+# calculate G+C and CpG obs/expected
+fMono <- oligonucleotideFrequency(seqs, width = 1L, as.prob = TRUE)
+fDi <- oligonucleotideFrequency(seqs, width = 2L, as.prob = TRUE)
+fracGC <- fMono[, "G"] + fMono[, "C"]
+oeCpG <- (fDi[, "CG"] + 0.01) / (fMono[, "G"] * fMono[, "C"] + 0.01)
+
+# add GC and oeCpG to predictor matrix
+TFBSmatrix <- cbind(fracGC, oeCpG, TFBSmatrix)
+TFBSmatrix[1:6, 1:6]
+
+```
+
+Next we run stability selection with randomized lasso. Since this is a stochastic process, we will need to set the seed to reproduce our results.
+
+```{r}
+# run randomized lasso stability selection
+set.seed(123)
+se <- randLassoStabSel(x = TFBSmatrix, y = gr$logFC, cutoff = 0.8)
+se
+
+# selected TFs
+sel <- colnames(se)[se$selected]
+sel
+
+```
+
+As mentioned, motifs are competing against each other for selection here. A known challenge with regression methods is colinearity between the predictors. This is worth keeping in mind for very highly correlated TFBSs. If we have two TFs with highly similar motifs explaining the logFC, only one of them may end up being selected. It is also worth remembering to focus on interpreting the motifs rather than the particular TF name.
+
+Let's have a look at the stability paths of the motifs. These paths show the selection probability as a function of the regularization step. The strength of the regularization increases from left to right and the stronger the regularization, the less motifs are selected. The motifs above the minimum selection probability at the last step are the final selected ones. These paths can give an indication of how strongly a particular motif can explain the logFC in accessibility, by being selected fairly early and then consistently along the regulalrization steps. It can also show how well the selected motifs separate from the non-selected ones and how strong the signal is.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+
+plotStabilityPaths(se, labelPaths = TRUE)
+```
+
+Based on these, BATF3 is the first motif to be selected which indicates that this motif quite strongly explains the logFC compared to the rest. This may be expected since this TF was knocked down.
+
+Let's look at where the GC and CpG content predictors fall on these paths.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+
+plotStabilityPaths(se, labelPaths = TRUE, labelNudgeX = 3,
+                   labels = c("fracGC", "oeCpG"))
+```
+
+They have very low selection probabilities and were not contributing to explaining the logFC in accessibility. What if we want to get a sense of the direction in which the selected motifs explain accessibility changes: towards positive logFC values indicating more accessibility in KO, or toward negative logFC values indicating more accessibility in the Wt? To reflect that, we can plot the selection probabilities multiplied by the sign of the correlation to the logFC vector.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+plotSelectionProb(se, directional = TRUE, ylimext = 1) 
+```
+
+BATF3, Runx1 and FOSL1::JUND explain negative changes in accessibility, so enhancers which were more accessible in Wt and lost that accessibility in the Batf-KO. The motifs for BATF3 and FOSL1::JUND were also enriched in the binned approach, in bins with lower logFC values. Interestingly Runx1 only shows up here. Let's have a look at the motif seqlogo to see if that motif came up in the enrichment approach under another TF name.
+
+```{r}
+# get PFM
+JASPAR2024 <- JASPAR2024()
+JASPARConnect <- RSQLite::dbConnect(RSQLite::SQLite(), db(JASPAR2024))
+pfm <- getMatrixByID(x = JASPARConnect, ID = "MA0002.3")
+RSQLite::dbDisconnect(JASPARConnect)
+name(pfm)
+
+# plot seqlogo
+seqLogo(x = toICM(pfm))
+```
+
+We did not see this motif in the binned approach. Perhaps this could only be selected in context with the rest of the motifs. We can also have a closer look at some of the enhancers which have predicted binding sites for a motif of interest, ordering by absolute logFC in accessibility as a means of ranking the most important ones. Let's look at such top enhancers for the Runx1 motif.
+
+```{r}
+# TF on interest
+TF <- sel[3]
+TF
+
+# identify enhancerswhich contain perdicted TFBSs 
+i <- which(assay(se, "x")[, TF] > 0) 
+
+# order by absolute logFC
+o <- order(abs(gr$logFC[i]), decreasing = TRUE)
+gr[i][o]
+
+```
+
+# Additional resources
+
+This tutorial has closely followed the vignettes provided in the `monaLisa` package. They are referenced below, as well additional reading material.
+
+-   `monaLisa`'s binned motif enrichment vignette: <https://bioconductor.org/packages/release/bioc/vignettes/monaLisa/inst/doc/monaLisa.html>
+
+-   `monaLisa`'s regression vignette: <https://bioconductor.org/packages/release/bioc/vignettes/monaLisa/inst/doc/selecting_motifs_with_randLassoStabSel.html>
+
+-   Recent publications which have benchmarked several tools looking at TF selection or enrichment:
+
+    -   Gerbaldo, F. E., Sonder, E., Fischer, V., Frei, S., Wang, J., Gapp, K., Robinson, M. D., & Germain, P.-L. (2024). On the identification of differentially-active transcription factors from ATAC-seq data. *PLOS Computational Biology, 20*(10), e1011971. <https://doi.org/10.1371/journal.pcbi.1011971>
+
+    -   Santana, L. S., Reyes, A., Hoersch, S., Ferrero, E., Kolter, C., Gaulis, S., & Steinhauser, S. (2024). Benchmarking tools for transcription factor prioritization. *Computational and Structural Biotechnology Journal, 23*, Article 1274-1287. <https://doi.org/10.1016/j.csbj.2024.03.016>
+
+-   Stability selection paper: Meinshausen, N., & Bühlmann, P. (2010). Stability selection. *Journal of the Royal Statistical Society: Series B (Statistical Methodology), 72*(4), 417–473. <https://doi.org/10.1111/j.1467-9868.2010.00740.x>
+
+-   Improved error bounds on stability selection: Shah, R. D., & Samworth, R. J. (2013). Variable selection with error control: Another look at stability selection. *Journal of the Royal Statistical Society: Series B (Statistical Methodology), 75*(1), 55–80. <https://doi.org/10.1111/j.1467-9868.2011.01034.x>
+
+# Session
+
+```{r}
+date()
+sessionInfo()
+```
