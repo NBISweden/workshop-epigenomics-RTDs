@@ -696,7 +696,7 @@ Starting at ``peaks``::
 	mkdir counts
 	cd counts
 
-.. .. code-block:: bash
+.. code-block:: bash
 
  	module load BEDOPS/2.4.41
 
