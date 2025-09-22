@@ -703,7 +703,7 @@ Starting at ``peaks``::
     bedops -m ../genrich/WT_Batf.chr1.genrich.narrowPeak ../../../results/peaks/A_Batf_cKO_P14.genrich_joint.chr1.narrowPeak > AB_Batf_KO_invivo.genrich_joint.merged_peaks.chr1.bed
 
 
- How many?::
+How many peaks?::
 	
   4904 AB_Batf_KO_invivo.genrich_joint.merged_peaks.chr1.bed
 
