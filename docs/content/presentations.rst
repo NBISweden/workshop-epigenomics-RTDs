@@ -37,9 +37,9 @@ Day 2: **ATAC-seq**
 Day 2: **NGI**
 
 
-.. `Bulk Functional Genomics Methods (Orlando Contreras‐López) <../_static/EpigeneticsatNGIforNBIS2024.pdf>`_
+`Epigenomics methods at NGI (Orlando Contreras‐López) <../_static/JN-EpigeneticsMethods_updated2025.pdf>`_
 
-.. `Single Cell Methods (Anja Metzger) <../_static/2024-09-17NBISsinglecell.pdf>`_
+`Single Cell Methods (Anja Metzger) <https://drive.google.com/file/d/1TYcp9VirbnqfIqcGrtIpXO_zYTQf5i4a/view?usp=sharing>`_
 
 
 
