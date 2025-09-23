@@ -9,6 +9,8 @@ ChIP-seq data processing tutorial
 ===================================
 
 
+**Please note this tutorial is more than 4 years old. It uses older tools versions and has not been recently tested.**
+
 **Learning outcomes**
 
 - apply standard data processing of the ChIP-seq libraries
@@ -24,6 +26,7 @@ ChIP-seq data processing tutorial
     :local:
 
 **Please note this tutorial is partially redundant with the tutorials for** :doc:`Data preprocessing <../data-preproc/data-preproc>`, :doc:`General QC <../data-preproc/data-qc1>`. **ChIP-seq specific steps will be marked throughout the text.** 
+
 
 
 
@@ -165,12 +168,13 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /proj/epi2023/chipseq/scripts/chipseq_data.sh .
-  cp /proj/epi2023/chipseq/scripts/chipseq_env.sh .
+  cp /proj/epi2025/chipseq/scripts/chipseq_data.sh .
+  bash chipseq_data.sh
 
 
-  source chipseq_env.sh 
-  source chipseq_data.sh
+.. cp /proj/epi2023/chipseq/scripts/chipseq_env.sh .
+.. source chipseq_env.sh 
+
 
 
 You should see a directory named ``chipseq``:
@@ -232,7 +236,7 @@ We provide a conda environment to run ``phantompeakqualtools``. This package pro
   module load conda/latest
   module load bioinfo-tools
   conda activate /sw/courses/epigenomics/software/conda/xcor
-  module load samtools/1.8 #samtools loaded in this order
+  module load samtools/1.8 #samtools versions loaded in this order
   module load samtools/0.1.19
 
   run_spp.R -c=../../data/ENCFF000PED.chr12.bam -savp=hela2_xcor.pdf -out=xcor_metrics_hela.txt
