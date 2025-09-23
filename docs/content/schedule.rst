@@ -120,8 +120,9 @@ Thursday (25 September 2025)
 
 **12:00 - 13:00** lunch *(offline)*
 
-**13:00 - 15:00** :doc:`Additional downstream exercises <./tutorials/downstream_tutorials>` 
-and :doc:`genome overlaps <./tutorials/downstream_tutorials>` *(online support)*
+**13:00 - 15:00** :doc:`Additional downstream exercises <./tutorials/downstream_tutorials>` *(online support)*
+
+.. and :doc:`genome overlaps <./tutorials/downstream_tutorials>` *(online support)*
 
 **15:00 - 17:00** Exercises *(offline support)*
 
