@@ -37,7 +37,7 @@ Day 2: **ATAC-seq**
 Day 2: **NGI**
 
 
-`Epigenomics methods at NGI (Orlando Contreras‐López) <../_static/JN-EpigeneticsMethods_updated2025.pdf>`_
+`Epigenomics methods at NGI (Orlando Contreras‐López) <../_static/Epigenetics_at_NGI_for_NBIS2025-with_results.pdf>`_
 
 `Single Cell Methods (Anja Metzger) <https://drive.google.com/file/d/1TYcp9VirbnqfIqcGrtIpXO_zYTQf5i4a/view?usp=sharing>`_
 
