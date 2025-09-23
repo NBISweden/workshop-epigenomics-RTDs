@@ -39,7 +39,7 @@ Day 2: **NGI**
 
 `Epigenomics methods at NGI (Orlando Contreras‐López) <../_static/EpigeneticsatNGIforNBIS2025_Orlando.pdf>`_
 
-`Single Cell Methods (Michelle Ljungmark) <https://drive.google.com/file/d/1TYcp9VirbnqfIqcGrtIpXO_zYTQf5i4a/view?usp=sharing>`_
+`Single Cell Methods (Michelle Ljungmark) <../_static/2025-09-23-NBIS-single-cell.pdf>`_
 
 
 
@@ -50,7 +50,7 @@ Day 2: **NGI**
 
 Day 3 **Advanced ChIP methods**
 
-.. `Advanced ChIP methods <../_static/NBIS-Course_2024.pdf>`_
+`Advanced ChIP methods (Simon Elsässer) <../_static/SE-NBIS-Course-2025.pdf>`_
 
 
 :raw-html:`<br />`
