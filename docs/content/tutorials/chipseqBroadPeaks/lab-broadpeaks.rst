@@ -7,6 +7,8 @@
 Detection of broad peaks from ChIP-seq data
 ============================================
 
+**Please note this tutorial is more than 4 years old. It uses older tools versions and has not been recently tested.**
+
 
 **Learning outcomes**
 
@@ -128,7 +130,7 @@ Cross-correlation and related metrics
 ----------------------------------------
 
 The files discussed in this section can be accessed at 
-``/proj/epi2023/broad_peaks/results/qc``
+``/proj/epi2025/broad_peaks/results/qc``
 
 These metrics have been developed with application to point source (i.e. TFs and narrow histone modifications) ChIP-seq in mind, and you can see that the results for broad domains are not as easy to interpret as for point source factors. Below are cross correlation plots for the IP and input you are going to use for the exercise. 
 
@@ -193,8 +195,8 @@ Effective genome size for chr 1 and 2 in ``hg38`` is ``4.9e8``.
   mkdir -p analysis/macs3
   cd analysis/macs3
 
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
 
   module load bioinfo-tools #if needed
   module load MACS/3.0.0a6
@@ -301,7 +303,7 @@ How many peaks were identified in replicate 1?
 .. HINT::
 
 	You can also copy the results from
-	``/proj/epi2023/broad_peaks/results/macs3/neuroGM23338``
+	``/proj/epi2025/broad_peaks/results/macs3/neuroGM23338``
 
 This is a preliminary peak list, and in case of broad domains, it often needs some processing or filtering.
 
@@ -313,8 +315,8 @@ Let's select the detected domains reproducible in both replicates. First, let's 
   
     mkdir peaks
     cd peaks
-    ln -s /proj/epi2023/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
-    ln -s /proj/epi2023/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
+    ln -s /proj/epi2025/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep1_peaks.broadPeak
+    ln -s /proj/epi2025/broad_peaks/results/macs3/neuroGM23338/neuroGM23338_macs3_rep2_peaks.broadPeak
 
     #make bed
     cut -f 1-6 neuroGM23338_macs3_rep1_peaks.broadPeak >neuroGM23338_macs3_rep1_peaks.bed
@@ -358,7 +360,7 @@ Required files are:
 .. HINT::
 
 	You can access the bam and bai files from
-	``/proj/epi2023/broad_peaks/data/neuron_GM23338``
+	``/proj/epi2025/broad_peaks/data/neuron_GM23338``
 
 
 
@@ -460,10 +462,10 @@ Here again we use a prepared conda environment. Newer versions of ``Pysam`` seem
   mkdir ../../epic2
   cd ../../epic2
 
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
-  ln -s /proj/epi2023/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338/ENCFF395DAJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam
+  ln -s /proj/epi2025/broad_peaks/data/neuron_GM23338//ENCFF956GLJ.chr12.MAPQ30.blcklst.rh.sorted.bam.bai
 
 
   conda activate /sw/courses/epigenomics/software/conda/epic_2b
@@ -635,7 +637,7 @@ To prepare the files, assuming you are in ``~/broad_peaks/analysis``:
    cd csaw
 
    mkdir bam
-   ln -s  /proj/epi2023/broad_peaks/data/neuron_GM23338/* bam
+   ln -s  /proj/epi2025/broad_peaks/data/neuron_GM23338/* bam
 
 
 .. .. code-block:: bash
