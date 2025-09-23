@@ -82,7 +82,7 @@ To compute cumulative enrichment for processed bam files in our ATAC-seq data se
 
 	module load deepTools/3.5.6
 
-	plotFingerprint --bamfiles SRR17296554.filt.chr1.bam SRR17296555.filt.chr1.bam SRR17296556.filt.chr1.bam SRR17296556.filt.chr1.bam \
+	plotFingerprint --bamfiles SRR17296554.filt.chr1.bam SRR17296555.filt.chr1.bam SRR17296556.filt.chr1.bam SRR17296557.filt.chr1.bam \
 	 --binSize=1000 --plotFile Invivo_proc.fingerprint.pdf \
 	 --smartLabels -p 5 &> fingerprint.log
 
