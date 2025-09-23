@@ -7,6 +7,9 @@
 ChIP-seq down-stream analysis
 ################################
 
+**Please note this tutorial is more than 4 years old. It uses older tools versions and has not been recently tested.**
+
+
 **Learning outcomes**
 
 - obtain differentially bound sites with ``DiffBind``
@@ -54,13 +57,16 @@ If you haven't, starting in your home directory, you need to copy data:
 
 .. code-block:: bash
 
-	cp /proj/epi2023/chipseq/scripts/chipseq_data.sh .
-	cp /proj/epi2023/chipseq/scripts/chipseq_env.sh .
+	cp /proj/epi2025/chipseq/scripts/chipseq_data.sh .
+	bash chipseq_data.sh
+    
+    cd chipseq/analysis/R
 
-	source chipseq_env.sh
-	source chipseq_data.sh
 
-	cd chipseq/analysis/R
+.. cp /proj/epi2025/chipseq/scripts/chipseq_env.sh .
+
+.. source chipseq_env.sh
+
 
 
 
