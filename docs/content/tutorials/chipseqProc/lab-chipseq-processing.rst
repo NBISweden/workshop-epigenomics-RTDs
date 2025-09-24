@@ -168,7 +168,7 @@ Copy the scripts to your home directory and execute them:
 
 .. code-block:: bash
 
-  cp /proj/epi2025/chipseq/scripts/chipseq_data.sh .
+  cp /proj/epi2025/chipseq_processing/chipseq_data.sh .
   bash chipseq_data.sh
 
 
