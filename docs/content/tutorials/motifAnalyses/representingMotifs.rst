@@ -72,15 +72,15 @@ will need to work with the latest version of ``monaLisa`` if using
         library(Biostrings)
         library(JASPAR2024)
         library(RSQLite)
-        library(BSgenome.Mmusculus.UCSC.mm10)
-        library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+        library(BSgenome.Mmusculus.UCSC.mm39)
+        library(TxDb.Mmusculus.UCSC.mm39.knownGene)
         library(GenomicRanges)
         library(monaLisa)
       })
 
       # ## To install the latest tool versions, and from the current bioconductor release (3.21)
       # pkgs <- c("TFBSTools", "Biostrings", "JASPAR2024", "RSQLite",
-      #           "BSgenome.Mmusculus.UCSC.mm10", "TxDb.Mmusculus.UCSC.mm10.knownGene", 
+      #           "BSgenome.Mmusculus.UCSC.mm39", "TxDb.Mmusculus.UCSC.mm39.knownGene", 
       #           "GenomicRanges", "monaLisa")
       # bioc <- "3.21" # with R 4.5
       # #libPath <- "/path/to/custom/folder/if/desired"
@@ -957,7 +957,7 @@ parallelization across PWMs with the ``BPPARAM`` argument.
    .. code:: r
 
       # get promoters as GRanges object
-      promoters <- trim(promoters(TxDb.Mmusculus.UCSC.mm10.knownGene,
+      promoters <- trim(promoters(TxDb.Mmusculus.UCSC.mm39.knownGene,
                              upstream = 1000, downstream = 500))
 
    .. container:: cell-output cell-output-stderr
@@ -965,35 +965,35 @@ parallelization across PWMs with the ``BPPARAM`` argument.
       ::
 
          Warning in valid.GenomicRanges.seqinfo(x, suggest.trim = TRUE): GRanges object contains 1 out-of-bound range located on sequence
-           chr4_JH584295_random. Note that ranges located on a sequence whose length is
-           unknown (NA) or on a circular sequence are not considered out-of-bound (use
-           seqlengths() and isCircular() to get the lengths and circularity flags of the
-           underlying sequences). You can use trim() to trim these ranges. See
+           chr1_GL456210v1_random. Note that ranges located on a sequence whose length
+           is unknown (NA) or on a circular sequence are not considered out-of-bound
+           (use seqlengths() and isCircular() to get the lengths and circularity flags
+           of the underlying sequences). You can use trim() to trim these ranges. See
            ?`trim,GenomicRanges-method` for more information.
 
    .. code:: r
 
       # extract promoter sequences
-      promoterSeqs <- getSeq(BSgenome.Mmusculus.UCSC.mm10, promoters)
+      promoterSeqs <- getSeq(BSgenome.Mmusculus.UCSC.mm39, promoters)
       promoterSeqs
 
    .. container:: cell-output cell-output-stdout
 
       ::
 
-         DNAStringSet object of length 142446:
+         DNAStringSet object of length 278375:
                   width seq                                          names               
-              [1]  1500 CCCTTTTGGATAGATTCTAGG...GATTTATGAGTAAGGGATGT ENSMUST00000193812.1
-              [2]  1500 TTCTGAGGAGAGTGGCTCATA...AGGTAGCAACAGATATGGCA ENSMUST00000082908.1
-              [3]  1500 GTCTACCACATAGTTGCACAT...GCAATAGAAATTTGTTAAAA ENSMUST00000192857.1
-              [4]  1500 TGCGGTATGTTCATGTATACA...AATTTACCAATGCCACACAG ENSMUST00000161581.1
-              [5]  1500 TGATTAAGAAAATTCCCTGGT...TTGGTGTGGTAGTCACGTCC ENSMUST00000192183.1
+              [1]  1500 CCCTTTTGGATAGATTCTAGG...GATTTATGAGTAAGGGATGT ENSMUST00000193812.2
+              [2]  1500 TTCTGAGGAGAGTGGCTCATA...AGGTAGCAACAGATATGGCA ENSMUST00000082908.3
+              [3]  1500 GTCTACCACATAGTTGCACAT...GCAATAGAAATTTGTTAAAA ENSMUST00000192857.2
+              [4]  1500 ACTTAAACACTAAATATGCGG...TTCAAGGATGGCCATGAATT ENSMUST00000161581.3
+              [5]  1500 TGATTAAGAAAATTCCCTGGT...TTGGTGTGGTAGTCACGTCC ENSMUST00000192183.2
               ...   ... ...
-         [142442]  1500 NNNNNNNNNNNNNNNNNNNNN...CACATCTGCTTTCAGATTTC ENSMUST00000184505.1
-         [142443]  1500 CATGCTGACACCCCAATGGGG...AACACTGCAGAAGATGGAGG ENSMUST00000178705.1
-         [142444]  1500 TGAGAACACTGCAGAAGATGG...ATTAAAGATTGTTTTTTCTC ENSMUST00000180206.1
-         [142445]  1500 TTCCAGGTCCTACCATGTGAG...TGTGTACACCAGGCTGGCCT ENSMUST00000179505.7
-         [142446]  1500 CGTTTTTCAGTTTTCTCACCA...TTTTTTTCGAGACTGGGTTT ENSMUST00000178343.1
+         [278371]  1500 CATGCTGACACCCCAATGGGG...AACACTGCAGAAGATGGAGG ENSMUST00020182238.1
+         [278372]  1500 TGAGAACACTGCAGAAGATGG...ATTAAAGATTGTTTTTTCTC ENSMUST00020182428.1
+         [278373]  1500 TGACCTTGTAAAACTAGTGGG...AGGACCCTCTGGCCTGAAAG ENSMUST00000381725.1
+         [278374]  1500 TTCCAGGTCCTACCATGTGAG...TGTGTACACCAGGCTGGCCT ENSMUST00000179505.8
+         [278375]  1500 CGTTTTTCAGTTTTCTCACCA...TTTTTTTCGAGACTGGGTTT ENSMUST00000178343.2
 
    .. code:: r
 
@@ -1022,20 +1022,20 @@ parallelization across PWMs with the ``BPPARAM`` argument.
 
       ::
 
-         GRanges object with 250935 ranges and 4 metadata columns:
+         GRanges object with 504274 ranges and 4 metadata columns:
                                 seqnames    ranges strand |      matchedSeq    pwmid
                                    <Rle> <IRanges>  <Rle> |  <DNAStringSet>    <Rle>
-                [1] ENSMUST00000193812.1   915-924      - |      TGGCATTTCC MA0101.1
-                [2] ENSMUST00000082908.1   768-781      - |  TTTATGCATCATAT MA0069.1
-                [3] ENSMUST00000192857.1 1059-1072      - |  TTAATGCATCAGTG MA0069.1
-                [4] ENSMUST00000192857.1 1090-1099      - |      ATTGAGGTCA MA0071.1
-                [5] ENSMUST00000192183.1   662-671      + |      TTCAGGGTCA MA0071.1
+                [1] ENSMUST00000193812.2   915-924      - |      TGGCATTTCC MA0101.1
+                [2] ENSMUST00000082908.3   768-781      - |  TTTATGCATCATAT MA0069.1
+                [3] ENSMUST00000192857.2 1059-1072      - |  TTAATGCATCAGTG MA0069.1
+                [4] ENSMUST00000192857.2 1090-1099      - |      ATTGAGGTCA MA0071.1
+                [5] ENSMUST00000192183.2   662-671      + |      TTCAGGGTCA MA0071.1
                 ...                  ...       ...    ... .             ...      ...
-           [250931] ENSMUST00000180206.1 1176-1185      - |      AAGCAGGTCA MA0071.1
-           [250932] ENSMUST00000179505.7   238-252      + | GGGTCCTAGAGTTTG MA0074.1
-           [250933] ENSMUST00000179505.7 1333-1342      + |      TGGTTTTTCC MA0101.1
-           [250934] ENSMUST00000178343.1   261-275      + | GGGTCCTAGAGTTTG MA0074.1
-           [250935] ENSMUST00000178343.1 1356-1365      + |      TGGTTTTTCC MA0101.1
+           [504270] ENSMUST00000381725.1   644-649      - |          CACGTG MA0004.1
+           [504271] ENSMUST00000179505.8   238-252      + | GGGTCCTAGAGTTTG MA0074.1
+           [504272] ENSMUST00000179505.8 1333-1342      + |      TGGTTTTTCC MA0101.1
+           [504273] ENSMUST00000178343.2   261-275      + | GGGTCCTAGAGTTTG MA0074.1
+           [504274] ENSMUST00000178343.2 1356-1365      + |      TGGTTTTTCC MA0101.1
                       pwmname     score
                         <Rle> <numeric>
                 [1]       REL   10.5180
@@ -1044,13 +1044,13 @@ parallelization across PWMs with the ``BPPARAM`` argument.
                 [4]      RORA   12.6983
                 [5]      RORA   12.3224
                 ...       ...       ...
-           [250931]      RORA   11.1253
-           [250932] RXRA::VDR   12.0611
-           [250933]       REL   10.4383
-           [250934] RXRA::VDR   12.0611
-           [250935]       REL   10.4383
+           [504270]      Arnt   11.3550
+           [504271] RXRA::VDR   12.0611
+           [504272]       REL   10.4383
+           [504273] RXRA::VDR   12.0611
+           [504274]       REL   10.4383
            -------
-           seqinfo: 142446 sequences from an unspecified genome
+           seqinfo: 278375 sequences from an unspecified genome
 
    .. code:: r
 
@@ -1065,12 +1065,12 @@ parallelization across PWMs with the ``BPPARAM`` argument.
 
                                
                                 Arnt PAX6 RORA RXRA::VDR REL
-           ENSMUST00000193812.1    0    0    0         0   1
-           ENSMUST00000082908.1    0    1    0         0   0
-           ENSMUST00000192857.1    0    1    1         0   0
-           ENSMUST00000161581.1    0    0    0         0   0
-           ENSMUST00000192183.1    0    0    2         0   1
-           ENSMUST00000193244.1    0    0    1         0   0
+           ENSMUST00000193812.2    0    0    0         0   1
+           ENSMUST00000082908.3    0    1    0         0   0
+           ENSMUST00000192857.2    0    1    1         0   0
+           ENSMUST00000161581.3    0    0    0         0   0
+           ENSMUST00000192183.2    0    0    2         0   1
+           ENSMUST00000193244.2    0    0    1         0   0
 
 It is good to remember that these are predicted TF binding sites. By
 making use of additionally available information, like ATAC-seq data,
@@ -1119,7 +1119,7 @@ Session information
 
       ::
 
-         [1] "Wed Sep 24 07:24:34 2025"
+         [1] "Wed Sep 24 11:07:29 2025"
 
    .. code:: r
 
@@ -1149,11 +1149,11 @@ Session information
 
          other attached packages:
           [1] monaLisa_1.14.1                          
-          [2] TxDb.Mmusculus.UCSC.mm10.knownGene_3.10.0
+          [2] TxDb.Mmusculus.UCSC.mm39.knownGene_3.21.0
           [3] GenomicFeatures_1.60.0                   
           [4] AnnotationDbi_1.70.0                     
           [5] Biobase_2.68.0                           
-          [6] BSgenome.Mmusculus.UCSC.mm10_1.4.3       
+          [6] BSgenome.Mmusculus.UCSC.mm39_1.4.3       
           [7] BSgenome_1.76.0                          
           [8] rtracklayer_1.68.0                       
           [9] BiocIO_1.18.0                            
@@ -1183,8 +1183,8 @@ Session information
          [17] caTools_1.18.3              Rsamtools_2.24.1           
          [19] rmarkdown_2.29              UCSC.utils_1.4.0           
          [21] DirichletMultinomial_1.50.0 purrr_1.0.4                
-         [23] bit_4.6.0                   glmnet_4.1-9               
-         [25] xfun_0.52                   cachem_1.1.0               
+         [23] bit_4.6.0                   xfun_0.52                  
+         [25] glmnet_4.1-9                cachem_1.1.0               
          [27] jsonlite_2.0.0              blob_1.2.4                 
          [29] DelayedArray_0.34.1         BiocParallel_1.42.2        
          [31] parallel_4.5.1              cluster_2.1.8.1            

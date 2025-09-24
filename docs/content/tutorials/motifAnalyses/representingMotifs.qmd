@@ -73,15 +73,15 @@ suppressPackageStartupMessages({
   library(Biostrings)
   library(JASPAR2024)
   library(RSQLite)
-  library(BSgenome.Mmusculus.UCSC.mm10)
-  library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+  library(BSgenome.Mmusculus.UCSC.mm39)
+  library(TxDb.Mmusculus.UCSC.mm39.knownGene)
   library(GenomicRanges)
   library(monaLisa)
 })
 
 # ## To install the latest tool versions, and from the current bioconductor release (3.21)
 # pkgs <- c("TFBSTools", "Biostrings", "JASPAR2024", "RSQLite",
-#           "BSgenome.Mmusculus.UCSC.mm10", "TxDb.Mmusculus.UCSC.mm10.knownGene", 
+#           "BSgenome.Mmusculus.UCSC.mm39", "TxDb.Mmusculus.UCSC.mm39.knownGene", 
 #           "GenomicRanges", "monaLisa")
 # bioc <- "3.21" # with R 4.5
 # #libPath <- "/path/to/custom/folder/if/desired"
@@ -485,11 +485,11 @@ across PWMs with the `BPPARAM` argument.
 
 ```{r}
 # get promoters as GRanges object
-promoters <- trim(promoters(TxDb.Mmusculus.UCSC.mm10.knownGene,
+promoters <- trim(promoters(TxDb.Mmusculus.UCSC.mm39.knownGene,
                        upstream = 1000, downstream = 500))
 
 # extract promoter sequences
-promoterSeqs <- getSeq(BSgenome.Mmusculus.UCSC.mm10, promoters)
+promoterSeqs <- getSeq(BSgenome.Mmusculus.UCSC.mm39, promoters)
 promoterSeqs
 
 # choose first 5 PWM as an example
