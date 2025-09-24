@@ -165,7 +165,7 @@ Friday (26 September 2025)
 
 **15:00 - 16:00** Daily challenge  
 
-**15:00 - 16:00** Short term feedback form
+**15:00 - 16:00** `Short term feedback form <https://forms.gle/qdN8M87oqHkgtQC8A>`_
 
 **15.00 - 16.00** Course wrap-up
 
