@@ -519,10 +519,10 @@ To avoid very long paths in the command line we will create sub-directories and 
 	mkdir sknsh
 	mkdir neural
 
-	ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
- 	ln -s /proj/epi2023/chipseq/data/bam/hepg2/* ./hepg2
- 	ln -s /proj/epi2023/chipseq/data/bam/sknsh/* ./sknsh
- 	ln -s /proj/epi2023/chipseq/data/bam/neural/* ./neural
+	ln -s /proj/epi2025/chipseq_processing/data/bam/hela/* ./hela
+ 	ln -s /proj/epi2025/chipseq_processing/data/bam/hepg2/* ./hepg2
+ 	ln -s /proj/epi2025/chipseq_processing/data/bam/sknsh/* ./sknsh
+ 	ln -s /proj/epi2025/chipseq_processing/data/bam/neural/* ./neural
 
 
 
@@ -608,9 +608,9 @@ To avoid long paths in the command line let's create links to BAM files with ChI
   mkdir peak_calling
   cd peak_calling
 
-  ln -s /proj/epi2023/chipseq/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2025/chipseq_processing/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam \
   ./ENCFF000PED.preproc.bam
-  ln -s /proj/epi2023/chipseq/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
+  ln -s /proj/epi2025/chipseq_processing/data/bam/hela/ENCFF000PET.chr12.rmdup.sort.bam \
   ./ENCFF000PET.preproc.bam
 
 Before we run ``MACS`` we need to **look at parameters** as there are several of them affecting peak calling as well as reporting the results. It is important to understand them to be able to modify the command to the needs of your data set.
@@ -905,10 +905,10 @@ in ``chipseq/analysis/``
   mkdir hepg2
   mkdir sknsh
   mkdir neural
-  ln -s /proj/epi2023/chipseq/data/bam/hela/* ./hela
-  ln -s /proj/epi2023/chipseq/data/bam/hepg2/* ./hepg2
-  ln -s /proj/epi2023/chipseq/data/bam/sknsh/* ./sknsh
-  ln -s /proj/epi2023/chipseq/data/bam/neural/* ./neural
+  ln -s /proj/epi2025/chipseq_processing/data/bam/hela/* ./hela
+  ln -s /proj/epi2025/chipseq_processing/data/bam/hepg2/* ./hepg2
+  ln -s /proj/epi2025/chipseq_processing/data/bam/sknsh/* ./sknsh
+  ln -s /proj/epi2025/chipseq_processing/data/bam/neural/* ./neural
 
   ln -s ../peak_calling/REST_peaks.chr12.bed REST_peaks.chr12.bed
 
