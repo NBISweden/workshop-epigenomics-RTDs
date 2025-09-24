@@ -44,7 +44,10 @@ Now we will make use of these functionalities and use additional tools to enrich
 
 # Libraries
 
-We start by loading the needed packages. If necessary, use `BiocManager::install()` to install missing packages.
+We start by loading the needed packages. If necessary, use 
+`BiocManager::install()` to install missing packages.
+Note that we will need to work with the latest version of `monaLisa` 
+if using `ggplo2>=4.0.0`.
 
 ```{r echo=FALSE}
 .libPaths(c("/Users/daniamachlab/Library/R/arm64/4.5-Bioc-3.21/library", .libPaths()))
@@ -65,8 +68,23 @@ suppressPackageStartupMessages({
   library(RSQLite)
 })
 
-# Note on installing specific ggplot2 version in case the latest version causes problems
-#remotes::install_version("ggplot2", version = "3.5.2")
+# ## To install the latest tool versions, and from the current bioconductor release (3.21)
+# pkgs <- c("monaLisa", "BiocParallel", "ggplot2", "ComplexHeatmap", "circlize", 
+#           "GenomicRanges", "BSgenome.Mmusculus.UCSC.mm39", "JASPAR2024", "TFBSTools", 
+#           "SummarizedExperiment", "RSQLite")
+# bioc <- "3.21" # with R 4.5
+# #libPath <- "/path/to/custom/folder/if/desired"
+# BiocManager::install(pkgs = pkgs, 
+#                      update = TRUE, 
+#                      ask = TRUE, 
+#                      checkBuilt = FALSE, 
+#                      force = FALSE,
+#                      # lib = libPath,
+#                      version = bioc) 
+
+# ## if you need to install a specific version of a package you can do so as follows
+# remotes::install_version("ggplot2", version = "3.5.2")
+
 ```
 
 # The Dataset

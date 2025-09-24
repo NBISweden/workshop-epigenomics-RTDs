@@ -60,6 +60,8 @@ predicted motif hits.
 
 We start by loading the needed packages. If necessary, use
 `BiocManager::install()` to install missing packages.
+Note that we will need to work with the latest version of `monaLisa` if 
+using `ggplo2>=4.0.0`.
 
 ```{r echo=FALSE}
 .libPaths(c("/Users/daniamachlab/Library/R/arm64/4.5-Bioc-3.21/library", .libPaths()))
@@ -76,6 +78,24 @@ suppressPackageStartupMessages({
   library(GenomicRanges)
   library(monaLisa)
 })
+
+# ## To install the latest tool versions, and from the current bioconductor release (3.21)
+# pkgs <- c("TFBSTools", "Biostrings", "JASPAR2024", "RSQLite",
+#           "BSgenome.Mmusculus.UCSC.mm10", "TxDb.Mmusculus.UCSC.mm10.knownGene", 
+#           "GenomicRanges", "monaLisa")
+# bioc <- "3.21" # with R 4.5
+# #libPath <- "/path/to/custom/folder/if/desired"
+# BiocManager::install(pkgs = pkgs,
+#                      update = TRUE,
+#                      ask = TRUE,
+#                      checkBuilt = FALSE,
+#                      force = FALSE,
+#                      # lib = libPath,
+#                      version = bioc)
+
+# ## if you need to install a specific version of a package you can do so as follows
+# remotes::install_version("ggplot2", version = "3.5.2")
+
 ```
 
 # Motif databases

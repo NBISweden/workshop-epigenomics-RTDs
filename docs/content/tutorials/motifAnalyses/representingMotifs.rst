@@ -2,7 +2,7 @@
 Motifs: representing them and searching for hits against a reference
 ====================================================================
 
-:Date: 2025-09-21
+:Date: 2025-09-24
 
 .. contents::
    :depth: 2
@@ -59,7 +59,9 @@ Libraries
 =========
 
 We start by loading the needed packages. If necessary, use
-``BiocManager::install()`` to install missing packages.
+``BiocManager::install()`` to install missing packages. Note that we
+will need to work with the latest version of ``monaLisa`` if using
+``ggplo2>=4.0.0``.
 
 .. container:: cell
 
@@ -75,6 +77,23 @@ We start by loading the needed packages. If necessary, use
         library(GenomicRanges)
         library(monaLisa)
       })
+
+      # ## To install the latest tool versions, and from the current bioconductor release (3.21)
+      # pkgs <- c("TFBSTools", "Biostrings", "JASPAR2024", "RSQLite",
+      #           "BSgenome.Mmusculus.UCSC.mm10", "TxDb.Mmusculus.UCSC.mm10.knownGene", 
+      #           "GenomicRanges", "monaLisa")
+      # bioc <- "3.21" # with R 4.5
+      # #libPath <- "/path/to/custom/folder/if/desired"
+      # BiocManager::install(pkgs = pkgs,
+      #                      update = TRUE,
+      #                      ask = TRUE,
+      #                      checkBuilt = FALSE,
+      #                      force = FALSE,
+      #                      # lib = libPath,
+      #                      version = bioc)
+
+      # ## if you need to install a specific version of a package you can do so as follows
+      # remotes::install_version("ggplot2", version = "3.5.2")
 
 Motif databases
 ===============
@@ -1100,7 +1119,7 @@ Session information
 
       ::
 
-         [1] "Sun Sep 21 21:49:46 2025"
+         [1] "Wed Sep 24 07:24:34 2025"
 
    .. code:: r
 
@@ -1129,7 +1148,7 @@ Session information
          [8] base     
 
          other attached packages:
-          [1] monaLisa_1.14.0                          
+          [1] monaLisa_1.14.1                          
           [2] TxDb.Mmusculus.UCSC.mm10.knownGene_3.10.0
           [3] GenomicFeatures_1.60.0                   
           [4] AnnotationDbi_1.70.0                     
@@ -1164,8 +1183,8 @@ Session information
          [17] caTools_1.18.3              Rsamtools_2.24.1           
          [19] rmarkdown_2.29              UCSC.utils_1.4.0           
          [21] DirichletMultinomial_1.50.0 purrr_1.0.4                
-         [23] bit_4.6.0                   xfun_0.52                  
-         [25] glmnet_4.1-9                cachem_1.1.0               
+         [23] bit_4.6.0                   glmnet_4.1-9               
+         [25] xfun_0.52                   cachem_1.1.0               
          [27] jsonlite_2.0.0              blob_1.2.4                 
          [29] DelayedArray_0.34.1         BiocParallel_1.42.2        
          [31] parallel_4.5.1              cluster_2.1.8.1            
@@ -1178,24 +1197,24 @@ Session information
          [45] codetools_0.2-20            curl_6.4.0                 
          [47] lattice_0.22-7              tibble_3.3.0               
          [49] withr_3.0.2                 KEGGREST_1.48.1            
-         [51] evaluate_1.0.4              survival_3.8-3             
-         [53] circlize_0.4.16             pillar_1.11.0              
-         [55] filelock_1.0.3              MatrixGenerics_1.20.0      
-         [57] foreach_1.5.2               RCurl_1.98-1.17            
-         [59] ggplot2_3.5.2               scales_1.4.0               
-         [61] gtools_3.9.5                glue_1.8.0                 
-         [63] seqLogo_1.74.0              tools_4.5.1                
-         [65] TFMPvalue_0.0.9             GenomicAlignments_1.44.0   
-         [67] XML_3.99-0.18               grid_4.5.1                 
-         [69] tidyr_1.3.1                 colorspace_2.1-1           
-         [71] GenomeInfoDbData_1.2.14     restfulr_0.0.16            
-         [73] cli_3.6.5                   S4Arrays_1.8.1             
-         [75] ComplexHeatmap_2.24.1       dplyr_1.1.4                
-         [77] gtable_0.3.6                digest_0.6.37              
-         [79] SparseArray_1.8.0           rjson_0.2.23               
-         [81] farver_2.1.2                memoise_2.0.1              
-         [83] htmltools_0.5.8.1           lifecycle_1.0.4            
-         [85] httr_1.4.7                  GlobalOptions_0.1.2        
-         [87] bit64_4.6.0-1              
+         [51] S7_0.2.0                    evaluate_1.0.4             
+         [53] survival_3.8-3              circlize_0.4.16            
+         [55] pillar_1.11.0               filelock_1.0.3             
+         [57] MatrixGenerics_1.20.0       foreach_1.5.2              
+         [59] RCurl_1.98-1.17             ggplot2_4.0.0              
+         [61] scales_1.4.0                gtools_3.9.5               
+         [63] glue_1.8.0                  seqLogo_1.74.0             
+         [65] tools_4.5.1                 TFMPvalue_0.0.9            
+         [67] GenomicAlignments_1.44.0    XML_3.99-0.18              
+         [69] grid_4.5.1                  tidyr_1.3.1                
+         [71] colorspace_2.1-1            GenomeInfoDbData_1.2.14    
+         [73] restfulr_0.0.16             cli_3.6.5                  
+         [75] S4Arrays_1.8.1              ComplexHeatmap_2.24.1      
+         [77] dplyr_1.1.4                 gtable_0.3.6               
+         [79] digest_0.6.37               SparseArray_1.8.0          
+         [81] rjson_0.2.23                farver_2.1.2               
+         [83] memoise_2.0.1               htmltools_0.5.8.1          
+         [85] lifecycle_1.0.4             httr_1.4.7                 
+         [87] GlobalOptions_0.1.2         bit64_4.6.0-1              
 
 .. |image1| image:: representingMotifs_files/figure-rst/unnamed-chunk-13-1.png
