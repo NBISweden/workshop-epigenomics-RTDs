@@ -103,11 +103,11 @@ keep <- gr$annotation %in% c("Distal Intergenic", "Promoter (1-2kb)", "Promoter 
 gr <- gr[keep]
 table(gr$annotation)
 
-# fix chr names in gr
-seqlevels(gr) <- paste0("chr", seqlevels(gr))
+# specify chr naming convention
+seqlevelsStyle(BSgenome.Mmusculus.UCSC.mm39) <- "NCBI"
 
 # subset autosomal enhancers
-keep <- seqnames(gr) %in% paste0("chr", 1:19)
+keep <- seqnames(gr) %in% 1:19
 gr <- gr[keep]
 table(gr$annotation)
 

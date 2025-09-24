@@ -215,11 +215,11 @@ called “Promoter (1-2kb)”, “Promoter (2-3kb)” and “Distal Intergenic�
 
    .. code:: r
 
-      # fix chr names in gr
-      seqlevels(gr) <- paste0("chr", seqlevels(gr))
+      # specify chr naming convention
+      seqlevelsStyle(BSgenome.Mmusculus.UCSC.mm39) <- "NCBI"
 
       # subset autosomal enhancers
-      keep <- seqnames(gr) %in% paste0("chr", 1:19)
+      keep <- seqnames(gr) %in% 1:19
       gr <- gr[keep]
       table(gr$annotation)
 
@@ -244,12 +244,12 @@ called “Promoter (1-2kb)”, “Promoter (2-3kb)” and “Distal Intergenic�
          GRanges object with 6 ranges and 13 metadata columns:
                seqnames              ranges strand |             peakID     logFC
                   <Rle>           <IRanges>  <Rle> |        <character> <numeric>
-           e_1    chr17   66268427-66269247      * | merged_peaks_28038  -1.61077
-           e_2     chr1   95195320-95196614      * |  merged_peaks_1873  -1.15764
-           e_3     chr2 162944874-162945676      * | merged_peaks_36974  -1.14102
-           e_4    chr19   17241967-17242651      * | merged_peaks_31308  -1.36160
-           e_5     chr6 122509800-122510274      * | merged_peaks_51769  -1.10413
-           e_6    chr17   87180093-87180462      * | merged_peaks_28593  -1.80282
+           e_1       17   66268427-66269247      * | merged_peaks_28038  -1.61077
+           e_2        1   95195320-95196614      * |  merged_peaks_1873  -1.15764
+           e_3        2 162944874-162945676      * | merged_peaks_36974  -1.14102
+           e_4       19   17241967-17242651      * | merged_peaks_31308  -1.36160
+           e_5        6 122509800-122510274      * | merged_peaks_51769  -1.10413
+           e_6       17   87180093-87180462      * | merged_peaks_28593  -1.80282
                        FDR        gc        annotation   geneChr geneStart   geneEnd
                  <numeric> <numeric>       <character> <integer> <integer> <integer>
            e_1 1.11065e-85  0.436054 Distal Intergenic        17  66261129  66265392
@@ -1021,17 +1021,17 @@ at such top enhancers for the Runx1 motif.
          GRanges object with 7865 ranges and 13 metadata columns:
                    seqnames              ranges strand |             peakID        logFC
                       <Rle>           <IRanges>  <Rle> |        <character>    <numeric>
-             e_946    chr17   32327657-32328101      * | merged_peaks_26931     -3.36110
-             e_586     chr3   21776693-21777137      * | merged_peaks_38008     -2.77391
-             e_940    chr10   76572614-76573058      * |  merged_peaks_6105     -2.28866
-             e_104     chr8   95554605-95555049      * | merged_peaks_58633     -2.20077
-             e_165     chr1   52458595-52459039      * |   merged_peaks_710     -2.11577
+             e_946       17   32327657-32328101      * | merged_peaks_26931     -3.36110
+             e_586        3   21776693-21777137      * | merged_peaks_38008     -2.77391
+             e_940       10   76572614-76573058      * |  merged_peaks_6105     -2.28866
+             e_104        8   95554605-95555049      * | merged_peaks_58633     -2.20077
+             e_165        1   52458595-52459039      * |   merged_peaks_710     -2.11577
                ...      ...                 ...    ... .                ...          ...
-           e_19350    chr15   97396226-97396670      * | merged_peaks_23110 -1.85648e-04
-           e_19354     chr5 148713152-148713596      * | merged_peaks_49032  1.61644e-04
-           e_19345     chr1 194914907-194915351      * |  merged_peaks_4361 -1.30662e-04
-           e_19357     chr1   66934978-66935422      * |  merged_peaks_1135 -4.34532e-05
-           e_19359    chr11   46321910-46322354      * |  merged_peaks_8973  4.34149e-05
+           e_19350       15   97396226-97396670      * | merged_peaks_23110 -1.85648e-04
+           e_19354        5 148713152-148713596      * | merged_peaks_49032  1.61644e-04
+           e_19345        1 194914907-194915351      * |  merged_peaks_4361 -1.30662e-04
+           e_19357        1   66934978-66935422      * |  merged_peaks_1135 -4.34532e-05
+           e_19359       11   46321910-46322354      * |  merged_peaks_8973  4.34149e-05
                            FDR        gc        annotation   geneChr geneStart   geneEnd
                      <numeric> <numeric>       <character> <integer> <integer> <integer>
              e_946 1.10436e-02  0.464912  Promoter (1-2kb)        17  32297771  32326324
@@ -1126,7 +1126,7 @@ Session
 
       ::
 
-         [1] "Wed Sep 24 07:26:51 2025"
+         [1] "Wed Sep 24 07:39:23 2025"
 
    .. code:: r
 
