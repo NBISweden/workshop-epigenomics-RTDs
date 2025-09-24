@@ -72,10 +72,10 @@ Assuming we are in the home directory:
 	mkdir deepTools
 	cd deepTools
 
-	ln -s /proj/epi2023/vis/deepTools/chrom.sizes.hg19 
-	ln -s /proj/epi2023/vis/deepTools/refGene_hg19_TSS_chr12_sorted_corr.bed
-	ln -s /proj/epi2023/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam
-	ln -s /proj/epi2023/vis/deepTools/ENCFF000PED.chr12.rmdup.sort.bam.bai
+	ln -s /proj/epi2025/chipseq_processing/hg19/chrom.sizes.hg19
+	ln -s /proj/epi2025/chipseq_processing/hg19/refGene_hg19_TSS_chr12_sorted_corr.bed
+	ln -s /proj/epi2025/chipseq_processing/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam
+	ln -s /proj/epi2025/chipseq_processing/data/bam/hela/ENCFF000PED.chr12.rmdup.sort.bam.bai
 
 
 Normalised coverage tracks
@@ -117,8 +117,9 @@ We can convert it to another format ``bigWig``:
 	
 	If these above steps did not work, you can link the precomputed coverage tracks::
 
-		ln -s /proj/epi2023/vis/deepTools/ENCFF000PET.cov.norm1x.bedgraph
-		ln -s /proj/epi2023/vis/deepTools/hela_1.bw
+		ln -s /proj/epi2025/chipseq_processing/results/coverage/hela_1.bw
+		ln -s /proj/epi2025/chipseq_processing/results/coverage/ENCFF000PET.cov.norm1x.bedgraph
+
 
 
 
@@ -211,12 +212,12 @@ Let's link the necessary files and produce coverage tracks (assuming we are in `
 	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.macs.broad_peaks.broadPeak
 	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF045OAB.genrich.narrowPeak
 	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.macs.broad_peaks.broadPeak
-	ln -s /sw/courses/epigenomics/2022/vis/pyGT//ENCFF398QLV.genrich.narrowPeak
+	ln -s /sw/courses/epigenomics/2022/vis/pyGT/ENCFF398QLV.genrich.narrowPeak
 
 	ln -s /sw/courses/epigenomics/2022/vis/pyGT/hg38.refGene.gtf
 
 	cp /sw/courses/epigenomics/2022/vis/pyGT/tracks1.ini .
-	cp /sw/courses/epigenomics/2022/vis/pyGT//tracks2.ini .
+	cp /sw/courses/epigenomics/2022/vis/pyGT/tracks2.ini .
 
 
 .. Hint::
