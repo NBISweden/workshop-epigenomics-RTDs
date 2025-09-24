@@ -96,6 +96,13 @@ We can link all necessary files:
    ln -s ../../results/DA/annotation/
 
 
+Please note the ``counts`` directory used in this step is **not the same one** we created when generating  the counts table in the course of the previous tutorial. If in doubt, you can link the files like this:
+
+.. code-block:: bash
+
+    ln -s /proj/epi2025/atacseq_proc/analysis/counts
+
+
 We access the R environment via:
 
 .. code-block:: bash
