@@ -145,6 +145,21 @@ sequences in `R`. See the
 [vignette](https://bioconductor.org/packages/release/bioc/vignettes/Biostrings/inst/doc/Biostrings2Classes.pdf)
 from the `Biostrings` package for more details.
 
+Let's set up our working directory and download the data.
+```{bash}
+#| eval: false
+
+# go to your working directory and make a data folder
+mkdir data
+
+# option A: download the file from Jaspar
+wget -P data https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites 
+
+# option B: download the file from GitHub
+wget -P data https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/MA1102.3.sites
+```
+
+
 ```{r}
 # read in the TFBS sequences
 CTCFLsequencesFile <- "data/MA1102.3.sites"

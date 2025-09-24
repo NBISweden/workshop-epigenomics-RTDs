@@ -144,6 +144,21 @@ sequences in ``R``. See the
 `vignette <https://bioconductor.org/packages/release/bioc/vignettes/Biostrings/inst/doc/Biostrings2Classes.pdf>`__
 from the ``Biostrings`` package for more details.
 
+Let’s set up our working directory and download the data.
+
+.. container:: cell
+
+   .. code:: bash
+
+      # go to your working directory and make a data folder
+      mkdir data
+
+      # option A: download the file from Jaspar
+      wget -P data https://jaspar.elixir.no/download/data/2024/sites/MA1102.3.sites 
+
+      # option B: download the file from GitHub
+      wget -P data https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/MA1102.3.sites
+
 .. container:: cell
 
    .. code:: r
@@ -1119,7 +1134,7 @@ Session information
 
       ::
 
-         [1] "Wed Sep 24 15:22:21 2025"
+         [1] "Wed Sep 24 15:45:07 2025"
 
    .. code:: r
 
@@ -1217,4 +1232,4 @@ Session information
          [85] lifecycle_1.0.4             httr_1.4.7                 
          [87] GlobalOptions_0.1.2         bit64_4.6.0-1              
 
-.. |image1| image:: representingMotifs_files/figure-rst/unnamed-chunk-13-1.png
+.. |image1| image:: representingMotifs_files/figure-rst/unnamed-chunk-14-1.png

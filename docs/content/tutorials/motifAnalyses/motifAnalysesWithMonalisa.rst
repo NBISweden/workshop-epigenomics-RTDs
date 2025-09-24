@@ -133,7 +133,7 @@ called “Promoter (1-2kb)”, “Promoter (2-3kb)” and “Distal Intergenic�
 If you have run the exercises and produced the
 ``FiltPeaks.DA.TMM.annot.rds`` object, you may read that file in.
 Alternatively, you can download the ``RDS`` file we need from
-``rackham`` as follows. Open a terminal and type in:
+``rackham`` as follows with option A. Open a terminal and type in:
 
 .. container:: cell
 
@@ -145,11 +145,11 @@ Alternatively, you can download the ``RDS`` file we need from
       # make data dir
       mkdir data
 
-      # download data from rackham
+      # option A: download data from rackham
       scp -r <username>@rackham.uppmax.uu.se:/proj/epi2025/atacseq_proc/results/DA/objects/FiltPeaks.DA.TMM.annot.rds data 
 
-A third option is to download it from GitHub:
-https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
+      # option B: download data from GitHub
+      wget -P data https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
 
 Let’s read in this file.
 
@@ -1149,7 +1149,7 @@ Session
 
       ::
 
-         [1] "Wed Sep 24 15:26:33 2025"
+         [1] "Wed Sep 24 15:47:27 2025"
 
    .. code:: r
 
