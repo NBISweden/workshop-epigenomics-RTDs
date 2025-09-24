@@ -398,7 +398,7 @@ set a min absolute logFC above which to bin.
 
    .. code:: r
 
-      # plot log2FC histogram
+      # plot logFC histogram
       ggplot(data = data.frame(logFC = gr$logFC)) + 
         geom_histogram(aes(x = logFC), bins = 100, fill = "steelblue") + 
         xlab("Batf cKO vs Wt logFC") + 
@@ -501,12 +501,12 @@ options, which can be controlled via the ``background`` parameter, see
 the help page of the function.
 
 The p-value for the enrichment test is calculated using Fisher’s exact
-test. We illustrate this more with the contingency table below. Given a
-specific bin, for each motif, we end up with a table of weighted counts
-as shown below. They are weighted to correct for sequence composition
-differences between the foreground and background sets, where foreground
-reflects the sequences belonging to the bin being testes, and background
-sequences from all other bins.
+test. We illustrate the contingency table used for this test below.
+Given a specific bin, for each motif, we end up with a table of weighted
+counts as shown below. They are weighted to correct for sequence
+composition differences between the foreground and background sets,
+where foreground reflects the sequences belonging to the bin being
+tested, and background sequences from all other bins.
 
 ============== =========== ==============
 \              with TF hit with no TF hit
@@ -918,7 +918,7 @@ particular TF name.
 
 Let’s have a look at the stability paths of the motifs. These paths show
 the selection probability as a function of the regularization step. The
-strength of the regularization increases from left to right and the
+strength of the regularization decreases from left to right and the
 stronger the regularization, the less motifs are selected. The motifs
 above the minimum selection probability at the last step are the final
 selected ones. These paths can give an indication of how strongly a
@@ -939,7 +939,7 @@ non-selected ones and how strong the signal is.
 
 Based on these, BATF3 is the first motif to be selected which indicates
 that this motif quite strongly explains the logFC compared to the rest.
-This may be expected since this TF was knocked down.
+This may be expected since this TF was knocked out.
 
 Let’s look at where the GC and CpG content predictors fall on these
 paths.
@@ -1149,7 +1149,7 @@ Session
 
       ::
 
-         [1] "Wed Sep 24 15:47:27 2025"
+         [1] "Wed Sep 24 20:09:12 2025"
 
    .. code:: r
 

@@ -183,7 +183,7 @@ summary(width(gr))
 Let us examine the histogram depicting the logFCs across the enhancers and create bins. In order to have robust calculations in enrichment, it is recommended to have at least a couple of hundred sequences per bin. Here, we will have 800 regions or sequences per bin, and additionally set a min absolute logFC above which to bin.
 
 ```{r}
-# plot log2FC histogram
+# plot logFC histogram
 ggplot(data = data.frame(logFC = gr$logFC)) + 
   geom_histogram(aes(x = logFC), bins = 100, fill = "steelblue") + 
   xlab("Batf cKO vs Wt logFC") + 
@@ -238,7 +238,7 @@ RSQLite::dbDisconnect(JASPARConnect)
 
 We can now run the motif enrichment analysis. We will do the enrichment per bin vs all other bins, which is the default option in `calcBinnedMotifEnrR`. To learn more about the other available options, which can be controlled via the `background` parameter, see the help page of the function.
 
-The p-value for the enrichment test is calculated using Fisher's exact test. We illustrate this more with the contingency table below. Given a specific bin, for each motif, we end up with a table of weighted counts as shown below. They are weighted to correct for sequence composition differences between the foreground and background sets, where foreground reflects the sequences belonging to the bin being testes, and background sequences from all other bins.
+The p-value for the enrichment test is calculated using Fisher's exact test. We illustrate the contingency table used for this test below. Given a specific bin, for each motif, we end up with a table of weighted counts as shown below. They are weighted to correct for sequence composition differences between the foreground and background sets, where foreground reflects the sequences belonging to the bin being tested, and background sequences from all other bins.
 
 |                | with TF hit | with no TF hit |
 |----------------|-------------|----------------|
@@ -405,7 +405,7 @@ sel
 
 As mentioned, motifs are competing against each other for selection here. A known challenge with regression methods is colinearity between the predictors. This is worth keeping in mind for very highly correlated TFBSs. If we have two TFs with highly similar motifs explaining the logFC, only one of them may end up being selected. It is also worth remembering to focus on interpreting the motifs rather than the particular TF name.
 
-Let's have a look at the stability paths of the motifs. These paths show the selection probability as a function of the regularization step. The strength of the regularization increases from left to right and the stronger the regularization, the less motifs are selected. The motifs above the minimum selection probability at the last step are the final selected ones. These paths can give an indication of how strongly a particular motif can explain the logFC in accessibility, by being selected fairly early and then consistently along the regulalrization steps. It can also show how well the selected motifs separate from the non-selected ones and how strong the signal is.
+Let's have a look at the stability paths of the motifs. These paths show the selection probability as a function of the regularization step. The strength of the regularization decreases from left to right and the stronger the regularization, the less motifs are selected. The motifs above the minimum selection probability at the last step are the final selected ones. These paths can give an indication of how strongly a particular motif can explain the logFC in accessibility, by being selected fairly early and then consistently along the regulalrization steps. It can also show how well the selected motifs separate from the non-selected ones and how strong the signal is.
 
 ```{r}
 #| fig-width: 10
@@ -414,7 +414,7 @@ Let's have a look at the stability paths of the motifs. These paths show the sel
 plotStabilityPaths(se, labelPaths = TRUE)
 ```
 
-Based on these, BATF3 is the first motif to be selected which indicates that this motif quite strongly explains the logFC compared to the rest. This may be expected since this TF was knocked down.
+Based on these, BATF3 is the first motif to be selected which indicates that this motif quite strongly explains the logFC compared to the rest. This may be expected since this TF was knocked out.
 
 Let's look at where the GC and CpG content predictors fall on these paths.
 
