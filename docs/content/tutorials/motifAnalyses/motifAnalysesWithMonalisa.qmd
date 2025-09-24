@@ -93,6 +93,27 @@ We give a quick recap on the dataset we are dealing with and which was used in t
 
 We start by loading in the `RDS` file called `FiltPeaks.DA.TMM.annot.rds` which was generated in previous exercises. This is a `GRanges` object containing the annotated merged peak regions, as well as log-fold changes in accessibility for `Batf-cKO` vs `Wt`. We will subset the enhancer peaks which we define as being at least 1kb away from any TSS. We will rely on the annotations column to extract these regions. This includes the regions called "Promoter (1-2kb)", "Promoter (2-3kb)" and "Distal Intergenic".
 
+If you have run the exercises and produced the `FiltPeaks.DA.TMM.annot.rds` 
+object, you may read that file in. Alternatively, you can download the `RDS`
+file we need from `rackham` as follows. Open a terminal and type in:
+
+```{bash}
+#| eval: false
+
+<!-- # got to your working dir -->
+<!-- cd /your/wdir/ -->
+
+# make data dir
+mkdir data
+
+# download data from rackham
+scp -r <username>@rackham.uppmax.uu.se:/proj/epi2025/atacseq_proc/results/DA/objects/FiltPeaks.DA.TMM.annot.rds data 
+```
+
+A third option is to download it from GitHub:
+https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
+
+Let's read in this file.
 ```{r}
 # read in the GRanges object
 gr <- readRDS("data/FiltPeaks.DA.TMM.annot.rds")

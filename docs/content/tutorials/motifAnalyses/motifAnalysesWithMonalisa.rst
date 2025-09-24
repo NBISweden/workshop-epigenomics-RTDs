@@ -130,6 +130,29 @@ define as being at least 1kb away from any TSS. We will rely on the
 annotations column to extract these regions. This includes the regions
 called “Promoter (1-2kb)”, “Promoter (2-3kb)” and “Distal Intergenic”.
 
+If you have run the exercises and produced the
+``FiltPeaks.DA.TMM.annot.rds`` object, you may read that file in.
+Alternatively, you can download the ``RDS`` file we need from
+``rackham`` as follows. Open a terminal and type in:
+
+.. container:: cell
+
+   .. code:: bash
+
+      <!-- # got to your working dir -->
+      <!-- cd /your/wdir/ -->
+
+      # make data dir
+      mkdir data
+
+      # download data from rackham
+      scp -r <username>@rackham.uppmax.uu.se:/proj/epi2025/atacseq_proc/results/DA/objects/FiltPeaks.DA.TMM.annot.rds data 
+
+A third option is to download it from GitHub:
+https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
+
+Let’s read in this file.
+
 .. container:: cell
 
    .. code:: r
@@ -1126,7 +1149,7 @@ Session
 
       ::
 
-         [1] "Wed Sep 24 07:39:23 2025"
+         [1] "Wed Sep 24 15:26:33 2025"
 
    .. code:: r
 
@@ -1213,16 +1236,16 @@ Session
          [81] httr_1.4.7                  GlobalOptions_0.1.2        
          [83] bit64_4.6.0-1              
 
-.. |image1| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-4-1.png
-.. |image2| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-6-1.png
-.. |image3| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-6-2.png
-.. |image4| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-1.png
-.. |image5| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-2.png
+.. |image1| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-5-1.png
+.. |image2| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-1.png
+.. |image3| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-7-2.png
+.. |image4| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-8-1.png
+.. |image5| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-8-2.png
 .. |image6| image:: figures/SE.png
-.. |image7| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-1.png
-.. |image8| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-11-2.png
-.. |image9| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-12-1.png
-.. |image10| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-16-1.png
-.. |image11| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-17-1.png
-.. |image12| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-18-1.png
-.. |image13| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-19-1.png
+.. |image7| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-12-1.png
+.. |image8| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-12-2.png
+.. |image9| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-13-1.png
+.. |image10| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-17-1.png
+.. |image11| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-18-1.png
+.. |image12| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-19-1.png
+.. |image13| image:: motifAnalysesWithMonalisa_files/figure-rst/unnamed-chunk-20-1.png

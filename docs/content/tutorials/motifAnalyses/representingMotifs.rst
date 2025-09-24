@@ -1119,7 +1119,7 @@ Session information
 
       ::
 
-         [1] "Wed Sep 24 11:07:29 2025"
+         [1] "Wed Sep 24 15:22:21 2025"
 
    .. code:: r
 
