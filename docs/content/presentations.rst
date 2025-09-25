@@ -67,9 +67,9 @@ Day 4: **Transcription Factor Analyses**
 
 Day 5 **Single cell methods & data integation**
 
-.. `Single cell methods <../_static/single_cell_methods.pdf>`_
+`Single cell methods <../_static/single_cell_methods_2025.pdf>`_
 
-.. `Integration of genomics data  <../_static/data_intergration.pdf>`_
+.. `Integration of genomics data  <../_static/data_intergration_2025.pdf>`_
 
-.. `Introduction to exercises  <../_static/lab_intro.pdf>`_
+.. `Introduction to exercises  <../_static/lab_intro_2025.pdf>`_
 .. 
