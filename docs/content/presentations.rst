@@ -56,9 +56,9 @@ Day 3 **Advanced ChIP methods**
 :raw-html:`<br />`
 
 
-Day 4: **Downstream analyses**
+Day 4: **Transcription Factor Analyses**
 
-.. `Introduction to workflow managers <../_static/as-wfm-2024.pdf>`_
+`TFs and gene regulation <../_static/TFslides.pdf>`_
 
 
 
