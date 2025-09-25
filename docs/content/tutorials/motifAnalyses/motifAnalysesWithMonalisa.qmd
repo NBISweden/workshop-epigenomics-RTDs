@@ -95,7 +95,7 @@ We start by loading in the `RDS` file called `FiltPeaks.DA.TMM.annot.rds` which 
 
 If you have run the exercises and produced the `FiltPeaks.DA.TMM.annot.rds` 
 object, you may read that file in. Alternatively, you can download the `RDS`
-file we need from `rackham` as follows with option A. Open a terminal and type in:
+file we need from `rackham` as follows. Open a terminal and type in:
 
 ```{bash}
 #| eval: false
@@ -106,11 +106,9 @@ file we need from `rackham` as follows with option A. Open a terminal and type i
 # make data dir
 mkdir data
 
-# option A: download data from rackham
+# download data from rackham
 scp -r <username>@rackham.uppmax.uu.se:/proj/epi2025/atacseq_proc/results/DA/objects/FiltPeaks.DA.TMM.annot.rds data 
 
-# option B: download data from GitHub
-wget -P data https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
 ```
 
 

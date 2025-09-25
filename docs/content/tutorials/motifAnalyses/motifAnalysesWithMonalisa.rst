@@ -2,7 +2,7 @@
 Motif Analyses with ``monaLisa``
 ================================
 
-:Date: 2025-09-24
+:Date: 2025-09-25
 
 .. contents::
    :depth: 2
@@ -133,7 +133,7 @@ called “Promoter (1-2kb)”, “Promoter (2-3kb)” and “Distal Intergenic�
 If you have run the exercises and produced the
 ``FiltPeaks.DA.TMM.annot.rds`` object, you may read that file in.
 Alternatively, you can download the ``RDS`` file we need from
-``rackham`` as follows with option A. Open a terminal and type in:
+``rackham`` as follows. Open a terminal and type in:
 
 .. container:: cell
 
@@ -145,11 +145,8 @@ Alternatively, you can download the ``RDS`` file we need from
       # make data dir
       mkdir data
 
-      # option A: download data from rackham
+      # download data from rackham
       scp -r <username>@rackham.uppmax.uu.se:/proj/epi2025/atacseq_proc/results/DA/objects/FiltPeaks.DA.TMM.annot.rds data 
-
-      # option B: download data from GitHub
-      wget -P data https://github.com/NBISweden/workshop-epigenomics-RTDs/blob/master/docs/content/tutorials/motifAnalyses/data/FiltPeaks.DA.TMM.annot.rds
 
 Let’s read in this file.
 
@@ -1149,7 +1146,7 @@ Session
 
       ::
 
-         [1] "Wed Sep 24 20:09:12 2025"
+         [1] "Thu Sep 25 13:58:54 2025"
 
    .. code:: r
 
