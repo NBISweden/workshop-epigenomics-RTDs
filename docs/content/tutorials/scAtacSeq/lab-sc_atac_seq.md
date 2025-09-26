@@ -101,7 +101,7 @@ Finally, start a web browser on your local computer, and go to [http://localhost
 You should now see Rstudio in you web browser, and can start the exercise.
 
 
-
+<!-- 
 .. ### Option C
 
 .. If this doesn't work for some reason (*e.g.* if you don't have an account on uppmax), you can run the exercise entirely on your local computer. This has been tested on Mac, but chances are that it also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
@@ -163,6 +163,8 @@ You should now see Rstudio in you web browser, and can start the exercise.
 .. ```
 
 .. If everything has worked, you should now see Rstudio, and can start the exercise.
+
+ -->
 
 
 ## Analysis of single cell ATAC-seq data
