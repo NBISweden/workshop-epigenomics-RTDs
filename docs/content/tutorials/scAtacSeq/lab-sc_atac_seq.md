@@ -102,67 +102,67 @@ You should now see Rstudio in you web browser, and can start the exercise.
 
 
 
-### Option C
+.. ### Option C
 
-If this doesn't work for some reason (*e.g.* if you don't have an account on uppmax), you can run the exercise entirely on your local computer. This has been tested on Mac, but chances are that it also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
+.. If this doesn't work for some reason (*e.g.* if you don't have an account on uppmax), you can run the exercise entirely on your local computer. This has been tested on Mac, but chances are that it also works on Linux and Windows. Also note that R uses around 13Gb RAM running the commands in the exercise.
 
-First, set up the directory where you will work
+.. First, set up the directory where you will work
 
 
-```bash
-cd <some directory where you work with this course>
+.. ```bash
+.. cd <some directory where you work with this course>
 
-mkdir -p sc_lab/data
-cd sc_lab/data
-```
+.. mkdir -p sc_lab/data
+.. cd sc_lab/data
+.. ```
 
-Install mamba, following the instructions [here](https://mamba.readthedocs.io/en/latest/micromamba-installation.html). Then, set up the environment using the commands below. This takes approximately one hour, depending on your network connection:
+.. Install mamba, following the instructions [here](https://mamba.readthedocs.io/en/latest/micromamba-installation.html). Then, set .. up the environment using the commands below. This takes approximately one hour, depending on your network connection:
 
-```bash
-curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yaml > environment_epigenomics2023.yaml
+.. ```bash
+.. curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yaml > environment_epigenomics2023.yaml
 
-mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
-```
+.. mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
+.. ```
  
-NOTE: The commands above don't work with new Macs with the new Apple chips (M1, M2 etc.). If you have a Mac from 2021 or later, instead run:
+.. NOTE: The commands above don't work with new Macs with the new Apple chips (M1, M2 etc.). If you have a Mac from 2021 or later, instead run:
 
-```bash
-curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yaml > environment_epigenomics2023.yaml
+.. ```bash
+.. curl https://raw.githubusercontent.com/NBISweden/workshop-epigenomics-RTDs/master/docs/content/tutorials/scAtacSeq/environment_epigenomics2023.yaml > environment_epigenomics2023.yaml
 
-curl https://raw.githubusercontent.com/fasterius/dotfiles/main/scripts/intel-conda-env.sh > intel-conda-env.sh
+.. curl https://raw.githubusercontent.com/fasterius/dotfiles/main/scripts/intel-conda-env.sh > intel-conda-env.sh
 
-chmod a+x intel-conda-env.sh
+.. chmod a+x intel-conda-env.sh
 
-./intel-conda-env.sh mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
-```
+.. ./intel-conda-env.sh mamba env create -n environment_epigenomics2023 -f environment_epigenomics2023.yaml
+.. ```
 
-Next download the data needed for the exercise (5.4 Gb, make sure you delete the files when you no longer need them):
+.. Next download the data needed for the exercise (5.4 Gb, make sure you delete the files when you no longer need them):
 
-```bash
-# download data for exercise
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz.tbi
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_singlecell.csv
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz.tbi 
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_10k_v3.rds
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi
-curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
-cd ..
-```
+.. ```bash
+.. # download data for exercise
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_fragments.tsv.gz.tbi
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/atac_v1_pbmc_10k_singlecell.csv
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_atac_fragments.tsv.gz.tbi 
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_filtered_feature_bc_matrix.h5
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/e18_mouse_brain_fresh_5k_per_barcode_metrics.csv
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_10k_v3.rds
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz.tbi
+.. curl -OJ https://export.uppmax.uu.se/naiss2023-23-349/sc_atac_seq/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5
+.. cd ..
+.. ```
 
-Finally, activate the environment and start Rstudio.
+.. Finally, activate the environment and start Rstudio.
 
-```bash
-mamba activate environment_epigenomics2023
-open -na Rstudio
-```
+.. ```bash
+.. mamba activate environment_epigenomics2023
+.. open -na Rstudio
+.. ```
 
-If everything has worked, you should now see Rstudio, and can start the exercise.
+.. If everything has worked, you should now see Rstudio, and can start the exercise.
 
 
 ## Analysis of single cell ATAC-seq data
