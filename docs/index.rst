@@ -24,8 +24,7 @@ This workshop is an introduction to best practice bioinformatics methods for pro
 Current Workshop Materials
 ------------------------------
 
-The workshop materials will be hosted on our `new homegage <https://nbisweden.github.io/workshop-epigenomics/
->`_.
+The workshop materials will be hosted on our `new homegage <https://nbisweden.github.io/workshop-epigenomics/>`_.
 
 
 
