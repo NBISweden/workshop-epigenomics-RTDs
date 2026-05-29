@@ -21,13 +21,15 @@ This workshop is an introduction to best practice bioinformatics methods for pro
 :raw-html:`<br />`
 
 
-.. image:: content/icons/calendar-date.png
-	:height: 40
-   	:width: 40
+Current Workshop Materials
+------------------------------
 
-Date
-----
-22 - 26 September 2025
+The workshop materials will be hosted on our `new homegage <https://nbisweden.github.io/workshop-epigenomics/
+>`_.
+
+
+
+
 
 :raw-html:`<br />`
 
@@ -35,15 +37,33 @@ Date
 	:height: 40
    	:width: 40
 
+
 Application
 -----------
 
 
-.. - Application is now open!
-.. - Sign up `here <https://forms.gle/gToSCQffqBgBBcpr8>`_.
+- Application is now open!
+- Sign up `here <https://training.scilifelab.se/events/epigenomics-data-analysis-from-bulk-to-single-cell>`_.
 
-- Application is now closed
-- Sign up `here <https://forms.gle/BSieETwyWHACwRsT8>`_ and we will let you know when we open application for the next workshop.
+.. - Application is now closed
+.. - Sign up `here <https://forms.gle/BSieETwyWHACwRsT8>`_ and we will let you know when we open application for the next workshop.
+
+
+
+:raw-html:`<br />`
+:raw-html:`<br />`
+:raw-html:`<br />`
+
+
+
+.. image:: content/icons/calendar-date.png
+	:height: 40
+   	:width: 40
+
+
+Date
+----
+22 - 26 September 2025
 
 
 
