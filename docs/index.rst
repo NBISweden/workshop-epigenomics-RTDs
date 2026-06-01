@@ -20,6 +20,11 @@ This workshop is an introduction to best practice bioinformatics methods for pro
 
 :raw-html:`<br />`
 
+Thanks for visiting! Please note that as of 2026, the workshop homepage has moved to a new location, and this page will not be updated.
+
+:raw-html:`<br />`
+
+
 
 Current Workshop Materials
 ------------------------------
@@ -62,7 +67,10 @@ Application
 
 Date
 ----
-22 - 26 September 2025
+
+Please visit workshop current homepage for dates of upcoming events.
+
+.. 22 - 26 September 2025
 
 
 
